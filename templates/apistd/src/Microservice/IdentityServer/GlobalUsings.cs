@@ -1,0 +1,12 @@
+﻿global using System.Security.Claims;
+global using Core.Identity;
+global using IdentityServer.Models;
+global using Microsoft.AspNetCore;
+global using Microsoft.AspNetCore.Authentication;
+global using Microsoft.AspNetCore.Authorization;
+global using Microsoft.AspNetCore.Identity;
+global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.Extensions.Primitives;
+global using OpenIddict.Abstractions;
+global using OpenIddict.Server.AspNetCore;

@@ -1,0 +1,18 @@
+{
+    "$schema": "http://json.schemastore.org/template",
+    "author": "Alter",
+    "classifications": [
+        "Web",
+        "WebApi",
+        "Framework"
+    ],
+    "identity": "Ater.Web.Framework",
+    "name": "ater webapi ",
+    "shortName": "atapi",
+    "tags": {
+        "language": "C#",
+        "type": "project"
+    },
+    "sourceName": "MyProjectName",
+    "preferNameDirectory": true
+}
