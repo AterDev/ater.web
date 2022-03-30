@@ -1,13 +1,13 @@
 {
     "$schema": "http://json.schemastore.org/template",
-    "author": "Alter",
+    "author": "ater.niltor",
     "classifications": [
         "Web",
-        "WebApi",
-        "Web Framework"
+        "WebAPI",
+        "Framework"
     ],
     "identity": "Ater.Web.Framework",
-    "name": "ater webapi ",
+    "name": "Ater Web API ",
     "shortName": "atapi",
     "tags": {
         "language": "C#",

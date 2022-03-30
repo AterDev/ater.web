@@ -2,10 +2,10 @@
 	<PropertyGroup>
 		<PackageType>Template</PackageType>
 		<PackageVersion>1.0.1</PackageVersion>
-		<PackageId>alter.web.templates</PackageId>
-		<Title>Alter Web Templates</Title>
-		<Authors>alter.niltor</Authors>
-		<Description>Templates to create alter.web framework.</Description>
+		<PackageId>ater.web.templates</PackageId>
+		<Title>Ater Web Templates</Title>
+		<Authors>ater.niltor</Authors>
+		<Description>Templates to create ater.web framework.</Description>
 		<PackageTags>dotnet-new;templates;webapi;</PackageTags>
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<IncludeContentInPack>true</IncludeContentInPack>

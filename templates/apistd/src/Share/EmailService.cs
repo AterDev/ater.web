@@ -46,7 +46,7 @@ public class EmailService
     /// <returns></returns>
     public async Task<bool> SendRegisterMailAsync(string toEmail, string userId)
     {
-        var host = "https://publist.vof.media";
+        var host = "yourhost";
         if (_env.IsDevelopment())
         {
             host = "http://localhost:4200";
