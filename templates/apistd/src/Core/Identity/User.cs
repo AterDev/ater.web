@@ -56,18 +56,6 @@ public class User : IdentityUser<Guid>
     /// </summary>
     [MaxLength(200)]
     public string? Avatar { get; set; }
-    public UserInfo? Extend { get; set; }
-    /// <summary>
-    /// 文章
-    /// </summary>
-    public List<Article>? Articles { get; set; }
-    /// <summary>
-    /// 文章目录
-    /// </summary>
-    public List<ArticleCatalog>? ArticleCatalogs { get; set; }
-    /// <summary>
-    /// 评论
-    /// </summary>
-    public List<Comment>? Comments { get; set; }
+ 
 }
 

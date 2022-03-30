@@ -1,29 +1,16 @@
-using Http.API.BackgroundTask;
-using Share.Azure;
-using Share.NewsCollectionService;
-
 var builder = WebApplication.CreateBuilder(args);
 
 var services = builder.Services;
 var configuration = builder.Configuration;
 
-services.AddHostedService<NewsTimerService>();
 services.AddHttpContextAccessor();
-services.Configure<AzureOptions>(configuration.GetSection("Azure"));
 var connectionString = configuration.GetConnectionString("DefaultConnection");
 services.AddDbContextPool<ContextBase>(option =>
 {
     option.UseNpgsql(connectionString, sql => { sql.MigrationsAssembly("EntityFramework.Migrator"); });
 });
 
-
-services.AddOptions();
-services.AddScoped<IUserContext, UserContext>();
-services.AddScoped<NewsCollectionService>();
-services.AddScoped<TwitterService>();
 services.AddScoped(typeof(FileService));
-
-services.AddDataStore();
 
 #region 接口相关内容:jwt/授权/cors
 // jwt

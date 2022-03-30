@@ -15,7 +15,6 @@ public class FileService
         LocalPath = Path.Combine(_env.ContentRootPath, "wwwroot", "Uploads");
     }
 
-
     /// <summary>
     /// 保存文件
     /// </summary>
@@ -30,7 +29,7 @@ public class FileService
         var dirPath = Path.GetDirectoryName(filePath);
         if (!Directory.Exists(dirPath))
         {
-            Directory.CreateDirectory(dirPath);
+            Directory.CreateDirectory(dirPath!);
         }
         using var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write);
         stream.Seek(0, SeekOrigin.Begin);
@@ -38,12 +37,4 @@ public class FileService
         return filePath;
 
     }
-
-    /// <summary>
-    /// 保存到第三方云服务
-    /// </summary>
-    /// <param name="path"></param>
-    /// <param name="stream"></param>
-    /// <returns></returns>
-    public string SaveToCloud(string path, Stream stream) => default;
 }
