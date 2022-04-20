@@ -1,11 +1,10 @@
-using Core.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 namespace EntityFramework;
 
-public class ContextBase : IdentityDbContext<User, Role, Guid>
+public class ContextBase : DbContext
 {
-    public override DbSet<User> Users { get; set; } = null!;
-    public override DbSet<Role> Roles { get; set; } = null!;
+    public DbSet<User> Users { get; set; } = null!;
+    public DbSet<Role> Roles { get; set; } = null!;
 
     public ContextBase(DbContextOptions<ContextBase> options) : base(options)
     {
@@ -30,7 +29,6 @@ public class ContextBase : IdentityDbContext<User, Role, Guid>
             e.HasIndex(a => a.Status);
 
         });
-
 
         builder.Entity<Role>(e =>
         {

@@ -12,15 +12,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="EFCore.BulkExtensions" Version="6.2.3" />
-		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
-		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.15.0" />
-		<PackageReference Include="SendGrid" Version="9.25.1" />
-		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.15.0" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<ProjectReference Include="..\Core\Core.csproj" />
 		<ProjectReference Include="..\Database\EntityFramework\EntityFramework.csproj" />
 	</ItemGroup>

@@ -18,11 +18,9 @@ public class HashCrypto
     public static string BuildSalt()
     {
         var randomBytes = new byte[128 / 8];
-        using (var generator = RandomNumberGenerator.Create())
-        {
-            generator.GetBytes(randomBytes);
-            return Convert.ToBase64String(randomBytes);
-        }
+        using var generator = RandomNumberGenerator.Create();
+        generator.GetBytes(randomBytes);
+        return Convert.ToBase64String(randomBytes);
     }
     /// <summary>
     /// 字符串md5值

@@ -1,34 +1,69 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
 var builder = WebApplication.CreateBuilder(args);
 
 var services = builder.Services;
 var configuration = builder.Configuration;
-
 services.AddHttpContextAccessor();
-var connectionString = configuration.GetConnectionString("DefaultConnection");
+// database sql
+var connectionString = configuration.GetConnectionString("Default");
 services.AddDbContextPool<ContextBase>(option =>
 {
     option.UseNpgsql(connectionString, sql => { sql.MigrationsAssembly("EntityFramework.Migrator"); });
 });
 
+// redis
+//builder.Services.AddStackExchangeRedisCache(options =>
+//{
+//    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+//    options.InstanceName = builder.Configuration.GetConnectionString("RedisInstanceName");
+//});
+//services.AddSingleton(typeof(RedisService));
+
 services.AddScoped(typeof(FileService));
 
 #region 接口相关内容:jwt/授权/cors
-// jwt
+// use jwt
 services.AddAuthentication(options =>
 {
-    options.DefaultScheme = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme;
-});
-services.AddOpenIddict()
-    .AddValidation(options =>
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(cfg =>
+{
+    cfg.SaveToken = true;
+    cfg.TokenValidationParameters = new TokenValidationParameters()
     {
-        options.SetIssuer("https://localhost:5001/");
-        options.UseIntrospection()
-            .SetClientId("api")
-            .SetClientSecret("myApiTestSecret");
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSection("Jwt")["Sign"])),
+        ValidIssuer = configuration.GetSection("Jwt")["Issuer"],
+        ValidAudience = configuration.GetSection("Jwt")["Audience"],
+        ValidateIssuer = true,
+        ValidateLifetime = true,
+        RequireExpirationTime = true,
+        ValidateIssuerSigningKey = true
+    };
+});
 
-        options.UseSystemNetHttp();
-        options.UseAspNetCore();
-    });
+// use OpenIddict
+//services.AddAuthentication(options =>
+//{
+//    options.DefaultScheme = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme;
+//});
+//services.AddOpenIddict()
+//    .AddValidation(options =>
+//    {
+//        options.SetIssuer("https://localhost:5001/");
+//        options.UseIntrospection()
+//            .SetClientId("api")
+//            .SetClientSecret("myApiTestSecret");
+
+//        options.UseSystemNetHttp();
+//        options.UseAspNetCore();
+//    });
+
 // 验证
 services.AddAuthorization(options =>
 {
@@ -81,7 +116,7 @@ if (app.Environment.IsDevelopment())
     app.UseCors("default");
     app.UseDeveloperExceptionPage();
     app.UseOpenApi();
-    app.UseSwaggerUi3(c => { c.DocumentTitle = "文档"; }); 
+    app.UseSwaggerUi3(c => { c.DocumentTitle = "文档"; });
     app.UseStaticFiles();
 }
 else
@@ -91,6 +126,23 @@ else
     //app.UseHsts();
     app.UseHttpsRedirection();
 }
+// 异常统一处理
+//app.UseExceptionHandler(handler =>
+//{
+//    handler.Run(async context =>
+//    {
+//        context.Response.StatusCode = 500;
+//        var exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
+//        var result = new
+//        {
+//            Title = "程序内部错误:" + exception?.Message,
+//            Detail = exception?.Source,
+//            Status = 500,
+//            TraceId = context.TraceIdentifier
+//        };
+//        await context.Response.WriteAsJsonAsync(result);
+//    });
+//});
 
 app.UseHealthChecks("/health");
 
@@ -103,3 +155,5 @@ app.UseEndpoints(endpoints =>
 });
 
 app.Run();
+
+public partial class Program { }
