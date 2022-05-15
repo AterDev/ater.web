@@ -8,13 +8,13 @@ namespace Core.Utils;
 public class HashCrypto
 {
     private readonly static RandomNumberGenerator Rng = RandomNumberGenerator.Create();
-    public static string Create(string value, string salt)
+    public static string SHAHash(string value, string salt)
     {
         var encrpty = new Rfc2898DeriveBytes(value, Encoding.UTF8.GetBytes(salt), 100, HashAlgorithmName.SHA512);
         var valueBytes = encrpty.GetBytes(32);
         return Convert.ToBase64String(valueBytes);
     }
-    public static bool Validate(string value, string salt, string hash) => Create(value, salt) == hash;
+    public static bool Validate(string value, string salt, string hash) => SHAHash(value, salt) == hash;
     public static string BuildSalt()
     {
         var randomBytes = new byte[128 / 8];

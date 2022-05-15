@@ -1,7 +1,9 @@
+using Http.API.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -104,13 +106,29 @@ services.AddOpenApiDocument(c =>
     };
 });
 services.AddControllers()
+    .ConfigureApiBehaviorOptions(o =>
+    {
+        o.InvalidModelStateResponseFactory = context =>
+        {
+            return new CustomBadRequest(context, null);
+        };
+    })
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
     });
 
 
 var app = builder.Build();
+
+// 初始化工作
+await using (var scope = app.Services.CreateAsyncScope())
+{
+    var provider = scope.ServiceProvider;
+    //await InitDataTask.InitDataAsync(provider);
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.UseCors("default");

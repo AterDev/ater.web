@@ -23,7 +23,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EntityFramework.Migrator", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Share", "src\Share\Share.csproj", "{5D8DD758-141F-452D-A69C-B2652C1ABF91}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Http.API.Test", "test\Http.API.Test\Http.API.Test.csproj", "{DCBC8404-6957-4CEB-893F-78BD40B2A30E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Http.API.Test", "test\Http.API.Test\Http.API.Test.csproj", "{DCBC8404-6957-4CEB-893F-78BD40B2A30E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{22DA7F18-A733-47F7-AEDD-11A524889D90}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AD201ED3-17FD-45E0-95FD-8A0FCCE52510}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		global.json = global.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
