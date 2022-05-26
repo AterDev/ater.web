@@ -8,13 +8,21 @@ namespace Core.Utils;
 public class HashCrypto
 {
     private readonly static RandomNumberGenerator Rng = RandomNumberGenerator.Create();
-    public static string SHAHash(string value, string salt)
+    /// <summary>
+    /// SHA512 encrypt
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="salt"></param>
+    /// <returns></returns>
+    public static string GeneratePwd(string value, string salt)
     {
         var encrpty = new Rfc2898DeriveBytes(value, Encoding.UTF8.GetBytes(salt), 100, HashAlgorithmName.SHA512);
         var valueBytes = encrpty.GetBytes(32);
         return Convert.ToBase64String(valueBytes);
     }
-    public static bool Validate(string value, string salt, string hash) => SHAHash(value, salt) == hash;
+
+
+    public static bool Validate(string value, string salt, string hash) => GeneratePwd(value, salt) == hash;
     public static string BuildSalt()
     {
         var randomBytes = new byte[128 / 8];
@@ -22,6 +30,22 @@ public class HashCrypto
         generator.GetBytes(randomBytes);
         return Convert.ToBase64String(randomBytes);
     }
+
+
+    /// <summary>
+    /// HMACSHA256 encrypt
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="content"></param>
+    /// <returns></returns>
+    public static string HMACSHA256(string key, string content)
+    {
+        using HMACSHA256 hmac = new(Encoding.UTF8.GetBytes(key));
+        byte[] valueBytes = hmac.ComputeHash(Encoding.UTF8.GetBytes(content));
+        return Convert.ToBase64String(valueBytes);
+
+    }
+
     /// <summary>
     /// 字符串md5值
     /// </summary>

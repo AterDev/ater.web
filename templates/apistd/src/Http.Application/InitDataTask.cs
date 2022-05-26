@@ -31,7 +31,7 @@ public class InitDataTask
         {
             UserName = "admin",
             PasswordSalt = salt,
-            PasswordHash = HashCrypto.SHAHash("123456", salt),
+            PasswordHash = HashCrypto.GeneratePwd("123456", salt),
             Roles = new List<Role>() { role },
         };
         context.Roles.Add(userRole);
