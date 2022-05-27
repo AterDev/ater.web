@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 namespace EntityFramework;
 
 public class ContextBase : DbContext

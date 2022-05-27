@@ -29,7 +29,7 @@ public static class StringExtension
                     builder.Append('-');
                 }
             }
-            else if (item == '_' || item == ' ')
+            else if (item is '_' or ' ')
             {
                 builder.Append('-');
             }
@@ -82,11 +82,7 @@ public static class StringExtension
     }
     public static string ToUpperFirst(this string str)
     {
-        if (string.IsNullOrWhiteSpace(str))
-        {
-            return string.Empty;
-        }
-        return char.ToUpper(str[0]) + str[1..];
+        return string.IsNullOrWhiteSpace(str) ? string.Empty : char.ToUpper(str[0]) + str[1..];
     }
 
     /// <summary>
@@ -112,7 +108,7 @@ public static class StringExtension
         }
 
         var stepsToSame = source.ComputeLevenshteinDistance(target);
-        return 1.0 - stepsToSame / (double)Math.Max(source.Length, target.Length);
+        return 1.0 - (stepsToSame / (double)Math.Max(source.Length, target.Length));
     }
     /// <summary>
     /// 计算两字符串转变距离

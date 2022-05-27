@@ -1,10 +1,11 @@
-﻿namespace Http.Application;
+﻿namespace Http.Application.Services;
+
 public class InitDataTask
 {
     public static async Task InitDataAsync(IServiceProvider provider)
     {
         var context = provider.GetRequiredService<ContextBase>();
-        // 判断是否已有管理员账号
+        // 判断是否初始化
         var role = await context.Roles.SingleOrDefaultAsync(r => r.Name.ToLower() == "admin");
         if (role == null)
         {
@@ -39,6 +40,4 @@ public class InitDataTask
         context.Users.Add(user);
         await context.SaveChangesAsync();
     }
-
-   
 }

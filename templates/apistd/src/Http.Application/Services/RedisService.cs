@@ -1,14 +1,13 @@
 ﻿using Microsoft.Extensions.Caching.Distributed;
-namespace Share;
+
+namespace Http.Application.Services;
 
 /// <summary>
 /// 简单封装对象的存储和获取
 /// </summary>
 public class RedisService
 {
-    public IDistributedCache Cache {
-        get { return _cache; }
-    }
+    public IDistributedCache Cache => _cache;
 
     private readonly IDistributedCache _cache;
     public RedisService(IDistributedCache cache)

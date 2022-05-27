@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace Http.API.Test.DatastoreTests;
+﻿namespace Http.API.Test.DatastoreTests;
 /// <summary>
 /// 用户角色测试
 /// </summary>
@@ -17,5 +13,5 @@ public class UserRoleTest : BaseTest
         //_roleStore = _service.GetRequiredService<RoleDataStore>();
     }
 
-   
+
 }

@@ -7,7 +7,7 @@ namespace Core.Utils;
 /// </summary>
 public class HashCrypto
 {
-    private readonly static RandomNumberGenerator Rng = RandomNumberGenerator.Create();
+    private static readonly RandomNumberGenerator Rng = RandomNumberGenerator.Create();
     /// <summary>
     /// SHA512 encrypt
     /// </summary>
@@ -22,7 +22,11 @@ public class HashCrypto
     }
 
 
-    public static bool Validate(string value, string salt, string hash) => GeneratePwd(value, salt) == hash;
+    public static bool Validate(string value, string salt, string hash)
+    {
+        return GeneratePwd(value, salt) == hash;
+    }
+
     public static string BuildSalt()
     {
         var randomBytes = new byte[128 / 8];

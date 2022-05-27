@@ -1,9 +1,7 @@
-using Http.API.Middleware;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -126,7 +124,7 @@ var app = builder.Build();
 await using (var scope = app.Services.CreateAsyncScope())
 {
     var provider = scope.ServiceProvider;
-    //await InitDataTask.InitDataAsync(provider);
+    await InitDataTask.InitDataAsync(provider);
 }
 
 if (app.Environment.IsDevelopment())

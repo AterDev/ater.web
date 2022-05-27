@@ -2,7 +2,7 @@
 using SendGrid.Helpers.Mail;
 using Share.Options;
 
-namespace Share;
+namespace Http.Application.Services;
 
 public class EmailService
 {
@@ -57,8 +57,8 @@ public class EmailService
         htmlContent += $@"<a href=""{host}/home/verify_email?code={userId}&time={time}""
 style=""background: #1e5b99;color:rgb(255, 255, 255);padding:8px 16px;text-decoration: none"">激活邮箱</a>";
         var response = await SendAsync(fromEmail, toEmail, $"{_webName}账号激活", null, htmlContent, _webName);
-        if (response.StatusCode != HttpStatusCode.OK
-            && response.StatusCode != HttpStatusCode.Accepted)
+        if (response.StatusCode is not HttpStatusCode.OK
+            and not HttpStatusCode.Accepted)
         {
             // TODO:记录错误信息
             var result = await response.Body.ReadAsStringAsync();
@@ -79,8 +79,8 @@ style=""background: #1e5b99;color:rgb(255, 255, 255);padding:8px 16px;text-decor
         var htmlContent = @$"<p>您请求的【{_webName}】验证码为：</p>";
         htmlContent += $@"<p style=""color:blue;font-size:20px""><strong>{code}</strong></p>";
         var response = await SendAsync(fromEmail, toEmail, $"{_webName}验证码", null, htmlContent, _webName);
-        if (response.StatusCode != HttpStatusCode.OK
-            && response.StatusCode != HttpStatusCode.Accepted)
+        if (response.StatusCode is not HttpStatusCode.OK
+            and not HttpStatusCode.Accepted)
         {
             // TODO:记录错误信息
             var result = await response.Body.ReadAsStringAsync();

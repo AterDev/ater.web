@@ -1,4 +1,4 @@
-﻿namespace Share;
+﻿namespace Http.Application.Services;
 
 /// <summary>
 /// 文件服务
@@ -24,7 +24,10 @@ public class FileService
     public string SaveFile(string path, Stream stream)
     {
         var filePath = Path.Combine(LocalPath, path);
-        if (File.Exists(filePath)) return filePath;
+        if (File.Exists(filePath))
+        {
+            return filePath;
+        }
         // 创建目录
         var dirPath = Path.GetDirectoryName(filePath);
         if (!Directory.Exists(dirPath))
