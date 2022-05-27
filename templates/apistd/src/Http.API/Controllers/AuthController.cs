@@ -30,9 +30,10 @@ public class AuthController : ControllerBase
     public async Task<ActionResult<AuthResult>> LoginAsync(LoginDto dto)
     {
         var user = new User();
-        //var user = _store.Db.Where(u => u.UserName.Equals(dto.UserName))
+        // TODO:查询用户
+        //var user = await _store.Db.Where(u => u.UserName.Equals(dto.UserName))
         //    .Include(u => u.Roles)
-        //    .FirstOrDefault();
+        //    .FirstOrDefaultAsync();
         if (user == null)
         {
             return NotFound("不存在该用户");
