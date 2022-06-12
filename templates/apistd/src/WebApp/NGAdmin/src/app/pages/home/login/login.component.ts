@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 // import { OAuthService, OAuthErrorEvent, UserInfo } from 'angular-oauth2-oidc';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { LoginService } from 'src/app/auth/login.service';
 
 @Component({
   selector: 'app-login',
@@ -9,13 +10,14 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  public loginForm!: FormGroup; constructor(
-    // private oauthService: OAuthService,
+  public loginForm!: FormGroup;
+  constructor(
+    private loginService: LoginService,
     private router: Router
 
   ) {
   }
-  get email() { return this.loginForm.get('email'); }
+  get username() { return this.loginForm.get('username'); }
   get password() { return this.loginForm.get('password'); }
   ngOnInit(): void {
     // const token = this.oauthService.getAccessToken();
@@ -37,10 +39,9 @@ export class LoginComponent implements OnInit {
     //     }
     //   }
     // });
-    console.log('asdas');
 
     this.loginForm = new FormGroup({
-      email: new FormControl('', [Validators.required, Validators.email]),
+      username: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(50)])
     });
   }
@@ -52,9 +53,10 @@ export class LoginComponent implements OnInit {
    */
   getValidatorMessage(type: string): string {
     switch (type) {
-      case 'email':
-        return this.email?.errors?.['required'] ? '邮箱必填' :
-          this.email?.errors?.['email'] ? '错误的邮箱格式' : '';
+      case 'username':
+        return this.username?.errors?.['required'] ? '用户名必填' :
+          this.username?.errors?.['minlength']
+            || this.username?.errors?.['maxlength'] ? '用户名长度4-20位' : '';
       case 'password':
         return this.password?.errors?.['required'] ? '密码必填' :
           this.password?.errors?.['minlength'] ? '密码长度不可低于6位' :
@@ -65,15 +67,18 @@ export class LoginComponent implements OnInit {
     return '';
   }
   doLogin(): void {
+    // TODO:获取表单数据并提交
+    let data = this.loginForm.value;
+    // TODO:登录接口
+    // this.authService.login(data)
+    //   .subscribe(res => {
+    //     // this.loginService.saveLoginState(res);
+    //     this.router.navigate(['/']);
+    //   });
 
   }
 
   logout(): void {
-
+    this.loginService.logout();
   }
-
-  get userName(): string | null {
-    return '';
-  }
-
 }

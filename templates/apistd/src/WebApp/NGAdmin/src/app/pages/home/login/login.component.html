@@ -8,9 +8,9 @@
       <form [formGroup]="loginForm" (ngSubmit)="doLogin()">
         <div>
           <mat-form-field appearance="outline">
-            <mat-label>邮箱</mat-label>
-            <input matInput type="email" placeholder="user@daemon" formControlName="email" required>
-            <mat-error *ngIf="email?.invalid">{{getValidatorMessage('email')}}</mat-error>
+            <mat-label>用户名</mat-label>
+            <input matInput type="text" placeholder="用户名4位以上" formControlName="username" required>
+            <mat-error *ngIf="username?.invalid">{{getValidatorMessage('username')}}</mat-error>
           </mat-form-field>
         </div>
         <div>

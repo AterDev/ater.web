@@ -1,7 +1,7 @@
 import { isDataSource } from '@angular/cdk/collections';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from 'src/app/auth/auth.service';
+import { LoginService } from 'src/app/auth/login.service';
 
 @Component({
   selector: 'app-layout',
@@ -12,7 +12,7 @@ export class LayoutComponent implements OnInit {
   isLogin = false;
   username = '';
   constructor(
-    private auth: AuthService,
+    private auth: LoginService,
     private router: Router
   ) { }
   ngOnInit(): void {
