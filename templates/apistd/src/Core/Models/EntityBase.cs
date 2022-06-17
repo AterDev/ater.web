@@ -14,6 +14,10 @@ public class EntityBase
     public virtual Status Status { get; set; } = Status.Default;
     public DateTimeOffset CreatedTime { get; set; } = DateTimeOffset.UtcNow;
     public DateTimeOffset UpdatedTime { get; set; } = DateTimeOffset.UtcNow;
+    /// <summary>
+    /// 软删除
+    /// </summary>
+    public bool IsDeleted { get; set; } = false;
 }
 
 public enum Status

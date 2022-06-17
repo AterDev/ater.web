@@ -1,4 +1,4 @@
-﻿namespace Share;
+﻿namespace Share.Services;
 
 /// <summary>
 /// 文件服务
@@ -7,7 +7,7 @@ public class FileService
 {
     public string LocalPath { get; }
 
-    private IHostEnvironment _env;
+    private readonly IHostEnvironment _env;
     public FileService(
         IHostEnvironment env)
     {
