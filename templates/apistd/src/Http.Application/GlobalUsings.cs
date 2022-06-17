@@ -1,8 +1,0 @@
-global using System;
-global using Core.Identity;
-global using Core.Models;
-global using Core.Utils;
-global using EntityFramework;
-global using Microsoft.EntityFrameworkCore;
-global using Microsoft.Extensions.DependencyInjection;
-global using Microsoft.Extensions.Logging;

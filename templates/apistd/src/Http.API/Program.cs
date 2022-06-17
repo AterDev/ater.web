@@ -1,3 +1,5 @@
+using Share.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 var services = builder.Services;
@@ -81,7 +83,7 @@ if (app.Environment.IsDevelopment())
     app.UseCors("default");
     app.UseDeveloperExceptionPage();
     app.UseOpenApi();
-    app.UseSwaggerUi3(c => { c.DocumentTitle = "нд╣╣"; }); 
+    app.UseSwaggerUi3(c => { c.DocumentTitle = "нд╣╣"; });
     app.UseStaticFiles();
 }
 else

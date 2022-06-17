@@ -23,6 +23,22 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EntityFramework.Migrator", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Share", "src\Share\Share.csproj", "{5D8DD758-141F-452D-A69C-B2652C1ABF91}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{F4A37FAE-B90C-481B-AD56-427CE7D95364}"
+	ProjectSection(SolutionItems) = preProject
+		config\.editorconfig = config\.editorconfig
+		config\global.json = config\global.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{8377B34A-79F0-47E0-96E1-0AF7B2ACE75C}"
+	ProjectSection(SolutionItems) = preProject
+		scripts\default.ps1 = scripts\default.ps1
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{171177E5-11DA-47B2-B9C3-EDFC480A9C6E}"
+	ProjectSection(SolutionItems) = preProject
+		docs\docs.md = docs\docs.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
