@@ -25,6 +25,3 @@ public class Role : EntityBase
 
     public ICollection<User>? Users { get; set; }
 }
-
-
-

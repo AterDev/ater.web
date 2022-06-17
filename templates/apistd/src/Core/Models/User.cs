@@ -13,7 +13,7 @@ public class User : EntityBase
     /// 真实姓名
     /// </summary>
     [MaxLength(30)]
-    public string RealName { get; set; } = default!;
+    public string? RealName { get; set; }
     /// <summary>
     /// 职位
     /// </summary>
@@ -41,6 +41,7 @@ public class User : EntityBase
     /// 密码重试次数
     /// </summary>
     public int RetryCount { get; set; } = 0;
+    public bool IsDeleted { get; set; } = false;
     /// <summary>
     /// 头像url
     /// </summary>

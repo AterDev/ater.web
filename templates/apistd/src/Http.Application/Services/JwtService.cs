@@ -2,7 +2,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 using Microsoft.IdentityModel.Tokens;
-namespace Share.Services;
+
+namespace Http.Application.Services;
 
 public class JwtService
 {
@@ -28,9 +29,8 @@ public class JwtService
     /// </summary>
     /// <param name="id"></param>
     /// <param name="role"></param>
-    /// <param name="username"></param>
     /// <returns></returns>
-    public string GetToken(string id, string role, string username = "")
+    public string GetToken(string id, string role)
     {
         var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Sign));
         var signingCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
@@ -38,14 +38,12 @@ public class JwtService
         {
                 // 此处自定义claims
                 new Claim(ClaimTypes.NameIdentifier, id),
-                new Claim(ClaimTypes.Role, role),
-                new Claim(ClaimTypes.Name, username),
+                new Claim(ClaimTypes.Role, role)
         };
         if (Claims != null && Claims.Any())
         {
             claims.AddRange(Claims);
         }
-
         var jwt = new JwtSecurityToken(Issuer, Audience, claims,
             expires: DateTime.UtcNow.AddMinutes(TokenExpires),
             signingCredentials: signingCredentials);

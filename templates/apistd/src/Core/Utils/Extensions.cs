@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+
 using Mapster;
 
 namespace Core.Utils;
@@ -32,7 +33,7 @@ public static partial class Extensions
         TypeAdapterConfig<TSource, TDestination>
            .NewConfig()
            .IgnoreNullValues(true);
-        return source.Adapt<TSource,TDestination>();
+        return source.Adapt<TSource, TDestination>();
     }
 
     /// <summary>
@@ -67,6 +68,6 @@ public static partial class Extensions
                 source.Expression, Expression.Quote(selector)));
 
     }
-   
+
 
 }

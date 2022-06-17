@@ -16,9 +16,11 @@
 		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.19.0" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.19.0" />
 	</ItemGroup>
-
 	<ItemGroup>
 		<ProjectReference Include="..\Core\Core.csproj" />
 		<ProjectReference Include="..\Database\EntityFramework\EntityFramework.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Services\" />
 	</ItemGroup>
 </Project>
