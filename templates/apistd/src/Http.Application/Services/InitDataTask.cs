@@ -5,12 +5,20 @@ public class InitDataTask
     public static async Task InitDataAsync(IServiceProvider provider)
     {
         var context = provider.GetRequiredService<ContextBase>();
-        // 判断是否初始化
-        var role = await context.Roles.SingleOrDefaultAsync(r => r.Name.ToLower() == "admin");
-        if (role == null)
+        try
         {
-            Console.WriteLine("初始化数据");
-            await InitRoleAndUserAsync(context);
+            // 判断是否初始化
+            var role = await context.Roles.SingleOrDefaultAsync(r => r.Name.ToLower() == "admin");
+            if (role == null)
+            {
+                Console.WriteLine("初始化数据");
+                await InitRoleAndUserAsync(context);
+            }
+        }
+        catch (Exception ex)
+        {
+
+            Console.WriteLine("请检查数据库配置:" + ex.Message);
         }
     }
 
