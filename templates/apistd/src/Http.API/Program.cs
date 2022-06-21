@@ -99,7 +99,7 @@ services.AddOpenApiDocument(c =>
     c.UseControllerSummaryAsTagDescription = true;
     c.PostProcess = (document) =>
     {
-        document.Info.Title = "Dev Platform";
+        document.Info.Title = "MyProjectName";
         document.Info.Description = "Api ÎÄµµ";
         document.Info.Version = "1.0";
     };
