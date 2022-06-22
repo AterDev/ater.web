@@ -103,9 +103,11 @@ services.AddSwaggerGen(c =>
         Description = "Api ÎÄµµ",
         Version = "v1"
     });
-
-    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename), includeControllerXmlComments: true);
+    var xmlFiles = Directory.GetFiles(AppContext.BaseDirectory, "*.xml", SearchOption.TopDirectoryOnly);
+    foreach (var xml in xmlFiles)
+    {
+        c.IncludeXmlComments(xml, includeControllerXmlComments: true);
+    }
 });
 services.AddControllers()
     .ConfigureApiBehaviorOptions(o =>
@@ -139,7 +141,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c =>
     {
         c.DocumentTitle = "ÎÄµµ";
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API Doc");
     });
 
 }
