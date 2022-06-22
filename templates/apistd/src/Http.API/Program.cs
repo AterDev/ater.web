@@ -1,9 +1,12 @@
 
+using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -92,17 +95,17 @@ services.AddCors(options =>
 
 services.AddHealthChecks();
 // api 接口文档设置
-services.AddOpenApiDocument(c =>
+services.AddSwaggerGen(c =>
 {
-    c.GenerateXmlObjects = true;
-    c.GenerateEnumMappingDescription = true;
-    c.UseControllerSummaryAsTagDescription = true;
-    c.PostProcess = (document) =>
+    c.SwaggerDoc("v1", new OpenApiInfo
     {
-        document.Info.Title = "MyProjectName";
-        document.Info.Description = "Api 文档";
-        document.Info.Version = "1.0";
-    };
+        Title = "MyProjectName",
+        Description = "Api 文档",
+        Version = "v1"
+    });
+
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename), includeControllerXmlComments: true);
 });
 services.AddControllers()
     .ConfigureApiBehaviorOptions(o =>
@@ -118,7 +121,6 @@ services.AddControllers()
         options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
     });
 
-
 var app = builder.Build();
 
 // 初始化工作
@@ -132,9 +134,14 @@ if (app.Environment.IsDevelopment())
 {
     app.UseCors("default");
     app.UseDeveloperExceptionPage();
-    app.UseOpenApi();
-    app.UseSwaggerUi3(c => { c.DocumentTitle = "文档"; });
     app.UseStaticFiles();
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.DocumentTitle = "文档";
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+    });
+
 }
 else
 {
