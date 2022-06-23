@@ -1,10 +1,7 @@
-
-using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
@@ -28,6 +25,8 @@ services.AddDbContextPool<ContextBase>(option =>
 //});
 //services.AddSingleton(typeof(RedisService));
 
+// user context
+//services.AddTransient<IUserContext,UserContext>();
 
 #region 接口相关内容:jwt/授权/cors
 // use jwt
