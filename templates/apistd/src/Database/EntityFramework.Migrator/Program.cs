@@ -4,9 +4,6 @@ using Microsoft.Extensions.Hosting;
 
 var configBuilder = new ConfigurationBuilder()
     .AddJsonFile($"appsettings.json", true, true)
-    .AddJsonFile($"appsettings.Development.json", true, true)
-    .AddJsonFile($"appsettings.Test.json", true, true)
-    //.AddJsonFile($"appsettings.Production.json", true, true)
     .AddUserSecrets(typeof(Program).Assembly)
     .AddEnvironmentVariables();
 
