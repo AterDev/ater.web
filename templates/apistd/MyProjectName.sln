@@ -39,6 +39,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{171177E5-1
 		docs\docs.md = docs\docs.md
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Http.API.Test", "..\..\..\..\work\marketDataPlatform\test\Http.API.Test\Http.API.Test.csproj", "{0F6B0255-A28B-4AF6-BD34-B35B14E90946}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,10 @@ Global
 		{5D8DD758-141F-452D-A69C-B2652C1ABF91}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D8DD758-141F-452D-A69C-B2652C1ABF91}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D8DD758-141F-452D-A69C-B2652C1ABF91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F6B0255-A28B-4AF6-BD34-B35B14E90946}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F6B0255-A28B-4AF6-BD34-B35B14E90946}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F6B0255-A28B-4AF6-BD34-B35B14E90946}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F6B0255-A28B-4AF6-BD34-B35B14E90946}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -82,6 +88,7 @@ Global
 		{9BDFBC64-469E-4CE6-B1AB-36C8E5E2E4E4} = {7D9A9611-5FA8-44D7-8393-6A38FC30D6FB}
 		{F63AEA43-96E3-41EC-8312-B849532ED119} = {7D9A9611-5FA8-44D7-8393-6A38FC30D6FB}
 		{5D8DD758-141F-452D-A69C-B2652C1ABF91} = {FB9BEFB4-E921-476F-AC1B-B589C2CA2562}
+		{0F6B0255-A28B-4AF6-BD34-B35B14E90946} = {7FEE554D-ABB8-40A3-8F56-DB0F7D47CBFD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E9C122E1-F965-4DE0-BA4B-CFC5D269C768}
