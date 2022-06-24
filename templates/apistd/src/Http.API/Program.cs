@@ -28,7 +28,7 @@ services.AddDbContextPool<ContextBase>(option =>
 // user context
 //services.AddTransient<IUserContext,UserContext>();
 
-#region ½Ó¿ÚÏà¹ØÄÚÈİ:jwt/ÊÚÈ¨/cors
+#region æ¥å£ç›¸å…³å†…å®¹:jwt/æˆæƒ/cors
 // use jwt
 services.AddAuthentication(options =>
 {
@@ -67,7 +67,7 @@ services.AddAuthentication(options =>
 //        options.UseAspNetCore();
 //    });
 
-// ÑéÖ¤
+// éªŒè¯
 services.AddAuthorization(options =>
 {
     options.AddPolicy("ApiScope", policy =>
@@ -80,7 +80,7 @@ services.AddAuthorization(options =>
         policy.RequireRole("Admin"));
 });
 
-// corsÅäÖÃ 
+// corsé…ç½® 
 services.AddCors(options =>
 {
     options.AddPolicy("default", builder =>
@@ -93,13 +93,13 @@ services.AddCors(options =>
 #endregion
 
 services.AddHealthChecks();
-// api ½Ó¿ÚÎÄµµÉèÖÃ
+// api æ¥å£æ–‡æ¡£è®¾ç½®
 services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
     {
         Title = "MyProjectName",
-        Description = "Api ÎÄµµ",
+        Description = "Api æ–‡æ¡£",
         Version = "v1"
     });
     var xmlFiles = Directory.GetFiles(AppContext.BaseDirectory, "*.xml", SearchOption.TopDirectoryOnly);
@@ -124,7 +124,7 @@ services.AddControllers()
 
 var app = builder.Build();
 
-// ³õÊ¼»¯¹¤×÷
+// åˆå§‹åŒ–å·¥ä½œ
 await using (var scope = app.Services.CreateAsyncScope())
 {
     var provider = scope.ServiceProvider;
@@ -139,19 +139,19 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        c.DocumentTitle = "ÎÄµµ";
+        c.DocumentTitle = "æ–‡æ¡£";
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API Doc");
     });
 
 }
 else
 {
-    // Éú²ú»·¾³ĞèÒªĞÂµÄÅäÖÃ
+    // ç”Ÿäº§ç¯å¢ƒéœ€è¦æ–°çš„é…ç½®
     app.UseCors("default");
     //app.UseHsts();
     app.UseHttpsRedirection();
 }
-// Òì³£Í³Ò»´¦Àí
+// å¼‚å¸¸ç»Ÿä¸€å¤„ç†
 //app.UseExceptionHandler(handler =>
 //{
 //    handler.Run(async context =>
@@ -160,7 +160,7 @@ else
 //        var exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
 //        var result = new
 //        {
-//            Title = "³ÌĞòÄÚ²¿´íÎó:" + exception?.Message,
+//            Title = "ç¨‹åºå†…éƒ¨é”™è¯¯:" + exception?.Message,
 //            Detail = exception?.Source,
 //            Status = 500,
 //            TraceId = context.TraceIdentifier
