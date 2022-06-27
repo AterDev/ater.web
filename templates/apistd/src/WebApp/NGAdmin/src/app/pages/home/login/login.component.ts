@@ -72,11 +72,12 @@ export class LoginComponent implements OnInit {
     // TODO:登录接口
     // this.authService.login(data)
     //   .subscribe(res => {
-    //     // this.loginService.saveLoginState(res);
+    //     this.loginService.saveLoginState(res);
     //     this.router.navigate(['/']);
     //   });
 
   }
+
 
   logout(): void {
     this.loginService.logout();

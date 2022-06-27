@@ -1,6 +1,5 @@
-import { isDataSource } from '@angular/cdk/collections';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationStart, Router } from '@angular/router';
 import { LoginService } from 'src/app/auth/login.service';
 
 @Component({
@@ -10,11 +9,21 @@ import { LoginService } from 'src/app/auth/login.service';
 })
 export class LayoutComponent implements OnInit {
   isLogin = false;
-  username = '';
+  username?: string | null = null;
   constructor(
     private auth: LoginService,
     private router: Router
-  ) { }
+  ) {
+    // this layout is out of router-outlet, so we need to listen router event and change isLogin status
+    router.events.subscribe((event) => {
+      if (event instanceof NavigationStart) {
+        console.log(event);
+        this.isLogin = this.auth.isLogin;
+        this.username = this.auth.userName;
+      }
+    });
+
+  }
   ngOnInit(): void {
     this.isLogin = this.auth.isLogin;
     if (this.isLogin) {
@@ -28,5 +37,7 @@ export class LayoutComponent implements OnInit {
 
   logout(): void {
     this.auth.logout();
+    this.router.navigateByUrl('/index');
+    location.reload();
   }
 }
