@@ -36,6 +36,7 @@ import { NavigationComponent } from './navigation/navigation.component';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { AdminLayoutComponent } from './admin-layout/admin-layout.component';
 
 const MaterialModules = [
   MatToolbarModule,
@@ -73,7 +74,7 @@ const MaterialModules = [
 ];
 
 @NgModule({
-  declarations: [LayoutComponent, NavigationComponent, ConfirmDialogComponent],
+  declarations: [LayoutComponent, NavigationComponent, ConfirmDialogComponent, AdminLayoutComponent],
   imports: [
     CommonModule,
     RouterModule,
@@ -85,7 +86,8 @@ const MaterialModules = [
     ...MaterialModules,
     LayoutComponent,
     NavigationComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    AdminLayoutComponent
   ]
 })
 export class ComponentsModule { }

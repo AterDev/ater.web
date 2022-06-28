@@ -9,6 +9,7 @@ import { LoginService } from 'src/app/auth/login.service';
 })
 export class LayoutComponent implements OnInit {
   isLogin = false;
+  isAdmin = false;
   username?: string | null = null;
   constructor(
     private auth: LoginService,
@@ -19,6 +20,7 @@ export class LayoutComponent implements OnInit {
       if (event instanceof NavigationStart) {
         console.log(event);
         this.isLogin = this.auth.isLogin;
+        this.isAdmin = this.auth.isAdmin;
         this.username = this.auth.userName;
       }
     });
@@ -26,13 +28,13 @@ export class LayoutComponent implements OnInit {
   }
   ngOnInit(): void {
     this.isLogin = this.auth.isLogin;
+    this.isAdmin = this.auth.isAdmin;
     if (this.isLogin) {
       this.username = this.auth.userName!;
     }
   }
   login(): void {
     this.router.navigateByUrl('/login')
-    // this.router.navigateByUrl('/login');
   }
 
   logout(): void {

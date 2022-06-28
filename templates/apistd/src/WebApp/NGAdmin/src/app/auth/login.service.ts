@@ -4,6 +4,7 @@ import { AuthResult } from "../share/models/auth/auth-result.model";
 @Injectable({ providedIn: 'root' })
 export class LoginService {
   isLogin = false;
+  isAdmin = false;
   userName?: string | null = null;
   id?: string | null = null;
   constructor() {
@@ -13,6 +14,9 @@ export class LoginService {
   saveLoginState(data: AuthResult): void {
     this.isLogin = true;
     this.userName = data.username;
+    if (data.role.toLowerCase() == "admin") {
+      this.isAdmin = true;
+    }
     localStorage.setItem("id", data.id);
     localStorage.setItem("role", data.role);
     localStorage.setItem("username", data.username);
@@ -23,9 +27,12 @@ export class LoginService {
     const userId = localStorage.getItem('id');
     const username = localStorage.getItem('username');
     const token = localStorage.getItem('accessToken');
+    const role = localStorage.getItem('role');
     if (userId && token && username) {
       this.userName = username;
       this.isLogin = true;
+      if (role?.toLowerCase() == "admin")
+        this.isAdmin = true;
     } else {
       this.isLogin = false;
     }
