@@ -2,6 +2,7 @@ using System.Text.Encodings.Web;
 using System.Text.Unicode;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
@@ -101,6 +102,11 @@ services.AddSwaggerGen(c =>
         Title = "MyProjectName",
         Description = "Api 文档",
         Version = "v1"
+    });
+    c.CustomOperationIds((z) =>
+    {
+        var descriptor = (ControllerActionDescriptor)z.ActionDescriptor;
+        return $"{descriptor.ControllerName}_{descriptor.ActionName}";
     });
     var xmlFiles = Directory.GetFiles(AppContext.BaseDirectory, "*.xml", SearchOption.TopDirectoryOnly);
     foreach (var xml in xmlFiles)
