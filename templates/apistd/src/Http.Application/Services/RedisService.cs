@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Caching.Distributed;
+﻿using System.Text.Json;
+using Microsoft.Extensions.Caching.Distributed;
 namespace Http.Application.Services;
 
 /// <summary>

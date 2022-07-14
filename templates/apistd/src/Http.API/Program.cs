@@ -1,8 +1,9 @@
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
-
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using NSwag;
+using NSwag.Generation.Processors.Security;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +14,11 @@ services.AddHttpContextAccessor();
 var connectionString = configuration.GetConnectionString("Default");
 services.AddDbContextPool<ContextBase>(option =>
 {
-    option.UseNpgsql(connectionString, sql => { sql.MigrationsAssembly("EntityFramework.Migrator"); });
+    option.UseNpgsql(connectionString, sql =>
+    {
+        sql.MigrationsAssembly("EntityFramework.Migrator");
+        sql.CommandTimeout(10);
+    });
 });
 
 // redis
@@ -104,6 +109,14 @@ services.AddOpenApiDocument(c =>
         document.Info.Description = "Api 文档";
         document.Info.Version = "1.0";
     };
+    c.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme
+    {
+        Type = OpenApiSecuritySchemeType.ApiKey,
+        Name = "Authorization",
+        In = OpenApiSecurityApiKeyLocation.Header,
+        Description = "Bearer {your JWT token}."
+    });
+    c.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
 });
 services.AddControllers()
     .ConfigureApiBehaviorOptions(o =>

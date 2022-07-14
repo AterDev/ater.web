@@ -1,4 +1,5 @@
-﻿namespace Core.Models;
+﻿
+namespace Core.Models;
 /// <summary>
 /// 权限
 /// </summary>
