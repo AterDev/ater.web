@@ -19,6 +19,8 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="Interface\" />
+	  <Folder Include="DataStore\" />
+	  <Folder Include="新文件夹\" />
 	</ItemGroup>
 
 </Project>

@@ -34,3 +34,7 @@ public interface IDataStoreCommandExt<TId, TEntity>
     /// <returns></returns>
     Task<int> DeleteRangeAsync(List<TId> ids);
 }
+
+public interface IDataStoreCommandExt<TEntity> : IDataStoreCommandExt<Guid, TEntity>
+     where TEntity : class
+{ }
