@@ -5,17 +5,9 @@ public class ContextBase : DbContext
     public DbSet<User> Users { get; set; } = null!;
     public DbSet<Role> Roles { get; set; } = null!;
 
-    public ContextBase(DbContextOptions<ContextBase> options) : base(options)
+    public ContextBase(DbContextOptions options) : base(options)
     {
     }
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        if (!optionsBuilder.IsConfigured)
-        {
-            // 默认配置
-        }
-    }
-
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.Entity<User>(e =>
