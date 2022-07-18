@@ -35,7 +35,7 @@ public interface IDataStoreCommand<TId, TEntity>
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    Task<TEntity> DeleteAsync(TId id);
+    Task<TEntity?> DeleteAsync(TId id);
 }
 public interface IDataStoreCommand<TEntity> : IDataStoreCommand<Guid, TEntity>
     where TEntity : class
