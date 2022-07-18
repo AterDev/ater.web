@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Core.Utils;
+using Microsoft.Extensions.Logging;
 
 namespace Ater.Web.Contract.Implement;
 /// <summary>
@@ -8,9 +9,9 @@ namespace Ater.Web.Contract.Implement;
 /// <typeparam name="TEntity"></typeparam>
 /// <typeparam name="TFilter"></typeparam>
 public class DataStoreQueryBase<TContext, TEntity, TFilter> :
-    IDataStoreQuery<TFilter>, IDataStoreQueryExt<TEntity, TFilter>
+    IDataStoreQuery<TEntity, TFilter>, IDataStoreQueryExt<TEntity, TFilter>
     where TContext : DbContext
-    where TEntity : class
+    where TEntity : EntityBase
     where TFilter : FilterBase
 {
     private readonly TContext _context;
@@ -31,14 +32,19 @@ public class DataStoreQueryBase<TContext, TEntity, TFilter> :
         _query = _db.AsQueryable();
     }
 
-    public Task<TDto> FindAsync<TDto>(Guid id)
+    public async Task<TDto?> FindAsync<TDto>(Guid id)
     {
-        throw new NotImplementedException();
+        return await _db.Where(d => d.Id == id)
+            .AsNoTracking()
+            .ProjectTo<TDto>()
+            .FirstOrDefaultAsync();
     }
 
-    public Task<TDto> FindAsync<TDto>(TFilter filter)
+    public async Task<TDto?> FindAsync<TDto>(Expression<Func<TEntity, bool>> whereExp)
     {
-        throw new NotImplementedException();
+        return await _db.Where(whereExp)
+            .ProjectTo<TDto>()
+            .FirstOrDefaultAsync();
     }
 
     public Task<List<TItem>> ListAsync<TItem>(TFilter filter)

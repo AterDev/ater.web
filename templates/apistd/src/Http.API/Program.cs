@@ -12,7 +12,15 @@ var configuration = builder.Configuration;
 services.AddHttpContextAccessor();
 // database sql
 var connectionString = configuration.GetConnectionString("Default");
-services.AddDbContextPool<ContextBase>(option =>
+services.AddDbContextPool<QueryDbContext>(option =>
+{
+    option.UseNpgsql(connectionString, sql =>
+    {
+        sql.MigrationsAssembly("EntityFramework.Migrator");
+        sql.CommandTimeout(10);
+    });
+});
+services.AddDbContextPool<CommandDbContext>(option =>
 {
     option.UseNpgsql(connectionString, sql =>
     {

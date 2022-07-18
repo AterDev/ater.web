@@ -4,10 +4,10 @@ namespace Core.Utils;
 public static partial class Extensions
 {
     /// <summary>
-    /// set source property value as merge type value, ignore null property
+    /// 将被合并对象中非空属性值，合并到源对象
     /// </summary>
-    /// <typeparam name="TSource"></typeparam>
-    /// <typeparam name="TMerge"></typeparam>
+    /// <typeparam name="TSource">源对象</typeparam>
+    /// <typeparam name="TMerge">被合并对象</typeparam>
     /// <param name="source"></param>
     /// <param name="merge"></param>
     /// <returns></returns>
@@ -35,8 +35,8 @@ public static partial class Extensions
     }
 
     /// <summary>
-    /// select dto properties
-    /// important: dto and entity property(name and type) must same
+    /// 构造查询Dto
+    /// 重要: dto中属性名称和类型必须与实体一致
     /// </summary>
     /// <typeparam name="TSource"></typeparam>
     /// <typeparam name="TResult"></typeparam>
@@ -64,8 +64,11 @@ public static partial class Extensions
         return source.Provider.CreateQuery<TResult>(
             Expression.Call(typeof(Queryable), "Select", new Type[] { sourceType, resultType },
                 source.Expression, Expression.Quote(selector)));
-
     }
 
+    public static IQueryable<TResult> ProjectTo<TResult>(this IQueryable source)
+    {
+        return source.ProjectToType<TResult>();
+    }
 
 }

@@ -1,8 +1,4 @@
-﻿using System.Linq.Expressions;
-
-using Ater.Web.Contract.Models;
-
-namespace Http.Application.Interface;
+﻿namespace Http.Application.Interface;
 /// <summary>
 /// 高级查询接口
 /// </summary>
