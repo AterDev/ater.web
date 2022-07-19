@@ -76,12 +76,14 @@ public class DataStoreQueryBase<TContext, TEntity, TFilter> :
     /// <exception cref="NotImplementedException"></exception>
     public virtual async Task<PageList<TItem>> PageListAsync<TItem>(TFilter filter)
     {
-        if (filter.PageIndex is null or < 1) filter.PageIndex = 1;
-        if (filter.PageSize is null or < 1) filter.PageSize = 12;
+        var pageIndex = 1;
+        var pageSize = 12;
+        if (filter.PageIndex is not null and > 1) pageIndex = 1;
+        if (filter.PageSize is not null or > 1) pageSize = 12;
 
         var count = _query.Count();
-        var data = await _query.Take(filter.PageSize.Value)
-            .Skip((filter.PageIndex.Value - 1) * filter.PageSize.Value)
+        var data = await _query.Take(pageSize)
+            .Skip((pageIndex - 1) * pageSize)
             .ProjectTo<TItem>()
             .ToListAsync();
 
@@ -89,7 +91,7 @@ public class DataStoreQueryBase<TContext, TEntity, TFilter> :
         {
             Count = count,
             Data = data,
-            PageIndex = filter.PageIndex.Value
+            PageIndex = pageIndex
         };
     }
 
@@ -103,16 +105,18 @@ public class DataStoreQueryBase<TContext, TEntity, TFilter> :
     /// <exception cref="NotImplementedException"></exception>
     public virtual async Task<PageList<TItem>> Filter<TItem>(TFilter filter, Dictionary<string, bool>? order)
     {
-        if (filter.PageIndex is null or < 1) filter.PageIndex = 1;
-        if (filter.PageSize is null or < 1) filter.PageSize = 12;
+        var pageIndex = 1;
+        var pageSize = 12;
+        if (filter.PageIndex is not null and > 1) pageIndex = 1;
+        if (filter.PageSize is not null or > 1) pageSize = 12;
 
         if (order != null)
         {
             _query = _query.OrderBy(order);
         }
         var count = _query.Count();
-        var data = await _query.Take(filter.PageSize.Value)
-            .Skip((filter.PageIndex.Value - 1) * filter.PageSize.Value)
+        var data = await _query.Take(pageSize)
+            .Skip((pageIndex - 1) * pageSize)
             .ProjectTo<TItem>()
             .ToListAsync();
 
@@ -120,7 +124,7 @@ public class DataStoreQueryBase<TContext, TEntity, TFilter> :
         {
             Count = count,
             Data = data,
-            PageIndex = filter.PageIndex.Value
+            PageIndex = pageIndex
         };
     }
 
