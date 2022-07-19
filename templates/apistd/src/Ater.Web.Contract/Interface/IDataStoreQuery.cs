@@ -13,7 +13,7 @@ public interface IDataStoreQuery<TId, TEntity, TFilter>
     /// <param name="id"></param>
     /// <returns></returns>
     Task<TDto?> FindAsync<TDto>(TId id);
-    Task<TDto?> FindAsync<TDto>(Expression<Func<TEntity, bool>> whereExp);
+    Task<TDto?> FindAsync<TDto>(Expression<Func<TEntity, bool>>? whereExp);
     /// <summary>
     /// 列表条件查询
     /// </summary>
@@ -21,7 +21,7 @@ public interface IDataStoreQuery<TId, TEntity, TFilter>
     /// <param name="whereExp"></param>
     /// <param name="tracking"></param>
     /// <returns></returns>
-    Task<List<TItem>> ListAsync<TItem>(TFilter filter);
+    Task<List<TItem>> ListAsync<TItem>(Expression<Func<TEntity, bool>>? whereExp);
     /// <summary>
     /// 分页查询
     /// </summary>

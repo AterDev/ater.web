@@ -9,6 +9,7 @@ public class EntityBase<TId>
 }
 public class EntityBase : EntityBase<Guid>
 {
+
 }
 
 

@@ -11,7 +11,7 @@ public interface IDataStoreQueryExt<TEntity, TFilter>
     /// <param name="filter"></param>
     /// <param name="order"></param>
     /// <returns></returns>
-    Task<PageList<TItem>> Filter<TItem>(TFilter filter, Dictionary<string, bool> order);
+    Task<PageList<TItem>> Filter<TItem>(TFilter filter, Dictionary<string, bool>? order);
 
     /// <summary>
     /// 条件查询
@@ -20,5 +20,5 @@ public interface IDataStoreQueryExt<TEntity, TFilter>
     /// <param name="whereExp"></param>
     /// <param name="order"></param>
     /// <returns></returns>
-    Task<PageList<TItem>> Filter<TItem>(Expression<Func<TEntity, bool>> whereExp, Dictionary<string, bool>? order, int? pageIndex = 1, int? pageSize = 12);
+    Task<PageList<TItem>> Filter<TItem>(Expression<Func<TEntity, bool>> whereExp, Dictionary<string, bool>? order, int pageIndex = 1, int pageSize = 12);
 }

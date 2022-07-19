@@ -40,30 +40,123 @@ public class DataStoreQueryBase<TContext, TEntity, TFilter> :
             .FirstOrDefaultAsync();
     }
 
-    public async Task<TDto?> FindAsync<TDto>(Expression<Func<TEntity, bool>> whereExp)
+    /// <summary>
+    /// 条件查询
+    /// </summary>
+    /// <typeparam name="TDto"></typeparam>
+    /// <param name="whereExp"></param>
+    /// <returns></returns>
+    public async Task<TDto?> FindAsync<TDto>(Expression<Func<TEntity, bool>>? whereExp)
     {
+        Expression<Func<TEntity, bool>> exp = e => true;
+        whereExp ??= exp;
         return await _db.Where(whereExp)
             .ProjectTo<TDto>()
             .FirstOrDefaultAsync();
     }
 
-    public Task<List<TItem>> ListAsync<TItem>(TFilter filter)
+    /// <summary>
+    /// 列表条件查询
+    /// </summary>
+    /// <typeparam name="TItem"></typeparam>
+    /// <param name="whereExp"></param>
+    /// <returns></returns>
+    public async Task<List<TItem>> ListAsync<TItem>(Expression<Func<TEntity, bool>>? whereExp)
     {
-        throw new NotImplementedException();
+        Expression<Func<TEntity, bool>> exp = e => true;
+        whereExp ??= exp;
+        return await _db.Where(whereExp)
+            .ProjectTo<TItem>()
+            .ToListAsync();
     }
 
-    public Task<PageList<TItem>> PageListAsync<TItem>(TFilter filter)
+    /// <summary>
+    /// 分页查询
+    /// </summary>
+    /// <typeparam name="TItem"></typeparam>
+    /// <param name="filter"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public async Task<PageList<TItem>> PageListAsync<TItem>(TFilter filter)
     {
-        throw new NotImplementedException();
+        if (filter.PageIndex is null or < 1) filter.PageIndex = 1;
+        if (filter.PageSize is null or < 1) filter.PageSize = 12;
+
+        var count = _query.Count();
+        var data = await _query.Take(filter.PageSize.Value)
+            .Skip((filter.PageIndex.Value - 1) * filter.PageSize.Value)
+            .ProjectTo<TItem>()
+            .ToListAsync();
+
+        return new PageList<TItem>
+        {
+            Count = count,
+            Data = data,
+            PageIndex = filter.PageIndex.Value
+        };
     }
 
-    public Task<PageList<TItem>> Filter<TItem>(TFilter filter, Dictionary<string, bool> order)
+    /// <summary>
+    /// 分页筛选
+    /// </summary>
+    /// <typeparam name="TItem"></typeparam>
+    /// <param name="filter"></param>
+    /// <param name="order">排序</param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public async Task<PageList<TItem>> Filter<TItem>(TFilter filter, Dictionary<string, bool>? order)
     {
-        throw new NotImplementedException();
+        if (filter.PageIndex is null or < 1) filter.PageIndex = 1;
+        if (filter.PageSize is null or < 1) filter.PageSize = 12;
+
+        if (order != null)
+        {
+            _query = _query.OrderBy(order);
+        }
+        var count = _query.Count();
+        var data = await _query.Take(filter.PageSize.Value)
+            .Skip((filter.PageIndex.Value - 1) * filter.PageSize.Value)
+            .ProjectTo<TItem>()
+            .ToListAsync();
+
+        return new PageList<TItem>
+        {
+            Count = count,
+            Data = data,
+            PageIndex = filter.PageIndex.Value
+        };
     }
 
-    public Task<PageList<TItem>> Filter<TItem>(Expression<Func<TEntity, bool>> whereExp, Dictionary<string, bool>? order, int? pageIndex = 1, int? pageSize = 12)
+    /// <summary>
+    /// 分页筛选
+    /// </summary>
+    /// <typeparam name="TItem"></typeparam>
+    /// <param name="whereExp"></param>
+    /// <param name="order"></param>
+    /// <param name="pageIndex"></param>
+    /// <param name="pageSize"></param>
+    /// <returns></returns>
+    public async Task<PageList<TItem>> Filter<TItem>(Expression<Func<TEntity, bool>> whereExp, Dictionary<string, bool>? order, int pageIndex = 1, int pageSize = 12)
     {
-        throw new NotImplementedException();
+        if (pageIndex < 1) pageIndex = 1;
+        _query = _query.Where(whereExp);
+
+        if (order != null)
+        {
+            _query = _query.OrderBy(order);
+        }
+        var count = _query.Count();
+        var data = await _query.Take(pageSize)
+            .Skip((pageIndex - 1) * pageSize)
+            .ProjectTo<TItem>()
+            .ToListAsync();
+
+        return new PageList<TItem>
+        {
+            Count = count,
+            Data = data,
+            PageIndex = pageIndex
+        };
+
     }
 }
