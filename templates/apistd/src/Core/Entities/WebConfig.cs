@@ -1,4 +1,4 @@
-﻿namespace Core.Models;
+﻿namespace Core.Entities;
 /// <summary>
 /// 网站配置
 /// </summary>

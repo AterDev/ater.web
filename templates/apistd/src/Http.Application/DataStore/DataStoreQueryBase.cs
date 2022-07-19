@@ -1,7 +1,4 @@
-﻿using Core.Utils;
-using Microsoft.Extensions.Logging;
-
-namespace Ater.Web.Contract.Implement;
+﻿namespace Http.Application.DataStore;
 /// <summary>
 /// 只读仓储
 /// </summary>

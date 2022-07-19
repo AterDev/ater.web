@@ -1,3 +1,5 @@
+using Core.Entities;
+
 namespace EntityFramework;
 
 public class ContextBase : DbContext

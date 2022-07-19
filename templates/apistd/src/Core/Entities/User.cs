@@ -1,4 +1,6 @@
-﻿namespace Core.Models;
+﻿using Core.Models;
+
+namespace Core.Entities;
 /// <summary>
 /// 系统用户
 /// </summary>

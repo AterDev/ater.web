@@ -1,4 +1,4 @@
-﻿namespace Core.Models;
+﻿namespace Core.Entities;
 /// <summary>
 /// 角色表
 /// </summary>

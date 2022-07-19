@@ -19,14 +19,12 @@ public interface IDataStoreQuery<TId, TEntity, TFilter>
     /// </summary>
     /// <typeparam name="TItem"></typeparam>
     /// <param name="whereExp"></param>
-    /// <param name="tracking"></param>
     /// <returns></returns>
     Task<List<TItem>> ListAsync<TItem>(Expression<Func<TEntity, bool>>? whereExp);
     /// <summary>
     /// 分页查询
     /// </summary>
     /// <typeparam name="TItem"></typeparam>
-    /// <typeparam name="TFilter"></typeparam>
     /// <param name="filter"></param>
     /// <returns></returns>
     Task<PageList<TItem>> PageListAsync<TItem>(TFilter filter);

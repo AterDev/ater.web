@@ -1,4 +1,4 @@
-﻿namespace Ater.Web.Contract.Interface;
+﻿namespace Http.Application.Interface;
 public interface IDataStoreCommandExt<TId, TEntity>
     where TEntity : EntityBase
 {
@@ -6,21 +6,23 @@ public interface IDataStoreCommandExt<TId, TEntity>
     /// 批量新增
     /// </summary>
     /// <param name="entities"></param>
+    /// <param name="chunk"></param>
     /// <returns></returns>
     Task<List<TEntity>> CreateRangeAsync(List<TEntity> entities, int? chunk = 50);
 
     /// <summary>
-    /// 批量更新，覆盖
+    /// 条件更新
     /// </summary>
-    /// <param name="id"></param>
-    /// <param name="entity"></param>
+    /// <typeparam name="TUpdate"></typeparam>
+    /// <param name="whereExp"></param>
+    /// <param name="dto"></param>
     /// <returns></returns>
     Task<int> UpdateRangeAsync<TUpdate>(Expression<Func<TEntity, bool>> whereExp, TUpdate dto);
 
     /// <summary>
-    /// 批量更新,部分字段
+    /// 批量更新
     /// </summary>
-    /// <typeparam name="TEdit"></typeparam>
+    /// <typeparam name="TUpdate"></typeparam>
     /// <param name="ids"></param>
     /// <param name="dto"></param>
     /// <returns></returns>

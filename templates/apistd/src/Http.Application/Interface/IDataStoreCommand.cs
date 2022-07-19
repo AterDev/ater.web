@@ -1,4 +1,4 @@
-﻿namespace Ater.Web.Contract.Interface;
+﻿namespace Http.Application.Interface;
 
 /// <summary>
 /// 仓储命令

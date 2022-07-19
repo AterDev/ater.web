@@ -1,4 +1,4 @@
-﻿namespace Ater.Web.Contract.Models;
+﻿namespace Core.Models;
 public class PageList<T>
 {
     public int Count { get; set; } = 0;

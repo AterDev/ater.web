@@ -18,8 +18,7 @@
 		<ProjectReference Include="..\Share\Share.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-	  <Folder Include="Interface\" />
-	  <Folder Include="DataStore\" />
+	  <Folder Include="Manager\" />
 	</ItemGroup>
 
 </Project>

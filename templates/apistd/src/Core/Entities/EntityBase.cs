@@ -1,4 +1,4 @@
-namespace Core.Models;
+namespace Core.Entities;
 
 /// <summary>
 /// 数据加基础字段模型

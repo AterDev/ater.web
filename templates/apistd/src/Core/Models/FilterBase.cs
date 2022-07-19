@@ -1,4 +1,4 @@
-﻿namespace Ater.Web.Contract.Models;
+﻿namespace Core.Models;
 public class FilterBase
 {
     public int? PageIndex { get; set; } = 1;

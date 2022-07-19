@@ -1,9 +1,6 @@
-﻿using Ater.Web.Contract.Interface;
-using Core.Utils;
-using EFCore.BulkExtensions;
-using Microsoft.Extensions.Logging;
+﻿using EFCore.BulkExtensions;
 
-namespace Ater.Web.Contract.Implement;
+namespace Http.Application.DataStore;
 public class DataStoreCommandBase<TContext, TEntity> : IDataStoreCommand<TEntity>, IDataStoreCommandExt<TEntity>
     where TContext : DbContext
     where TEntity : EntityBase
@@ -82,10 +79,12 @@ public class DataStoreCommandBase<TContext, TEntity> : IDataStoreCommand<TEntity
         return entity;
     }
 
+
     /// <summary>
     /// 批量创建
     /// </summary>
     /// <param name="entities"></param>
+    /// <param name="chunk"></param>
     /// <returns></returns>
     public virtual async Task<List<TEntity>> CreateRangeAsync(List<TEntity> entities, int? chunk = 50)
     {
@@ -109,7 +108,9 @@ public class DataStoreCommandBase<TContext, TEntity> : IDataStoreCommand<TEntity
     /// <summary>
     /// 条件更新
     /// </summary>
-    /// <param name="entities"></param>
+    /// <typeparam name="TUpdate"></typeparam>
+    /// <param name="whereExp"></param>
+    /// <param name="dto"></param>
     /// <returns></returns>
     public virtual async Task<int> UpdateRangeAsync<TUpdate>(Expression<Func<TEntity, bool>> whereExp, TUpdate dto)
     {
@@ -119,7 +120,7 @@ public class DataStoreCommandBase<TContext, TEntity> : IDataStoreCommand<TEntity
     /// <summary>
     /// 批量编辑
     /// </summary>
-    /// <typeparam name="TEdit"></typeparam>
+    /// <typeparam name="TUpdate"></typeparam>
     /// <param name="ids"></param>
     /// <param name="dto"></param>
     /// <returns></returns>
