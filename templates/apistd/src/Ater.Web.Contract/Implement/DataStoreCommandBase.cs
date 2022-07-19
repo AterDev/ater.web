@@ -1,10 +1,12 @@
 ﻿using Ater.Web.Contract.Interface;
+using Core.Utils;
+using EFCore.BulkExtensions;
 using Microsoft.Extensions.Logging;
 
 namespace Ater.Web.Contract.Implement;
 public class DataStoreCommandBase<TContext, TEntity> : IDataStoreCommand<TEntity>, IDataStoreCommandExt<TEntity>
     where TContext : DbContext
-    where TEntity : class
+    where TEntity : EntityBase
 {
     private readonly TContext _context;
     protected readonly ILogger _logger;
@@ -30,8 +32,7 @@ public class DataStoreCommandBase<TContext, TEntity> : IDataStoreCommand<TEntity
     /// </summary>
     /// <param name="entity"></param>
     /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
-    public async Task<TEntity> CreateAsync(TEntity entity)
+    public virtual async Task<TEntity> CreateAsync(TEntity entity)
     {
         await _db.AddAsync(entity);
         return entity;
@@ -43,10 +44,12 @@ public class DataStoreCommandBase<TContext, TEntity> : IDataStoreCommand<TEntity
     /// <param name="id"></param>
     /// <param name="entity"></param>
     /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
-    public Task<TEntity> UpdateAsync(Guid id, TEntity entity)
+    public virtual async Task<TEntity> UpdateAsync(Guid id, TEntity entity)
     {
-        throw new NotImplementedException();
+        var current = await _db.FindAsync(id);
+        if (current == null) throw new ArgumentNullException(nameof(current));
+        current = current.Merge(entity);
+        return current;
     }
 
     /// <summary>
@@ -56,10 +59,12 @@ public class DataStoreCommandBase<TContext, TEntity> : IDataStoreCommand<TEntity
     /// <param name="id"></param>
     /// <param name="dto"></param>
     /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
-    public Task<TEntity> EditAsync<TEdit>(Guid id, TEdit dto)
+    public virtual async Task<TEntity> EditAsync<TEdit>(Guid id, TEdit dto)
     {
-        throw new NotImplementedException();
+        var current = await _db.FindAsync(id);
+        if (current == null) throw new ArgumentNullException(nameof(current));
+        current = current.Merge(dto);
+        return current;
     }
 
     /// <summary>
@@ -67,8 +72,7 @@ public class DataStoreCommandBase<TContext, TEntity> : IDataStoreCommand<TEntity
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
-    public async Task<TEntity?> DeleteAsync(Guid id)
+    public virtual async Task<TEntity?> DeleteAsync(Guid id)
     {
         var entity = await _db.FindAsync(id);
         if (entity != null)
@@ -83,21 +87,33 @@ public class DataStoreCommandBase<TContext, TEntity> : IDataStoreCommand<TEntity
     /// </summary>
     /// <param name="entities"></param>
     /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
-    public Task<List<TEntity>> CreateRangeAsync(List<TEntity> entities)
+    public virtual async Task<List<TEntity>> CreateRangeAsync(List<TEntity> entities, int? chunk = 50)
     {
-        throw new NotImplementedException();
+        if (chunk != null && entities.Count > chunk)
+        {
+            entities.Chunk(chunk.Value).ToList()
+                .ForEach(block =>
+                {
+                    _db.AddRange(block);
+                    _context.SaveChanges();
+                });
+        }
+        else
+        {
+            await _db.AddRangeAsync(entities);
+            await SaveChangeAsync();
+        }
+        return entities;
     }
 
     /// <summary>
-    /// 批量更新
+    /// 条件更新
     /// </summary>
     /// <param name="entities"></param>
     /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
-    public Task<List<TEntity>> UpdateRangeAsync(List<TEntity> entities)
+    public virtual async Task<int> UpdateRangeAsync<TUpdate>(Expression<Func<TEntity, bool>> whereExp, TUpdate dto)
     {
-        throw new NotImplementedException();
+        return await _db.Where(whereExp).BatchUpdateAsync(dto!);
     }
 
     /// <summary>
@@ -107,10 +123,9 @@ public class DataStoreCommandBase<TContext, TEntity> : IDataStoreCommand<TEntity
     /// <param name="ids"></param>
     /// <param name="dto"></param>
     /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
-    public Task<List<TEntity>> EditRangeAsync<TEdit>(List<Guid> ids, TEdit dto)
+    public virtual async Task<int> EditRangeAsync<TUpdate>(List<Guid> ids, TUpdate dto)
     {
-        throw new NotImplementedException();
+        return await _db.Where(d => ids.Contains(d.Id)).BatchUpdateAsync(dto!);
     }
 
     /// <summary>
@@ -118,10 +133,18 @@ public class DataStoreCommandBase<TContext, TEntity> : IDataStoreCommand<TEntity
     /// </summary>
     /// <param name="ids"></param>
     /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
-
-    public Task<int> DeleteRangeAsync(List<Guid> ids)
+    public virtual async Task<int> DeleteRangeAsync(List<Guid> ids)
     {
-        throw new NotImplementedException();
+        return await _db.Where(d => ids.Contains(d.Id)).BatchDeleteAsync();
+    }
+
+    /// <summary>
+    /// 条件删除
+    /// </summary>
+    /// <param name="whereExp"></param>
+    /// <returns></returns>
+    public virtual async Task<int> DeleteRangeAsync(Expression<Func<TEntity, bool>> whereExp)
+    {
+        return await _db.Where(whereExp).BatchDeleteAsync();
     }
 }
