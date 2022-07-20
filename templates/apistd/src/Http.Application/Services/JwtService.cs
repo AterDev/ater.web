@@ -2,7 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 
 using Microsoft.IdentityModel.Tokens;
 
-namespace Http.Application.Services;
+namespace Application.Services;
 
 public class JwtService
 {

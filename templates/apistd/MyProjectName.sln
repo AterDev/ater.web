@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{7FEE554D-A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "src\Core\Core.csproj", "{98B3C835-3D2B-4BA8-A197-6EA842A75C31}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Http.Application", "src\Http.Application\Http.Application.csproj", "{604DD880-14E9-4475-9380-19660BB64F98}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "src\Http.Application\Application.csproj", "{604DD880-14E9-4475-9380-19660BB64F98}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{7D9A9611-5FA8-44D7-8393-6A38FC30D6FB}"
 EndProject

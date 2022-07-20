@@ -1,4 +1,4 @@
-﻿namespace Http.Application.Interface;
+﻿namespace Application.Interface;
 public interface IDataStoreCommandExt<TId, TEntity>
     where TEntity : EntityBase
 {

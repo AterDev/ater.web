@@ -1,4 +1,6 @@
-﻿namespace Http.Application.DataStore;
+﻿using Application.Interface;
+
+namespace Application.DataStore;
 /// <summary>
 /// 只读仓储
 /// </summary>

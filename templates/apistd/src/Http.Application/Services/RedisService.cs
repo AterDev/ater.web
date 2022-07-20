@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 using Microsoft.Extensions.Caching.Distributed;
-namespace Http.Application.Services;
+namespace Application.Services;
 
 /// <summary>
 /// 简单封装对象的存储和获取

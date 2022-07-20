@@ -1,4 +1,6 @@
-﻿namespace Core.Entities;
+﻿using Core.Models;
+
+namespace Core.Entities;
 /// <summary>
 /// 角色权限中间表
 /// </summary>

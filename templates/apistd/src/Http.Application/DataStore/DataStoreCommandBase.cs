@@ -1,6 +1,7 @@
-﻿using EFCore.BulkExtensions;
+﻿using Application.Interface;
+using EFCore.BulkExtensions;
 
-namespace Http.Application.DataStore;
+namespace Application.DataStore;
 public class DataStoreCommandBase<TContext, TEntity> : IDataStoreCommand<TEntity>, IDataStoreCommandExt<TEntity>
     where TContext : DbContext
     where TEntity : EntityBase

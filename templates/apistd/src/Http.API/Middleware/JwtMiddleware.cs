@@ -1,5 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using Application.Services;
 
 namespace Http.API.Middleware;
 

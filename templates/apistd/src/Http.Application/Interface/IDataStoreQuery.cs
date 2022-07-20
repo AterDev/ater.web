@@ -1,4 +1,4 @@
-﻿namespace Http.Application.Interface;
+﻿namespace Application.Interface;
 /// <summary>
 /// 基础查询接口
 /// </summary>

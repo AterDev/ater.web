@@ -31,7 +31,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Http.Application\Http.Application.csproj" />
+		<ProjectReference Include="..\Http.Application\Application.csproj" />
 	</ItemGroup>
 
 </Project>

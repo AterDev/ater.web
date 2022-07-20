@@ -1,4 +1,4 @@
-﻿namespace Http.Application.Services;
+﻿namespace Application.Services;
 
 public class InitDataTask
 {

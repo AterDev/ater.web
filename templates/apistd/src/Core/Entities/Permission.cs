@@ -1,4 +1,6 @@
-﻿namespace Core.Entities;
+﻿using Core.Models;
+
+namespace Core.Entities;
 /// <summary>
 /// 权限
 /// </summary>

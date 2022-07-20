@@ -1,4 +1,4 @@
-﻿namespace Http.Application.Interface;
+﻿namespace Application.Interface;
 
 /// <summary>
 /// 仓储命令
