@@ -48,9 +48,20 @@ public class DomainManagerBase<TEntity> : IDomainManager<TEntity>
         return await Query.FindAsync<TDto>(id);
     }
 
-    public virtual async Task<PageList<TItem>> FilterAsync<TItem>(Expression<Func<TEntity, bool>> whereExp, Dictionary<string, bool>? order = null, int? pageIndex = 1, int? pageSize = 12)
+    /// <summary>
+    /// 分页筛选，需要重写该方法
+    /// </summary>
+    /// <typeparam name="TItem"></typeparam>
+    /// <typeparam name="TFilter"></typeparam>
+    /// <param name="filter"></param>
+    /// <param name="pageIndex"></param>
+    /// <param name="pageSize"></param>
+    /// <returns></returns>
+    public virtual async Task<PageList<TItem>> FilterAsync<TItem, TFilter>(TFilter filter, int? pageIndex = 1, int? pageSize = 12)
+        where TFilter : FilterBase
     {
-        return await Query.FilterAsync<TItem>(whereExp, order, pageIndex ?? 1, pageSize ?? 12);
+        Expression<Func<TEntity, bool>> exp = e => true;
+        return await Query.FilterAsync<TItem>(exp, filter.OrderBy, pageIndex ?? 1, pageSize ?? 12);
     }
 
 }

@@ -27,14 +27,15 @@ public interface IDomainManager<TEntity>
     /// <param name="id"></param>
     /// <returns></returns>
     Task<TDto?> FindAsync<TDto>(Guid id) where TDto : class;
+    
     /// <summary>
     /// 分页查询
     /// </summary>
     /// <typeparam name="TItem"></typeparam>
-    /// <param name="whereExp"></param>
-    /// <param name="order"></param>
+    /// <typeparam name="TFilter"></typeparam>
+    /// <param name="filter"></param>
     /// <param name="pageIndex"></param>
     /// <param name="pageSize"></param>
     /// <returns></returns>
-    Task<PageList<TItem>> FilterAsync<TItem>(Expression<Func<TEntity, bool>> whereExp, Dictionary<string, bool>? order = null, int? pageIndex = 1, int? pageSize = 12);
+    Task<PageList<TItem>> FilterAsync<TItem, TFilter>(TFilter filter, int? pageIndex = 1, int? pageSize = 12) where TFilter : FilterBase;
 }

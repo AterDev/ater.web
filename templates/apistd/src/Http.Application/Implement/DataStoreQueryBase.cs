@@ -90,6 +90,8 @@ public class DataStoreQueryBase<TContext, TEntity> :
     {
         if (pageIndex < 1) pageIndex = 1;
         if (pageSize < 0) pageSize = 12;
+        Expression<Func<TEntity, bool>> exp = e => true;
+        whereExp ??= exp;
 
         var count = _query.Count();
         var data = await _query.Take(pageSize)
@@ -117,6 +119,8 @@ public class DataStoreQueryBase<TContext, TEntity> :
     public virtual async Task<PageList<TItem>> FilterAsync<TItem>(Expression<Func<TEntity, bool>> whereExp, Dictionary<string, bool>? order, int pageIndex = 1, int pageSize = 12)
     {
         if (pageIndex < 1) pageIndex = 1;
+        Expression<Func<TEntity, bool>> exp = e => true;
+        whereExp ??= exp;
         _query = _query.Where(whereExp);
 
         if (order != null)

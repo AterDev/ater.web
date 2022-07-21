@@ -32,6 +32,7 @@ public class RestApiBase<TManager, TEntity, TFilter, TUpdate> : RestControllerBa
         var entity = form.MapTo<TAdd, TEntity>();
         return await manager.AddAsync(entity);
     }
+
     public async Task<ActionResult<TEntity?>> UpdateAsync(Guid id, TUpdate form)
     {
         var entity = form.MapTo<TUpdate, TEntity>();
@@ -40,7 +41,7 @@ public class RestApiBase<TManager, TEntity, TFilter, TUpdate> : RestControllerBa
 
     public async Task<ActionResult<PageList<TItem>>> FilterAsync<TItem>(TFilter filter)
     {
-        return await manager.FilterAsync<TItem>(e => true, filter.OrderBy, filter.PageIndex, filter.PageSize);
+        return await manager.FilterAsync<TItem, TFilter>(filter);
     }
 
     public async Task<ActionResult<TEntity?>> GetDetailAsync(Guid id)
