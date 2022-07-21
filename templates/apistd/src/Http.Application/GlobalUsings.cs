@@ -2,7 +2,9 @@
 global using System.Linq.Expressions;
 global using System.Security.Claims;
 global using System.Text;
+global using Application.Implement;
 global using Application.Interface;
+global using Application.Manager;
 global using Core.Entities;
 global using Core.Models;
 global using Core.Utils;

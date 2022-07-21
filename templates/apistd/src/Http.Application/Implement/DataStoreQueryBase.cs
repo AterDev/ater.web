@@ -1,17 +1,13 @@
-﻿using Application.Interface;
-
-namespace Application.DataStore;
+﻿namespace Application.Implement;
 /// <summary>
 /// 只读仓储
 /// </summary>
 /// <typeparam name="TContext"></typeparam>
 /// <typeparam name="TEntity"></typeparam>
-/// <typeparam name="TFilter"></typeparam>
-public class DataStoreQueryBase<TContext, TEntity, TFilter> :
-    IDataStoreQuery<TEntity, TFilter>, IDataStoreQueryExt<TEntity, TFilter>
+public class DataStoreQueryBase<TContext, TEntity> :
+    IDataStoreQuery<TEntity>, IDataStoreQueryExt<TEntity>
     where TContext : DbContext
     where TEntity : EntityBase
-    where TFilter : FilterBase
 {
     private readonly TContext _context;
     protected readonly ILogger _logger;
@@ -31,12 +27,20 @@ public class DataStoreQueryBase<TContext, TEntity, TFilter> :
         _query = _db.AsQueryable();
     }
 
-    public virtual async Task<TDto?> FindAsync<TDto>(Guid id)
+    private void ResetQuery()
     {
-        return await _db.Where(d => d.Id == id)
+        _query = _db.AsQueryable();
+    }
+
+    public virtual async Task<TDto?> FindAsync<TDto>(Guid id)
+        where TDto : class
+    {
+        var res = await _query.Where(d => d.Id == id)
             .AsNoTracking()
             .ProjectTo<TDto>()
             .FirstOrDefaultAsync();
+        ResetQuery();
+        return res;
     }
 
     /// <summary>
@@ -46,12 +50,15 @@ public class DataStoreQueryBase<TContext, TEntity, TFilter> :
     /// <param name="whereExp"></param>
     /// <returns></returns>
     public virtual async Task<TDto?> FindAsync<TDto>(Expression<Func<TEntity, bool>>? whereExp)
+        where TDto : class
     {
         Expression<Func<TEntity, bool>> exp = e => true;
         whereExp ??= exp;
-        return await _db.Where(whereExp)
+        var res = await _query.Where(whereExp)
             .ProjectTo<TDto>()
             .FirstOrDefaultAsync();
+        ResetQuery();
+        return res;
     }
 
     /// <summary>
@@ -64,64 +71,32 @@ public class DataStoreQueryBase<TContext, TEntity, TFilter> :
     {
         Expression<Func<TEntity, bool>> exp = e => true;
         whereExp ??= exp;
-        return await _db.Where(whereExp)
+        var res = await _query.Where(whereExp)
             .ProjectTo<TItem>()
             .ToListAsync();
+        ResetQuery();
+        return res;
     }
 
     /// <summary>
-    /// 分页查询
+    /// 
     /// </summary>
     /// <typeparam name="TItem"></typeparam>
-    /// <param name="filter"></param>
+    /// <param name="whereExp"></param>
+    /// <param name="pageIndex"></param>
+    /// <param name="pageSize"></param>
     /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
-    public virtual async Task<PageList<TItem>> PageListAsync<TItem>(TFilter filter)
+    public virtual async Task<PageList<TItem>> PageListAsync<TItem>(Expression<Func<TEntity, bool>>? whereExp, int pageIndex = 1, int pageSize = 12)
     {
-        var pageIndex = 1;
-        var pageSize = 12;
-        if (filter.PageIndex is not null and > 1) pageIndex = 1;
-        if (filter.PageSize is not null or > 1) pageSize = 12;
+        if (pageIndex < 1) pageIndex = 1;
+        if (pageSize < 0) pageSize = 12;
 
         var count = _query.Count();
         var data = await _query.Take(pageSize)
             .Skip((pageIndex - 1) * pageSize)
             .ProjectTo<TItem>()
             .ToListAsync();
-
-        return new PageList<TItem>
-        {
-            Count = count,
-            Data = data,
-            PageIndex = pageIndex
-        };
-    }
-
-    /// <summary>
-    /// 分页筛选
-    /// </summary>
-    /// <typeparam name="TItem"></typeparam>
-    /// <param name="filter"></param>
-    /// <param name="order">排序</param>
-    /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
-    public virtual async Task<PageList<TItem>> Filter<TItem>(TFilter filter, Dictionary<string, bool>? order)
-    {
-        var pageIndex = 1;
-        var pageSize = 12;
-        if (filter.PageIndex is not null and > 1) pageIndex = 1;
-        if (filter.PageSize is not null or > 1) pageSize = 12;
-
-        if (order != null)
-        {
-            _query = _query.OrderBy(order);
-        }
-        var count = _query.Count();
-        var data = await _query.Take(pageSize)
-            .Skip((pageIndex - 1) * pageSize)
-            .ProjectTo<TItem>()
-            .ToListAsync();
-
+        ResetQuery();
         return new PageList<TItem>
         {
             Count = count,
@@ -139,7 +114,7 @@ public class DataStoreQueryBase<TContext, TEntity, TFilter> :
     /// <param name="pageIndex"></param>
     /// <param name="pageSize"></param>
     /// <returns></returns>
-    public virtual async Task<PageList<TItem>> Filter<TItem>(Expression<Func<TEntity, bool>> whereExp, Dictionary<string, bool>? order, int pageIndex = 1, int pageSize = 12)
+    public virtual async Task<PageList<TItem>> FilterAsync<TItem>(Expression<Func<TEntity, bool>> whereExp, Dictionary<string, bool>? order, int pageIndex = 1, int pageSize = 12)
     {
         if (pageIndex < 1) pageIndex = 1;
         _query = _query.Where(whereExp);
@@ -153,13 +128,21 @@ public class DataStoreQueryBase<TContext, TEntity, TFilter> :
             .Skip((pageIndex - 1) * pageSize)
             .ProjectTo<TItem>()
             .ToListAsync();
-
+        ResetQuery();
         return new PageList<TItem>
         {
             Count = count,
             Data = data,
             PageIndex = pageIndex
         };
+    }
+}
 
+
+public class QuerySet<TEntity> : DataStoreQueryBase<QueryDbContext, TEntity>
+    where TEntity : EntityBase
+{
+    public QuerySet(QueryDbContext context, ILogger logger) : base(context, logger)
+    {
     }
 }

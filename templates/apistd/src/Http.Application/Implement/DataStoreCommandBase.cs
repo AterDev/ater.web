@@ -1,7 +1,6 @@
-﻿using Application.Interface;
-using EFCore.BulkExtensions;
+﻿using EFCore.BulkExtensions;
 
-namespace Application.DataStore;
+namespace Application.Implement;
 public class DataStoreCommandBase<TContext, TEntity> : IDataStoreCommand<TEntity>, IDataStoreCommandExt<TEntity>
     where TContext : DbContext
     where TEntity : EntityBase
@@ -12,6 +11,8 @@ public class DataStoreCommandBase<TContext, TEntity> : IDataStoreCommand<TEntity
     /// 当前实体DbSet
     /// </summary>
     protected readonly DbSet<TEntity> _db;
+
+    //public TEntity CurrentEntity { get; }
 
     public DataStoreCommandBase(TContext context, ILogger logger)
     {
@@ -24,6 +25,16 @@ public class DataStoreCommandBase<TContext, TEntity> : IDataStoreCommand<TEntity
     {
         return await _context.SaveChangesAsync();
     }
+
+    public virtual async Task<TEntity?> FindAsync(Expression<Func<TEntity, bool>>? whereExp)
+    {
+
+        Expression<Func<TEntity, bool>> exp = e => true;
+        whereExp ??= exp;
+        return await _db.Where(whereExp)
+            .FirstOrDefaultAsync();
+    }
+
 
     /// <summary>
     /// 创建实体
@@ -44,24 +55,10 @@ public class DataStoreCommandBase<TContext, TEntity> : IDataStoreCommand<TEntity
     /// <returns></returns>
     public virtual async Task<TEntity> UpdateAsync(Guid id, TEntity entity)
     {
+        if (entity.Id != id) throw new Exception("entity id not match");
         var current = await _db.FindAsync(id);
         if (current == null) throw new ArgumentNullException(nameof(current));
         current = current.Merge(entity);
-        return current;
-    }
-
-    /// <summary>
-    /// 编辑实体
-    /// </summary>
-    /// <typeparam name="TEdit"></typeparam>
-    /// <param name="id"></param>
-    /// <param name="dto"></param>
-    /// <returns></returns>
-    public virtual async Task<TEntity> EditAsync<TEdit>(Guid id, TEdit dto)
-    {
-        var current = await _db.FindAsync(id);
-        if (current == null) throw new ArgumentNullException(nameof(current));
-        current = current.Merge(dto);
         return current;
     }
 
@@ -148,5 +145,12 @@ public class DataStoreCommandBase<TContext, TEntity> : IDataStoreCommand<TEntity
     public virtual async Task<int> DeleteRangeAsync(Expression<Func<TEntity, bool>> whereExp)
     {
         return await _db.Where(whereExp).BatchDeleteAsync();
+    }
+}
+public class CommandSet<TEntity> : DataStoreCommandBase<CommandDbContext, TEntity>
+    where TEntity : EntityBase
+{
+    public CommandSet(CommandDbContext context, ILogger logger) : base(context, logger)
+    {
     }
 }

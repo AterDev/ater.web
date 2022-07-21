@@ -18,7 +18,7 @@
 		<ProjectReference Include="..\Share\Share.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-	  <Folder Include="Manager\" />
+	  <Folder Include="DataStore\" />
 	</ItemGroup>
 
 </Project>
