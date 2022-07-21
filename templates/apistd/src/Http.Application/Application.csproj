@@ -18,7 +18,8 @@
 		<ProjectReference Include="..\Share\Share.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-	  <Folder Include="DataStore\" />
+	  <Folder Include="QueryDataStore\" />
+	  <Folder Include="CommandDataStore\" />
 	</ItemGroup>
 
 </Project>
