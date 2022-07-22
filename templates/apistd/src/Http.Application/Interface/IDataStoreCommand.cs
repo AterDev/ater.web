@@ -16,11 +16,9 @@ public interface IDataStoreCommand<TId, TEntity>
     /// <summary>
     /// 更新实体
     /// </summary>
-    /// <param name="id"></param>
     /// <param name="entity"></param>
     /// <returns></returns>
-    Task<TEntity> UpdateAsync(TId id, TEntity entity);
-
+    TEntity Update(TEntity entity);
 
     /// <summary>
     /// 删除

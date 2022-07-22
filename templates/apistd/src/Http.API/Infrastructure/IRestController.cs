@@ -1,26 +1,28 @@
-﻿using Core.Models;
-namespace Http.API.Infrastructure;
+﻿namespace Http.API.Infrastructure;
 
-public interface IRestAPI<TEntity, TFilter, TUpdate>
+public interface IRestController<TEntity, TAdd, TUpdate, TFilter, TItem>
+    where TEntity : EntityBase
 {
+
     /// <summary>
     /// 添加
     /// </summary>
     /// <param name="form"></param>
     /// <returns></returns>
-    Task<ActionResult<TEntity>> AddAsync<TAdd>(TAdd form);
+    Task<ActionResult<User>> AddAsync(TAdd form);
 
     /// <summary>
     /// 分页筛选
     /// </summary>
     /// <param name="filter"></param>
     /// <returns></returns>
-    Task<ActionResult<PageList<TItem>>> FilterAsync<TItem>(TFilter filter);
+    Task<ActionResult<PageList<TItem>>> FilterAsync(TFilter filter);
     /// <summary>
     /// 详情
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
+
     Task<ActionResult<TEntity?>> GetDetailAsync(Guid id);
     /// <summary>
     /// 更新

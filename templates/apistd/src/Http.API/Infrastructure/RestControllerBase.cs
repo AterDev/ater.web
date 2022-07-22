@@ -1,20 +1,42 @@
-﻿using Microsoft.AspNetCore.Mvc.Infrastructure;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace Http.API.Infrastructure;
 
 /// <summary>
 /// http api 基类，重写ControllerBase中的方法
 /// </summary>
-public class RestControllerBase : ControllerBase
+[ApiController]
+[Route("api/[controller]")]
+[Authorize("User")]
+public class RestControllerBase<TManager, TEntity, TUpdate> : ControllerBase
+     where TEntity : EntityBase
+     where TManager : DomainManagerBase<TEntity, TUpdate>
 {
+    protected readonly TManager manager;
+    protected readonly ILogger _logger;
+    protected readonly IUserContext _user;
+    public RestControllerBase(
+        TManager manager,
+        IUserContext user,
+        ILogger logger
+        )
+    {
+        this.manager = manager;
+        _user = user;
+        _logger = logger;
+    }
+
     /// <summary>
     /// 404返回格式处理
     /// </summary>
     /// <param name="value"></param>
     /// <returns></returns>
+    [ApiExplorerSettings(IgnoreApi = true)]
     public override NotFoundObjectResult NotFound([ActionResultObjectValue] object? value)
     {
-        var res = new {
+        var res = new
+        {
             Title = "访问的资源不存在",
             Detail = value?.ToString(),
             Status = 404,
@@ -28,9 +50,11 @@ public class RestControllerBase : ControllerBase
     /// </summary>
     /// <param name="error"></param>
     /// <returns></returns>
+    [ApiExplorerSettings(IgnoreApi = true)]
     public override ConflictObjectResult Conflict([ActionResultObjectValue] object? error)
     {
-        var res = new {
+        var res = new
+        {
             Title = "重复的资源",
             Detail = error?.ToString(),
             Status = 409,

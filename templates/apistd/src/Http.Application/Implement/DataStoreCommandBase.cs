@@ -26,13 +26,19 @@ public class DataStoreCommandBase<TContext, TEntity> : IDataStoreCommand<TEntity
         return await _context.SaveChangesAsync();
     }
 
-    public virtual async Task<TEntity?> FindAsync(Expression<Func<TEntity, bool>>? whereExp)
+    public virtual async Task<TEntity?> FindAsync(Expression<Func<TEntity, bool>>? whereExp, string[]? navigations = null)
     {
-
         Expression<Func<TEntity, bool>> exp = e => true;
         whereExp ??= exp;
-        return await _db.Where(whereExp)
-            .FirstOrDefaultAsync();
+        var _query = _db.Where(whereExp).AsQueryable();
+        if (navigations != null)
+        {
+            foreach (var item in navigations)
+            {
+                _query = _query.Include(item);
+            }
+        }
+        return await _query.FirstOrDefaultAsync();
     }
 
 
@@ -50,16 +56,12 @@ public class DataStoreCommandBase<TContext, TEntity> : IDataStoreCommand<TEntity
     /// <summary>
     /// 更新实体
     /// </summary>
-    /// <param name="id"></param>
     /// <param name="entity"></param>
     /// <returns></returns>
-    public virtual async Task<TEntity> UpdateAsync(Guid id, TEntity entity)
+    public virtual TEntity Update(TEntity entity)
     {
-        if (entity.Id != id) throw new Exception("entity id not match");
-        var current = await _db.FindAsync(id);
-        if (current == null) throw new ArgumentNullException(nameof(current));
-        current = current.Merge(entity);
-        return current;
+        _db.Update(entity);
+        return entity;
     }
 
     /// <summary>
