@@ -1,7 +1,7 @@
 ﻿using EFCore.BulkExtensions;
 
 namespace Application.Implement;
-public class DataStoreCommandBase<TContext, TEntity> : IDataStoreCommand<TEntity>, IDataStoreCommandExt<TEntity>
+public class CommandDataStoreBase<TContext, TEntity> : IDataStoreCommand<TEntity>, IDataStoreCommandExt<TEntity>
     where TContext : DbContext
     where TEntity : EntityBase
 {
@@ -11,10 +11,11 @@ public class DataStoreCommandBase<TContext, TEntity> : IDataStoreCommand<TEntity
     /// 当前实体DbSet
     /// </summary>
     protected readonly DbSet<TEntity> _db;
+    public bool EnableSoftDelete { get; set; } = true;
 
     //public TEntity CurrentEntity { get; }
 
-    public DataStoreCommandBase(TContext context, ILogger logger)
+    public CommandDataStoreBase(TContext context, ILogger logger)
     {
         _context = context;
         _logger = logger;
@@ -74,7 +75,14 @@ public class DataStoreCommandBase<TContext, TEntity> : IDataStoreCommand<TEntity
         var entity = await _db.FindAsync(id);
         if (entity != null)
         {
-            _db.Remove(entity!);
+            if (EnableSoftDelete)
+            {
+                entity.IsDeleted = true;
+            }
+            else
+            {
+                _db.Remove(entity!);
+            }
         }
         return entity;
     }
@@ -149,7 +157,7 @@ public class DataStoreCommandBase<TContext, TEntity> : IDataStoreCommand<TEntity
         return await _db.Where(whereExp).BatchDeleteAsync();
     }
 }
-public class CommandSet<TEntity> : DataStoreCommandBase<CommandDbContext, TEntity>
+public class CommandSet<TEntity> : CommandDataStoreBase<CommandDbContext, TEntity>
     where TEntity : EntityBase
 {
     public CommandSet(CommandDbContext context, ILogger logger) : base(context, logger)

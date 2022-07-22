@@ -35,7 +35,7 @@ public class RestControllerBase<TManager, TEntity, TUpdate> : ControllerBase
     [ApiExplorerSettings(IgnoreApi = true)]
     public override NotFoundObjectResult NotFound([ActionResultObjectValue] object? value)
     {
-        var res = new
+        var res = new HttpResponseError
         {
             Title = "访问的资源不存在",
             Detail = value?.ToString(),
@@ -53,14 +53,32 @@ public class RestControllerBase<TManager, TEntity, TUpdate> : ControllerBase
     [ApiExplorerSettings(IgnoreApi = true)]
     public override ConflictObjectResult Conflict([ActionResultObjectValue] object? error)
     {
-        var res = new
+        var res = new HttpResponseError
         {
-            Title = "重复的资源",
+            Title = "存在冲突",
             Detail = error?.ToString(),
             Status = 409,
             TraceId = HttpContext.TraceIdentifier
         };
         return base.Conflict(res);
+    }
+
+    /// <summary>
+    /// 400返回格式处理
+    /// </summary>
+    /// <param name="error"></param>
+    /// <returns></returns>
+    [ApiExplorerSettings(IgnoreApi = true)]
+    public override BadRequestObjectResult BadRequest([ActionResultObjectValue] object? error)
+    {
+        var res = new HttpResponseError
+        {
+            Title = "错误的请求",
+            Detail = error?.ToString(),
+            Status = 400,
+            TraceId = HttpContext.TraceIdentifier
+        };
+        return base.BadRequest(res);
     }
 
 }

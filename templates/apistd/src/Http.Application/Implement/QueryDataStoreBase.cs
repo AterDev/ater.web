@@ -4,7 +4,7 @@
 /// </summary>
 /// <typeparam name="TContext"></typeparam>
 /// <typeparam name="TEntity"></typeparam>
-public class DataStoreQueryBase<TContext, TEntity> :
+public class QueryDataStoreBase<TContext, TEntity> :
     IDataStoreQuery<TEntity>, IDataStoreQueryExt<TEntity>
     where TContext : DbContext
     where TEntity : EntityBase
@@ -19,7 +19,7 @@ public class DataStoreQueryBase<TContext, TEntity> :
     public IQueryable<TEntity> _query;
 
 
-    public DataStoreQueryBase(TContext context, ILogger logger)
+    public QueryDataStoreBase(TContext context, ILogger logger)
     {
         _context = context;
         _logger = logger;
@@ -143,7 +143,7 @@ public class DataStoreQueryBase<TContext, TEntity> :
 }
 
 
-public class QuerySet<TEntity> : DataStoreQueryBase<QueryDbContext, TEntity>
+public class QuerySet<TEntity> : QueryDataStoreBase<QueryDbContext, TEntity>
     where TEntity : EntityBase
 {
     public QuerySet(QueryDbContext context, ILogger logger) : base(context, logger)

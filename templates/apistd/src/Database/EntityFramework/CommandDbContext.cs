@@ -9,4 +9,5 @@ public class CommandDbContext : ContextBase
     {
         base.OnModelCreating(builder);
     }
+
 }
