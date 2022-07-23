@@ -1,6 +1,5 @@
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
-using Application.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using NSwag;
@@ -38,8 +37,6 @@ services.AddDbContextPool<CommandDbContext>(option =>
 //});
 //services.AddSingleton(typeof(RedisService));
 
-// user context
-//services.AddTransient<IUserContext,UserContext>();
 
 #region 接口相关内容:jwt/授权/cors
 // use jwt
@@ -63,30 +60,9 @@ services.AddAuthentication(options =>
     };
 });
 
-// use OpenIddict
-//services.AddAuthentication(options =>
-//{
-//    options.DefaultScheme = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme;
-//});
-//services.AddOpenIddict()
-//    .AddValidation(options =>
-//    {
-//        options.SetIssuer("https://localhost:5001/");
-//        options.UseIntrospection()
-//            .SetClientId("api")
-//            .SetClientSecret("myApiTestSecret");
-
-//        options.UseSystemNetHttp();
-//        options.UseAspNetCore();
-//    });
-
 // 验证
 services.AddAuthorization(options =>
 {
-    options.AddPolicy("ApiScope", policy =>
-    {
-        policy.RequireClaim("scope", "openid profile email offline_access");
-    });
     options.AddPolicy("User", policy =>
         policy.RequireRole("Admin", "User"));
     options.AddPolicy("Admin", policy =>

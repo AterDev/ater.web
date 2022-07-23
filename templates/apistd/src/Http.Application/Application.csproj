@@ -12,14 +12,23 @@
 	  <NoWarn>1701;1702;1591</NoWarn>
 	</PropertyGroup>
 	<ItemGroup>
+	  <Compile Remove="CommandDataStore\**" />
+	  <Compile Remove="QueryDataStore\**" />
+	  <EmbeddedResource Remove="CommandDataStore\**" />
+	  <EmbeddedResource Remove="QueryDataStore\**" />
+	  <None Remove="CommandDataStore\**" />
+	  <None Remove="QueryDataStore\**" />
+	</ItemGroup>
+	<ItemGroup>
 		<PackageReference Include="EFCore.BulkExtensions" Version="6.5.1" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Share\Share.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-	  <Folder Include="QueryDataStore\" />
-	  <Folder Include="CommandDataStore\" />
+	  <Folder Include="CommandStore\" />
+	  <Folder Include="IManager\" />
+	  <Folder Include="QueryStore\" />
 	</ItemGroup>
 
 </Project>
