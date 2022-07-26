@@ -1,7 +1,6 @@
 global using System.Text;
 global using System.Text.Json.Serialization;
 global using Application.Interface;
-global using Application.Manager;
 global using Application.Services;
 global using Core.Entities;
 global using Core.Models;
