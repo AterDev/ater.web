@@ -1,8 +1,9 @@
-﻿namespace Application.Implement;
+namespace Application.Implement;
 public class DataStoreContext
 {
     public QueryDbContext QueryContext { get; init; }
     public CommandDbContext CommandContext { get; init; }
+
     /// <summary>
     /// 绑在对象
     /// </summary>
@@ -15,6 +16,7 @@ public class DataStoreContext
     {
         QueryContext = queryDbContext;
         CommandContext = commandDbContext;
+
     }
 
     public async Task<int> SaveChangesAsync()
@@ -24,14 +26,14 @@ public class DataStoreContext
 
     public QuerySet<TEntity> QuerySet<TEntity>() where TEntity : EntityBase
     {
-        var typename = typeof(TEntity).Name + "QueryDataStore";
+        var typename = typeof(TEntity).Name + "QueryStore";
         var set = GetSet(typename);
         if (set == null) throw new ArgumentNullException($"{typename} class object not found");
         return (QuerySet<TEntity>)set;
     }
     public CommandSet<TEntity> CommandSet<TEntity>() where TEntity : EntityBase
     {
-        var typename = typeof(TEntity).Name + "CommandDataStore";
+        var typename = typeof(TEntity).Name + "CommandStore";
         var set = GetSet(typename);
         if (set == null) throw new ArgumentNullException($"{typename} class object not found");
         return (CommandSet<TEntity>)set;

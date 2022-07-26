@@ -1,4 +1,4 @@
-﻿namespace Core.Models;
+﻿namespace Share.Models;
 public class FilterBase
 {
     public int? PageIndex { get; set; } = 1;
