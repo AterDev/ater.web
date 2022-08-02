@@ -1,4 +1,3 @@
-using Application.Interface;
 using Microsoft.AspNetCore.Http;
 
 namespace Application.Implement;
@@ -14,8 +13,8 @@ public class UserContext : IUserContext
     public List<string>? Roles { get; set; }
     public Guid? GroupId { get; init; }
     private readonly IHttpContextAccessor _httpContextAccessor;
-
-    public UserContext(IHttpContextAccessor httpContextAccessor)
+    private readonly CommandDbContext _context;
+    public UserContext(IHttpContextAccessor httpContextAccessor, CommandDbContext context)
     {
         _httpContextAccessor = httpContextAccessor;
         if (Guid.TryParse(FindClaim(ClaimTypes.NameIdentifier)?.Value, out var userId) && userId != Guid.Empty)
@@ -37,8 +36,12 @@ public class UserContext : IUserContext
         {
             IsAdmin = false;
         }
+        _context = context;
     }
 
     public Claim? FindClaim(string claimType) => _httpContextAccessor?.HttpContext?.User?.FindFirst(claimType);
-
+    public async Task<User?> GetUserAsync()
+    {
+        return await _context.Users.FindAsync(UserId);
+    }
 }
