@@ -4,10 +4,18 @@ public class DomainManagerBase<TEntity, TUpdate, TFilter> : IDomainManager<TEnti
     where TEntity : EntityBase
     where TFilter : FilterBase
 {
+    /// <summary>
+    /// 仓储上下文，可通过Store访问到其他实体的上下文
+    /// </summary>
     public DataStoreContext Stores { get; init; }
+    /// <summary>
+    /// 实体的只读仓储实现
+    /// </summary>
     public QuerySet<TEntity> Query { get; init; }
+    /// <summary>
+    /// 实体的可写仓储实现
+    /// </summary>
     public CommandSet<TEntity> Command { get; init; }
-
     /// <summary>
     /// 是否自动保存(调用SaveChanges)
     /// </summary>
@@ -24,7 +32,7 @@ public class DomainManagerBase<TEntity, TUpdate, TFilter> : IDomainManager<TEnti
         return await Stores.SaveChangesAsync();
     }
 
-    public async Task AutoSaveAsync()
+    private async Task AutoSaveAsync()
     {
         if (AutoSave)
         {
@@ -51,7 +59,7 @@ public class DomainManagerBase<TEntity, TUpdate, TFilter> : IDomainManager<TEnti
 
     public virtual async Task<TEntity> UpdateAsync(TEntity entity, TUpdate dto)
     {
-        entity.Merge(dto);
+        entity.Merge(dto, false);
         entity.UpdatedTime = DateTimeOffset.UtcNow;
         var res = Command.Update(entity);
         await AutoSaveAsync();
@@ -65,7 +73,12 @@ public class DomainManagerBase<TEntity, TUpdate, TFilter> : IDomainManager<TEnti
         return res;
     }
 
-    public virtual async Task<TDto?> FindAsync<TDto>(Expression<Func<TEntity, bool>>? whereExp) where TDto : class
+    public virtual async Task<TEntity?> FindAsync(Guid id)
+    {
+        return await Query.FindAsync<TEntity>(q => q.Id == id);
+    }
+
+    public async Task<TDto?> FindAsync<TDto>(Expression<Func<TEntity, bool>>? whereExp) where TDto : class
     {
         return await Query.FindAsync<TDto>(whereExp);
     }

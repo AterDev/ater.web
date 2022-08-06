@@ -22,6 +22,7 @@ public interface IDomainManager<TEntity, TUpdate, TFilter>
     Task<TEntity> UpdateAsync(TEntity entity, TUpdate dto);
     Task<TEntity?> DeleteAsync(Guid id);
 
+    Task<TEntity?> FindAsync(Guid id);
     /// <summary>
     /// 查询对象
     /// </summary>
