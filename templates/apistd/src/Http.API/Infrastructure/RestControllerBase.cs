@@ -4,14 +4,10 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 namespace Http.API.Infrastructure;
 
 /// <summary>
-/// http api 基类，重写ControllerBase中的方法
+/// 带Manager的控制器
 /// </summary>
-[ApiController]
-[Route("api/[controller]")]
-[Authorize("User")]
-public class RestControllerBase<TManager, TEntity, TUpdate> : ControllerBase
-     where TEntity : EntityBase
-     where TManager : DomainManagerBase<TEntity, TUpdate>
+public class RestControllerBase<TManager> : RestControllerBase
+     where TManager : class
 {
     protected readonly TManager manager;
     protected readonly ILogger _logger;
@@ -27,6 +23,16 @@ public class RestControllerBase<TManager, TEntity, TUpdate> : ControllerBase
         _logger = logger;
     }
 
+}
+/// <summary>
+/// http api 基类，重写ControllerBase中的方法
+/// </summary>
+[ApiController]
+[Route("api/[controller]")]
+[Authorize("User")]
+public class RestControllerBase : ControllerBase
+{
+
     /// <summary>
     /// 404返回格式处理
     /// </summary>
@@ -35,7 +41,7 @@ public class RestControllerBase<TManager, TEntity, TUpdate> : ControllerBase
     [ApiExplorerSettings(IgnoreApi = true)]
     public override NotFoundObjectResult NotFound([ActionResultObjectValue] object? value)
     {
-        var res = new HttpResponseError
+        var res = new
         {
             Title = "访问的资源不存在",
             Detail = value?.ToString(),
@@ -53,32 +59,13 @@ public class RestControllerBase<TManager, TEntity, TUpdate> : ControllerBase
     [ApiExplorerSettings(IgnoreApi = true)]
     public override ConflictObjectResult Conflict([ActionResultObjectValue] object? error)
     {
-        var res = new HttpResponseError
+        var res = new
         {
-            Title = "存在冲突",
+            Title = "重复的资源",
             Detail = error?.ToString(),
             Status = 409,
             TraceId = HttpContext.TraceIdentifier
         };
         return base.Conflict(res);
     }
-
-    /// <summary>
-    /// 400返回格式处理
-    /// </summary>
-    /// <param name="error"></param>
-    /// <returns></returns>
-    [ApiExplorerSettings(IgnoreApi = true)]
-    public override BadRequestObjectResult BadRequest([ActionResultObjectValue] object? error)
-    {
-        var res = new HttpResponseError
-        {
-            Title = "错误的请求",
-            Detail = error?.ToString(),
-            Status = 400,
-            TraceId = HttpContext.TraceIdentifier
-        };
-        return base.BadRequest(res);
-    }
-
 }
