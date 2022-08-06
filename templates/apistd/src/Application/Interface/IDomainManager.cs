@@ -20,7 +20,7 @@ public interface IDomainManager<TEntity, TUpdate, TFilter>
     Task<TEntity?> GetCurrent(Guid id, string[]? navigations = null);
     Task<TEntity> AddAsync(TEntity entity);
     Task<TEntity> UpdateAsync(TEntity entity, TUpdate dto);
-    Task<TEntity?> DeleteAsync(Guid id);
+    Task<TEntity?> DeleteAsync(TEntity entity);
 
     Task<TEntity?> FindAsync(Guid id);
     /// <summary>
