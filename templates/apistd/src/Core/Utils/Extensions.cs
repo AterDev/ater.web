@@ -10,12 +10,16 @@ public static partial class Extensions
     /// <typeparam name="TMerge">被合并对象</typeparam>
     /// <param name="source"></param>
     /// <param name="merge"></param>
+    /// <param name="ignoreNull">是否忽略null</param>
     /// <returns></returns>
-    public static TSource Merge<TSource, TMerge>(this TSource source, TMerge merge)
+    public static TSource Merge<TSource, TMerge>(this TSource source, TMerge merge, bool ignoreNull = true)
     {
-        TypeAdapterConfig<TMerge, TSource>
-            .NewConfig()
-            .IgnoreNullValues(true);
+        if (ignoreNull)
+        {
+            TypeAdapterConfig<TMerge, TSource>
+                .NewConfig()
+                .IgnoreNullValues(true);
+        }
         return merge.Adapt(source);
     }
 
