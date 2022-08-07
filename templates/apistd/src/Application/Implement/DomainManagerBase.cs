@@ -1,6 +1,6 @@
 ﻿namespace Application.Implement;
 
-public class DomainManagerBase<TEntity, TUpdate, TFilter> : IDomainManager<TEntity, TUpdate, TFilter>
+public class DomainManagerBase<TEntity, TUpdate, TFilter, TItem> : IDomainManager<TEntity, TUpdate, TFilter, TItem>
     where TEntity : EntityBase
     where TFilter : FilterBase
 {
@@ -16,6 +16,7 @@ public class DomainManagerBase<TEntity, TUpdate, TFilter> : IDomainManager<TEnti
     /// 实体的可写仓储实现
     /// </summary>
     public CommandSet<TEntity> Command { get; init; }
+    public IQueryable<TEntity> Queryable { get; set; }
     /// <summary>
     /// 是否自动保存(调用SaveChanges)
     /// </summary>
@@ -25,6 +26,7 @@ public class DomainManagerBase<TEntity, TUpdate, TFilter> : IDomainManager<TEnti
         Stores = storeContext;
         Query = Stores.QuerySet<TEntity>();
         Command = Stores.CommandSet<TEntity>();
+        Queryable = Query._query;
     }
 
     public async Task<int> SaveChangesAsync()
@@ -98,9 +100,9 @@ public class DomainManagerBase<TEntity, TUpdate, TFilter> : IDomainManager<TEnti
     /// <typeparam name="TItem"></typeparam>
     /// <param name="filter"></param>
     /// <returns></returns>
-    public virtual async Task<PageList<TItem>> FilterAsync<TItem>(TFilter filter)
+    public virtual async Task<PageList<TItem>> FilterAsync(TFilter filter)
     {
-        return await Query.FilterAsync<TItem>(GetQueryable(), filter.OrderBy, filter.PageIndex ?? 1, filter.PageSize ?? 12);
+        return await Query.FilterAsync<TItem>(Queryable, filter.OrderBy, filter.PageIndex ?? 1, filter.PageSize ?? 12);
     }
 
 }
