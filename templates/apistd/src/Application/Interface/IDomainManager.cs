@@ -29,7 +29,13 @@ public interface IDomainManager<TEntity, TUpdate, TFilter>
     /// <param name="whereExp"></param>
     /// <returns></returns>
     Task<TDto?> FindAsync<TDto>(Expression<Func<TEntity, bool>>? whereExp) where TDto : class;
-
+    /// <summary>
+    /// 列表条件查询
+    /// </summary>
+    /// <typeparam name="TDto"></typeparam>
+    /// <param name="whereExp"></param>
+    /// <returns></returns>
+    Task<List<TDto>> ListAsync<TDto>(Expression<Func<TEntity, bool>>? whereExp) where TDto : class;
     /// <summary>
     /// 分页查询
     /// </summary>
