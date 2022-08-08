@@ -1,13 +1,22 @@
 ﻿namespace Application.Implement;
 
-public class DomainManagerBase<TEntity, TUpdate, TFilter> : IDomainManager<TEntity, TUpdate, TFilter>
+public class DomainManagerBase<TEntity, TUpdate, TFilter, TItem> : IDomainManager<TEntity, TUpdate, TFilter, TItem>
     where TEntity : EntityBase
     where TFilter : FilterBase
 {
+    /// <summary>
+    /// 仓储上下文，可通过Store访问到其他实体的上下文
+    /// </summary>
     public DataStoreContext Stores { get; init; }
+    /// <summary>
+    /// 实体的只读仓储实现
+    /// </summary>
     public QuerySet<TEntity> Query { get; init; }
+    /// <summary>
+    /// 实体的可写仓储实现
+    /// </summary>
     public CommandSet<TEntity> Command { get; init; }
-
+    public IQueryable<TEntity> Queryable { get; set; }
     /// <summary>
     /// 是否自动保存(调用SaveChanges)
     /// </summary>
@@ -17,6 +26,7 @@ public class DomainManagerBase<TEntity, TUpdate, TFilter> : IDomainManager<TEnti
         Stores = storeContext;
         Query = Stores.QuerySet<TEntity>();
         Command = Stores.CommandSet<TEntity>();
+        Queryable = Query._query;
     }
 
     public async Task<int> SaveChangesAsync()
@@ -24,7 +34,7 @@ public class DomainManagerBase<TEntity, TUpdate, TFilter> : IDomainManager<TEnti
         return await Stores.SaveChangesAsync();
     }
 
-    public async Task AutoSaveAsync()
+    private async Task AutoSaveAsync()
     {
         if (AutoSave)
         {
@@ -51,21 +61,26 @@ public class DomainManagerBase<TEntity, TUpdate, TFilter> : IDomainManager<TEnti
 
     public virtual async Task<TEntity> UpdateAsync(TEntity entity, TUpdate dto)
     {
-        entity.Merge(dto);
+        entity.Merge(dto, false);
         entity.UpdatedTime = DateTimeOffset.UtcNow;
         var res = Command.Update(entity);
         await AutoSaveAsync();
         return res;
     }
 
-    public virtual async Task<TEntity?> DeleteAsync(Guid id)
+    public virtual async Task<TEntity?> DeleteAsync(TEntity entity)
     {
-        var res = await Command.DeleteAsync(id);
+        var res = Command.Remove(entity);
         await AutoSaveAsync();
         return res;
     }
 
-    public virtual async Task<TDto?> FindAsync<TDto>(Expression<Func<TEntity, bool>>? whereExp) where TDto : class
+    public virtual async Task<TEntity?> FindAsync(Guid id)
+    {
+        return await Query.FindAsync<TEntity>(q => q.Id == id);
+    }
+
+    public async Task<TDto?> FindAsync<TDto>(Expression<Func<TEntity, bool>>? whereExp) where TDto : class
     {
         return await Query.FindAsync<TDto>(whereExp);
     }
@@ -96,9 +111,9 @@ public class DomainManagerBase<TEntity, TUpdate, TFilter> : IDomainManager<TEnti
     /// <typeparam name="TItem"></typeparam>
     /// <param name="filter"></param>
     /// <returns></returns>
-    public virtual async Task<PageList<TItem>> FilterAsync<TItem>(TFilter filter)
+    public virtual async Task<PageList<TItem>> FilterAsync(TFilter filter)
     {
-        return await Query.FilterAsync<TItem>(GetQueryable(), filter.OrderBy, filter.PageIndex ?? 1, filter.PageSize ?? 12);
+        return await Query.FilterAsync<TItem>(Queryable, filter.OrderBy, filter.PageIndex ?? 1, filter.PageSize ?? 12);
     }
 
 }
