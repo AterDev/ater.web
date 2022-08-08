@@ -108,7 +108,6 @@ public class DomainManagerBase<TEntity, TUpdate, TFilter, TItem> : IDomainManage
     /// <summary>
     /// 分页筛选，需要重写该方法
     /// </summary>
-    /// <typeparam name="TItem"></typeparam>
     /// <param name="filter"></param>
     /// <returns></returns>
     public virtual async Task<PageList<TItem>> FilterAsync(TFilter filter)
