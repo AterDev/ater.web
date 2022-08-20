@@ -86,6 +86,17 @@ public class DomainManagerBase<TEntity, TUpdate, TFilter, TItem> : IDomainManage
     }
 
     /// <summary>
+    /// 条件查询列表
+    /// </summary>
+    /// <typeparam name="TDto">返回类型</typeparam>
+    /// <param name="whereExp"></param>
+    /// <returns></returns>
+    public async Task<List<TDto>> ListAsync<TDto>(Expression<Func<TEntity, bool>>? whereExp) where TDto : class
+    {
+        return await Query.ListAsync<TDto>(whereExp);
+    }
+
+    /// <summary>
     /// 获取当前查询构造对象
     /// </summary>
     /// <returns></returns>
@@ -97,7 +108,6 @@ public class DomainManagerBase<TEntity, TUpdate, TFilter, TItem> : IDomainManage
     /// <summary>
     /// 分页筛选，需要重写该方法
     /// </summary>
-    /// <typeparam name="TItem"></typeparam>
     /// <param name="filter"></param>
     /// <returns></returns>
     public virtual async Task<PageList<TItem>> FilterAsync(TFilter filter)
