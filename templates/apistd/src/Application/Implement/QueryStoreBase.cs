@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore.Infrastructure;
+
 namespace Application.Implement;
 /// <summary>
 /// 只读仓储
@@ -15,9 +17,11 @@ public class QueryStoreBase<TContext, TEntity> :
     /// 当前实体DbSet
     /// </summary>
     protected readonly DbSet<TEntity> _db;
-    public DbSet<TEntity> Db { get => _db; }
-    public TContext Context { get => _context; }
+    public DbSet<TEntity> Db => _db;
+    public TContext Context => _context;
+    public DatabaseFacade Database { get; init; }
     public IQueryable<TEntity> _query;
+
     public bool EnableSoftDelete { get; set; } = true;
 
     public QueryStoreBase(TContext context, ILogger logger)
@@ -28,6 +32,7 @@ public class QueryStoreBase<TContext, TEntity> :
         _query = EnableSoftDelete
             ? _db.Where(d => !d.IsDeleted).AsQueryable()
             : _db.AsQueryable();
+        Database = _context.Database;
     }
 
 

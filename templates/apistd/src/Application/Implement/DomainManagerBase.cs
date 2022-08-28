@@ -1,4 +1,6 @@
-﻿namespace Application.Implement;
+﻿using Microsoft.EntityFrameworkCore.Infrastructure;
+
+namespace Application.Implement;
 
 public class DomainManagerBase<TEntity, TUpdate, TFilter, TItem> : IDomainManager<TEntity, TUpdate, TFilter, TItem>
     where TEntity : EntityBase
@@ -21,12 +23,14 @@ public class DomainManagerBase<TEntity, TUpdate, TFilter, TItem> : IDomainManage
     /// 是否自动保存(调用SaveChanges)
     /// </summary>
     public bool AutoSave { get; set; } = true;
+    public DatabaseFacade Database { get; init; }
     public DomainManagerBase(DataStoreContext storeContext)
     {
         Stores = storeContext;
         Query = Stores.QuerySet<TEntity>();
         Command = Stores.CommandSet<TEntity>();
         Queryable = Query._query;
+        Database = Command.Database;
     }
 
     public async Task<int> SaveChangesAsync()
