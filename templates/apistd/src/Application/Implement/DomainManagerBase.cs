@@ -72,8 +72,9 @@ public class DomainManagerBase<TEntity, TUpdate, TFilter, TItem> : IDomainManage
         return res;
     }
 
-    public virtual async Task<TEntity?> DeleteAsync(TEntity entity)
+    public virtual async Task<TEntity?> DeleteAsync(TEntity entity, bool softDelete = true)
     {
+        Command.EnableSoftDelete = softDelete;
         var res = Command.Remove(entity);
         await AutoSaveAsync();
         return res;

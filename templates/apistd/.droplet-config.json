@@ -1,4 +1,3 @@
-// droplet 命令行需要的配置文件
 {
     "RootPath": "./",
     "DtoPath": "Share",

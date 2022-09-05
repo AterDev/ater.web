@@ -20,8 +20,6 @@ public interface IDomainManager<TEntity, TUpdate, TFilter, TItem>
     Task<TEntity?> GetCurrent(Guid id, params string[] navigations);
     Task<TEntity> AddAsync(TEntity entity);
     Task<TEntity> UpdateAsync(TEntity entity, TUpdate dto);
-    Task<TEntity?> DeleteAsync(TEntity entity);
-
     Task<TEntity?> FindAsync(Guid id);
     /// <summary>
     /// 查询对象
@@ -43,4 +41,5 @@ public interface IDomainManager<TEntity, TUpdate, TFilter, TItem>
     /// <param name="filter"></param>
     /// <returns></returns>
     Task<PageList<TItem>> FilterAsync(TFilter filter);
+    Task<TEntity?> DeleteAsync(TEntity entity, bool softDelete = true);
 }
