@@ -38,7 +38,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{171177E5-1
 		docs\docs.md = docs\docs.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Http.API.Test", "..\..\..\..\work\marketDataPlatform\test\Http.API.Test\Http.API.Test.csproj", "{0F6B0255-A28B-4AF6-BD34-B35B14E90946}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Http.API.Test", "test\Http.API.Test\Http.API.Test.csproj", "{0F6B0255-A28B-4AF6-BD34-B35B14E90946}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
