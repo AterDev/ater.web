@@ -7,6 +7,5 @@ internal class UserConfiguration : EntityBaseConfiguration<User>
     {
         base.Configure(builder);
         // 设置comment ，index等内容
-        builder.HasComment("用户名").HasIndex(x => x.UserName);
     }
 }
