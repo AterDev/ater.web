@@ -165,7 +165,6 @@ if (app.Environment.IsDevelopment())
 {
     app.UseCors("default");
     app.UseDeveloperExceptionPage();
-    app.UseStaticFiles();
     app.UseOpenApi();
     app.UseSwaggerUi3(c => { c.DocumentTitle = "文档"; });
 }
@@ -176,6 +175,8 @@ else
     //app.UseHsts();
     app.UseHttpsRedirection();
 }
+
+app.UseStaticFiles();
 // 异常统一处理
 //app.UseExceptionHandler(handler =>
 //{
@@ -195,11 +196,13 @@ else
 //});
 
 app.UseHealthChecks("/health");
-
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapDefaultControllerRoute();
+
+app.MapFallbackToFile("index.html");
+
 app.Run();
 
 public partial class Program { }

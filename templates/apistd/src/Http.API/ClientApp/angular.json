@@ -72,7 +72,8 @@
               "browserTarget": "NGAdmin:build:production"
             },
             "development": {
-              "browserTarget": "NGAdmin:build:development"
+              "browserTarget": "NGAdmin:build:development",
+              "proxyConfig": "proxy.conf.js"
             }
           },
           "defaultConfiguration": "development"

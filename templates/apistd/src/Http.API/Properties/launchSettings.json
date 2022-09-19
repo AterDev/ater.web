@@ -12,9 +12,9 @@
     "Http.API": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES":  "Microsoft.AspNetCore.SpaProxy"
       },
       "applicationUrl": "http://localhost:5002;https://localhost:15002"
     },
