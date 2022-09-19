@@ -1,17 +1,19 @@
 using Core.Entities;
+using Core.Models;
 
 namespace EntityFramework;
 
 public class ContextBase : DbContext
 {
-    public DbSet<User> Users { get; set; } = null!;
-    public DbSet<Role> Roles { get; set; } = null!;
+    public DbSet<User> Users { get; set; }
+    public DbSet<Role> Roles { get; set; }
 
     public ContextBase(DbContextOptions options) : base(options)
     {
     }
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        builder.Entity<EntityBase>().UseTpcMappingStrategy();
         builder.Entity<User>(e =>
         {
             e.HasIndex(a => a.Email);
