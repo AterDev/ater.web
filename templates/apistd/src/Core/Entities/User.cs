@@ -1,5 +1,4 @@
 ﻿using Core.Models;
-
 namespace Core.Entities;
 /// <summary>
 /// 系统用户
@@ -69,3 +68,12 @@ public class User : EntityBase
     public string? Address { get; set; } = default!;
 }
 
+/// <summary>
+/// 性别
+/// </summary>
+public enum SexType
+{
+    Male,
+    Female,
+    Else
+}
