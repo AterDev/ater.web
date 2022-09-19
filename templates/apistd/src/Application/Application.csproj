@@ -23,11 +23,9 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Share\Share.csproj" />
 	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="CommandStore\" />
-	  <Folder Include="IManager\" />
-	  <Folder Include="Manager\" />
-	  <Folder Include="QueryStore\" />
-	</ItemGroup>
 
+	<ItemGroup>
+		<PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.0.0-rc9.6" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.0.0-rc9.6" />
+	</ItemGroup>
 </Project>
