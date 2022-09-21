@@ -6,18 +6,18 @@
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-	  <NoWarn>1701;1702;1591</NoWarn>
+		<NoWarn>1701;1702;1591</NoWarn>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-	  <NoWarn>1701;1702;1591</NoWarn>
+		<NoWarn>1701;1702;1591</NoWarn>
 	</PropertyGroup>
 	<ItemGroup>
-	  <Compile Remove="CommandDataStore\**" />
-	  <Compile Remove="QueryDataStore\**" />
-	  <EmbeddedResource Remove="CommandDataStore\**" />
-	  <EmbeddedResource Remove="QueryDataStore\**" />
-	  <None Remove="CommandDataStore\**" />
-	  <None Remove="QueryDataStore\**" />
+		<Compile Remove="CommandDataStore\**" />
+		<Compile Remove="QueryDataStore\**" />
+		<EmbeddedResource Remove="CommandDataStore\**" />
+		<EmbeddedResource Remove="QueryDataStore\**" />
+		<None Remove="CommandDataStore\**" />
+		<None Remove="QueryDataStore\**" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -3,9 +3,9 @@ using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using Application.Implement;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.IdentityModel.Tokens;
-using NSwag;
-using NSwag.Generation.Processors.Security;
+using Microsoft.OpenApi.Models;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Resources;
 
@@ -30,8 +30,6 @@ builder.Services.Configure<OpenTelemetryLoggerOptions>(opt =>
     opt.IncludeFormattedMessage = true;
 });
 #endregion
-
-
 
 var services = builder.Services;
 var configuration = builder.Configuration;
@@ -118,25 +116,35 @@ services.AddCors(options =>
 
 services.AddHealthChecks();
 // api 接口文档设置
-services.AddOpenApiDocument(c =>
+services.AddSwaggerGen(c =>
 {
-    c.GenerateXmlObjects = true;
-    c.GenerateEnumMappingDescription = true;
-    c.UseControllerSummaryAsTagDescription = true;
-    c.PostProcess = (document) =>
+    c.SwaggerDoc("v1", new OpenApiInfo
     {
-        document.Info.Title = "MyProjectName";
-        document.Info.Description = "Api 文档";
-        document.Info.Version = "1.0";
-    };
-    c.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme
-    {
-        Type = OpenApiSecuritySchemeType.ApiKey,
-        Name = "Authorization",
-        In = OpenApiSecurityApiKeyLocation.Header,
-        Description = "Bearer {your JWT token}."
+        Title = "dusi.dev",
+        Description = "API 文档",
+        Version = "v1"
     });
-    c.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
+    var xmlFiles = Directory.GetFiles(AppContext.BaseDirectory, "*.xml", SearchOption.TopDirectoryOnly);
+    foreach (var item in xmlFiles)
+    {
+        try
+        {
+            c.IncludeXmlComments(item, includeControllerXmlComments: true);
+        }
+        catch (Exception) { }
+    }
+    c.DescribeAllParametersInCamelCase();
+    c.CustomOperationIds((z) =>
+    {
+        var descriptor = (ControllerActionDescriptor)z.ActionDescriptor;
+        return $"{descriptor.ControllerName}_{descriptor.ActionName}";
+    });
+    c.SchemaFilter<EnumSchemaFilter>();
+    c.MapType<DateOnly>(() => new OpenApiSchema
+    {
+        Type = "string",
+        Format = "date"
+    });
 });
 services.AddControllers()
     .ConfigureApiBehaviorOptions(o =>
@@ -164,9 +172,8 @@ await using (var scope = app.Services.CreateAsyncScope())
 if (app.Environment.IsDevelopment())
 {
     app.UseCors("default");
-    app.UseDeveloperExceptionPage();
-    app.UseOpenApi();
-    app.UseSwaggerUi3(c => { c.DocumentTitle = "文档"; });
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 else
 {
