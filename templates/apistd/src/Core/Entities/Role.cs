@@ -10,7 +10,7 @@ public class Role : EntityBase
     /// 角色显示名称
     /// </summary>
     [MaxLength(30)]
-    public string Name { get; set; } = default!;
+    public required string Name { get; set; }
     /// <summary>
     /// 角色名，系统标识
     /// </summary>

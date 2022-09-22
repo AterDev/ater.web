@@ -9,7 +9,7 @@ public class User : EntityBase
     /// 用户名
     /// </summary>
     [MaxLength(30)]
-    public string UserName { get; set; } = default!;
+    public required string UserName { get; set; }
     /// <summary>
     /// 真实姓名
     /// </summary>
@@ -24,9 +24,9 @@ public class User : EntityBase
     public string? Email { get; set; } = null!;
     public bool EmailConfirmed { get; set; } = false;
     [MaxLength(100)]
-    public string PasswordHash { get; set; } = default!;
+    public required string PasswordHash { get; set; }
     [MaxLength(60)]
-    public string PasswordSalt { get; set; } = default!;
+    public required string PasswordSalt { get; set; }
     [MaxLength(20)]
     public string? PhoneNumber { get; set; }
     public bool PhoneNumberConfirmed { get; set; } = false;
@@ -54,18 +54,12 @@ public class User : EntityBase
     /// 身份证号
     /// </summary>
     [MaxLength(18)]
-    public string IdNumber { get; set; } = default!;
+    public string? IdNumber { get; set; }
 
     /// <summary>
     /// 性别
     /// </summary>
     public SexType Sex { get; set; } = SexType.Male;
-
-    /// <summary>
-    /// 地址
-    /// </summary>
-    [MaxLength(200)]
-    public string? Address { get; set; } = default!;
 }
 
 /// <summary>
