@@ -15,11 +15,6 @@ public class User : EntityBase
     /// </summary>
     [MaxLength(30)]
     public string? RealName { get; set; }
-    /// <summary>
-    /// 职位
-    /// </summary>
-    [MaxLength(30)]
-    public string? Position { get; set; }
     [MaxLength(100)]
     public string? Email { get; set; } = null!;
     public bool EmailConfirmed { get; set; } = false;
