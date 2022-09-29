@@ -10,13 +10,13 @@ namespace Http.API.Controllers;
 [ApiController]
 public class AuthController : ControllerBase
 {
-    private readonly UserQueryStore _store;
+    private readonly SystemUserQueryStore _store;
     private readonly IConfiguration _config;
     //private readonly RedisService _redis;
     public AuthController(
         IConfiguration config,
         //RedisService redis,
-        UserQueryStore store)
+        SystemUserQueryStore store)
     {
         //_store = userDataStore;
         _config = config;
@@ -34,7 +34,7 @@ public class AuthController : ControllerBase
     {
         // 查询用户
         var user = await _store.Db.Where(u => u.UserName.Equals(dto.UserName))
-            .Include(u => u.Roles)
+            .Include(u => u.SystemRoles)
             .FirstOrDefaultAsync();
         if (user == null)
         {
@@ -46,7 +46,7 @@ public class AuthController : ControllerBase
             var sign = _config.GetSection("Jwt")["Sign"];
             var issuer = _config.GetSection("Jwt")["Issuer"];
             var audience = _config.GetSection("Jwt")["Audience"];
-            var role = user.Roles?.FirstOrDefault();
+            var role = user.SystemRoles?.FirstOrDefault();
             //var time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             //1天后过期
             if (!string.IsNullOrWhiteSpace(sign) &&

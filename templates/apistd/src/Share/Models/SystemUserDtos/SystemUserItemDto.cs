@@ -1,9 +1,14 @@
-namespace Share.Models.UserDtos;
+using Core.Entities;
+namespace Share.Models.SystemUserDtos;
 /// <summary>
-/// 系统用户概要
+/// 系统用户列表元素
 /// </summary>
-public class UserShortDto
+public class SystemUserItemDto
 {
+    /// <summary>
+    /// 用户名
+    /// </summary>
+    [MaxLength(30)]
     public string UserName { get; set; } = default!;
     /// <summary>
     /// 真实姓名
@@ -13,11 +18,10 @@ public class UserShortDto
     [MaxLength(100)]
     public string? Email { get; set; }
     public bool EmailConfirmed { get; set; } = default!;
+    // [MaxLength(100)]
     // public string PasswordHash { get; set; }
+    // [MaxLength(60)]
     // public string PasswordSalt { get; set; }
-    /// <summary>
-    /// 手机号
-    /// </summary>
     [MaxLength(20)]
     public string? PhoneNumber { get; set; }
     public bool PhoneNumberConfirmed { get; set; } = default!;
@@ -38,15 +42,12 @@ public class UserShortDto
     /// </summary>
     [MaxLength(200)]
     public string? Avatar { get; set; }
-    /// <summary>
-    /// 身份证号
-    /// </summary>
-    [MaxLength(18)]
-    public string? IdNumber { get; set; }
+
+
     /// <summary>
     /// 性别
     /// </summary>
-    public SexType Sex { get; set; } = default!;
+    public Sex Sex { get; set; } = default!;
     public Guid Id { get; set; } = default!;
     public DateTimeOffset CreatedTime { get; set; } = default!;
     public DateTimeOffset UpdatedTime { get; set; } = default!;

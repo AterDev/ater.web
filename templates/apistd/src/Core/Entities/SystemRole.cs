@@ -4,7 +4,7 @@ namespace Core.Entities;
 /// <summary>
 /// 角色表
 /// </summary>
-public class Role : EntityBase
+public class SystemRole : EntityBase
 {
     /// <summary>
     /// 角色显示名称
@@ -25,5 +25,5 @@ public class Role : EntityBase
     [MaxLength(30)]
     public string? Icon { get; set; }
 
-    public ICollection<User>? Users { get; set; }
+    public ICollection<SystemUser>? Users { get; set; }
 }

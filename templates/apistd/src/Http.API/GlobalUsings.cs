@@ -10,3 +10,7 @@ global using Http.API.Middleware;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.DependencyInjection;
+
+global using Microsoft.AspNetCore.Authorization;
+global using Share.Models;
+global using Application.IManager;

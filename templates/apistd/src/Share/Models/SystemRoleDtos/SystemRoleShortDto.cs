@@ -1,9 +1,14 @@
-namespace Share.Models.RoleDtos;
+using Core.Entities;
+namespace Share.Models.SystemRoleDtos;
 /// <summary>
-/// 角色列表元素
+/// 角色概要
 /// </summary>
-public class RoleItemDto
+public class SystemRoleShortDto
 {
+    /// <summary>
+    /// 角色显示名称
+    /// </summary>
+    [MaxLength(30)]
     public string Name { get; set; } = default!;
     /// <summary>
     /// 角色名，系统标识

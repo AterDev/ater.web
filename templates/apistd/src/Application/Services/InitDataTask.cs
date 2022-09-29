@@ -38,21 +38,21 @@ public class InitDataTask
     /// </summary>
     public static async Task InitRoleAndUserAsync(CommandDbContext context)
     {
-        var role = new Role()
+        var role = new SystemRole()
         {
             Name = "Admin"
         };
-        var userRole = new Role()
+        var userRole = new SystemRole()
         {
             Name = "User"
         };
         var salt = HashCrypto.BuildSalt();
-        var user = new User()
+        var user = new SystemUser()
         {
             UserName = "admin",
             PasswordSalt = salt,
             PasswordHash = HashCrypto.GeneratePwd("123456", salt),
-            Roles = new List<Role>() { role },
+            SystemRoles = new List<SystemRole>() { role },
         };
         context.Roles.Add(userRole);
         context.Roles.Add(role);

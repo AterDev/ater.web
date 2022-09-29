@@ -5,8 +5,8 @@ namespace EntityFramework;
 
 public class ContextBase : DbContext
 {
-    public DbSet<User> Users { get; set; }
-    public DbSet<Role> Roles { get; set; }
+    public DbSet<SystemUser> Users { get; set; }
+    public DbSet<SystemRole> Roles { get; set; }
 
     public ContextBase(DbContextOptions options) : base(options)
     {
@@ -14,7 +14,7 @@ public class ContextBase : DbContext
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.Entity<EntityBase>().UseTpcMappingStrategy();
-        builder.Entity<User>(e =>
+        builder.Entity<SystemUser>(e =>
         {
             e.HasIndex(a => a.Email);
             e.HasIndex(a => a.PhoneNumber);
@@ -23,7 +23,7 @@ public class ContextBase : DbContext
             e.HasIndex(a => a.CreatedTime);
         });
 
-        builder.Entity<Role>(e =>
+        builder.Entity<SystemRole>(e =>
         {
             e.HasIndex(m => m.Name);
         });

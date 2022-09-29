@@ -13,7 +13,7 @@ public class RolePermission : EntityBase
     /// </summary>
     public PermissionType PermissionTypeMyProperty { get; set; } = PermissionType.Write;
 
-    public Role Role { get; set; } = null!;
+    public SystemRole Role { get; set; } = null!;
     public Permission Permission { get; set; } = null!;
 
 
