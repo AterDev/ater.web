@@ -45,7 +45,7 @@
 	<Target Name="SwaggerPostBuildTarget" AfterTargets="Build" Condition="'$(Configuration)' == 'Debug'">
 		<Exec Command="dotnet tool restore" />
 		<Exec Command="dotnet swagger tofile --output ./swagger.json .\bin\Debug\net7.0\Http.API.dll v1" />
-		<Exec Command="droplet sync"/>
+		<Exec Command="dotnet droplet sync"/>
 	</Target>
 
 
