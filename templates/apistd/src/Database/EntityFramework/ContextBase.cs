@@ -5,8 +5,8 @@ namespace EntityFramework;
 
 public class ContextBase : DbContext
 {
-    public DbSet<SystemUser> Users { get; set; }
-    public DbSet<SystemRole> Roles { get; set; }
+    public DbSet<SystemUser> SystemUsers { get; set; }
+    public DbSet<SystemRole> SystemRoles { get; set; }
 
     public ContextBase(DbContextOptions options) : base(options)
     {

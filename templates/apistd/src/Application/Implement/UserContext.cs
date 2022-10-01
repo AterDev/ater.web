@@ -40,8 +40,5 @@ public class UserContext : IUserContext
     }
 
     public Claim? FindClaim(string claimType) => _httpContextAccessor?.HttpContext?.User?.FindFirst(claimType);
-    public async Task<SystemUser?> GetUserAsync()
-    {
-        return await _context.Users.FindAsync(UserId);
-    }
+
 }

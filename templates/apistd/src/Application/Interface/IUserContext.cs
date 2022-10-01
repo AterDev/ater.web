@@ -14,5 +14,4 @@ public interface IUserContext
     public List<string>? Roles { get; set; }
     public Guid? GroupId { get; init; }
     Claim? FindClaim(string claimType);
-    Task<SystemUser?> GetUserAsync();
 }

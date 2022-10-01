@@ -16,7 +16,11 @@ export class BaseService {
     // private oidcSecurityService: OidcSecurityService
   ) {
     this.isMobile = this.isMoblie();
-    this.baseUrl = baseUrl;
+    if (baseUrl.endsWith('/')) {
+      this.baseUrl = baseUrl.slice(0, -1);
+    } else {
+      this.baseUrl = baseUrl;
+    }
   }
 
   request<R>(method: string, path: string, body?: any): Observable<R> {

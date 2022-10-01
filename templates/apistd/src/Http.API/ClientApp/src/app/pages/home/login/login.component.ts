@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { LoginService } from 'src/app/auth/login.service';
+import { AuthService } from 'src/app/share/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -13,6 +14,7 @@ export class LoginComponent implements OnInit {
   public loginForm!: FormGroup;
   constructor(
     private loginService: LoginService,
+    private authService: AuthService,
     private router: Router
 
   ) {
@@ -41,11 +43,10 @@ export class LoginComponent implements OnInit {
     // });
 
     this.loginForm = new FormGroup({
-      username: new FormControl('', [Validators.required, Validators.email]),
+      username: new FormControl('', [Validators.required, Validators.minLength(3)]),
       password: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(50)])
     });
   }
-
 
   /**
    * 错误信息
@@ -56,7 +57,7 @@ export class LoginComponent implements OnInit {
       case 'username':
         return this.username?.errors?.['required'] ? '用户名必填' :
           this.username?.errors?.['minlength']
-            || this.username?.errors?.['maxlength'] ? '用户名长度4-20位' : '';
+            || this.username?.errors?.['maxlength'] ? '用户名长度3-20位' : '';
       case 'password':
         return this.password?.errors?.['required'] ? '密码必填' :
           this.password?.errors?.['minlength'] ? '密码长度不可低于6位' :
@@ -67,15 +68,14 @@ export class LoginComponent implements OnInit {
     return '';
   }
   doLogin(): void {
-    // TODO:获取表单数据并提交
-    let data = this.loginForm.value;
-    // TODO:登录接口
-    // this.authService.login(data)
-    //   .subscribe(res => {
-    //     this.loginService.saveLoginState(res);
-    //     this.router.navigate(['/']);
-    //   });
 
+    let data = this.loginForm.value;
+    // 登录接口
+    this.authService.login(data)
+      .subscribe(res => {
+        this.loginService.saveLoginState(res);
+        this.router.navigate(['/']);
+      });
   }
 
 

@@ -23,7 +23,7 @@
 		<PackageReleaseNotes>Web快速开发框架</PackageReleaseNotes>
 	</PropertyGroup>
 	<ItemGroup>
-		<Content Include="templates\**\*" Exclude="templates\**\bin\**;templates\**\obj\**" />
+		<Content Include="templates\**\*" Exclude="templates\**\bin\**;templates\**\obj\**;templates\**\.vs\**" />
 		<Compile Remove="**\*" />
 	</ItemGroup>
 	<ItemGroup>
