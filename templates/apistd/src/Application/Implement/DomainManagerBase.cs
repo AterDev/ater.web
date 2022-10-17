@@ -117,7 +117,7 @@ public class DomainManagerBase<TEntity, TUpdate, TFilter, TItem> : IDomainManage
     /// <returns></returns>
     public virtual async Task<PageList<TItem>> FilterAsync(TFilter filter)
     {
-        return await Query.FilterAsync<TItem>(Queryable, filter.OrderBy, filter.PageIndex ?? 1, filter.PageSize ?? 12);
+        return await Query.FilterAsync<TItem>(Queryable, filter.PageIndex, filter.PageSize);
     }
 
 }

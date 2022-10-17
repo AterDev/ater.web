@@ -1,6 +1,4 @@
-﻿using Core.Models;
-
-namespace EntityFramework;
+﻿namespace EntityFramework;
 /// <summary>
 /// 只读数据库上下文
 /// </summary>
@@ -24,7 +22,6 @@ public class QueryDbContext : ContextBase
     protected override void OnModelCreating(ModelBuilder builder)
     {
         // 全局过滤
-        builder.Entity<EntityBase>().HasQueryFilter(e => !e.IsDeleted);
         base.OnModelCreating(builder);
     }
 }

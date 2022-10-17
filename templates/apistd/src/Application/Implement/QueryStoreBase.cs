@@ -125,7 +125,7 @@ public class QueryStoreBase<TContext, TEntity> :
     /// <param name="pageIndex"></param>
     /// <param name="pageSize"></param>
     /// <returns></returns>
-    public virtual async Task<PageList<TItem>> FilterAsync<TItem>(IQueryable<TEntity> query, Dictionary<string, bool>? order = null, int pageIndex = 1, int pageSize = 12)
+    public virtual async Task<PageList<TItem>> FilterAsync<TItem>(IQueryable<TEntity> query, int pageIndex = 1, int pageSize = 12, Dictionary<string, bool>? order = null)
     {
         if (pageIndex < 1) pageIndex = 1;
         if (query != null)

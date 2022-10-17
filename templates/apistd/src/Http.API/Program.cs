@@ -53,6 +53,19 @@ services.AddDbContextPool<CommandDbContext>(option =>
     });
 });
 
+#region if you use mysql
+//services.AddDbContext<QueryDbContext>(options =>
+//{
+//    var serverVersion = new MySqlServerVersion(new Version(8, 0, 0));
+//    options.UseMySql(connectionString, serverVersion);
+//});
+//services.AddDbContext<CommandDbContext>(options =>
+//{
+//    var serverVersion = new MySqlServerVersion(new Version(8, 0, 0));
+//    options.UseMySql(connectionString, serverVersion);
+//});
+#endregion
+
 services.AddDataStore();
 services.AddManager();
 
@@ -118,9 +131,33 @@ services.AddHealthChecks();
 // api 接口文档设置
 services.AddSwaggerGen(c =>
 {
+    // 为swagger添加token认证
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Please enter a valid token",
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = "Bearer"
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type=ReferenceType.SecurityScheme,
+                    Id="Bearer"
+                }
+            },
+            new string[]{}
+        }
+    });
     c.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "dusi.dev",
+        Title = "MyProjectName",
         Description = "API 文档",
         Version = "v1"
     });

@@ -27,6 +27,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{F4A37F
 	ProjectSection(SolutionItems) = preProject
 		.droplet-config.json = .droplet-config.json
 	EndProjectSection
+	ProjectSection(FolderGlobals) = preProject
+		D_5_4codes_4ater_1web_4templates_4apistd_4_1droplet-config_1json__JsonSchema = https://docs.gradle.com/build-cache-node/schema/build-cache-node-config-schema-5.json
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{8377B34A-79F0-47E0-96E1-0AF7B2ACE75C}"
 	ProjectSection(SolutionItems) = preProject
