@@ -1,5 +1,4 @@
 using Core.Entities;
-using Core.Models;
 
 namespace EntityFramework;
 
@@ -13,7 +12,6 @@ public class ContextBase : DbContext
     }
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        builder.Entity<EntityBase>().UseTpcMappingStrategy();
         builder.Entity<SystemUser>(e =>
         {
             e.HasIndex(a => a.Email);

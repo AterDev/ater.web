@@ -138,30 +138,6 @@ public class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity>, IComm
         //return await _db.Where(whereExp).ExecuteUpdateAsync(d => d.SetProperty(d => d.Id, d => Guid.NewGuid()));
         throw new NotImplementedException();
     }
-
-    /// <summary>
-    /// 批量删除
-    /// </summary>
-    /// <param name="ids"></param>
-    /// <returns></returns>
-    public virtual async Task<int> DeleteRangeAsync(List<Guid> ids)
-    {
-        return await _db.Where(d => ids.Contains(d.Id)).ExecuteDeleteAsync();
-        throw new NotImplementedException();
-
-    }
-
-    /// <summary>
-    /// 条件删除
-    /// </summary>
-    /// <param name="whereExp"></param>
-    /// <returns></returns>
-    public virtual async Task<int> DeleteRangeAsync(Expression<Func<TEntity, bool>> whereExp)
-    {
-        return await _db.Where(whereExp).ExecuteDeleteAsync();
-        throw new NotImplementedException();
-
-    }
 }
 public class CommandSet<TEntity> : CommandStoreBase<CommandDbContext, TEntity>
     where TEntity : EntityBase

@@ -19,7 +19,7 @@ public class InitDataTask
             else
             {
                 // 判断是否初始化
-                var role = await context.Roles.SingleOrDefaultAsync(r => r.Name.ToLower() == "admin");
+                var role = await context.SystemRoles.SingleOrDefaultAsync(r => r.Name.ToLower() == "admin");
                 if (role == null)
                 {
                     logger.LogInformation("初始化数据");
@@ -54,9 +54,9 @@ public class InitDataTask
             PasswordHash = HashCrypto.GeneratePwd("123456", salt),
             SystemRoles = new List<SystemRole>() { role },
         };
-        context.Roles.Add(userRole);
-        context.Roles.Add(role);
-        context.Users.Add(user);
+        context.SystemRoles.Add(userRole);
+        context.SystemRoles.Add(role);
+        context.SystemUsers.Add(user);
         await context.SaveChangesAsync();
     }
 }

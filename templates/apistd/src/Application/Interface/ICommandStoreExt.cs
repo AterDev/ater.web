@@ -18,15 +18,6 @@ public interface ICommandStoreExt<TId, TEntity>
     /// <param name="dto"></param>
     /// <returns></returns>
     Task<int> UpdateRangeAsync<TUpdate>(Expression<Func<TEntity, bool>> whereExp, TUpdate dto);
-
-    /// <summary>
-    /// 批量删除
-    /// </summary>
-    /// <param name="ids"></param>
-    /// <returns></returns>
-    Task<int> DeleteRangeAsync(List<TId> ids);
-
-    Task<int> DeleteRangeAsync(Expression<Func<TEntity, bool>> whereExp);
 }
 
 public interface ICommandStoreExt<TEntity> : ICommandStoreExt<Guid, TEntity>

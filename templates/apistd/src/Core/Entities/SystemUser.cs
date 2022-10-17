@@ -9,7 +9,7 @@ public class SystemUser : EntityBase
     /// 用户名
     /// </summary>
     [MaxLength(30)]
-    public required string UserName { get; set; }
+    public string UserName { get; set; } = default!;
     /// <summary>
     /// 真实姓名
     /// </summary>
@@ -19,9 +19,9 @@ public class SystemUser : EntityBase
     public string? Email { get; set; } = null!;
     public bool EmailConfirmed { get; set; } = false;
     [MaxLength(100)]
-    public required string PasswordHash { get; set; }
+    public string PasswordHash { get; set; } = default!;
     [MaxLength(60)]
-    public required string PasswordSalt { get; set; }
+    public string PasswordSalt { get; set; } = default!;
     [MaxLength(20)]
     public string? PhoneNumber { get; set; }
     public bool PhoneNumberConfirmed { get; set; } = false;
