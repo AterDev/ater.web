@@ -1,7 +1,6 @@
 using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
-using Application.Implement;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.IdentityModel.Tokens;
@@ -118,9 +117,32 @@ services.AddHealthChecks();
 // api 接口文档设置
 services.AddSwaggerGen(c =>
 {
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Please enter a valid token",
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = "Bearer"
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type=ReferenceType.SecurityScheme,
+                    Id="Bearer"
+                }
+            },
+            new string[]{}
+        }
+    });
     c.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "dusi.dev",
+        Title = "MyProjectName",
         Description = "API 文档",
         Version = "v1"
     });

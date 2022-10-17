@@ -1,0 +1,1313 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "MyProjectName",
+    "description": "API 文档",
+    "version": "v1"
+  },
+  "paths": {
+    "/api/Auth": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "登录获取Token",
+        "operationId": "Auth_Login",
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Auth/{id}": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "退出",
+        "operationId": "Auth_Logout",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/SystemRole/filter": {
+      "post": {
+        "tags": [
+          "SystemRole"
+        ],
+        "summary": "筛选",
+        "operationId": "SystemRole_Filter",
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SystemRoleFilterDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SystemRoleFilterDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SystemRoleFilterDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemRoleItemDtoPageList"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemRoleItemDtoPageList"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemRoleItemDtoPageList"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/SystemRole": {
+      "post": {
+        "tags": [
+          "SystemRole"
+        ],
+        "summary": "新增",
+        "operationId": "SystemRole_Add",
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SystemRoleAddDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SystemRoleAddDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SystemRoleAddDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemRole"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemRole"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemRole"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/SystemRole/{id}": {
+      "put": {
+        "tags": [
+          "SystemRole"
+        ],
+        "summary": "更新",
+        "operationId": "SystemRole_Update",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SystemRoleUpdateDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SystemRoleUpdateDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SystemRoleUpdateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemRole"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemRole"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemRole"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "SystemRole"
+        ],
+        "summary": "详情",
+        "operationId": "SystemRole_GetDetail",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemRole"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemRole"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemRole"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "SystemRole"
+        ],
+        "summary": "⚠删除",
+        "operationId": "SystemRole_Delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemRole"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemRole"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemRole"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/SystemUser/filter": {
+      "post": {
+        "tags": [
+          "SystemUser"
+        ],
+        "summary": "筛选",
+        "operationId": "SystemUser_Filter",
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SystemUserFilterDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SystemUserFilterDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SystemUserFilterDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemUserItemDtoPageList"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemUserItemDtoPageList"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemUserItemDtoPageList"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/SystemUser": {
+      "post": {
+        "tags": [
+          "SystemUser"
+        ],
+        "summary": "新增",
+        "operationId": "SystemUser_Add",
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SystemUserAddDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SystemUserAddDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SystemUserAddDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemUser"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemUser"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemUser"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/SystemUser/{id}": {
+      "put": {
+        "tags": [
+          "SystemUser"
+        ],
+        "summary": "更新",
+        "operationId": "SystemUser_Update",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SystemUserUpdateDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SystemUserUpdateDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SystemUserUpdateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemUser"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemUser"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemUser"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "SystemUser"
+        ],
+        "summary": "详情",
+        "operationId": "SystemUser_GetDetail",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemUser"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemUser"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemUser"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "SystemUser"
+        ],
+        "summary": "⚠删除",
+        "operationId": "SystemUser_Delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemUser"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemUser"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemUser"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AuthResult": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "username": {
+            "type": "string",
+            "description": "用户名",
+            "nullable": true
+          },
+          "role": {
+            "type": "string",
+            "nullable": true
+          },
+          "token": {
+            "type": "string",
+            "description": "token",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "userName": {
+            "maxLength": 50,
+            "type": "string",
+            "nullable": true
+          },
+          "password": {
+            "maxLength": 60,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "登录"
+      },
+      "Sex": {
+        "enum": [
+          0,
+          1,
+          2
+        ],
+        "type": "integer",
+        "description": "性别",
+        "format": "int32",
+        "x-enumNames": [
+          "Male",
+          "Female",
+          "Else"
+        ]
+      },
+      "SystemRole": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "createdTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "description": "软删除"
+          },
+          "name": {
+            "maxLength": 30,
+            "type": "string",
+            "description": "角色显示名称",
+            "nullable": true
+          },
+          "nameValue": {
+            "type": "string",
+            "description": "角色名，系统标识",
+            "nullable": true
+          },
+          "isSystem": {
+            "type": "boolean",
+            "description": "是否系统内置,系统内置不可删除"
+          },
+          "icon": {
+            "maxLength": 30,
+            "type": "string",
+            "description": "图标",
+            "nullable": true
+          },
+          "users": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SystemUser"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "角色表"
+      },
+      "SystemRoleAddDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 30,
+            "type": "string",
+            "description": "角色显示名称",
+            "nullable": true
+          },
+          "nameValue": {
+            "type": "string",
+            "description": "角色名，系统标识",
+            "nullable": true
+          },
+          "isSystem": {
+            "type": "boolean",
+            "description": "是否系统内置,系统内置不可删除"
+          },
+          "icon": {
+            "maxLength": 30,
+            "type": "string",
+            "description": "图标",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "角色添加时请求结构"
+      },
+      "SystemRoleFilterDto": {
+        "type": "object",
+        "properties": {
+          "pageIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "orderBy": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "boolean",
+              "nullable": true
+            },
+            "description": "排序",
+            "nullable": true
+          },
+          "name": {
+            "maxLength": 30,
+            "type": "string",
+            "description": "角色显示名称",
+            "nullable": true
+          },
+          "nameValue": {
+            "type": "string",
+            "description": "角色名，系统标识",
+            "nullable": true
+          },
+          "isSystem": {
+            "type": "boolean",
+            "description": "是否系统内置,系统内置不可删除",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "角色查询筛选"
+      },
+      "SystemRoleItemDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 30,
+            "type": "string",
+            "description": "角色显示名称",
+            "nullable": true
+          },
+          "nameValue": {
+            "type": "string",
+            "description": "角色名，系统标识",
+            "nullable": true
+          },
+          "isSystem": {
+            "type": "boolean",
+            "description": "是否系统内置,系统内置不可删除"
+          },
+          "icon": {
+            "maxLength": 30,
+            "type": "string",
+            "description": "图标",
+            "nullable": true
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "createdTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "description": "软删除"
+          }
+        },
+        "additionalProperties": false,
+        "description": "角色列表元素"
+      },
+      "SystemRoleItemDtoPageList": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SystemRoleItemDto"
+            },
+            "nullable": true
+          },
+          "pageIndex": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SystemRoleUpdateDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 30,
+            "type": "string",
+            "description": "角色显示名称",
+            "nullable": true
+          },
+          "nameValue": {
+            "type": "string",
+            "description": "角色名，系统标识",
+            "nullable": true
+          },
+          "isSystem": {
+            "type": "boolean",
+            "description": "是否系统内置,系统内置不可删除",
+            "nullable": true
+          },
+          "icon": {
+            "maxLength": 30,
+            "type": "string",
+            "description": "图标",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "角色更新时请求结构"
+      },
+      "SystemUser": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "createdTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "description": "软删除"
+          },
+          "userName": {
+            "maxLength": 30,
+            "type": "string",
+            "description": "用户名",
+            "nullable": true
+          },
+          "realName": {
+            "maxLength": 30,
+            "type": "string",
+            "description": "真实姓名",
+            "nullable": true
+          },
+          "email": {
+            "maxLength": 100,
+            "type": "string",
+            "nullable": true
+          },
+          "emailConfirmed": {
+            "type": "boolean"
+          },
+          "passwordHash": {
+            "maxLength": 100,
+            "type": "string",
+            "nullable": true
+          },
+          "passwordSalt": {
+            "maxLength": 60,
+            "type": "string",
+            "nullable": true
+          },
+          "phoneNumber": {
+            "maxLength": 20,
+            "type": "string",
+            "nullable": true
+          },
+          "phoneNumberConfirmed": {
+            "type": "boolean"
+          },
+          "twoFactorEnabled": {
+            "type": "boolean"
+          },
+          "lockoutEnd": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lockoutEnabled": {
+            "type": "boolean"
+          },
+          "accessFailedCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lastLoginTime": {
+            "type": "string",
+            "description": "最后登录时间",
+            "format": "date-time",
+            "nullable": true
+          },
+          "retryCount": {
+            "type": "integer",
+            "description": "密码重试次数",
+            "format": "int32"
+          },
+          "avatar": {
+            "maxLength": 200,
+            "type": "string",
+            "description": "头像url",
+            "nullable": true
+          },
+          "systemRoles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SystemRole"
+            },
+            "nullable": true
+          },
+          "sex": {
+            "$ref": "#/components/schemas/Sex"
+          }
+        },
+        "additionalProperties": false,
+        "description": "系统用户"
+      },
+      "SystemUserAddDto": {
+        "type": "object",
+        "properties": {
+          "userName": {
+            "maxLength": 30,
+            "type": "string",
+            "description": "用户名",
+            "nullable": true
+          },
+          "realName": {
+            "maxLength": 30,
+            "type": "string",
+            "description": "真实姓名",
+            "nullable": true
+          },
+          "email": {
+            "maxLength": 100,
+            "type": "string",
+            "nullable": true
+          },
+          "emailConfirmed": {
+            "type": "boolean"
+          },
+          "phoneNumber": {
+            "maxLength": 20,
+            "type": "string",
+            "nullable": true
+          },
+          "phoneNumberConfirmed": {
+            "type": "boolean"
+          },
+          "twoFactorEnabled": {
+            "type": "boolean"
+          },
+          "lockoutEnd": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lockoutEnabled": {
+            "type": "boolean"
+          },
+          "accessFailedCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lastLoginTime": {
+            "type": "string",
+            "description": "最后登录时间",
+            "format": "date-time",
+            "nullable": true
+          },
+          "retryCount": {
+            "type": "integer",
+            "description": "密码重试次数",
+            "format": "int32"
+          },
+          "avatar": {
+            "maxLength": 200,
+            "type": "string",
+            "description": "头像url",
+            "nullable": true
+          },
+          "sex": {
+            "$ref": "#/components/schemas/Sex"
+          }
+        },
+        "additionalProperties": false,
+        "description": "系统用户添加时请求结构"
+      },
+      "SystemUserFilterDto": {
+        "type": "object",
+        "properties": {
+          "pageIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "orderBy": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "boolean",
+              "nullable": true
+            },
+            "description": "排序",
+            "nullable": true
+          },
+          "userName": {
+            "maxLength": 30,
+            "type": "string",
+            "description": "用户名",
+            "nullable": true
+          },
+          "emailConfirmed": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "phoneNumberConfirmed": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "twoFactorEnabled": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "lockoutEnabled": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "accessFailedCount": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "retryCount": {
+            "type": "integer",
+            "description": "密码重试次数",
+            "format": "int32",
+            "nullable": true
+          },
+          "sex": {
+            "$ref": "#/components/schemas/Sex"
+          }
+        },
+        "additionalProperties": false,
+        "description": "系统用户查询筛选"
+      },
+      "SystemUserItemDto": {
+        "type": "object",
+        "properties": {
+          "userName": {
+            "maxLength": 30,
+            "type": "string",
+            "description": "用户名",
+            "nullable": true
+          },
+          "realName": {
+            "maxLength": 30,
+            "type": "string",
+            "description": "真实姓名",
+            "nullable": true
+          },
+          "email": {
+            "maxLength": 100,
+            "type": "string",
+            "nullable": true
+          },
+          "emailConfirmed": {
+            "type": "boolean"
+          },
+          "phoneNumber": {
+            "maxLength": 20,
+            "type": "string",
+            "nullable": true
+          },
+          "phoneNumberConfirmed": {
+            "type": "boolean"
+          },
+          "twoFactorEnabled": {
+            "type": "boolean"
+          },
+          "lockoutEnd": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lockoutEnabled": {
+            "type": "boolean"
+          },
+          "accessFailedCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lastLoginTime": {
+            "type": "string",
+            "description": "最后登录时间",
+            "format": "date-time",
+            "nullable": true
+          },
+          "retryCount": {
+            "type": "integer",
+            "description": "密码重试次数",
+            "format": "int32"
+          },
+          "avatar": {
+            "maxLength": 200,
+            "type": "string",
+            "description": "头像url",
+            "nullable": true
+          },
+          "sex": {
+            "$ref": "#/components/schemas/Sex"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "createdTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "description": "软删除"
+          }
+        },
+        "additionalProperties": false,
+        "description": "系统用户列表元素"
+      },
+      "SystemUserItemDtoPageList": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SystemUserItemDto"
+            },
+            "nullable": true
+          },
+          "pageIndex": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SystemUserUpdateDto": {
+        "type": "object",
+        "properties": {
+          "userName": {
+            "maxLength": 30,
+            "type": "string",
+            "description": "用户名",
+            "nullable": true
+          },
+          "realName": {
+            "maxLength": 30,
+            "type": "string",
+            "description": "真实姓名",
+            "nullable": true
+          },
+          "email": {
+            "maxLength": 100,
+            "type": "string",
+            "nullable": true
+          },
+          "emailConfirmed": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "phoneNumber": {
+            "maxLength": 20,
+            "type": "string",
+            "nullable": true
+          },
+          "phoneNumberConfirmed": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "twoFactorEnabled": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "lockoutEnd": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lockoutEnabled": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "accessFailedCount": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "lastLoginTime": {
+            "type": "string",
+            "description": "最后登录时间",
+            "format": "date-time",
+            "nullable": true
+          },
+          "retryCount": {
+            "type": "integer",
+            "description": "密码重试次数",
+            "format": "int32",
+            "nullable": true
+          },
+          "avatar": {
+            "maxLength": 200,
+            "type": "string",
+            "description": "头像url",
+            "nullable": true
+          },
+          "sex": {
+            "$ref": "#/components/schemas/Sex"
+          }
+        },
+        "additionalProperties": false,
+        "description": "系统用户更新时请求结构"
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "description": "Please enter a valid token",
+        "scheme": "Bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {
+      "Bearer": [ ]
+    }
+  ],
+  "tags": [
+    {
+      "name": "SystemRole",
+      "description": "角色表"
+    },
+    {
+      "name": "SystemUser",
+      "description": "系统用户"
+    },
+    {
+      "name": "Auth",
+      "description": "系统用户授权登录"
+    }
+  ]
+}
