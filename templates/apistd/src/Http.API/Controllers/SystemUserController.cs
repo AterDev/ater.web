@@ -6,12 +6,14 @@ namespace Http.API.Infrastructure;
 /// </summary>
 public class SystemUserController : RestControllerBase<ISystemUserManager>
 {
+    private readonly IWebHostEnvironment _environment;
     public SystemUserController(
         IUserContext user,
         ILogger<SystemUserController> logger,
-        ISystemUserManager manager
-        ) : base(manager, user, logger)
+        ISystemUserManager manager,
+        IWebHostEnvironment environment) : base(manager, user, logger)
     {
+        _environment = environment;
     }
 
     /// <summary>
@@ -61,6 +63,66 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
     {
         var res = await manager.FindAsync(id);
         return (res == null) ? NotFound() : res;
+    }
+
+    /// <summary>
+    /// 上传图片
+    /// </summary>
+    /// <param name="file"></param>
+    /// <returns></returns>
+    [HttpPost("upload")]
+    [AllowAnonymous]
+    public async Task<ActionResult<UploadResult>> UploadImgAsync(IFormFile file)
+    {
+        if (file == null)
+        {
+            return Problem("没有上传的文件", title: "业务错误");
+        }
+        //获取静态资源文件根目录
+        var webRootPath = _environment.WebRootPath;
+        var dir = Path.Combine(webRootPath, "Uploads", "images");
+        if (file.Length > 0)
+        {
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+            string fileExt = Path.GetExtension(file.FileName).ToLowerInvariant();
+            long fileSize = file.Length; //获得文件大小，以字节为单位
+            //判断后缀是否是图片
+            var permittedExtensions = new string[] { ".jpeg", ".jpg", "png" };
+
+            if (fileExt == null)
+            {
+                return Problem("上传的文件没有后缀");
+            }
+
+            if (!permittedExtensions.Contains(fileExt))
+            {
+                return Problem("请上传jpg、png格式的图片");
+            }
+            if (fileSize > 1024 * 1024 * 2) //2M
+            {
+                //上传的文件不能大于2M
+                return Problem("上传的图片应小于2M");
+            }
+            using var stream = new MemoryStream();
+            await file.CopyToAsync(stream);
+
+            var fileName = HashCrypto.Md5FileHash(stream);
+            var path = Path.Combine(dir, fileName + fileExt);
+            // 写入文件
+            using var fileStream = System.IO.File.Create(path);
+            file.CopyTo(fileStream);
+            fileStream.Close();
+
+            return new UploadResult()
+            {
+                FilePath = path,
+                Url = path,
+            };
+        }
+        return Problem("文件不正确", title: "业务错误");
     }
 
     /// <summary>
