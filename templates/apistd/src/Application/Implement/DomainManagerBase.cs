@@ -65,7 +65,7 @@ public class DomainManagerBase<TEntity, TUpdate, TFilter, TItem> : IDomainManage
 
     public virtual async Task<TEntity> UpdateAsync(TEntity entity, TUpdate dto)
     {
-        entity.Merge(dto, false);
+        entity.Merge(dto, true);
         entity.UpdatedTime = DateTimeOffset.UtcNow;
         var res = Command.Update(entity);
         await AutoSaveAsync();
