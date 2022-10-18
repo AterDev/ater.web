@@ -90,7 +90,7 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
             string fileExt = Path.GetExtension(file.FileName).ToLowerInvariant();
             long fileSize = file.Length; //获得文件大小，以字节为单位
             //判断后缀是否是图片
-            var permittedExtensions = new string[] { ".jpeg", ".jpg", "png" };
+            var permittedExtensions = new string[] { ".jpeg", ".jpg", ".png" };
 
             if (fileExt == null)
             {
@@ -110,12 +110,15 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
             await file.CopyToAsync(stream);
 
             var fileName = HashCrypto.Md5FileHash(stream);
-            var path = Path.Combine(dir, fileName + fileExt);
-            // 写入文件
-            using var fileStream = System.IO.File.Create(path);
-            file.CopyTo(fileStream);
-            fileStream.Close();
-
+            var filePath = Path.Combine(dir, fileName);
+            if (!System.IO.File.Exists(filePath))
+            {
+                // 写入文件
+                using var fileStream = System.IO.File.Create(filePath);
+                file.CopyTo(fileStream);
+                fileStream.Close();
+            }
+            var path = Path.Combine("Uploads", "images", fileName + fileExt);
             return new UploadResult()
             {
                 FilePath = path,

@@ -9,9 +9,9 @@ import { environment } from 'src/environments/environment';
 })
 export class BaseService {
   private isMobile = false;
-  private baseUrl: string;
+  protected baseUrl: string;
   constructor(
-    private http: HttpClient,
+    protected http: HttpClient,
     @Inject('BASE_URL') baseUrl: string
     // private oidcSecurityService: OidcSecurityService
   ) {
