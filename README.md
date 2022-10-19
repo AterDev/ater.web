@@ -13,7 +13,11 @@ The web framework with best practices base on ASP.NET Core.
 
 # 下载安装
 
-## 下载模板
+## 使用源代码安装
+- 拉取源代码
+- 执行`install.ps1`脚本安装。
+
+## 使用Nuget安装
 模板已经发布到[`nuget`](https://www.nuget.org/packages/ater.web.templates)上，请根据你的项目版本下载对应的模板。
 
 ```pwsh
