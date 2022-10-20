@@ -7,8 +7,8 @@ try {
     $PackageId = $PackageNode.Node.InnerText
 
     #re install package
-    dotnet new uninstall $PackageId
-    dotnet new install .\nuget\$PackageId.$Version.nupkg
+    dotnet new --uninstall $PackageId
+    dotnet new --install .\nuget\$PackageId.$Version.nupkg
 }
 catch {
     Write-Host $_.Exception.Message
