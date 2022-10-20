@@ -15,7 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 // config logger
 var assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown";
 Action<ResourceBuilder> configureResource = r => r.AddService(
-    "dusi.dev", serviceVersion: assemblyVersion, serviceInstanceId: Environment.MachineName);
+    "MyProjectName", serviceVersion: assemblyVersion, serviceInstanceId: Environment.MachineName);
 builder.Logging.ClearProviders();
 builder.Logging.AddOpenTelemetry(options =>
 {
@@ -244,8 +244,6 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapDefaultControllerRoute();
-
-app.MapFallbackToFile("index.html");
 
 app.Run();
 
