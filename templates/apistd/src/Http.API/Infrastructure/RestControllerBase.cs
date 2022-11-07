@@ -12,6 +12,7 @@ public class RestControllerBase<TManager> : RestControllerBase
     protected readonly TManager manager;
     protected readonly ILogger _logger;
     protected readonly IUserContext _user;
+
     public RestControllerBase(
         TManager manager,
         IUserContext user,
