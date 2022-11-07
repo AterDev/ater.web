@@ -13,6 +13,12 @@
       "commands": [
         "droplet"
       ]
+    },
+    "dotnet-ef": {
+      "version": "6.0.10",
+      "commands": [
+        "ef"
+      ]
     }
   }
 }

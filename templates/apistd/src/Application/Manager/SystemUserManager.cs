@@ -19,7 +19,7 @@ public class SystemUserManager : DomainManagerBase<SystemUser, SystemUserUpdateD
     {
         // TODO:根据实际业务构建筛选条件
         // if ... Queryable = ...
-        return await Query.FilterAsync<SystemUserItemDto>(Queryable);
+        return await Query.FilterAsync<SystemUserItemDto>(Queryable, filter.PageIndex, filter.PageSize);
     }
 
 }

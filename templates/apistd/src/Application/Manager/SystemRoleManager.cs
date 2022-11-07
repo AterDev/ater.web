@@ -19,7 +19,7 @@ public class SystemRoleManager : DomainManagerBase<SystemRole, SystemRoleUpdateD
     {
         // TODO:根据实际业务构建筛选条件
         // if ... Queryable = ...
-        return await Query.FilterAsync<SystemRoleItemDto>(Queryable);
+        return await Query.FilterAsync<SystemRoleItemDto>(Queryable, filter.PageIndex, filter.PageSize);
     }
 
 }

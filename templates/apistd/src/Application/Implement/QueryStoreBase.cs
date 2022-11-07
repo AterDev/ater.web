@@ -20,7 +20,7 @@ public class QueryStoreBase<TContext, TEntity> :
     public DbSet<TEntity> Db => _db;
     public TContext Context => _context;
     public DatabaseFacade Database { get; init; }
-    public IQueryable<TEntity> _query;
+    public IQueryable<TEntity> _query { get; set; }
 
     public bool EnableSoftDelete { get; set; } = true;
 
@@ -38,7 +38,9 @@ public class QueryStoreBase<TContext, TEntity> :
 
     private void ResetQuery()
     {
-        _query = _db.AsQueryable();
+        _query = EnableSoftDelete
+            ? _db.Where(d => !d.IsDeleted).AsQueryable()
+            : _db.AsQueryable();
     }
 
     public virtual async Task<TDto?> FindAsync<TDto>(Guid id)
@@ -64,6 +66,7 @@ public class QueryStoreBase<TContext, TEntity> :
         Expression<Func<TEntity, bool>> exp = e => true;
         whereExp ??= exp;
         var res = await _query.Where(whereExp)
+            .AsNoTracking()
             .ProjectTo<TDto>()
             .FirstOrDefaultAsync();
         ResetQuery();
@@ -81,6 +84,7 @@ public class QueryStoreBase<TContext, TEntity> :
         Expression<Func<TEntity, bool>> exp = e => true;
         whereExp ??= exp;
         var res = await _query.Where(whereExp)
+            .AsNoTracking()
             .ProjectTo<TItem>()
             .ToListAsync();
         ResetQuery();
@@ -136,6 +140,7 @@ public class QueryStoreBase<TContext, TEntity> :
         }
         var count = _query.Count();
         var data = await _query
+            .AsNoTracking()
             .ProjectTo<TItem>()
             .Skip((pageIndex - 1) * pageSize)
             .Take(pageSize)

@@ -6,15 +6,12 @@ public class InitDataTask
         var context = provider.GetRequiredService<CommandDbContext>();
         var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
         var logger = loggerFactory.CreateLogger<InitDataTask>();
-
         var connectionString = context.Database.GetConnectionString();
-        logger.LogInformation("当前数据库:" + connectionString);
-
         try
         {
             if (!await context.Database.CanConnectAsync())
             {
-                logger.LogError("数据库无法连接，请先配置数据库！");
+                logger.LogError("数据库无法连接:" + connectionString);
             }
             else
             {
