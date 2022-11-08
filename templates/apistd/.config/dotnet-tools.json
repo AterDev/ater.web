@@ -9,16 +9,16 @@
       ]
     },
     "ater.droplet.cli": {
-      "version": "6.2.0",
+      "version": "7.0.0-beta1",
       "commands": [
         "droplet"
       ]
     },
     "dotnet-ef": {
-      "version": "6.0.10",
+      "version": "7.0.0",
       "commands": [
         "ef"
       ]
     }
   }
-}
+}x
