@@ -2,6 +2,7 @@ using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -39,7 +40,7 @@ services.AddDbContextPool<QueryDbContext>(option =>
 {
     option.UseNpgsql(connectionString, sql =>
     {
-        sql.MigrationsAssembly("EntityFramework.Migrator");
+        sql.MigrationsAssembly("Http.API");
         sql.CommandTimeout(10);
     });
 });
@@ -47,7 +48,7 @@ services.AddDbContextPool<CommandDbContext>(option =>
 {
     option.UseNpgsql(connectionString, sql =>
     {
-        sql.MigrationsAssembly("EntityFramework.Migrator");
+        sql.MigrationsAssembly("Http.API");
         sql.CommandTimeout(10);
     });
 });
@@ -66,31 +67,7 @@ services.AddManager();
 
 #region 接口相关内容:jwt/授权/cors
 // use jwt
-services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(cfg =>
-{
-    cfg.SaveToken = true;
-    var sign = configuration.GetSection("Jwt")["Sign"];
-    if (string.IsNullOrEmpty(sign))
-    {
-        throw new Exception("未找到有效的jwt配置");
-    }
-    cfg.TokenValidationParameters = new TokenValidationParameters()
-    {
-
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(sign)),
-        ValidIssuer = configuration.GetSection("Jwt")["Issuer"],
-        ValidAudience = configuration.GetSection("Jwt")["Audience"],
-        ValidateIssuer = true,
-        ValidateLifetime = true,
-        RequireExpirationTime = true,
-        ValidateIssuerSigningKey = true
-    };
-});
+services.AddAuthentication().AddJwtBearer();
 
 // 验证
 services.AddAuthorization(options =>
@@ -114,7 +91,9 @@ services.AddCors(options =>
 #endregion
 
 services.AddHealthChecks();
+#region openAPI swagger
 // api 接口文档设置
+services.AddEndpointsApiExplorer();
 services.AddSwaggerGen(c =>
 {
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -168,6 +147,8 @@ services.AddSwaggerGen(c =>
         Format = "date"
     });
 });
+#endregion
+
 services.AddControllers()
     .ConfigureApiBehaviorOptions(o =>
     {
@@ -206,23 +187,23 @@ else
 }
 
 app.UseStaticFiles();
+
 // 异常统一处理
-//app.UseExceptionHandler(handler =>
-//{
-//    handler.Run(async context =>
-//    {
-//        context.Response.StatusCode = 500;
-//        var exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
-//        var result = new
-//        {
-//            Title = "程序内部错误:" + exception?.Message,
-//            Detail = exception?.Source,
-//            Status = 500,
-//            TraceId = context.TraceIdentifier
-//        };
-//        await context.Response.WriteAsJsonAsync(result);
-//    });
-//});
+app.UseExceptionHandler(handler =>
+{
+    handler.Run(async context =>
+    {
+        context.Response.StatusCode = 500;
+        var exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
+        var result = new {
+            Title = "程序内部错误:" + exception?.Message,
+            Detail = exception?.Source,
+            Status = 500,
+            TraceId = context.TraceIdentifier
+        };
+        await context.Response.WriteAsJsonAsync(result);
+    });
+});
 
 app.UseHealthChecks("/health");
 app.UseRouting();

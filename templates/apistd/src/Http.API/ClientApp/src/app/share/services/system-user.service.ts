@@ -6,6 +6,7 @@ import { SystemUserAddDto } from '../models/system-user/system-user-add-dto.mode
 import { SystemUserUpdateDto } from '../models/system-user/system-user-update-dto.model';
 import { SystemUserItemDtoPageList } from '../models/system-user/system-user-item-dto-page-list.model';
 import { SystemUser } from '../models/system-user/system-user.model';
+import { UploadResult } from '../models/system-user/upload-result.model';
 
 /**
  * 系统用户
@@ -56,6 +57,15 @@ export class SystemUserService extends BaseService {
   delete(id: string): Observable<SystemUser> {
     const url = `/api/SystemUser/${id}`;
     return this.request<SystemUser>('delete', url);
+  }
+
+  /**
+   * 上传图片
+   * @param data FormData
+   */
+  uploadImg(data: FormData): Observable<UploadResult> {
+    const url = `/api/SystemUser/upload`;
+    return this.request<UploadResult>('post', url, data);
   }
 
 }

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
 		<AssemblyName>Http.API</AssemblyName>
@@ -7,7 +7,8 @@
 		<SpaRoot>ClientApp\</SpaRoot>
 		<SpaProxyServerUrl>https://localhost:14200</SpaProxyServerUrl>
 		<SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
-	</PropertyGroup>
+	  <UserSecretsId>a72f0287-9d70-43b2-9f38-823f9f4e516d</UserSecretsId>
+  </PropertyGroup>
 
 	<PropertyGroup>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
@@ -43,7 +44,7 @@
 	<Target Name="SwaggerPostBuildTarget" AfterTargets="Build" Condition="'$(Configuration)' == 'Debug'">
 		<Exec Command="dotnet tool restore" UseUtf8Encoding="Always" />
 		<Exec Command="dotnet swagger tofile --output ./swagger.json .\bin\Debug\net7.0\Http.API.dll v1" UseUtf8Encoding="Always" />
-		<Exec Command="dotnet droplet sync" UseUtf8Encoding="Always" />
+		<!--<Exec Command="dotnet droplet sync" UseUtf8Encoding="Always" />-->
 	</Target>
 
 
@@ -60,7 +61,7 @@
 
 		<ItemGroup>
 			<DistFiles Include="$(SpaRoot)dist\**; $(SpaRoot)dist-server\**" />
-			<ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+			<ResolvedFileToPublish Include="@(DistFiles-&gt;'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
 				<RelativePath>wwwroot\%(RecursiveDir)%(FileName)%(Extension)</RelativePath>
 				<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 				<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
