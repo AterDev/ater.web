@@ -9,9 +9,11 @@ public class InitDataTask
         var connectionString = context.Database.GetConnectionString();
         try
         {
+            context.Database.Migrate();
             if (!await context.Database.CanConnectAsync())
             {
                 logger.LogError("数据库无法连接:" + connectionString);
+                return;
             }
             else
             {
