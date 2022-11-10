@@ -67,7 +67,31 @@ services.AddManager();
 
 #region 接口相关内容:jwt/授权/cors
 // use jwt
-services.AddAuthentication().AddJwtBearer();
+services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(cfg =>
+{
+    cfg.SaveToken = true;
+    var sign = configuration.GetSection("Authentication")["Schemes:Bearer:Sign"];
+    if (string.IsNullOrEmpty(sign))
+    {
+        throw new Exception("未找到有效的jwt配置");
+    }
+    cfg.TokenValidationParameters = new TokenValidationParameters()
+    {
+
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(sign)),
+        ValidIssuer = configuration.GetSection("Authentication")["Schemes:Bearer:ValidIssuer"],
+        ValidAudience = configuration.GetSection("Authentication")["Schemes:Bearer:ValidAudiences"],
+        ValidateIssuer = true,
+        ValidateLifetime = true,
+        RequireExpirationTime = true,
+        ValidateIssuerSigningKey = true
+    };
+});
 
 // 验证
 services.AddAuthorization(options =>

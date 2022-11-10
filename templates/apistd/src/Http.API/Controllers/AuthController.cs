@@ -43,9 +43,14 @@ public class AuthController : ControllerBase
 
         if (HashCrypto.Validate(dto.Password, user.PasswordSalt, user.PasswordHash))
         {
-            var sign = _config.GetSection("Jwt")["Sign"];
-            var issuer = _config.GetSection("Jwt")["Issuer"];
-            var audience = _config.GetSection("Jwt")["Audience"];
+            var sign = _config.GetSection("Authentication")["Schemes:Bearer:Sign"];
+            var issuer = _config.GetSection("Authentication")["Schemes:Bearer:ValidIssuer"];
+            //var audiences = _config.GetSection("Authentication:Schemes:Bearer:ValidAudiences").Get<string[]>();
+
+
+
+            //var audience = string.Join(",", audiences);
+            var audience = _config.GetSection("Authentication")["Schemes:Bearer:ValidAudiences"];
             var role = user.SystemRoles?.FirstOrDefault();
             //var time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             //1天后过期
