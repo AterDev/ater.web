@@ -6,5 +6,5 @@ namespace Application.IManager;
 /// </summary>
 public interface ISystemUserManager : IDomainManager<SystemUser, SystemUserUpdateDto, SystemUserFilterDto, SystemUserItemDto>
 {
-	// TODO: 定义业务方法
+    // TODO: 定义业务方法
 }

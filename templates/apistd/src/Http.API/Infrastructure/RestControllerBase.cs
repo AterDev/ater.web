@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
+﻿using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace Http.API.Infrastructure;
 
@@ -42,8 +41,7 @@ public class RestControllerBase : ControllerBase
     [ApiExplorerSettings(IgnoreApi = true)]
     public override NotFoundObjectResult NotFound([ActionResultObjectValue] object? value)
     {
-        var res = new
-        {
+        var res = new {
             Title = "访问的资源不存在",
             Detail = value?.ToString(),
             Status = 404,
@@ -60,8 +58,7 @@ public class RestControllerBase : ControllerBase
     [ApiExplorerSettings(IgnoreApi = true)]
     public override ConflictObjectResult Conflict([ActionResultObjectValue] object? error)
     {
-        var res = new
-        {
+        var res = new {
             Title = "重复的资源",
             Detail = error?.ToString(),
             Status = 409,

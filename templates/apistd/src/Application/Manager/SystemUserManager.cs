@@ -1,4 +1,3 @@
-using Application.IManager;
 using Share.Models.SystemUserDtos;
 
 namespace Application.Manager;

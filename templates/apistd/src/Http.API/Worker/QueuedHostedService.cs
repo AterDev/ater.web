@@ -1,4 +1,4 @@
-﻿namespace Application.Services;
+﻿namespace Http.API.Worker;
 /// <summary>
 /// 后台队列任务服务示例
 /// </summary>
@@ -29,7 +29,7 @@ public class QueuedHostedService : BackgroundService
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            var workItem = await TaskQueue.DequeueAsync(stoppingToken);
+            Func<object, ValueTask> workItem = await TaskQueue.DequeueAsync(stoppingToken);
 
             try
             {

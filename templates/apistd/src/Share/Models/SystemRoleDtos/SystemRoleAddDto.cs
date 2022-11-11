@@ -1,4 +1,3 @@
-using Core.Entities;
 namespace Share.Models.SystemRoleDtos;
 /// <summary>
 /// 角色添加时请求结构
@@ -23,5 +22,5 @@ public class SystemRoleAddDto
     /// </summary>
     [MaxLength(30)]
     public string? Icon { get; set; }
-    
+
 }

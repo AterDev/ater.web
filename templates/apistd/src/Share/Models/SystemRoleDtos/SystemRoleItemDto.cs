@@ -1,4 +1,3 @@
-using Core.Entities;
 namespace Share.Models.SystemRoleDtos;
 /// <summary>
 /// 角色列表元素
@@ -30,5 +29,5 @@ public class SystemRoleItemDto
     /// 软删除
     /// </summary>
     public bool IsDeleted { get; set; } = default!;
-    
+
 }

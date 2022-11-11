@@ -9,18 +9,18 @@ using Microsoft.OpenApi.Models;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Resources;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 #region logger
 // config logger
-var assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown";
+string assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown";
 Action<ResourceBuilder> configureResource = r => r.AddService(
     "dusi.dev", serviceVersion: assemblyVersion, serviceInstanceId: Environment.MachineName);
 builder.Logging.ClearProviders();
 builder.Logging.AddOpenTelemetry(options =>
 {
-    options.ConfigureResource(configureResource);
-    options.AddConsoleExporter();
+    _ = options.ConfigureResource(configureResource);
+    _ = options.AddConsoleExporter();
 });
 
 builder.Services.Configure<OpenTelemetryLoggerOptions>(opt =>
@@ -31,25 +31,25 @@ builder.Services.Configure<OpenTelemetryLoggerOptions>(opt =>
 });
 #endregion
 
-var services = builder.Services;
-var configuration = builder.Configuration;
+IServiceCollection services = builder.Services;
+ConfigurationManager configuration = builder.Configuration;
 services.AddHttpContextAccessor();
 // database sql
-var connectionString = configuration.GetConnectionString("Default");
+string? connectionString = configuration.GetConnectionString("Default");
 services.AddDbContextPool<QueryDbContext>(option =>
 {
-    option.UseNpgsql(connectionString, sql =>
+    _ = option.UseNpgsql(connectionString, sql =>
     {
-        sql.MigrationsAssembly("Http.API");
-        sql.CommandTimeout(10);
+        _ = sql.MigrationsAssembly("Http.API");
+        _ = sql.CommandTimeout(10);
     });
 });
 services.AddDbContextPool<CommandDbContext>(option =>
 {
-    option.UseNpgsql(connectionString, sql =>
+    _ = option.UseNpgsql(connectionString, sql =>
     {
-        sql.MigrationsAssembly("Http.API");
-        sql.CommandTimeout(10);
+        _ = sql.MigrationsAssembly("Http.API");
+        _ = sql.CommandTimeout(10);
     });
 });
 
@@ -75,14 +75,13 @@ services.AddAuthentication(options =>
 .AddJwtBearer(cfg =>
 {
     cfg.SaveToken = true;
-    var sign = configuration.GetSection("Authentication")["Schemes:Bearer:Sign"];
+    string? sign = configuration.GetSection("Authentication")["Schemes:Bearer:Sign"];
     if (string.IsNullOrEmpty(sign))
     {
         throw new Exception("未找到有效的jwt配置");
     }
     cfg.TokenValidationParameters = new TokenValidationParameters()
     {
-
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(sign)),
         ValidIssuer = configuration.GetSection("Authentication")["Schemes:Bearer:ValidIssuer"],
         ValidAudience = configuration.GetSection("Authentication")["Schemes:Bearer:ValidAudiences"],
@@ -107,9 +106,9 @@ services.AddCors(options =>
 {
     options.AddPolicy("default", builder =>
     {
-        builder.AllowAnyOrigin();
-        builder.AllowAnyMethod();
-        builder.AllowAnyHeader();
+        _ = builder.AllowAnyOrigin();
+        _ = builder.AllowAnyMethod();
+        _ = builder.AllowAnyHeader();
     });
 });
 #endregion
@@ -149,8 +148,8 @@ services.AddSwaggerGen(c =>
         Description = "API 文档",
         Version = "v1"
     });
-    var xmlFiles = Directory.GetFiles(AppContext.BaseDirectory, "*.xml", SearchOption.TopDirectoryOnly);
-    foreach (var item in xmlFiles)
+    string[] xmlFiles = Directory.GetFiles(AppContext.BaseDirectory, "*.xml", SearchOption.TopDirectoryOnly);
+    foreach (string item in xmlFiles)
     {
         try
         {
@@ -161,7 +160,7 @@ services.AddSwaggerGen(c =>
     c.DescribeAllParametersInCamelCase();
     c.CustomOperationIds((z) =>
     {
-        var descriptor = (ControllerActionDescriptor)z.ActionDescriptor;
+        ControllerActionDescriptor descriptor = (ControllerActionDescriptor)z.ActionDescriptor;
         return $"{descriptor.ControllerName}_{descriptor.ActionName}";
     });
     c.SchemaFilter<EnumSchemaFilter>();
@@ -187,27 +186,27 @@ services.AddControllers()
         options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
     });
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 // 初始化工作
-await using (var scope = app.Services.CreateAsyncScope())
+await using (AsyncServiceScope scope = app.Services.CreateAsyncScope())
 {
-    var provider = scope.ServiceProvider;
+    IServiceProvider provider = scope.ServiceProvider;
     await InitDataTask.InitDataAsync(provider);
 }
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseCors("default");
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    _ = app.UseCors("default");
+    _ = app.UseSwagger();
+    _ = app.UseSwaggerUI();
 }
 else
 {
     // 生产环境需要新的配置
-    app.UseCors("default");
+    _ = app.UseCors("default");
     //app.UseHsts();
-    app.UseHttpsRedirection();
+    _ = app.UseHttpsRedirection();
 }
 
 app.UseStaticFiles();
@@ -218,7 +217,7 @@ app.UseExceptionHandler(handler =>
     handler.Run(async context =>
     {
         context.Response.StatusCode = 500;
-        var exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
+        Exception? exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
         var result = new {
             Title = "程序内部错误:" + exception?.Message,
             Detail = exception?.Source,

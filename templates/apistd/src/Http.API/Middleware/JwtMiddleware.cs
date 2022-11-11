@@ -1,6 +1,5 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using Application.Services;
 
 namespace Http.API.Middleware;
 
@@ -16,15 +15,15 @@ public class JwtMiddleware
 
     public async Task Invoke(HttpContext context)
     {
-        var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+        string? token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
-        var tokenHandler = new JwtSecurityTokenHandler();
+        JwtSecurityTokenHandler tokenHandler = new();
 
-        var jwtToken = tokenHandler.ReadJwtToken(token);
-        var id = jwtToken.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+        JwtSecurityToken jwtToken = tokenHandler.ReadJwtToken(token);
+        string id = jwtToken.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
         if (id != null)
         {
-            var isLogin = _redis.GetValue<bool?>(id);
+            bool? isLogin = _redis.GetValue<bool?>(id);
             if (isLogin.HasValue)
             {
                 await _next(context);

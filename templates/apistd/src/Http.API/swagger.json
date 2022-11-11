@@ -1363,16 +1363,16 @@
   ],
   "tags": [
     {
+      "name": "Auth",
+      "description": "系统用户授权登录"
+    },
+    {
       "name": "SystemRole",
       "description": "角色表"
     },
     {
       "name": "SystemUser",
       "description": "系统用户"
-    },
-    {
-      "name": "Auth",
-      "description": "系统用户授权登录"
     }
   ]
 }

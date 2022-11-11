@@ -16,7 +16,7 @@ public class CustomBadRequest : ObjectResult
 
     private static string GetErrorMessage(ActionContext context)
     {
-        var errorMsgs = context.ModelState.Values.Select(x => x.Errors.FirstOrDefault()?.ErrorMessage).ToList();
+        List<string?> errorMsgs = context.ModelState.Values.Select(x => x.Errors.FirstOrDefault()?.ErrorMessage).ToList();
 
         return string.Join(";",
             errorMsgs.Where(e => !string.IsNullOrEmpty(e)).ToArray());

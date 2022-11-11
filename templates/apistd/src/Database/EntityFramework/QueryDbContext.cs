@@ -24,7 +24,7 @@ public class QueryDbContext : ContextBase
     protected override void OnModelCreating(ModelBuilder builder)
     {
         // 全局过滤
-        builder.Entity<EntityBase>().HasQueryFilter(e => !e.IsDeleted);
+        _ = builder.Entity<EntityBase>().HasQueryFilter(e => !e.IsDeleted);
         base.OnModelCreating(builder);
     }
 }

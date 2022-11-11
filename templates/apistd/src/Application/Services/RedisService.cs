@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using Microsoft.Extensions.Caching.Distributed;
+﻿using Microsoft.Extensions.Caching.Distributed;
 namespace Application.Services;
 
 /// <summary>
@@ -7,12 +6,11 @@ namespace Application.Services;
 /// </summary>
 public class RedisService
 {
-    public IDistributedCache Cache => _cache;
+    public IDistributedCache Cache { get; }
 
-    private readonly IDistributedCache _cache;
     public RedisService(IDistributedCache cache)
     {
-        _cache = cache;
+        Cache = cache;
     }
 
     /// <summary>
@@ -24,8 +22,8 @@ public class RedisService
     /// <returns></returns>
     public async Task SetValueAsync(string key, object data, int minutes)
     {
-        var bytes = JsonSerializer.SerializeToUtf8Bytes(data);
-        await _cache.SetAsync(key, bytes, new DistributedCacheEntryOptions
+        byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(data);
+        await Cache.SetAsync(key, bytes, new DistributedCacheEntryOptions
         {
             SlidingExpiration = TimeSpan.FromMinutes(minutes)
         });
@@ -38,12 +36,12 @@ public class RedisService
     /// <returns></returns>
     public T? GetValue<T>(string key)
     {
-        var bytes = _cache.Get(key);
+        byte[]? bytes = Cache.Get(key);
         if (bytes == null || bytes.Length < 1)
         {
             return default;
         }
-        var readOnlySpan = new ReadOnlySpan<byte>(bytes);
+        ReadOnlySpan<byte> readOnlySpan = new(bytes);
         return JsonSerializer.Deserialize<T>(readOnlySpan);
     }
 }

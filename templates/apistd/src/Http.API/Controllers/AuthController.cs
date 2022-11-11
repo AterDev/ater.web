@@ -33,7 +33,7 @@ public class AuthController : ControllerBase
     public async Task<ActionResult<AuthResult>> LoginAsync(LoginDto dto)
     {
         // 查询用户
-        var user = await _store.Db.Where(u => u.UserName.Equals(dto.UserName))
+        SystemUser? user = await _store.Db.Where(u => u.UserName.Equals(dto.UserName))
             .Include(u => u.SystemRoles)
             .FirstOrDefaultAsync();
         if (user == null)
@@ -43,26 +43,26 @@ public class AuthController : ControllerBase
 
         if (HashCrypto.Validate(dto.Password, user.PasswordSalt, user.PasswordHash))
         {
-            var sign = _config.GetSection("Authentication")["Schemes:Bearer:Sign"];
-            var issuer = _config.GetSection("Authentication")["Schemes:Bearer:ValidIssuer"];
+            string? sign = _config.GetSection("Authentication")["Schemes:Bearer:Sign"];
+            string? issuer = _config.GetSection("Authentication")["Schemes:Bearer:ValidIssuer"];
             //var audiences = _config.GetSection("Authentication:Schemes:Bearer:ValidAudiences").Get<string[]>();
 
 
 
             //var audience = string.Join(",", audiences);
-            var audience = _config.GetSection("Authentication")["Schemes:Bearer:ValidAudiences"];
-            var role = user.SystemRoles?.FirstOrDefault();
+            string? audience = _config.GetSection("Authentication")["Schemes:Bearer:ValidAudiences"];
+            SystemRole? role = user.SystemRoles?.FirstOrDefault();
             //var time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             //1天后过期
             if (!string.IsNullOrWhiteSpace(sign) &&
                 !string.IsNullOrWhiteSpace(issuer) &&
                 !string.IsNullOrWhiteSpace(audience))
             {
-                var jwt = new JwtService(sign, audience, issuer)
+                JwtService jwt = new(sign, audience, issuer)
                 {
                     TokenExpires = 60 * 24 * 7,
                 };
-                var token = jwt.GetToken(user.Id.ToString(), role?.Name ?? "");
+                string token = jwt.GetToken(user.Id.ToString(), role?.Name ?? "");
                 // 登录状态存储到Redis
                 //await _redis.SetValueAsync("login" + user.Id.ToString(), true, 60 * 24 * 7);
 

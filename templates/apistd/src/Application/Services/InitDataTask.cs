@@ -3,10 +3,10 @@ public class InitDataTask
 {
     public static async Task InitDataAsync(IServiceProvider provider)
     {
-        var context = provider.GetRequiredService<CommandDbContext>();
-        var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
-        var logger = loggerFactory.CreateLogger<InitDataTask>();
-        var connectionString = context.Database.GetConnectionString();
+        CommandDbContext context = provider.GetRequiredService<CommandDbContext>();
+        ILoggerFactory loggerFactory = provider.GetRequiredService<ILoggerFactory>();
+        ILogger<InitDataTask> logger = loggerFactory.CreateLogger<InitDataTask>();
+        string? connectionString = context.Database.GetConnectionString();
         try
         {
             context.Database.Migrate();
@@ -18,7 +18,7 @@ public class InitDataTask
             else
             {
                 // 判断是否初始化
-                var role = await context.SystemRoles.SingleOrDefaultAsync(r => r.Name.ToLower() == "admin");
+                SystemRole? role = await context.SystemRoles.SingleOrDefaultAsync(r => r.Name.ToLower() == "admin");
                 if (role == null)
                 {
                     logger.LogInformation("初始化数据");
@@ -37,25 +37,25 @@ public class InitDataTask
     /// </summary>
     public static async Task InitRoleAndUserAsync(CommandDbContext context)
     {
-        var role = new SystemRole()
+        SystemRole role = new()
         {
             Name = "Admin"
         };
-        var userRole = new SystemRole()
+        SystemRole userRole = new()
         {
             Name = "User"
         };
-        var salt = HashCrypto.BuildSalt();
-        var user = new SystemUser()
+        string salt = HashCrypto.BuildSalt();
+        SystemUser user = new()
         {
             UserName = "admin",
             PasswordSalt = salt,
             PasswordHash = HashCrypto.GeneratePwd("123456", salt),
             SystemRoles = new List<SystemRole>() { role },
         };
-        context.SystemRoles.Add(userRole);
-        context.SystemRoles.Add(role);
-        context.SystemUsers.Add(user);
-        await context.SaveChangesAsync();
+        _ = context.SystemRoles.Add(userRole);
+        _ = context.SystemRoles.Add(role);
+        _ = context.SystemUsers.Add(user);
+        _ = await context.SaveChangesAsync();
     }
 }

@@ -1,4 +1,3 @@
-using Core.Entities;
 namespace Share.Models.SystemUserDtos;
 /// <summary>
 /// 系统用户更新时请求结构
@@ -48,5 +47,5 @@ public class SystemUserUpdateDto
     /// 性别
     /// </summary>
     public Sex? Sex { get; set; }
-    
+
 }

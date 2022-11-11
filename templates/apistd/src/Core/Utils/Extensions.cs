@@ -16,7 +16,7 @@ public static partial class Extensions
     {
         if (ignoreNull)
         {
-            TypeAdapterConfig<TMerge, TSource>
+            _ = TypeAdapterConfig<TMerge, TSource>
                 .NewConfig()
                 .IgnoreNullValues(true);
         }
@@ -32,7 +32,7 @@ public static partial class Extensions
     /// <returns></returns>
     public static TDestination MapTo<TSource, TDestination>(this TSource source) where TDestination : class
     {
-        TypeAdapterConfig<TSource, TDestination>
+        _ = TypeAdapterConfig<TSource, TDestination>
            .NewConfig()
            .IgnoreNullValues(true);
         return source.Adapt<TSource, TDestination>();
@@ -49,22 +49,22 @@ public static partial class Extensions
     /// <exception cref="NullReferenceException"></exception>
     public static IQueryable<TResult> Select<TSource, TResult>(this IQueryable<TSource> source)
     {
-        var sourceType = typeof(TSource);
-        var resultType = typeof(TResult);
-        var parameter = Expression.Parameter(sourceType, "e");
+        Type sourceType = typeof(TSource);
+        Type resultType = typeof(TResult);
+        ParameterExpression parameter = Expression.Parameter(sourceType, "e");
 
         // 只构造都存在的属性
-        var sourceNames = sourceType.GetProperties()
+        List<string> sourceNames = sourceType.GetProperties()
             .Select(s => s.Name).ToList();
-        var props = resultType.GetProperties().ToList();
+        List<System.Reflection.PropertyInfo> props = resultType.GetProperties().ToList();
         props = props.Where(p => sourceNames.Contains(p.Name)).ToList();
         //props = props.Intersect(sourceProps).ToList();
 
-        var bindings = props.Select(p =>
+        List<MemberAssignment> bindings = props.Select(p =>
              Expression.Bind(p, Expression.PropertyOrField(parameter, p.Name))
         ).ToList();
-        var body = Expression.MemberInit(Expression.New(resultType), bindings);
-        var selector = Expression.Lambda(body, parameter);
+        MemberInitExpression body = Expression.MemberInit(Expression.New(resultType), bindings);
+        LambdaExpression selector = Expression.Lambda(body, parameter);
         return source.Provider.CreateQuery<TResult>(
             Expression.Call(typeof(Queryable), "Select", new Type[] { sourceType, resultType },
                 source.Expression, Expression.Quote(selector)));
@@ -85,31 +85,25 @@ public static partial class Extensions
     public static IOrderedQueryable<T> OrderBy<T>(this IQueryable<T> query, Dictionary<string, bool> dic)
     {
         IOrderedQueryable<T> orderQuery = default!;
-        var parameter = Expression.Parameter(typeof(T), "e");
-        foreach (var item in dic)
+        ParameterExpression parameter = Expression.Parameter(typeof(T), "e");
+        foreach (KeyValuePair<string, bool> item in dic)
         {
-            var prop = Expression.PropertyOrField(parameter, item.Key);
-            var body = Expression.MakeMemberAccess(parameter, prop.Member);
-            var selector = Expression.Lambda(body, parameter);
+            MemberExpression prop = Expression.PropertyOrField(parameter, item.Key);
+            MemberExpression body = Expression.MakeMemberAccess(parameter, prop.Member);
+            LambdaExpression selector = Expression.Lambda(body, parameter);
 
 
-            MethodCallExpression expression;
-            if (item.Value)
-            {
-                expression = Expression.Call(typeof(Queryable),
+            MethodCallExpression expression = item.Value
+                ? Expression.Call(typeof(Queryable),
                                           "OrderBy",
                                           new Type[] { typeof(T), body.Type },
                                           query.Expression,
-                                          Expression.Quote(selector));
-            }
-            else
-            {
-                expression = Expression.Call(typeof(Queryable),
+                                          Expression.Quote(selector))
+                : Expression.Call(typeof(Queryable),
                                           "OrderByDescending",
                                           new Type[] { typeof(T), body.Type },
                                           query.Expression,
                                           Expression.Quote(selector));
-            }
             orderQuery = (IOrderedQueryable<T>)query.Provider.CreateQuery<T>(expression);
             query = orderQuery;
         }

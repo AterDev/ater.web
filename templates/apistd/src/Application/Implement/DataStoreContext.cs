@@ -45,22 +45,20 @@ public class DataStoreContext
 
     public QuerySet<TEntity> QuerySet<TEntity>() where TEntity : EntityBase
     {
-        var typename = typeof(TEntity).Name + "QueryStore";
-        var set = GetSet(typename);
-        if (set == null) throw new ArgumentNullException($"{typename} class object not found");
-        return (QuerySet<TEntity>)set;
+        string typename = typeof(TEntity).Name + "QueryStore";
+        object set = GetSet(typename);
+        return set == null ? throw new ArgumentNullException($"{typename} class object not found") : (QuerySet<TEntity>)set;
     }
     public CommandSet<TEntity> CommandSet<TEntity>() where TEntity : EntityBase
     {
-        var typename = typeof(TEntity).Name + "CommandStore";
-        var set = GetSet(typename);
-        if (set == null) throw new ArgumentNullException($"{typename} class object not found");
-        return (CommandSet<TEntity>)set;
+        string typename = typeof(TEntity).Name + "CommandStore";
+        object set = GetSet(typename);
+        return set == null ? throw new ArgumentNullException($"{typename} class object not found") : (CommandSet<TEntity>)set;
     }
 
     private void AddCache(object set)
     {
-        var typeName = set.GetType().Name;
+        string typeName = set.GetType().Name;
         if (!SetCache.ContainsKey(typeName))
         {
             SetCache.Add(typeName, set);

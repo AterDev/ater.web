@@ -31,9 +31,9 @@ public class JwtService
     /// <returns></returns>
     public string GetToken(string id, string role)
     {
-        var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Sign));
-        var signingCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
-        var claims = new List<Claim>
+        SymmetricSecurityKey signingKey = new(Encoding.UTF8.GetBytes(Sign));
+        SigningCredentials signingCredentials = new(signingKey, SecurityAlgorithms.HmacSha256);
+        List<Claim> claims = new()
         {
                 // 此处自定义claims
                 new Claim(ClaimTypes.NameIdentifier, id),
@@ -43,10 +43,10 @@ public class JwtService
         {
             claims.AddRange(Claims);
         }
-        var jwt = new JwtSecurityToken(Issuer, Audience, claims,
+        JwtSecurityToken jwt = new(Issuer, Audience, claims,
             expires: DateTime.UtcNow.AddMinutes(TokenExpires),
             signingCredentials: signingCredentials);
-        var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+        string encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
         return encodedJwt;
     }
 }

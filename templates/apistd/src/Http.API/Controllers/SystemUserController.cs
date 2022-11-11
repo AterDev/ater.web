@@ -1,5 +1,6 @@
+using Http.API.Infrastructure;
 using Share.Models.SystemUserDtos;
-namespace Http.API.Infrastructure;
+namespace Http.API.Controllers;
 
 /// <summary>
 /// 系统用户
@@ -36,7 +37,7 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
     [HttpPost]
     public async Task<ActionResult<SystemUser>> AddAsync(SystemUserAddDto form)
     {
-        var entity = form.MapTo<SystemUserAddDto, SystemUser>();
+        SystemUser entity = form.MapTo<SystemUserAddDto, SystemUser>();
         return await manager.AddAsync(entity);
     }
 
@@ -49,9 +50,8 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
     [HttpPut("{id}")]
     public async Task<ActionResult<SystemUser?>> UpdateAsync([FromRoute] Guid id, SystemUserUpdateDto form)
     {
-        var current = await manager.GetCurrent(id);
-        if (current == null) return NotFound();
-        return await manager.UpdateAsync(current, form);
+        SystemUser? current = await manager.GetCurrent(id);
+        return current == null ? (ActionResult<SystemUser?>)NotFound() : (ActionResult<SystemUser?>)await manager.UpdateAsync(current, form);
     }
 
     /// <summary>
@@ -62,8 +62,8 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
     [HttpGet("{id}")]
     public async Task<ActionResult<SystemUser?>> GetDetailAsync([FromRoute] Guid id)
     {
-        var res = await manager.FindAsync(id);
-        return (res == null) ? NotFound() : res;
+        SystemUser? res = await manager.FindAsync(id);
+        return res == null ? NotFound() : res;
     }
 
     /// <summary>
@@ -79,18 +79,18 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
             return Problem("没有上传的文件", title: "业务错误");
         }
         //获取静态资源文件根目录
-        var webRootPath = _environment.WebRootPath;
-        var dir = Path.Combine(webRootPath, "Uploads", "images");
+        string webRootPath = _environment.WebRootPath;
+        string dir = Path.Combine(webRootPath, "Uploads", "images");
         if (file.Length > 0)
         {
             if (!Directory.Exists(dir))
             {
-                Directory.CreateDirectory(dir);
+                _ = Directory.CreateDirectory(dir);
             }
             string fileExt = Path.GetExtension(file.FileName).ToLowerInvariant();
             long fileSize = file.Length; //获得文件大小，以字节为单位
             //判断后缀是否是图片
-            var permittedExtensions = new string[] { ".jpeg", ".jpg", ".png" };
+            string[] permittedExtensions = new string[] { ".jpeg", ".jpg", ".png" };
 
             if (fileExt == null)
             {
@@ -105,20 +105,20 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
                 //上传的文件不能大于1M
                 return Problem("上传的图片应小于1M");
             }
-            using var stream = new MemoryStream();
+            using MemoryStream stream = new();
             await file.CopyToAsync(stream);
 
-            var fileName = HashCrypto.Md5FileHash(stream);
-            var filePath = Path.Combine(dir, fileName);
+            string fileName = HashCrypto.Md5FileHash(stream);
+            string filePath = Path.Combine(dir, fileName);
             if (!System.IO.File.Exists(filePath))
             {
                 // 写入文件
-                using var fileStream = System.IO.File.Create(filePath);
+                using FileStream fileStream = System.IO.File.Create(filePath);
                 file.CopyTo(fileStream);
                 fileStream.Close();
             }
-            var host = Request.Scheme + "://" + Request.Host.Value;
-            var path = Path.Combine(host, "Uploads", "images", fileName + fileExt);
+            string host = Request.Scheme + "://" + Request.Host.Value;
+            string path = Path.Combine(host, "Uploads", "images", fileName + fileExt);
             return new UploadResult()
             {
                 FilePath = path,
@@ -137,8 +137,7 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
     [HttpDelete("{id}")]
     public async Task<ActionResult<SystemUser?>> DeleteAsync([FromRoute] Guid id)
     {
-        var entity = await manager.GetCurrent(id);
-        if (entity == null) return NotFound();
-        return await manager.DeleteAsync(entity);
+        SystemUser? entity = await manager.GetCurrent(id);
+        return entity == null ? (ActionResult<SystemUser?>)NotFound() : (ActionResult<SystemUser?>)await manager.DeleteAsync(entity);
     }
 }

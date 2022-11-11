@@ -1,6 +1,6 @@
 ﻿using System.Threading.Channels;
 
-namespace Application.Services;
+namespace Http.API.Worker;
 
 
 public interface IBackgroundTaskQueue
@@ -19,7 +19,7 @@ public class BackgroundTaskQueue : IBackgroundTaskQueue
 
     public BackgroundTaskQueue(int capacity)
     {
-        var options = new BoundedChannelOptions(capacity)
+        BoundedChannelOptions options = new(capacity)
         {
             FullMode = BoundedChannelFullMode.Wait
         };
@@ -39,7 +39,7 @@ public class BackgroundTaskQueue : IBackgroundTaskQueue
     public async ValueTask<Func<object, ValueTask>> DequeueAsync(
         CancellationToken cancellationToken)
     {
-        var workItem = await _queue.Reader.ReadAsync(cancellationToken);
+        Func<object, ValueTask> workItem = await _queue.Reader.ReadAsync(cancellationToken);
         return workItem;
     }
 }

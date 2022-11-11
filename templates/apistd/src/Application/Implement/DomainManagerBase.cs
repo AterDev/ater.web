@@ -42,7 +42,7 @@ public class DomainManagerBase<TEntity, TUpdate, TFilter, TItem> : IDomainManage
     {
         if (AutoSave)
         {
-            await SaveChangesAsync();
+            _ = await SaveChangesAsync();
         }
     }
 
@@ -58,16 +58,16 @@ public class DomainManagerBase<TEntity, TUpdate, TFilter, TItem> : IDomainManage
     }
     public virtual async Task<TEntity> AddAsync(TEntity entity)
     {
-        var res = await Command.CreateAsync(entity);
+        TEntity res = await Command.CreateAsync(entity);
         await AutoSaveAsync();
         return res;
     }
 
     public virtual async Task<TEntity> UpdateAsync(TEntity entity, TUpdate dto)
     {
-        entity.Merge(dto, false);
+        _ = entity.Merge(dto, false);
         entity.UpdatedTime = DateTimeOffset.UtcNow;
-        var res = Command.Update(entity);
+        TEntity res = Command.Update(entity);
         await AutoSaveAsync();
         return res;
     }
@@ -75,7 +75,7 @@ public class DomainManagerBase<TEntity, TUpdate, TFilter, TItem> : IDomainManage
     public virtual async Task<TEntity?> DeleteAsync(TEntity entity, bool softDelete = true)
     {
         Command.EnableSoftDelete = softDelete;
-        var res = Command.Remove(entity);
+        TEntity? res = Command.Remove(entity);
         await AutoSaveAsync();
         return res;
     }

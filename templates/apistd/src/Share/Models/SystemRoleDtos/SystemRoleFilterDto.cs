@@ -1,4 +1,3 @@
-using Core.Entities;
 namespace Share.Models.SystemRoleDtos;
 /// <summary>
 /// 角色查询筛选
@@ -18,5 +17,5 @@ public class SystemRoleFilterDto : FilterBase
     /// 是否系统内置,系统内置不可删除
     /// </summary>
     public bool? IsSystem { get; set; }
-    
+
 }

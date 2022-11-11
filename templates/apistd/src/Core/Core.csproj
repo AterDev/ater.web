@@ -15,9 +15,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Mapster" Version="7.4.0-pre03" />
+		<PackageReference Include="Mapster" Version="7.3.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="7.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="7.0.0" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.0" />
 		<PackageReference Include="System.Linq.Async" Version="6.0.1" />
 	</ItemGroup>
 </Project>

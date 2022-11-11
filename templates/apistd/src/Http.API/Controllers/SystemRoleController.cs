@@ -1,5 +1,6 @@
+using Http.API.Infrastructure;
 using Share.Models.SystemRoleDtos;
-namespace Http.API.Infrastructure;
+namespace Http.API.Controllers;
 
 /// <summary>
 /// 角色表
@@ -33,7 +34,7 @@ public class SystemRoleController : RestControllerBase<ISystemRoleManager>
     [HttpPost]
     public async Task<ActionResult<SystemRole>> AddAsync(SystemRoleAddDto form)
     {
-        var entity = form.MapTo<SystemRoleAddDto, SystemRole>();
+        SystemRole entity = form.MapTo<SystemRoleAddDto, SystemRole>();
         return await manager.AddAsync(entity);
     }
 
@@ -46,9 +47,8 @@ public class SystemRoleController : RestControllerBase<ISystemRoleManager>
     [HttpPut("{id}")]
     public async Task<ActionResult<SystemRole?>> UpdateAsync([FromRoute] Guid id, SystemRoleUpdateDto form)
     {
-        var current = await manager.GetCurrent(id);
-        if (current == null) return NotFound();
-        return await manager.UpdateAsync(current, form);
+        SystemRole? current = await manager.GetCurrent(id);
+        return current == null ? (ActionResult<SystemRole?>)NotFound() : (ActionResult<SystemRole?>)await manager.UpdateAsync(current, form);
     }
 
     /// <summary>
@@ -59,8 +59,8 @@ public class SystemRoleController : RestControllerBase<ISystemRoleManager>
     [HttpGet("{id}")]
     public async Task<ActionResult<SystemRole?>> GetDetailAsync([FromRoute] Guid id)
     {
-        var res = await manager.FindAsync(id);
-        return (res == null) ? NotFound() : res;
+        SystemRole? res = await manager.FindAsync(id);
+        return res == null ? NotFound() : res;
     }
 
     /// <summary>
@@ -72,8 +72,7 @@ public class SystemRoleController : RestControllerBase<ISystemRoleManager>
     [HttpDelete("{id}")]
     public async Task<ActionResult<SystemRole?>> DeleteAsync([FromRoute] Guid id)
     {
-        var entity = await manager.GetCurrent(id);
-        if (entity == null) return NotFound();
-        return await manager.DeleteAsync(entity);
+        SystemRole? entity = await manager.GetCurrent(id);
+        return entity == null ? (ActionResult<SystemRole?>)NotFound() : (ActionResult<SystemRole?>)await manager.DeleteAsync(entity);
     }
 }

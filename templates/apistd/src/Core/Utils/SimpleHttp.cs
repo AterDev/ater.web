@@ -20,7 +20,7 @@ public class SimpleHttp
     public async Task<T?> PostJsonAsync<T>(string url, object data)
     {
         client.Timeout = TimeSpan.FromSeconds(5);
-        var res = await client.PostAsJsonAsync(url, data);
+        HttpResponseMessage res = await client.PostAsJsonAsync(url, data);
         if (res.IsSuccessStatusCode)
         {
             return await res.Content.ReadFromJsonAsync<T>();

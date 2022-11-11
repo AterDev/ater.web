@@ -6,5 +6,5 @@ namespace Application.IManager;
 /// </summary>
 public interface ISystemRoleManager : IDomainManager<SystemRole, SystemRoleUpdateDto, SystemRoleFilterDto, SystemRoleItemDto>
 {
-	// TODO: 定义业务方法
+    // TODO: 定义业务方法
 }

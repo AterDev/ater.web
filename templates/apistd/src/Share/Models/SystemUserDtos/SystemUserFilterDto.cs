@@ -1,4 +1,3 @@
-using Core.Entities;
 namespace Share.Models.SystemUserDtos;
 /// <summary>
 /// 系统用户查询筛选
@@ -29,5 +28,5 @@ public class SystemUserFilterDto : FilterBase
     /// 性别
     /// </summary>
     public Sex? Sex { get; set; }
-    
+
 }

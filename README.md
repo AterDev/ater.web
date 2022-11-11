@@ -33,12 +33,17 @@ or
 dotnet new atapi -n <projectname>
 ```
 ## 数据迁移
-在项目`src\Database\EntityFramework.Migrator`目录下，执行脚本`MigrationContext.ps1`。
-
+###  7.0之前
+项目`src\Database\EntityFramework.Migrator`目录下，执行脚本`MigrationContext.ps1`。
 ```pwsh
 cd src\Database\EntityFramework.Migrator
 .\MigrationContext.ps1
 ```
+### 7.0及之后
+移除了`EntityFramework.Migrator`，迁移代码将直接生成在`Http.API`项目中。
+
+可直接`scripts\EFMigrations.ps1`脚本生成迁移内容，程序在启动时会执行迁移。
+
 
 ## 运行项目
 ```pwsh

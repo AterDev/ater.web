@@ -1,4 +1,3 @@
-using Core.Entities;
 namespace Share.Models.SystemUserDtos;
 /// <summary>
 /// 系统用户列表元素
@@ -55,5 +54,5 @@ public class SystemUserItemDto
     /// 软删除
     /// </summary>
     public bool IsDeleted { get; set; } = default!;
-    
+
 }

@@ -5,14 +5,13 @@ public class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity>, IComm
     where TContext : DbContext
     where TEntity : EntityBase
 {
-    private readonly TContext _context;
     protected readonly ILogger _logger;
     /// <summary>
     /// 当前实体DbSet
     /// </summary>
     protected readonly DbSet<TEntity> _db;
     public DbSet<TEntity> Db => _db;
-    public TContext Context => _context;
+    public TContext Context { get; }
     public DatabaseFacade Database { get; init; }
     public bool EnableSoftDelete { get; set; } = true;
 
@@ -20,25 +19,25 @@ public class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity>, IComm
 
     public CommandStoreBase(TContext context, ILogger logger)
     {
-        _context = context;
+        Context = context;
         _logger = logger;
-        _db = _context.Set<TEntity>();
-        Database = _context.Database;
+        _db = Context.Set<TEntity>();
+        Database = Context.Database;
     }
 
     public virtual async Task<int> SaveChangeAsync()
     {
-        return await _context.SaveChangesAsync();
+        return await Context.SaveChangesAsync();
     }
 
     public virtual async Task<TEntity?> FindAsync(Expression<Func<TEntity, bool>>? whereExp, string[]? navigations = null)
     {
         Expression<Func<TEntity, bool>> exp = e => true;
         whereExp ??= exp;
-        var _query = _db.Where(whereExp).AsQueryable();
+        IQueryable<TEntity> _query = _db.Where(whereExp).AsQueryable();
         if (navigations != null)
         {
-            foreach (var item in navigations)
+            foreach (string item in navigations)
             {
                 _query = _query.Include(item);
             }
@@ -55,7 +54,7 @@ public class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity>, IComm
     {
         Expression<Func<TEntity, bool>> exp = e => true;
         whereExp ??= exp;
-        var res = await _db.Where(whereExp)
+        List<TEntity> res = await _db.Where(whereExp)
             .ToListAsync();
         return res;
     }
@@ -67,7 +66,7 @@ public class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity>, IComm
     /// <returns></returns>
     public virtual async Task<TEntity> CreateAsync(TEntity entity)
     {
-        await _db.AddAsync(entity);
+        _ = await _db.AddAsync(entity);
         return entity;
     }
 
@@ -78,7 +77,7 @@ public class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity>, IComm
     /// <returns></returns>
     public virtual TEntity Update(TEntity entity)
     {
-        _db.Update(entity);
+        _ = _db.Update(entity);
         return entity;
     }
 
@@ -95,7 +94,7 @@ public class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity>, IComm
         }
         else
         {
-            _db.Remove(entity!);
+            _ = _db.Remove(entity!);
         }
         return entity;
     }
@@ -115,13 +114,13 @@ public class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity>, IComm
                 .ForEach(block =>
                 {
                     _db.AddRange(block);
-                    _context.SaveChanges();
+                    _ = Context.SaveChanges();
                 });
         }
         else
         {
             await _db.AddRangeAsync(entities);
-            await SaveChangeAsync();
+            _ = await SaveChangeAsync();
         }
         return entities;
     }

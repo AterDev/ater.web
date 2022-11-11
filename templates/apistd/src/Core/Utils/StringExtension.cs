@@ -14,26 +14,26 @@ public static class StringExtension
             return string.Empty;
         }
 
-        var builder = new StringBuilder();
-        var upperNumber = 0;
-        for (var i = 0; i < str.Length; i++)
+        StringBuilder builder = new();
+        int upperNumber = 0;
+        for (int i = 0; i < str.Length; i++)
         {
-            var item = str[i];
+            char item = str[i];
             // 连续的大写只添加一个
-            var pre = i >= 1 ? str[i - 1] : 'a';
+            char pre = i >= 1 ? str[i - 1] : 'a';
             if (char.IsUpper(item) && char.IsLower(pre))
             {
                 upperNumber++;
                 if (upperNumber > 1)
                 {
-                    builder.Append('-');
+                    _ = builder.Append('-');
                 }
             }
             else if (item is '_' or ' ')
             {
-                builder.Append('-');
+                _ = builder.Append('-');
             }
-            builder.Append(char.ToLower(item));
+            _ = builder.Append(char.ToLower(item));
         }
         return builder.ToString();
     }
@@ -49,19 +49,12 @@ public static class StringExtension
         {
             return string.Empty;
         }
-        var resultBuilder = new StringBuilder();
-        foreach (var c in str)
+        StringBuilder resultBuilder = new();
+        foreach (char c in str)
         {
-            if (!char.IsLetterOrDigit(c))
-            {
-                resultBuilder.Append(' ');
-            }
-            else
-            {
-                resultBuilder.Append(c);
-            }
+            _ = !char.IsLetterOrDigit(c) ? resultBuilder.Append(' ') : resultBuilder.Append(c);
         }
-        var result = resultBuilder.ToString();
+        string result = resultBuilder.ToString();
         result = string.Join(string.Empty, result.Split(' ').Select(r => r.ToUpperFirst()).ToArray());
         return result;
     }
@@ -107,7 +100,7 @@ public static class StringExtension
             return 1.0;
         }
 
-        var stepsToSame = source.ComputeLevenshteinDistance(target);
+        int stepsToSame = source.ComputeLevenshteinDistance(target);
         return 1.0 - (stepsToSame / (double)Math.Max(source.Length, target.Length));
     }
     /// <summary>
@@ -129,8 +122,8 @@ public static class StringExtension
             return source.Length;
         }
 
-        var sourceWordCount = source.Length;
-        var targetWordCount = target.Length;
+        int sourceWordCount = source.Length;
+        int targetWordCount = target.Length;
 
         // Step 1
         if (sourceWordCount == 0)
@@ -143,25 +136,25 @@ public static class StringExtension
             return sourceWordCount;
         }
 
-        var distance = new int[sourceWordCount + 1, targetWordCount + 1];
+        int[,] distance = new int[sourceWordCount + 1, targetWordCount + 1];
 
         // Step 2
-        for (var i = 0; i <= sourceWordCount; distance[i, 0] = i++)
+        for (int i = 0; i <= sourceWordCount; distance[i, 0] = i++)
         {
             ;
         }
 
-        for (var j = 0; j <= targetWordCount; distance[0, j] = j++)
+        for (int j = 0; j <= targetWordCount; distance[0, j] = j++)
         {
             ;
         }
 
-        for (var i = 1; i <= sourceWordCount; i++)
+        for (int i = 1; i <= sourceWordCount; i++)
         {
-            for (var j = 1; j <= targetWordCount; j++)
+            for (int j = 1; j <= targetWordCount; j++)
             {
                 // Step 3
-                var cost = target[j - 1] == source[i - 1] ? 0 : 1;
+                int cost = target[j - 1] == source[i - 1] ? 0 : 1;
 
                 // Step 4
                 distance[i, j] = Math.Min(Math.Min(distance[i - 1, j] + 1, distance[i, j - 1] + 1), distance[i - 1, j - 1] + cost);
@@ -190,10 +183,10 @@ public static class StringExtension
             shorterString = source;
         }
 
-        var sameNum = 0;
-        for (var i = 0; i < shorterString.Length; i++)
+        int sameNum = 0;
+        for (int i = 0; i < shorterString.Length; i++)
         {
-            foreach (var item in longerString)
+            foreach (char item in longerString)
             {
                 if (shorterString[i] == item)
                 {
