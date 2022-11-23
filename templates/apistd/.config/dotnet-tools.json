@@ -9,7 +9,7 @@
       ]
     },
     "ater.droplet.cli": {
-      "version": "7.0.0-rc1",
+      "version": "7.0.0-rc2",
       "commands": [
         "droplet"
       ]
