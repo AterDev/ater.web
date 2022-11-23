@@ -188,13 +188,6 @@ services.AddControllers()
 
 WebApplication app = builder.Build();
 
-// 初始化工作
-await using (AsyncServiceScope scope = app.Services.CreateAsyncScope())
-{
-    IServiceProvider provider = scope.ServiceProvider;
-    await InitDataTask.InitDataAsync(provider);
-}
-
 if (app.Environment.IsDevelopment())
 {
     _ = app.UseCors("default");
@@ -236,6 +229,16 @@ app.MapDefaultControllerRoute();
 
 app.MapFallbackToFile("index.html");
 
-app.Run();
+using (app)
+{
+    // 初始化工作
+    await using (AsyncServiceScope scope = app.Services.CreateAsyncScope())
+    {
+        IServiceProvider provider = scope.ServiceProvider;
+        await InitDataTask.InitDataAsync(provider);
+    }
+    app.Start();
+    app.WaitForShutdown();
+}
 
 public partial class Program { }

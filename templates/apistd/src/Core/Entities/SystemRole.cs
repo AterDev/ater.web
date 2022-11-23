@@ -4,6 +4,7 @@ namespace Core.Entities;
 /// <summary>
 /// 角色表
 /// </summary>
+[NgPage("system", "role")]
 public class SystemRole : EntityBase
 {
     /// <summary>

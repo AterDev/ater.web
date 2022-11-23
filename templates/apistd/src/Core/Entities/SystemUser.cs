@@ -3,6 +3,7 @@ namespace Core.Entities;
 /// <summary>
 /// 系统用户
 /// </summary>
+[NgPage("system", "user")]
 public class SystemUser : EntityBase
 {
     /// <summary>

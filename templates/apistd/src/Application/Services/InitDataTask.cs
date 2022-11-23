@@ -9,7 +9,9 @@ public class InitDataTask
         string? connectionString = context.Database.GetConnectionString();
         try
         {
+            // 执行迁移,如果手动执行,请删除该代码
             context.Database.Migrate();
+
             if (!await context.Database.CanConnectAsync())
             {
                 logger.LogError("数据库无法连接:" + connectionString);

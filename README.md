@@ -21,7 +21,7 @@ The web framework with best practices base on ASP.NET Core.
 模板已经发布到[`nuget`](https://www.nuget.org/packages/ater.web.templates)上，请根据你的项目版本下载对应的模板。
 
 ```pwsh
-dotnet new --install ater.web.templates::6.0.1
+dotnet new --install ater.web.templates::7.0.0-rc1
 ```
 
 ## 创建项目
@@ -46,10 +46,21 @@ cd src\Database\EntityFramework.Migrator
 
 
 ## 运行项目
+
+### 运行后台项目
 ```pwsh
 cd src\Http.API
 dotnet watch run 
 ```
+### 运行前端项目
+项目模板自带了基于angular 的前端项目，根据实际需要使用。
+```pwsh
+cd  src\Http.API\ClientApp
+npm install
+npm start
+```  
+
+使用`admin/123456`初始管理账号登录。
 
 # 使用
 请查阅[使用文档](https://github.com/AterDev/ater.docs/tree/dev/cn/ater.web.template)！

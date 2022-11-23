@@ -8,17 +8,21 @@
         <mat-icon>arrow_drop_down</mat-icon>
       </button>
       <mat-menu #appMenu="matMenu">
-        <span mat-menu-item>
-          你好,{{username}}
-        </span>
-        <button mat-menu-item routerLink="/account" disabled>
-          <mat-icon>assignment_ind</mat-icon>
-          <span>账号设置</span>
-        </button>
-        <button mat-menu-item (click)="logout()">
-          <mat-icon>exit_to_app</mat-icon>
-          <span>登出</span>
-        </button>
+          <span mat-menu-item>
+              你好,{{username}}
+          </span>
+          <button mat-menu-item routerLink="/account" disabled>
+              <mat-icon>assignment_ind</mat-icon>
+              <span>账号设置</span>
+          </button>
+          <button *ngIf="isAdmin" mat-menu-item routerLink="/system">
+              <mat-icon>settings</mat-icon>
+              <span>后台管理</span>
+          </button>
+          <button mat-menu-item (click)="logout()">
+              <mat-icon>exit_to_app</mat-icon>
+              <span>登出</span>
+          </button>
       </mat-menu>
     </span>
     <span *ngIf="!isLogin">
