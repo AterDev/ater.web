@@ -48,8 +48,13 @@ cd src\Database\EntityFramework.Migrator
 ```
 ### 7.0及之后
 移除了`EntityFramework.Migrator`，迁移代码将直接生成在`Http.API`项目中。
+可直接运行`scripts\EFMigrations.ps1`脚本生成迁移内容，程序在启动时会执行迁移。
 
-可直接`scripts\EFMigrations.ps1`脚本生成迁移内容，程序在启动时会执行迁移。
+```pwsh
+cd scripts
+.\EFMigrations.ps1
+```
+该脚本可跟一个参数，参数为迁移生成时的名称，如`.\EFMigrations.ps1  Init` .
 
 
 ## 运行项目
