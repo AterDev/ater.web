@@ -32,6 +32,13 @@ or
 ```pwsh
 dotnet new atapi -n <projectname>
 ```
+
+## 数据库
+模板默认使用`PostgreSQL`，如果您使用其他数据库，你需要进行的操作：
+- 修改`appsettings.json`等配置文件中的**数据库连接字符串**
+- 在`Application`项目中添加相应的数据库驱动包
+- 在`Http.API`项目`Program.cs`中，修改数据库上下文的注入。
+
 ## 数据迁移
 ###  7.0之前
 项目`src\Database\EntityFramework.Migrator`目录下，执行脚本`MigrationContext.ps1`。
