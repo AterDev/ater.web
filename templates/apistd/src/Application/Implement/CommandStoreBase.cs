@@ -104,13 +104,14 @@ public class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity>, IComm
     /// 批量创建
     /// </summary>
     /// <param name="entities"></param>
-    /// <param name="chunk"></param>
+    /// <param name="chunk">每个批次的最大数量</param>
     /// <returns></returns>
     public virtual async Task<List<TEntity>> CreateRangeAsync(List<TEntity> entities, int? chunk = 50)
     {
         if (chunk != null && entities.Count > chunk)
         {
-            entities.Chunk(chunk.Value).ToList()
+
+            entities.Chunk(entities.Count / chunk.Value + 1).ToList()
                 .ForEach(block =>
                 {
                     _db.AddRange(block);
@@ -132,7 +133,8 @@ public class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity>, IComm
     /// <param name="whereExp"></param>
     /// <param name="dto"></param>
     /// <returns></returns>
-    public virtual async Task<int> UpdateRangeAsync<TUpdate>(Expression<Func<TEntity, bool>> whereExp, TUpdate dto)
+    [Obsolete("Not Implement")]
+    public virtual Task<int> UpdateRangeAsync<TUpdate>(Expression<Func<TEntity, bool>> whereExp, TUpdate dto)
     {
         //return await _db.Where(whereExp).ExecuteUpdateAsync(d => d.SetProperty(d => d.Id, d => Guid.NewGuid()));
         throw new NotImplementedException();
@@ -146,8 +148,6 @@ public class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity>, IComm
     public virtual async Task<int> DeleteRangeAsync(List<Guid> ids)
     {
         return await _db.Where(d => ids.Contains(d.Id)).ExecuteDeleteAsync();
-        throw new NotImplementedException();
-
     }
 
     /// <summary>
@@ -158,8 +158,6 @@ public class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity>, IComm
     public virtual async Task<int> DeleteRangeAsync(Expression<Func<TEntity, bool>> whereExp)
     {
         return await _db.Where(whereExp).ExecuteDeleteAsync();
-        throw new NotImplementedException();
-
     }
 }
 public class CommandSet<TEntity> : CommandStoreBase<CommandDbContext, TEntity>
