@@ -6,9 +6,7 @@
 		<Nullable>enable</Nullable>
 		<SpaRoot>ClientApp\</SpaRoot>
 		<SpaProxyServerUrl>https://localhost:14200</SpaProxyServerUrl>
-		<SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
-	  <UserSecretsId>a72f0287-9d70-43b2-9f38-823f9f4e516d</UserSecretsId>
-  </PropertyGroup>
+	</PropertyGroup>
 
 	<PropertyGroup>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
@@ -40,15 +38,12 @@
 		<ProjectReference Include="..\Application\Application.csproj" />
 	</ItemGroup>
 
-	<!--生成swagger.json-->
 	<Target Name="SwaggerPostBuildTarget" AfterTargets="Build" Condition="'$(Configuration)' == 'Debug'">
 		<Exec Command="dotnet tool restore" UseUtf8Encoding="Always" />
-		<Exec Command="dotnet swagger tofile --output ./swagger.json .\bin\Debug\net7.0\Http.API.dll v1" UseUtf8Encoding="Always" />
-		<!--<Exec Command="dotnet droplet sync" UseUtf8Encoding="Always" />-->
 	</Target>
 
 
-	<!-- 前端集成 begin,若不集成前端，请注释或删除以下内容 -->
+	<!-- 前端集成 begin,若不集成前端，请删除以下内容 -->
 	<ItemGroup>
 		<Content Remove="$(SpaRoot)**" />
 		<None Remove="$(SpaRoot)**" />
