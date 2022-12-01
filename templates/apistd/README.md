@@ -11,10 +11,30 @@
   - Http.API API接口项目，定义和编写控制器，对外开放和运行的主程序，依赖`Application`
   - Database 数据库目录，如EntityFramework数据库上下文及迁移项目.
     - EntityFramework 管理和配置`DbContext`.
-    - EntityFramework.Migrator 单独的数据库迁移项目。
   - WebApp 浏览器Web应用目录
-
 - test 测试项目目录
+
+
+# 开始使用
+## 数据库配置
+模板默认使用`PostgreSQL`，如果您使用其他数据库，你需要进行的操作：
+- 修改`appsettings.json`等配置文件中的**数据库连接字符串**
+- 在`Application`项目中添加相应的数据库驱动包
+- 在`Http.API`项目`Program.cs`中，修改数据库上下文的注入。
+
+## 数据迁移
+移除了`EntityFramework.Migrator`，迁移代码将直接生成在`Http.API`项目中。
+可直接运行`scripts\EFMigrations.ps1`脚本生成迁移内容，程序在启动时会执行迁移。
+
+## 运行项目
+```pwsh
+cd src\Http.API
+dotnet watch run 
+```
+
+使用`admin/123456`初始管理账号登录。
+
+
 
 # 规范及约定
 
@@ -64,7 +84,6 @@
 错误返回的格式如下：
 ```json
 {
-  "type": "https://tools.ietf.org/html/rfc7231#section-6.6.1",
   "title": "",
   "status": 500,
   "detail": "未知的错误！",
@@ -94,3 +113,130 @@ return Problem("未知的错误！", title: "业务错误");
 // 如果不存在，返回404
 return NotFound("用户名密码不存在");
 ```
+
+
+# 业务实现
+
+## 定义实体模型
+遵循`Entity Framework Core`的官方文档，对模型及关联关系进行定义。
+## 生成基础代码
+使用`droplet api`生成基础的`dto`,`dataStore`,`Controller`等基础代码。
+
+## 实现自定义业务逻辑
+> 默认的`Manager`继承了`DomainManagerBase`类，实现了常见的业务逻辑。
+默认实现的新增和修改，会直接调用`SaveChangesAsync()`，提交数据库更改。
+如果你想更改此行为，可在构造方法中覆盖`AutoSave`属性。
+>``` csharp
+>/// <summary>
+>/// 是否自动保存(调用SaveChangesAsync)
+>/// </summary>
+>public bool AutoSave { get; set; } = true;
+>```
+
+> **所有通过仓储调用的方法，并不会直接提交到数据库更改，你需要在恰当的时机，手动调用`SaveChangesAsync()`方法。**
+
+在`Manager`中实现自定义业务，通常包括 `筛选查询`,`添加实体`,`更新实体`.
+
+### 筛选查询
+构建自定义查询条件的步骤：
+
+1. 构造自己的查询条件`Queryable`
+2. 调用`FilterAsync<T>`方法获取结果
+
+代码示例：
+
+```csharp
+
+public override async Task<PageList<DiscussItemDto>> FilterAsync(DiscussFilterDto filter)
+{
+    // 根据实际业务构建筛选条件
+    if (filter.IsTop != null)
+    {
+        Queryable = Queryable.Where(q => q.IsTop == filter.IsTop);
+    }
+    if (filter.MemberId != null)
+    {
+        Queryable = Queryable.Where(q => q.Member.Id == filter.MemberId);
+    }
+    return await Query.FilterAsync<DiscussItemDto>(Queryable, filter.PageIndex, filter.PageSize);
+}
+```
+### 新增实体
+代码示例:
+```csharp
+public override async Task<Discuss> AddAsync(Discuss entity)
+{
+    var res = await Command.CreateAsync(entity);
+    // TODO: do something
+    // 提交更新
+    await Command.SaveChangeAsync();
+    return res;
+}
+```
+
+### 更新实体
+`manager`提供了`GetCurrent`方法来获取当前(`可写数据库上下文`)的实体。
+
+在控制器中，会先获取实体，如果不存在，则直接返回`404`。
+
+实体更新的方法传递两个参数，一个是实体本身，一个是提交的`DTO`对象,
+实体本身是在控制器当中使用`GetCurrent`方法获取到的，直接作为参数传递过去即可。
+
+代码示例:
+
+以下方面演示如何更新关联的内容。
+
+```csharp
+public override async Task<ResourceTypeDefinition> UpdateAsync(ResourceTypeDefinition entity, ResourceTypeDefinitionUpdateDto dto)
+    {
+        // 更新关联的内容
+        entity!.AttributeDefines = null;
+        if (dto.AttributeDefineIds != null)
+        {
+            // 通过父类的 Stores 查询其他实体的内容
+            var attributeDefines = await Stores.ResourceAttributeDefineCommand.Db.Where(a => dto.AttributeDefineIds.Contains(a.Id)).ToListAsync();
+            entity.AttributeDefines = attributeDefines;
+        }
+        return await base.UpdateAsync(entity, dto);
+    }
+```
+
+### 详情查询
+`manager`提供了默认的详情查询方法，可直接传递查询条件.
+
+若自定义查询，如查询关联的内容，需要添加新的方法来实现.
+
+`manager`提供了`Query.Db`成员，可直接对当前模型进行查询。
+
+代码示例:
+
+```csharp
+public async Task<ResourceGroup?> FindAsync(Guid id)
+{
+    return await Query.Db
+        .Include(g => g.Environment)
+        .FirstOrDefaultAsync(g => g.Id == id);
+}
+```
+
+### 删除处理
+删除默认为软删除，如果想修改该行为，可在`CommandStoreBase`类中将`EnableSoftDelete`设置为false.
+
+如果只想针对某个实体取消，可在实体对应的`XXXCommandStore`类中，覆盖`EnableSoftDelete`，将其设置为false.
+
+删除有时会涉及到**关联删除**，示例代码:
+```csharp
+public override async Task<Resource?> DeleteAsync(Guid id)
+{
+    var resource = entity;
+    if (resource!.Attributes != null)
+    {
+        Stores.CommandContext.RemoveRange(resource.Attributes);
+    }
+    return await DeleteAsync(resource);
+}
+
+```
+
+# 文档
+更多文档说明，请查阅[使用文档](https://github.com/AterDev/ater.docs/tree/dev/cn/ater.web.template)。
