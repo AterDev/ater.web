@@ -9,5 +9,6 @@ Set-Location ../src/Http.API/
 if ([string]::IsNullOrWhiteSpace($Name)) {
     $Name = [DateTime]::Now.ToString("yyyyMMdd-HHmmss")
 }
-dotnet ef migrations add $Name -c CommandDbContext
+dotnet build
+dotnet ef migrations add $Name -c CommandDbContext --no-build
 Set-Location $location
