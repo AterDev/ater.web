@@ -50,7 +50,7 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
     [HttpPut("{id}")]
     public async Task<ActionResult<SystemUser?>> UpdateAsync([FromRoute] Guid id, SystemUserUpdateDto form)
     {
-        SystemUser? current = await manager.GetCurrent(id);
+        SystemUser? current = await manager.GetCurrentAsync(id);
         return current == null ? (ActionResult<SystemUser?>)NotFound() : (ActionResult<SystemUser?>)await manager.UpdateAsync(current, form);
     }
 
@@ -137,7 +137,7 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
     [HttpDelete("{id}")]
     public async Task<ActionResult<SystemUser?>> DeleteAsync([FromRoute] Guid id)
     {
-        SystemUser? entity = await manager.GetCurrent(id);
+        SystemUser? entity = await manager.GetCurrentAsync(id);
         return entity == null ? (ActionResult<SystemUser?>)NotFound() : (ActionResult<SystemUser?>)await manager.DeleteAsync(entity);
     }
 }

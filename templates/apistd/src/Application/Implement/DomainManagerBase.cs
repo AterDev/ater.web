@@ -52,7 +52,7 @@ public class DomainManagerBase<TEntity, TUpdate, TFilter, TItem> : IDomainManage
     /// <param name="id"></param>
     /// <param name="navigations">include navigations</param>
     /// <returns></returns>
-    public virtual async Task<TEntity?> GetCurrent(Guid id, params string[]? navigations)
+    public virtual async Task<TEntity?> GetCurrentAsync(Guid id, params string[]? navigations)
     {
         return await Command.FindAsync(e => e.Id == id, navigations);
     }
@@ -62,6 +62,13 @@ public class DomainManagerBase<TEntity, TUpdate, TFilter, TItem> : IDomainManage
         await AutoSaveAsync();
         return res;
     }
+
+    [Obsolete("use GetCurrentAsync")]
+    public virtual async Task<TEntity?> GetCurrent(Guid id, params string[]? navigations)
+    {
+        return await Command.FindAsync(e => e.Id == id, navigations);
+    }
+
 
     public virtual async Task<TEntity> UpdateAsync(TEntity entity, TUpdate dto)
     {

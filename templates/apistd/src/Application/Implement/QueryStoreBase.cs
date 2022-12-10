@@ -21,25 +21,28 @@ public class QueryStoreBase<TContext, TEntity> :
     public DatabaseFacade Database { get; init; }
     public IQueryable<TEntity> _query { get; set; }
 
-    public bool EnableSoftDelete { get; set; } = true;
+    /// <summary>
+    ///  是否开户全局筛选
+    /// </summary>
+    public bool EnableGlobalQuery { get; set; } = true;
 
     public QueryStoreBase(TContext context, ILogger logger)
     {
         Context = context;
         _logger = logger;
         _db = Context.Set<TEntity>();
-        _query = EnableSoftDelete
-            ? _db.Where(d => !d.IsDeleted).AsQueryable()
-            : _db.AsQueryable();
+        _query = EnableGlobalQuery
+            ? _db.AsQueryable()
+            : _db.IgnoreQueryFilters().AsQueryable();
         Database = Context.Database;
     }
 
 
     private void ResetQuery()
     {
-        _query = EnableSoftDelete
-            ? _db.Where(d => !d.IsDeleted).AsQueryable()
-            : _db.AsQueryable();
+        _query = EnableGlobalQuery
+            ? _db.AsQueryable()
+            : _db.IgnoreQueryFilters().AsQueryable();
     }
 
     public virtual async Task<TDto?> FindAsync<TDto>(Guid id)

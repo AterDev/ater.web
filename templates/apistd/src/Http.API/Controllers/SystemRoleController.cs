@@ -47,7 +47,7 @@ public class SystemRoleController : RestControllerBase<ISystemRoleManager>
     [HttpPut("{id}")]
     public async Task<ActionResult<SystemRole?>> UpdateAsync([FromRoute] Guid id, SystemRoleUpdateDto form)
     {
-        SystemRole? current = await manager.GetCurrent(id);
+        SystemRole? current = await manager.GetCurrentAsync(id);
         return current == null ? (ActionResult<SystemRole?>)NotFound() : (ActionResult<SystemRole?>)await manager.UpdateAsync(current, form);
     }
 
@@ -72,7 +72,7 @@ public class SystemRoleController : RestControllerBase<ISystemRoleManager>
     [HttpDelete("{id}")]
     public async Task<ActionResult<SystemRole?>> DeleteAsync([FromRoute] Guid id)
     {
-        SystemRole? entity = await manager.GetCurrent(id);
+        SystemRole? entity = await manager.GetCurrentAsync(id);
         return entity == null ? (ActionResult<SystemRole?>)NotFound() : (ActionResult<SystemRole?>)await manager.DeleteAsync(entity);
     }
 }
