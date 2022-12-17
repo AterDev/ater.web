@@ -14,7 +14,7 @@ public class InitDataTask
 
             if (!await context.Database.CanConnectAsync())
             {
-                logger.LogError("数据库无法连接:" + connectionString);
+                logger.LogError("数据库无法连接:{message}", connectionString);
                 return;
             }
             else
@@ -30,7 +30,7 @@ public class InitDataTask
         }
         catch (Exception ex)
         {
-            logger.LogError("初始化异常,请检查数据库配置：" + connectionString + ex.Message);
+            logger.LogError("初始化异常,请检查数据库配置：{message}", ex.Message);
         }
     }
 
