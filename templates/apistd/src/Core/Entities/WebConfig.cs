@@ -18,9 +18,9 @@ public class WebConfig : EntityBase
     }
 
     [MaxLength(100)]
-    public required string Key { get; init; }
+    public required string Key { get; set; }
     [MaxLength(100)]
-    public string Value { get; init; } = string.Empty;
+    public string Value { get; set; } = string.Empty;
     [MaxLength(300)]
     public string? Description { get; set; }
     public bool Valid { get; set; } = true;
