@@ -1,9 +1,11 @@
 ﻿using Core.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Core.Entities;
 /// <summary>
 /// 网站配置
 /// </summary>
+[Index(nameof(Key))]
 public class WebConfig : EntityBase
 {
     public WebConfig(string key, string value = "")
@@ -16,7 +18,7 @@ public class WebConfig : EntityBase
     }
 
     [MaxLength(100)]
-    public string Key { get; init; } = default!;
+    public required string Key { get; init; }
     [MaxLength(100)]
     public string Value { get; init; } = string.Empty;
     [MaxLength(300)]
