@@ -30,6 +30,7 @@ public class RestControllerBase<TManager> : RestControllerBase
 [ApiController]
 [Route("api/[controller]")]
 [Authorize("User")]
+[Produces("application/json")]
 public class RestControllerBase : ControllerBase
 {
 
