@@ -139,7 +139,7 @@ services.AddSwaggerGen(c =>
                     Id="Bearer"
                 }
             },
-            new string[]{}
+            Array.Empty<string>()
         }
     });
     c.SwaggerDoc("v1", new OpenApiInfo
@@ -157,6 +157,7 @@ services.AddSwaggerGen(c =>
         }
         catch (Exception) { }
     }
+    c.SupportNonNullableReferenceTypes();
     c.DescribeAllParametersInCamelCase();
     c.CustomOperationIds((z) =>
     {
