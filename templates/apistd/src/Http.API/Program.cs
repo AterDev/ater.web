@@ -6,29 +6,55 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using OpenTelemetry;
 using OpenTelemetry.Logs;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Trace;
 using OpenTelemetry.Resources;
+using OpenTelemetry.Exporter;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-#region logger
+#region OpenTelemetry
 // config logger
-string assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown";
-Action<ResourceBuilder> configureResource = r => r.AddService(
-    "dusi.dev", serviceVersion: assemblyVersion, serviceInstanceId: Environment.MachineName);
+var serviceName = "VOF";
+var serviceVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown";
+var resource = ResourceBuilder.CreateDefault().AddService(serviceName: serviceName, serviceVersion: serviceVersion);
+
+var otlpEndpoint = configuration.GetSection("OTLP")
+    .GetValue<string>("Endpoint")
+    ?? "http://localhost:4317";
+
+var otlpConfig = new Action<OtlpExporterOptions>(opt =>
+{
+    opt.Endpoint = new Uri(otlpEndpoint);
+});
+
 builder.Logging.ClearProviders();
 builder.Logging.AddOpenTelemetry(options =>
 {
-    _ = options.ConfigureResource(configureResource);
-    _ = options.AddConsoleExporter();
+    options.SetResourceBuilder(resource);
+    options.AddOtlpExporter(otlpConfig);
 });
+// tracing
+builder.Services.AddOpenTelemetry()
+    .WithTracing(options =>
+    {
+        options.AddSource(serviceName)
+            .SetResourceBuilder(resource)
+            .AddHttpClientInstrumentation()
+            .AddAspNetCoreInstrumentation()
+            .AddOtlpExporter(otlpConfig);
+    })
+    .WithMetrics(options =>
+    {
+        options.AddMeter(serviceName)
+            .SetResourceBuilder(resource)
+            .AddHttpClientInstrumentation()
+            .AddAspNetCoreInstrumentation()
+            .AddOtlpExporter(otlpConfig);
+    }).StartWithHost();
 
-builder.Services.Configure<OpenTelemetryLoggerOptions>(opt =>
-{
-    opt.IncludeScopes = true;
-    opt.ParseStateValues = true;
-    opt.IncludeFormattedMessage = true;
-});
 #endregion
 
 IServiceCollection services = builder.Services;
