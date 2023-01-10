@@ -19,50 +19,6 @@ IServiceCollection services = builder.Services;
 ConfigurationManager configuration = builder.Configuration;
 services.AddHttpContextAccessor();
 
-#region OpenTelemetry
-// config logger
-var serviceName = "VOF";
-var serviceVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown";
-var resource = ResourceBuilder.CreateDefault().AddService(serviceName: serviceName, serviceVersion: serviceVersion);
-
-var otlpEndpoint = configuration.GetSection("OTLP")
-    .GetValue<string>("Endpoint")
-    ?? "http://localhost:4317";
-
-var otlpConfig = new Action<OtlpExporterOptions>(opt =>
-{
-    opt.Endpoint = new Uri(otlpEndpoint);
-});
-
-builder.Logging.ClearProviders();
-builder.Logging.AddOpenTelemetry(options =>
-{
-    options.SetResourceBuilder(resource);
-    options.AddOtlpExporter(otlpConfig);
-    options.ParseStateValues = true;
-    options.IncludeFormattedMessage = true;
-    options.IncludeScopes = true;
-});
-// tracing
-builder.Services.AddOpenTelemetry()
-    .WithTracing(options =>
-    {
-        options.AddSource(serviceName)
-            .SetResourceBuilder(resource)
-            .AddHttpClientInstrumentation()
-            .AddAspNetCoreInstrumentation()
-            .AddOtlpExporter(otlpConfig);
-    })
-    .WithMetrics(options =>
-    {
-        options.AddMeter(serviceName)
-            .SetResourceBuilder(resource)
-            .AddHttpClientInstrumentation()
-            .AddAspNetCoreInstrumentation()
-            .AddOtlpExporter(otlpConfig);
-    }).StartWithHost();
-
-#endregion
 // database sql
 string? connectionString = configuration.GetConnectionString("Default");
 services.AddDbContextPool<QueryDbContext>(option =>
@@ -92,8 +48,53 @@ services.AddManager();
 //    options.InstanceName = builder.Configuration.GetConnectionString("RedisInstanceName");
 //});
 //services.AddSingleton(typeof(RedisService));
+#region OpenTelemetry:log/trace/metric
+// config logger
+var serviceName = "VOF";
+var serviceVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown";
+var resource = ResourceBuilder.CreateDefault().AddService(serviceName: serviceName, serviceVersion: serviceVersion);
 
+var otlpEndpoint = configuration.GetSection("OTLP")
+    .GetValue<string>("Endpoint")
+    ?? "http://localhost:4317";
 
+var otlpConfig = new Action<OtlpExporterOptions>(opt =>
+{
+    opt.Endpoint = new Uri(otlpEndpoint);
+});
+
+builder.Logging.ClearProviders();
+builder.Logging.AddOpenTelemetry(options =>
+{
+    options.SetResourceBuilder(resource);
+    options.AddOtlpExporter(otlpConfig);
+    options.ParseStateValues = true;
+    options.IncludeFormattedMessage = true;
+    options.IncludeScopes = true;
+#if DEBUG   
+    options.AddConsoleExporter();
+#endif
+});
+// tracing
+builder.Services.AddOpenTelemetry()
+    .WithTracing(options =>
+    {
+        options.AddSource(serviceName)
+            .SetResourceBuilder(resource)
+            .AddHttpClientInstrumentation()
+            .AddAspNetCoreInstrumentation()
+            .AddOtlpExporter(otlpConfig);
+    })
+    .WithMetrics(options =>
+    {
+        options.AddMeter(serviceName)
+            .SetResourceBuilder(resource)
+            .AddHttpClientInstrumentation()
+            .AddAspNetCoreInstrumentation()
+            .AddOtlpExporter(otlpConfig);
+    }).StartWithHost();
+
+#endregion
 #region 接口相关内容:jwt/授权/cors
 // use jwt
 services.AddAuthentication(options =>
@@ -141,8 +142,6 @@ services.AddCors(options =>
     });
 });
 #endregion
-
-services.AddHealthChecks();
 #region openAPI swagger
 // api 接口文档设置
 services.AddEndpointsApiExplorer();
@@ -202,6 +201,7 @@ services.AddSwaggerGen(c =>
 });
 #endregion
 
+services.AddHealthChecks();
 services.AddControllers()
     .ConfigureApiBehaviorOptions(o =>
     {
