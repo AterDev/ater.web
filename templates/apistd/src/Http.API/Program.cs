@@ -50,7 +50,7 @@ services.AddManager();
 //services.AddSingleton(typeof(RedisService));
 #region OpenTelemetry:log/trace/metric
 // config logger
-var serviceName = "VOF";
+var serviceName = "MyProjectName";
 var serviceVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown";
 var resource = ResourceBuilder.CreateDefault().AddService(serviceName: serviceName, serviceVersion: serviceVersion);
 
