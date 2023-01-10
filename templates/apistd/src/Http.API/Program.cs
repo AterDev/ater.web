@@ -15,6 +15,10 @@ using OpenTelemetry.Exporter;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
+IServiceCollection services = builder.Services;
+ConfigurationManager configuration = builder.Configuration;
+services.AddHttpContextAccessor();
+
 #region OpenTelemetry
 // config logger
 var serviceName = "VOF";
@@ -35,6 +39,9 @@ builder.Logging.AddOpenTelemetry(options =>
 {
     options.SetResourceBuilder(resource);
     options.AddOtlpExporter(otlpConfig);
+    options.ParseStateValues = true;
+    options.IncludeFormattedMessage = true;
+    options.IncludeScopes = true;
 });
 // tracing
 builder.Services.AddOpenTelemetry()
@@ -56,10 +63,6 @@ builder.Services.AddOpenTelemetry()
     }).StartWithHost();
 
 #endregion
-
-IServiceCollection services = builder.Services;
-ConfigurationManager configuration = builder.Configuration;
-services.AddHttpContextAccessor();
 // database sql
 string? connectionString = configuration.GetConnectionString("Default");
 services.AddDbContextPool<QueryDbContext>(option =>
