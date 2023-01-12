@@ -12,6 +12,7 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Exporter;
+using Http.API.Infrastructure;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -48,51 +49,16 @@ services.AddManager();
 //    options.InstanceName = builder.Configuration.GetConnectionString("RedisInstanceName");
 //});
 //services.AddSingleton(typeof(RedisService));
-#region OpenTelemetry:log/trace/metric
-// config logger
-var serviceName = "MyProjectName";
-var serviceVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown";
-var resource = ResourceBuilder.CreateDefault().AddService(serviceName: serviceName, serviceVersion: serviceVersion);
 
+
+#region OpenTelemetry:log/trace/metric
 var otlpEndpoint = configuration.GetSection("OTLP")
     .GetValue<string>("Endpoint")
     ?? "http://localhost:4317";
-
-var otlpConfig = new Action<OtlpExporterOptions>(opt =>
+services.AddOpenTelemetry("MyProjectName", opt =>
 {
     opt.Endpoint = new Uri(otlpEndpoint);
 });
-
-builder.Logging.ClearProviders();
-builder.Logging.AddOpenTelemetry(options =>
-{
-    options.SetResourceBuilder(resource);
-    options.AddOtlpExporter(otlpConfig);
-    options.ParseStateValues = true;
-    options.IncludeFormattedMessage = true;
-    options.IncludeScopes = true;
-#if DEBUG   
-    options.AddConsoleExporter();
-#endif
-});
-// tracing
-builder.Services.AddOpenTelemetry()
-    .WithTracing(options =>
-    {
-        options.AddSource(serviceName)
-            .SetResourceBuilder(resource)
-            .AddHttpClientInstrumentation()
-            .AddAspNetCoreInstrumentation()
-            .AddOtlpExporter(otlpConfig);
-    })
-    .WithMetrics(options =>
-    {
-        options.AddMeter(serviceName)
-            .SetResourceBuilder(resource)
-            .AddHttpClientInstrumentation()
-            .AddAspNetCoreInstrumentation()
-            .AddOtlpExporter(otlpConfig);
-    }).StartWithHost();
 
 #endregion
 #region 接口相关内容:jwt/授权/cors
