@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Infrastructure;
+﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Http.API.Infrastructure;
@@ -40,7 +41,7 @@ public class RestControllerBase : ControllerBase
     /// </summary>
     /// <param name="value"></param>
     /// <returns></returns>
-    [ApiExplorerSettings(IgnoreApi = true)]
+    [NonAction]
     public override NotFoundObjectResult NotFound([ActionResultObjectValue] object? value)
     {
         var res = new {
@@ -49,6 +50,8 @@ public class RestControllerBase : ControllerBase
             Status = 404,
             TraceId = HttpContext.TraceIdentifier
         };
+        var at = Activity.Current;
+        at?.SetTag("responseBody", value);
         return base.NotFound(res);
     }
 
@@ -57,7 +60,7 @@ public class RestControllerBase : ControllerBase
     /// </summary>
     /// <param name="error"></param>
     /// <returns></returns>
-    [ApiExplorerSettings(IgnoreApi = true)]
+    [NonAction]
     public override ConflictObjectResult Conflict([ActionResultObjectValue] object? error)
     {
         var res = new {
@@ -66,9 +69,17 @@ public class RestControllerBase : ControllerBase
             Status = 409,
             TraceId = HttpContext.TraceIdentifier
         };
+        var at = Activity.Current;
+        at?.SetTag("responseBody", error);
         return base.Conflict(res);
     }
 
+    /// <summary>
+    /// 500业务错误
+    /// </summary>
+    /// <param name="detail"></param>
+    /// <returns></returns>
+    [NonAction]
     public ObjectResult Problem(string? detail = null)
     {
         var res = new {
@@ -77,6 +88,8 @@ public class RestControllerBase : ControllerBase
             Status = 500,
             TraceId = HttpContext.TraceIdentifier
         };
+        var at = Activity.Current;
+        at?.SetTag("responseBody", detail);
         return new ObjectResult(res)
         {
             StatusCode = 500,
