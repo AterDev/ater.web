@@ -46,7 +46,8 @@ public static class ServiceExtension
             options.AddConsoleExporter();
 #endif
         });
-
+        // 返回内容最大长度截取
+        int maxLength = 2048;
         tracerProvider ??= new Action<TracerProviderBuilder>(options =>
         {
             options.AddSource(serviceName)
@@ -58,17 +59,19 @@ public static class ServiceExtension
                     {
                         if (httpRequestMessage.Content != null)
                         {
-                            var stream = await httpRequestMessage.Content.ReadAsStreamAsync();
+                            var stream = httpRequestMessage.Content.ReadAsStream();
                             var body = await new StreamReader(stream).ReadToEndAsync();
                             activity.SetTag("requestBody", body);
                         }
                     };
 
-                    options.EnrichWithHttpResponseMessage = async (activity, httpResponseMessage) =>
+                    options.EnrichWithHttpResponseMessage = (activity, httpResponseMessage) =>
                     {
                         if (httpResponseMessage.Content != null)
                         {
-                            var body = await httpResponseMessage.Content.ReadAsStringAsync();
+                            // 不要使用ReadAsStream;此处需要同步执行;否则会出错
+                            var body = httpResponseMessage.Content.ReadAsStringAsync().Result;
+                            body = body.Length > maxLength ? body[0..maxLength] : body;
                             activity.SetTag("responseBody", body);
                         }
                     };
