@@ -1,4 +1,6 @@
-﻿using OpenTelemetry;
+﻿using System.ComponentModel.Design.Serialization;
+using System.Net.Http;
+using OpenTelemetry;
 using OpenTelemetry.Exporter;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
@@ -49,8 +51,57 @@ public static class ServiceExtension
         {
             options.AddSource(serviceName)
                 .SetResourceBuilder(resource)
-                .AddHttpClientInstrumentation()
-                .AddAspNetCoreInstrumentation()
+                .AddHttpClientInstrumentation(options =>
+                {
+                    options.RecordException = true;
+                    options.EnrichWithHttpRequestMessage = async (activity, httpRequestMessage) =>
+                    {
+                        if (httpRequestMessage.Content != null)
+                        {
+                            var stream = await httpRequestMessage.Content.ReadAsStreamAsync();
+                            var body = await new StreamReader(stream).ReadToEndAsync();
+                            activity.SetTag("requestBody", body);
+                        }
+                    };
+
+                    options.EnrichWithHttpResponseMessage = async (activity, httpResponseMessage) =>
+                    {
+                        if (httpResponseMessage.Content != null)
+                        {
+                            var body = await httpResponseMessage.Content.ReadAsStringAsync();
+                            activity.SetTag("responseBody", body);
+                        }
+                    };
+                    options.EnrichWithException = (activity, exception) =>
+                    {
+                    };
+                })
+                .AddAspNetCoreInstrumentation(options =>
+                {
+                    options.RecordException = true;
+                    options.EnrichWithHttpRequest = async (activity, request) =>
+                    {
+                        request.EnableBuffering();
+                        request.Body.Position = 0;
+                        var reader = new StreamReader(request.Body);
+                        activity.SetTag("requestBody", await reader.ReadToEndAsync());
+                        request.Body.Position = 0;
+                    };
+
+                    options.EnrichWithHttpResponse = (activity, response) =>
+                    {
+                    };
+
+                    options.EnrichWithException = (activity, exception) =>
+                    {
+                        activity.SetTag("stackTrace", exception.StackTrace);
+                        activity.SetTag("message", exception.Message);
+                    };
+                })
+                .AddSqlClientInstrumentation()
+#if DEBUG
+            .AddConsoleExporter()
+#endif
                 .AddOtlpExporter(otlpOptions);
         });
 

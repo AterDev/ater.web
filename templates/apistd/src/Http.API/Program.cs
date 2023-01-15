@@ -206,10 +206,15 @@ app.UseExceptionHandler(handler =>
     handler.Run(async context =>
     {
         context.Response.StatusCode = 500;
-        Exception? exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
+        var @byte = new ReadOnlyMemory<byte>();
+        var resp = await context.Response.BodyWriter.WriteAsync(@byte);
+
+        var exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
         var result = new {
-            Title = "程序内部错误:" + exception?.Message,
-            Detail = exception?.Source,
+            Title = "异常错误",
+            Source = exception?.Source,
+            Detail = exception?.Message,
+            StackTrace = exception?.StackTrace,
             Status = 500,
             TraceId = context.TraceIdentifier
         };
