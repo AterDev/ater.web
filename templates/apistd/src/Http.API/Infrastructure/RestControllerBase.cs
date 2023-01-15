@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Infrastructure;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Http.API.Infrastructure;
 
@@ -66,5 +67,20 @@ public class RestControllerBase : ControllerBase
             TraceId = HttpContext.TraceIdentifier
         };
         return base.Conflict(res);
+    }
+
+    public ObjectResult Problem(string? detail = null)
+    {
+        var res = new {
+            Title = "业务错误",
+            Detail = detail,
+            Status = 500,
+            TraceId = HttpContext.TraceIdentifier
+        };
+        return new ObjectResult(res)
+        {
+            StatusCode = 500,
+
+        };
     }
 }
