@@ -64,8 +64,7 @@ public static class ServiceExtension
                     {
                         if (httpRequestMessage.Content != null)
                         {
-                            var stream = httpRequestMessage.Content.ReadAsStream();
-                            var body = await new StreamReader(stream).ReadToEndAsync();
+                            var body = httpRequestMessage.Content.ReadAsStringAsync().Result;
                             activity.SetTag("requestBody", body);
                         }
                     };
