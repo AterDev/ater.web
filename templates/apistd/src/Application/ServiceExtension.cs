@@ -70,12 +70,11 @@ public static class ServiceExtension
                         }
                     };
 
-                    options.EnrichWithHttpResponseMessage = (activity, httpResponseMessage) =>
+                    options.EnrichWithHttpResponseMessage = async (activity, httpResponseMessage) =>
                     {
                         if (httpResponseMessage.Content != null)
                         {
-                            // 不要使用ReadAsStream;此处需要同步执行;否则会出错
-                            var body = httpResponseMessage.Content.ReadAsStringAsync().Result;
+                            var body = await httpResponseMessage.Content.ReadAsStringAsync();
                             body = body.Length > maxLength ? body[0..maxLength] : body;
                             activity.SetTag("responseBody", body);
                         }

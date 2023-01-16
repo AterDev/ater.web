@@ -206,9 +206,6 @@ app.UseExceptionHandler(handler =>
     handler.Run(async context =>
     {
         context.Response.StatusCode = 500;
-        var @byte = new ReadOnlyMemory<byte>();
-        var resp = await context.Response.BodyWriter.WriteAsync(@byte);
-
         var exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
         var result = new {
             Title = "异常错误",
