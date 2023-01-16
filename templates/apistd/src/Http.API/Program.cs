@@ -12,7 +12,7 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Exporter;
-using Http.API.Infrastructure;
+using Application;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 

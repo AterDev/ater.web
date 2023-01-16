@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.Design.Serialization;
 using System.Net.Http;
+using Application;
+using Microsoft.AspNetCore.Http;
 using OpenTelemetry;
 using OpenTelemetry.Exporter;
 using OpenTelemetry.Logs;
@@ -7,8 +9,11 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 
-namespace Http.API.Infrastructure;
+namespace Application;
 
+/// <summary>
+/// 服务注册扩展
+/// </summary>
 public static class ServiceExtension
 {
     /// <summary>
