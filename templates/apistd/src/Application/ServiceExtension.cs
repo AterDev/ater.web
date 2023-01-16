@@ -70,11 +70,12 @@ public static class ServiceExtension
                         }
                     };
 
-                    options.EnrichWithHttpResponseMessage = async (activity, httpResponseMessage) =>
+                    options.EnrichWithHttpResponseMessage = (activity, httpResponseMessage) =>
                     {
                         if (httpResponseMessage.Content != null)
                         {
-                            var body = await httpResponseMessage.Content.ReadAsStringAsync();
+                            // 不要使用await:The stream was already consumed. It cannot be read again
+                            var body = httpResponseMessage.Content.ReadAsStringAsync().Result;
                             body = body.Length > maxLength ? body[0..maxLength] : body;
                             activity.SetTag("responseBody", body);
                         }
