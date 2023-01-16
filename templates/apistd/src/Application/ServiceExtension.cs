@@ -11,6 +11,9 @@ using OpenTelemetry.Trace;
 
 namespace Application;
 
+/// <summary>
+/// 服务注册扩展
+/// </summary>
 public static class ServiceExtension
 {
     /// <summary>
