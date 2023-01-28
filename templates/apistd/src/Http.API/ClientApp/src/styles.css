@@ -34,3 +34,8 @@ img {
 .ck-editor__editable_inline {
     min-height: 500px;
 }
+
+.mat-icon {
+  margin-right: 4px;
+  vertical-align: middle;
+}
