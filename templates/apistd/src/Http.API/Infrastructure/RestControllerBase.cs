@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Core.Const;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -31,7 +32,7 @@ public class RestControllerBase<TManager> : RestControllerBase
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
-[Authorize("User")]
+[Authorize(Const.User)]
 [Produces("application/json")]
 public class RestControllerBase : ControllerBase
 {

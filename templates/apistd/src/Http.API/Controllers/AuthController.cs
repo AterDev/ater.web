@@ -1,4 +1,5 @@
 ﻿using Application.QueryStore;
+using Http.API.Infrastructure;
 using Share.Models.AuthDtos;
 
 namespace Http.API.Controllers;
@@ -6,9 +7,8 @@ namespace Http.API.Controllers;
 /// <summary>
 /// 系统用户授权登录
 /// </summary>
-[Route("api/[controller]")]
-[ApiController]
-public class AuthController : ControllerBase
+[AllowAnonymous]
+public class AuthController : RestControllerBase
 {
     private readonly SystemUserQueryStore _store;
     private readonly IConfiguration _config;

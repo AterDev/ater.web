@@ -103,7 +103,6 @@ public class InitDataTask
             {
                 // TODO:执行更新方法
 
-
                 version.Value = newVersionValue.ToString();
                 await context.SaveChangesAsync();
             }
