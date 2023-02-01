@@ -64,8 +64,16 @@ public static class ServiceExtension
                     {
                         if (httpRequestMessage.Content != null)
                         {
-                            var body = httpRequestMessage.Content.ReadAsStringAsync().Result;
-                            activity.SetTag("requestBody", body);
+                            var headers = httpRequestMessage.Content.Headers;
+                            // 过滤过长或文件类型
+                            if (headers.ContentLength > maxLength * 2
+                            || (headers.ContentType != null && headers.ContentType.ToString().Contains("multipart/form-data"))) { }
+                            else
+                            {
+                                var body = httpRequestMessage.Content.ReadAsStringAsync().Result;
+                                activity.SetTag("requestBody", body);
+                            }
+
                         }
                     };
 
@@ -88,11 +96,15 @@ public static class ServiceExtension
                     options.RecordException = true;
                     options.EnrichWithHttpRequest = async (activity, request) =>
                     {
-                        request.EnableBuffering();
-                        request.Body.Position = 0;
-                        var reader = new StreamReader(request.Body);
-                        activity.SetTag("requestBody", await reader.ReadToEndAsync());
-                        request.Body.Position = 0;
+                        // 此处过滤文件或过长的内容
+                        if (request.ContentLength <= maxLength * 2 && !request.ContentType!.Contains("multipart/form-data"))
+                        {
+                            request.EnableBuffering();
+                            request.Body.Position = 0;
+                            var reader = new StreamReader(request.Body);
+                            activity.SetTag("requestBody", await reader.ReadToEndAsync());
+                            request.Body.Position = 0;
+                        }
                     };
 
                     options.EnrichWithHttpResponse = (activity, response) =>
