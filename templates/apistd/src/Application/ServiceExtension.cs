@@ -66,14 +66,15 @@ public static class ServiceExtension
                         {
                             var headers = httpRequestMessage.Content.Headers;
                             // 过滤过长或文件类型
-                            if (headers.ContentLength > maxLength * 2
-                            || (headers.ContentType != null && headers.ContentType.ToString().Contains("multipart/form-data"))) { }
+                            var contentLength = headers.ContentLength ?? 0;
+                            var contentType = headers.ContentType?.ToString();
+                            if (contentLength > maxLength * 2
+                            || (contentType != null && contentType.Contains("multipart/form-data"))) { }
                             else
                             {
                                 var body = httpRequestMessage.Content.ReadAsStringAsync().Result;
                                 activity.SetTag("requestBody", body);
                             }
-
                         }
                     };
 
@@ -87,6 +88,7 @@ public static class ServiceExtension
                             activity.SetTag("responseBody", body);
                         }
                     };
+
                     options.EnrichWithException = (activity, exception) =>
                     {
                     };
@@ -97,7 +99,9 @@ public static class ServiceExtension
                     options.EnrichWithHttpRequest = async (activity, request) =>
                     {
                         // 此处过滤文件或过长的内容
-                        if (request.ContentLength <= maxLength * 2 && !request.ContentType!.Contains("multipart/form-data"))
+                        var contentLength = request.ContentLength ?? 0;
+                        var contentType = request.ContentType ?? string.Empty;
+                        if (contentLength <= maxLength * 2 && !contentType.Contains("multipart/form-data"))
                         {
                             request.EnableBuffering();
                             request.Body.Position = 0;
