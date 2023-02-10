@@ -60,7 +60,7 @@ public static class ServiceExtension
                 .AddHttpClientInstrumentation(options =>
                 {
                     options.RecordException = true;
-                    options.EnrichWithHttpRequestMessage = async (activity, httpRequestMessage) =>
+                    options.EnrichWithHttpRequestMessage = (activity, httpRequestMessage) =>
                     {
                         if (httpRequestMessage.Content != null)
                         {
