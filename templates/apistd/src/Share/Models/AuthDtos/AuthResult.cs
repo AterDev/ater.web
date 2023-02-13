@@ -7,7 +7,7 @@ public class AuthResult
     /// 用户名
     /// </summary>
     public string Username { get; set; } = default!;
-    public string Role { get; set; } = default!;
+    public string[] Roles { get; set; } = default!;
     /// <summary>
     /// token
     /// </summary>
