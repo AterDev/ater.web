@@ -12,6 +12,7 @@ public class UserContext : IUserContext
     public string? CurrentRole { get; set; }
     public List<string>? Roles { get; set; }
     public Guid? GroupId { get; init; }
+
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly CommandDbContext _context;
     public UserContext(IHttpContextAccessor httpContextAccessor, CommandDbContext context)
@@ -28,12 +29,17 @@ public class UserContext : IUserContext
         Username = FindClaim(ClaimTypes.Name)?.Value;
         Email = FindClaim(ClaimTypes.Email)?.Value;
         CurrentRole = FindClaim(ClaimTypes.Role)?.Value;
-        IsAdmin = CurrentRole != null && CurrentRole.ToLower() == "admin";
+        Roles = _httpContextAccessor.HttpContext?.User?.FindAll(ClaimTypes.Role)
+            .Select(c => c.Value).ToList();
+        if (Roles != null)
+        {
+            IsAdmin = Roles.Any(r => r.ToLower().Equals("admin"));
+        }
         _context = context;
     }
 
     public Claim? FindClaim(string claimType)
     {
-        return _httpContextAccessor?.HttpContext?.User?.FindFirst(claimType);
+        return _httpContextAccessor.HttpContext?.User?.FindFirst(claimType);
     }
 }

@@ -4,6 +4,7 @@ public static class StoreServicesExtensions
 {
     public static void AddDataStore(this IServiceCollection services)
     {
+        services.AddHttpContextAccessor();
         _ = services.AddTransient<IUserContext, UserContext>();
         _ = services.AddScoped(typeof(DataStoreContext));
         _ = services.AddScoped(typeof(SystemRoleQueryStore));

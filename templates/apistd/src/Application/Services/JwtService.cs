@@ -27,9 +27,9 @@ public class JwtService
     /// 生成jwt token
     /// </summary>
     /// <param name="id"></param>
-    /// <param name="role"></param>
+    /// <param name="roles">角色</param>
     /// <returns></returns>
-    public string GetToken(string id, string role)
+    public string GetToken(string id, string[] roles)
     {
         SymmetricSecurityKey signingKey = new(Encoding.UTF8.GetBytes(Sign));
         SigningCredentials signingCredentials = new(signingKey, SecurityAlgorithms.HmacSha256);
@@ -37,8 +37,14 @@ public class JwtService
         {
                 // 此处自定义claims
                 new Claim(ClaimTypes.NameIdentifier, id),
-                new Claim(ClaimTypes.Role, role)
         };
+        if (roles.Any())
+        {
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+        }
         if (Claims != null && Claims.Any())
         {
             claims.AddRange(Claims);

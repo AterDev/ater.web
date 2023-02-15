@@ -1,13 +1,16 @@
+using Microsoft.Win32.SafeHandles;
+
 namespace Core.Utils;
 
 public static class StringExtension
 {
     /// <summary>
-    /// to hyphen style: HelloWord->hellow-word
+    /// to hyphen style: HelloWord->hello-word
     /// </summary>
     /// <param name="str"></param>
+    /// <param name="separator">分隔符</param>
     /// <returns></returns>
-    public static string ToHyphen(this string str)
+    public static string ToHyphen(this string str, char separator = '-')
     {
         if (string.IsNullOrWhiteSpace(str))
         {
@@ -19,19 +22,19 @@ public static class StringExtension
         for (int i = 0; i < str.Length; i++)
         {
             char item = str[i];
-            // 连续的大写只添加一个
+            // 连续的大写只添加一个-
             char pre = i >= 1 ? str[i - 1] : 'a';
             if (char.IsUpper(item) && char.IsLower(pre))
             {
                 upperNumber++;
                 if (upperNumber > 1)
                 {
-                    _ = builder.Append('-');
+                    _ = builder.Append(separator);
                 }
             }
             else if (item is '_' or ' ')
             {
-                _ = builder.Append('-');
+                _ = builder.Append(separator);
             }
             _ = builder.Append(char.ToLower(item));
         }
@@ -39,7 +42,17 @@ public static class StringExtension
     }
 
     /// <summary>
-    /// to Pascalcase style:hellow-word->HelloWord
+    /// to snake lower style: HelloWord->hello_word
+    /// </summary>
+    /// <param name="str"></param>
+    /// <returns></returns>
+    public static string ToSankeLower(this string str)
+    {
+        return ToHyphen(str, '_');
+    }
+
+    /// <summary>
+    /// to Pascalcase style:hello-word->HelloWord
     /// </summary>
     /// <param name="str"></param>
     /// <returns></returns>
@@ -60,7 +73,7 @@ public static class StringExtension
     }
 
     /// <summary>
-    /// to camelcase style:hellow-word->hellowWord
+    /// to camelcase style:hello-word->hellowWord
     /// </summary>
     /// <param name="str"></param>
     /// <returns></returns>

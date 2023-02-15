@@ -1,4 +1,6 @@
-﻿namespace EntityFramework;
+﻿using Core.Models;
+
+namespace EntityFramework;
 public class CommandDbContext : ContextBase
 {
     public CommandDbContext(DbContextOptions<CommandDbContext> options) : base(options)
@@ -7,6 +9,7 @@ public class CommandDbContext : ContextBase
     }
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        _ = builder.Entity<EntityBase>().HasQueryFilter(e => !e.IsDeleted);
         base.OnModelCreating(builder);
     }
 
