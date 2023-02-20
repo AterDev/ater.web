@@ -1,4 +1,5 @@
-﻿using Core.Models;
+﻿using System.Text.Json.Serialization;
+using Core.Models;
 namespace Core.Entities;
 /// <summary>
 /// 系统用户
@@ -19,10 +20,12 @@ public class SystemUser : EntityBase
     [MaxLength(100)]
     public string? Email { get; set; } = null!;
     public bool EmailConfirmed { get; set; } = false;
+    [JsonIgnore]
     [MaxLength(100)]
-    public required string PasswordHash { get; set; }
+    public string PasswordHash { get; set; } = null!;
+    [JsonIgnore]
     [MaxLength(60)]
-    public required string PasswordSalt { get; set; }
+    public string PasswordSalt { get; set; } = null!;
     [MaxLength(20)]
     public string? PhoneNumber { get; set; }
     public bool PhoneNumberConfirmed { get; set; } = false;
