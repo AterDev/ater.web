@@ -25,7 +25,7 @@
 		<NoDefaultExcludes>true</NoDefaultExcludes>
 	</PropertyGroup>
 	<ItemGroup>
-		<Content Include="templates\**\*" Exclude="templates\**\bin\**;templates\**\obj\**;templates\**\.vs\**" />
+		<Content Include="templates\**\*" Exclude="templates\**\bin\**;templates\**\obj\**;templates\**\.vs\**;templates\**\node_modules\**;templates\**\.angular\**;templates\**\*.lock" />
 		<Compile Remove="**\*" />
 	</ItemGroup>
 	<ItemGroup>
