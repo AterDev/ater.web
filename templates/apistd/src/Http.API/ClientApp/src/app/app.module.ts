@@ -6,7 +6,7 @@ import { ComponentsModule } from './components/components.module';
 import { AppRoutingModule } from './app-routing.module';
 import { HomeModule } from './pages/home/home.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { MAT_LEGACY_SNACK_BAR_DEFAULT_OPTIONS as MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/legacy-snack-bar';
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 import { CustomerHttpInterceptor } from './share/customer-http.interceptor';
 
 @NgModule({
@@ -20,6 +20,7 @@ import { CustomerHttpInterceptor } from './share/customer-http.interceptor';
     AppRoutingModule,
     ComponentsModule,
     HomeModule
+    // SystemModule
   ],
   providers: [
     { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 2500 } },
