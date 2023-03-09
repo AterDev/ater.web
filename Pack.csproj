@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<PackageType>Template</PackageType>
-		<PackageVersion>7.0.5</PackageVersion>
+		<PackageVersion>7.1</PackageVersion>
 		<PackageId>ater.web.templates</PackageId>
 		<Title>Ater Web Templates</Title>
 		<Authors>ater.niltor</Authors>
@@ -20,7 +20,7 @@
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<RepositoryUrl>https://github.com/AterDev/ater.web</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageReleaseNotes>1 添加jwt多角色支持; 2 ng 升级成15.1</PackageReleaseNotes>
+		<PackageReleaseNotes>1 Opentelemetry使用正式包;2 引入Dapr1.10包</PackageReleaseNotes>
 		<NoWarn>$(NoWarn);NU5128;NU5110;NU5111</NoWarn>
 		<NoDefaultExcludes>true</NoDefaultExcludes>
 	</PropertyGroup>
