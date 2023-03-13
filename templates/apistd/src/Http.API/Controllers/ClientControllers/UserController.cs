@@ -1,6 +1,5 @@
 using Core.Const;
 using Http.API.Infrastructure;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Share.Models.AuthDtos;
 using Share.Models.UserDtos;
 namespace Http.API.Controllers.ClientControllers;
@@ -53,12 +52,13 @@ public class UserController : ClientControllerBase<IUserManager>
                 {
                     TokenExpires = 60 * 24 * 7,
                 };
-                var token = jwt.GetToken(user.Id.ToString(), new string[] { "User" });
+                var roles = new string[] { Const.User, user.UserType.ToString() };
+                var token = jwt.GetToken(user.Id.ToString(), roles);
 
                 return new AuthResult
                 {
                     Id = user.Id,
-                    Roles = new string[] { "User" },
+                    Roles = roles,
                     Token = token,
                     Username = user.UserName
                 };
@@ -75,24 +75,12 @@ public class UserController : ClientControllerBase<IUserManager>
     }
 
     /// <summary>
-    /// 筛选
-    /// </summary>
-    /// <param name="filter"></param>
-    /// <returns></returns>
-    [HttpPost("filter")]
-    [Authorize(Const.Admin)]
-    public async Task<ActionResult<PageList<UserItemDto>>> FilterAsync(UserFilterDto filter)
-    {
-        return await manager.FilterAsync(filter);
-    }
-
-    /// <summary>
-    /// 新增
+    /// 用户注册
     /// </summary>
     /// <param name="form"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<ActionResult<User>> AddAsync(UserAddDto form)
+    public async Task<ActionResult<User>> SignUpAsync(UserAddDto form)
     {
         if (await manager.FindAsync<User>(u => u.UserName == form.UserName) != null)
         {
@@ -148,7 +136,6 @@ public class UserController : ClientControllerBase<IUserManager>
     /// <returns></returns>
     // [ApiExplorerSettings(IgnoreApi = true)]
     [HttpDelete("{id}")]
-    [Authorize(Const.Admin)]
     public async Task<ActionResult<User?>> DeleteAsync([FromRoute] Guid id)
     {
         // 实现删除逻辑,注意删除权限

@@ -93,9 +93,9 @@ services.AddAuthentication(options =>
 services.AddAuthorization(options =>
 {
     options.AddPolicy(Const.User, policy =>
-        policy.RequireRole(Const.Admin, Const.User));
-    options.AddPolicy(Const.Admin, policy =>
-        policy.RequireRole(Const.Admin));
+        policy.RequireRole(Const.AdminUser, Const.User));
+    options.AddPolicy(Const.AdminUser, policy =>
+        policy.RequireRole(Const.AdminUser));
 });
 
 // cors配置 

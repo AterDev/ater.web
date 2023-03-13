@@ -44,6 +44,16 @@ public class UserContext : IUserContext
         return _httpContextAccessor?.HttpContext?.User?.FindFirst(claimType);
     }
 
+    /// <summary>
+    /// ÅÐ¶Ïµ±Ç°½ÇÉ«
+    /// </summary>
+    /// <param name="roleName"></param>
+    /// <returns></returns>
+    public bool IsRole(string roleName)
+    {
+        return Roles != null && Roles.Any(r => r.ToLower() == roleName);
+    }
+
     public async Task<User?> GetUserAsync()
     {
         return await _context.Users.FindAsync(UserId);

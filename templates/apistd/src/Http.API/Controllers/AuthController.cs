@@ -1,4 +1,5 @@
 ﻿using Application.QueryStore;
+using Core.Const;
 using Http.API.Infrastructure;
 using Share.Models.AuthDtos;
 
@@ -49,7 +50,7 @@ public class AuthController : RestControllerBase
 
             //var audience = string.Join(",", audiences);
             string? audience = _config.GetSection("Authentication")["Schemes:Bearer:ValidAudiences"];
-            var roles = user.SystemRoles?.Select(r => r.NameValue)?.ToArray();
+            var roles = user.SystemRoles?.Select(r => r.NameValue)?.ToList();
             //var time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             //1天后过期
             if (!string.IsNullOrWhiteSpace(sign) &&
@@ -60,14 +61,17 @@ public class AuthController : RestControllerBase
                 {
                     TokenExpires = 60 * 24 * 7,
                 };
-                string token = jwt.GetToken(user.Id.ToString(), roles ?? new string[] { "Unknown" });
+                // 添加管理员用户标识
+                roles?.Add(Const.AdminUser);
+
+                string token = jwt.GetToken(user.Id.ToString(), roles?.ToArray() ?? new string[] { Const.AdminUser });
+
                 // 登录状态存储到Redis
                 //await _redis.SetValueAsync("login" + user.Id.ToString(), true, 60 * 24 * 7);
-
                 return new AuthResult
                 {
                     Id = user.Id,
-                    Roles = roles ?? new string[] { "Unknown" },
+                    Roles = roles?.ToArray() ?? new string[] { Const.AdminUser },
                     Token = token,
                     Username = user.UserName
                 };

@@ -8,7 +8,7 @@ namespace Http.API.Infrastructure;
 /// 管理后台权限控制器
 /// </summary>
 [Route("api/admin/[controller]")]
-[Authorize(Const.Admin)]
+[Authorize(Const.AdminUser)]
 public class RestControllerBase<TManager> : RestControllerBase
      where TManager : class
 {
@@ -31,6 +31,13 @@ public class RestControllerBase<TManager> : RestControllerBase
     {
         return await _user.GetSystemUserAsync();
     }
+
+    // TODO:角色权限
+    public virtual bool HasPermission()
+    {
+        return true;
+    }
+
 }
 
 /// <summary>
