@@ -36,7 +36,7 @@
 	</ItemGroup>
 
 	<Target Name="SwaggerPostBuildTarget" AfterTargets="Build" Condition="'$(Configuration)' == 'Debug'">
-		<!--<Exec Command="dotnet tool restore" UseUtf8Encoding="Always" />-->
+		<Exec Command="dotnet tool restore" UseUtf8Encoding="Always" />
 	</Target>
 
 

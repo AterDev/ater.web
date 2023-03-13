@@ -137,10 +137,16 @@ services.AddSwaggerGen(c =>
             Array.Empty<string>()
         }
     });
-    c.SwaggerDoc("v1", new OpenApiInfo
+    c.SwaggerDoc("admin", new OpenApiInfo
     {
         Title = "MyProjectName",
-        Description = "API 文档",
+        Description = "Admin API 文档",
+        Version = "v1"
+    });
+    c.SwaggerDoc("client", new OpenApiInfo
+    {
+        Title = "MyProjectName client",
+        Description = "Client API 文档",
         Version = "v1"
     });
     string[] xmlFiles = Directory.GetFiles(AppContext.BaseDirectory, "*.xml", SearchOption.TopDirectoryOnly);
@@ -189,7 +195,11 @@ if (app.Environment.IsDevelopment())
 {
     _ = app.UseCors("default");
     _ = app.UseSwagger();
-    _ = app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/client/swagger.json", name: "client");
+        c.SwaggerEndpoint("/swagger/admin/swagger.json", "admin");
+    });
 }
 else
 {

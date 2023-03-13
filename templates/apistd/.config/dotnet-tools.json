@@ -2,18 +2,6 @@
   "version": 1,
   "isRoot": true,
   "tools": {
-    "swashbuckle.aspnetcore.cli": {
-      "version": "6.4.0",
-      "commands": [
-        "swagger"
-      ]
-    },
-    "ater.droplet.cli": {
-      "version": "7.0.7",
-      "commands": [
-        "droplet"
-      ]
-    },
     "dotnet-ef": {
       "version": "7.0.0",
       "commands": [
