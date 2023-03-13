@@ -1,10 +1,13 @@
 ﻿using Core.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Core.Entities;
 /// <summary>
 /// 角色表
 /// </summary>
-[NgPage("system", "role")]
+//[NgPage("system", "sysrole")]
+[Index(nameof(Name))]
+[Index(nameof(NameValue))]
 public class SystemRole : EntityBase
 {
     /// <summary>
@@ -15,7 +18,7 @@ public class SystemRole : EntityBase
     /// <summary>
     /// 角色名，系统标识
     /// </summary>
-    public string NameValue { get; set; } = string.Empty;
+    public required string NameValue { get; set; } = string.Empty;
     /// <summary>
     /// 是否系统内置,系统内置不可删除
     /// </summary>

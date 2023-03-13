@@ -1,39 +1,40 @@
-﻿using System.Text.Json.Serialization;
-using Core.Models;
+﻿using Core.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Core.Entities;
 /// <summary>
-/// 系统用户
+/// 用户账户
 /// </summary>
-//[NgPage("system", "sysuser")]
 [Index(nameof(UserName))]
 [Index(nameof(Email))]
 [Index(nameof(PhoneNumber))]
 [Index(nameof(CreatedTime))]
 [Index(nameof(IsDeleted))]
-public class SystemUser : EntityBase
+public class User : EntityBase
 {
+    // TODO:根据实际需求调整字段
+
     /// <summary>
     /// 用户名
     /// </summary>
-    [MaxLength(30)]
+    [MaxLength(40)]
     public required string UserName { get; set; }
+
     /// <summary>
-    /// 真实姓名
+    /// 用户类型
     /// </summary>
-    [MaxLength(30)]
-    public string? RealName { get; set; }
+    public UserType UserType { get; set; } = UserType.Normal;
+
+    /// <summary>
+    /// 邮箱
+    /// </summary>
     [MaxLength(100)]
     public string? Email { get; set; } = null!;
     public bool EmailConfirmed { get; set; } = false;
-    [JsonIgnore]
     [MaxLength(100)]
-    public string PasswordHash { get; set; } = null!;
-    [JsonIgnore]
+    public string PasswordHash { get; set; } = default!;
     [MaxLength(60)]
-    public string PasswordSalt { get; set; } = null!;
-    [MaxLength(20)]
+    public string PasswordSalt { get; set; } = default!;
     public string? PhoneNumber { get; set; }
     public bool PhoneNumberConfirmed { get; set; } = false;
     public bool TwoFactorEnabled { get; set; } = false;
@@ -53,21 +54,19 @@ public class SystemUser : EntityBase
     /// </summary>
     [MaxLength(200)]
     public string? Avatar { get; set; }
-
-    public ICollection<SystemRole>? SystemRoles { get; set; }
-
-    /// <summary>
-    /// 性别
-    /// </summary>
-    public Sex Sex { get; set; } = Sex.Male;
 }
-
-/// <summary>
-/// 性别
-/// </summary>
-public enum Sex
+public enum UserType
 {
-    Male,
-    Female,
-    Else
+    /// <summary>
+    /// 普通用户
+    /// </summary>
+    Normal,
+    /// <summary>
+    /// 认证用户
+    /// </summary>
+    Verify,
+    /// <summary>
+    /// 会员
+    /// </summary>
+    Member
 }
