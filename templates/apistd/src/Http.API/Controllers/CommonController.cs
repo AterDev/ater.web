@@ -22,7 +22,7 @@ public class CommonController : RestControllerBase
     /// <returns></returns>
     [HttpPost("upload")]
     [RequestSizeLimit(1024 * 1024 * 1)]
-    public async Task<ActionResult<UploadResult>> UploadImgAsync(IFormFile upload)
+    public ActionResult<UploadResult> UploadImg(IFormFile upload)
     {
         if (upload == null)
         {
@@ -59,7 +59,8 @@ public class CommonController : RestControllerBase
             string fileName = HashCrypto.Md5FileHash(upload.OpenReadStream());
             var blobPath = Path.Combine("movement", DateTime.UtcNow.ToString("yyyy-MM-dd"), fileName + fileExt);
 
-            // TODO:上传云存储
+            // TODO:保存到本地或上传云存储
+
 
             // TODO:返回上传后的路径对象
             return new UploadResult()

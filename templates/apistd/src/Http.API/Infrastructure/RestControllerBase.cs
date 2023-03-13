@@ -1,13 +1,14 @@
 ﻿using System.Diagnostics;
 using Core.Const;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Http.API.Infrastructure;
 
 /// <summary>
-/// 带Manager的控制器
+/// 管理后台权限控制器
 /// </summary>
+[Route("api/admin/[controller]")]
+[Authorize(Const.Admin)]
 public class RestControllerBase<TManager> : RestControllerBase
      where TManager : class
 {
@@ -26,13 +27,46 @@ public class RestControllerBase<TManager> : RestControllerBase
         _logger = logger;
     }
 
+    protected async Task<SystemUser?> GetUserAsync()
+    {
+        return await _user.GetSystemUserAsync();
+    }
 }
+
+/// <summary>
+/// 用户端权限控制器
+/// </summary>
+/// <typeparam name="TManager"></typeparam>
+[Authorize(Const.User)]
+public class ClientControllerBase<TManager> : RestControllerBase
+     where TManager : class
+{
+    protected readonly TManager manager;
+    protected readonly ILogger _logger;
+    protected readonly IUserContext _user;
+
+    public ClientControllerBase(
+        TManager manager,
+        IUserContext user,
+        ILogger logger
+        )
+    {
+        this.manager = manager;
+        _user = user;
+        _logger = logger;
+    }
+
+    protected async Task<User?> GetUserAsync()
+    {
+        return await _user.GetUserAsync();
+    }
+}
+
 /// <summary>
 /// http api 基类，重写ControllerBase中的方法
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Const.User)]
 [Produces("application/json")]
 public class RestControllerBase : ControllerBase
 {

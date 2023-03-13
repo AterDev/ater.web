@@ -13,6 +13,7 @@ using OpenTelemetry.Trace;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Exporter;
 using Application;
+using Core.Const;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -88,13 +89,13 @@ services.AddAuthentication(options =>
     };
 });
 
-// 验证
+// TODO:验证策略定义
 services.AddAuthorization(options =>
 {
-    options.AddPolicy("User", policy =>
-        policy.RequireRole("Admin", "User"));
-    options.AddPolicy("Admin", policy =>
-        policy.RequireRole("Admin"));
+    options.AddPolicy(Const.User, policy =>
+        policy.RequireRole(Const.Admin, Const.User));
+    options.AddPolicy(Const.Admin, policy =>
+        policy.RequireRole(Const.Admin));
 });
 
 // cors配置 
