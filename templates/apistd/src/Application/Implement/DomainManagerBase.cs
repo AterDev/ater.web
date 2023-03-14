@@ -89,7 +89,7 @@ public class DomainManagerBase<TEntity, TUpdate, TFilter, TItem> : IDomainManage
 
     public virtual async Task<TEntity?> FindAsync(Guid id)
     {
-        return await Query.FindAsync<TEntity>(q => q.Id == id);
+        return await Query.FindAsync(q => q.Id == id);
     }
 
     public async Task<TDto?> FindAsync<TDto>(Expression<Func<TEntity, bool>>? whereExp) where TDto : class
@@ -106,6 +106,10 @@ public class DomainManagerBase<TEntity, TUpdate, TFilter, TItem> : IDomainManage
     public async Task<List<TDto>> ListAsync<TDto>(Expression<Func<TEntity, bool>>? whereExp) where TDto : class
     {
         return await Query.ListAsync<TDto>(whereExp);
+    }
+    public async Task<List<TEntity>> ListAsync(Expression<Func<TEntity, bool>>? whereExp)
+    {
+        return await Query.ListAsync(whereExp);
     }
 
     /// <summary>

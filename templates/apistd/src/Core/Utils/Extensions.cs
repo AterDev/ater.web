@@ -1,3 +1,4 @@
+using Core.Models;
 using Mapster;
 
 namespace Core.Utils;
@@ -70,6 +71,20 @@ public static partial class Extensions
                 source.Expression, Expression.Quote(selector)));
     }
 
+
+    /// <summary>
+    /// 不为空时执行的条件
+    /// </summary>
+    /// <typeparam name="TSource"></typeparam>
+    /// <param name="source"></param>
+    /// <param name="field">不为空的字段</param>
+    /// <param name="expression">不为空时执行的条件</param>
+    /// <returns></returns>
+    public static IQueryable<TSource> WhereNotNull<TSource>(this IQueryable<TSource> source, object? field, Expression<Func<TSource, bool>> expression)
+    {
+        return field != null ? source.Where(expression) : source;
+    }
+
     public static IQueryable<TResult> ProjectTo<TResult>(this IQueryable source)
     {
         return source.ProjectToType<TResult>();
@@ -110,4 +125,34 @@ public static partial class Extensions
         return orderQuery;
     }
 
+
+        /// <summary>
+    /// 列表转成树型结构
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="nodes"></param>
+    /// <returns></returns>
+    public static List<T> BuildTree<T>(this List<T> nodes) where T : ITreeNode<T>
+    {
+        nodes.ForEach(n => { n.Children = null; });
+        var nodeDict = nodes.ToDictionary(n => n.Id);
+        var res = new List<T>();
+
+        foreach (var node in nodes)
+        {
+            if (node.ParentId == null)
+            {
+                res.Add(node);
+            }
+            else
+            {
+                if (nodeDict[node.ParentId.Value].Children == null)
+                {
+                    nodeDict[node.ParentId.Value].Children = new List<T>();
+                }
+                nodeDict[node.ParentId.Value].Children!.Add(node);
+            }
+        }
+        return res;
+    }
 }
