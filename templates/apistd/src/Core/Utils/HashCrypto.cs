@@ -55,8 +55,7 @@ public class HashCrypto
     /// <returns></returns>
     public static string Md5Hash(string str)
     {
-        using MD5 md5 = MD5.Create();
-        byte[] data = md5.ComputeHash(Encoding.UTF8.GetBytes(str));
+        byte[] data = MD5.HashData(Encoding.UTF8.GetBytes(str));
         StringBuilder sBuilder = new();
         for (int i = 0; i < data.Length; i++)
         {
