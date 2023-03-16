@@ -1,6 +1,6 @@
 using Http.API.Infrastructure;
 using Share.Models.SystemRoleDtos;
-namespace Http.API.Controllers;
+namespace Http.API.Controllers.AdminControllers;
 
 /// <summary>
 /// 角色表

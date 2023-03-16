@@ -3,12 +3,13 @@ using Core.Const;
 using Http.API.Infrastructure;
 using Share.Models.AuthDtos;
 
-namespace Http.API.Controllers;
+namespace Http.API.Controllers.AdminControllers;
 
 /// <summary>
 /// 系统用户授权登录
 /// </summary>
 [AllowAnonymous]
+[Route("api/admin/[controller]")]
 public class AuthController : RestControllerBase
 {
     private readonly SystemUserQueryStore _store;

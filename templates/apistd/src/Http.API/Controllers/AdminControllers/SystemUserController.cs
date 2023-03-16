@@ -1,6 +1,6 @@
 using Http.API.Infrastructure;
 using Share.Models.SystemUserDtos;
-namespace Http.API.Controllers;
+namespace Http.API.Controllers.AdminControllers;
 
 /// <summary>
 /// 系统用户
