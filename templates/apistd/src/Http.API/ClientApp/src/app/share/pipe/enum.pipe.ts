@@ -27,3 +27,12 @@ export class EnumPipe implements PipeTransform {
   }
 }
 
+@Pipe({
+  name: 'mapEnum'
+})
+export class MapEnumPipe implements PipeTransform {
+  transform(value: any, type: any): unknown {
+    return type[value];
+
+  }
+}
