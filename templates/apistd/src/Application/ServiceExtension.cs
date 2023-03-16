@@ -1,8 +1,5 @@
-﻿using System.ComponentModel.Design.Serialization;
-using System.Net.Http;
-using Application;
+﻿using Application;
 using Microsoft.AspNetCore.Http;
-using OpenTelemetry;
 using OpenTelemetry.Exporter;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
@@ -88,7 +85,6 @@ public static class ServiceExtension
                             activity.SetTag("responseBody", body);
                         }
                     };
-
                     options.EnrichWithException = (activity, exception) =>
                     {
                     };
@@ -98,17 +94,11 @@ public static class ServiceExtension
                     options.RecordException = true;
                     options.EnrichWithHttpRequest = async (activity, request) =>
                     {
-                        // 此处过滤文件或过长的内容
-                        var contentLength = request.ContentLength ?? 0;
-                        var contentType = request.ContentType ?? string.Empty;
-                        if (contentLength <= maxLength * 2 && !contentType.Contains("multipart/form-data"))
-                        {
-                            request.EnableBuffering();
-                            request.Body.Position = 0;
-                            var reader = new StreamReader(request.Body);
-                            activity.SetTag("requestBody", await reader.ReadToEndAsync());
-                            request.Body.Position = 0;
-                        }
+                        request.EnableBuffering();
+                        request.Body.Position = 0;
+                        var reader = new StreamReader(request.Body);
+                        activity.SetTag("requestBody", await reader.ReadToEndAsync());
+                        request.Body.Position = 0;
                     };
 
                     options.EnrichWithHttpResponse = (activity, response) =>
@@ -145,6 +135,7 @@ public static class ServiceExtension
         services.AddOpenTelemetry()
             .WithTracing(tracerProvider)
             .WithMetrics(meterProvider);
+
         return services;
     }
 }

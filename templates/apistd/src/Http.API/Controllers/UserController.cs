@@ -2,7 +2,7 @@ using Core.Const;
 using Http.API.Infrastructure;
 using Share.Models.AuthDtos;
 using Share.Models.UserDtos;
-namespace Http.API.Controllers.ClientControllers;
+namespace Http.API.Controllers;
 
 /// <summary>
 /// 用户账户

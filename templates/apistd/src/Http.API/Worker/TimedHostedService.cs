@@ -27,7 +27,7 @@ public class TimedHostedService : IHostedService, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex.Message + ex.Source + ex.StackTrace);
+            _logger.LogError("{message},{source},{stackTrace}", ex.Message, ex.Source, ex.StackTrace);
             return Task.CompletedTask;
         }
     }
@@ -45,7 +45,7 @@ public class TimedHostedService : IHostedService, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex.Message + ex.Source + ex.StackTrace);
+            _logger.LogError("{message},{source},{stackTrace}", ex.Message, ex.Source, ex.StackTrace);
         }
     }
 
