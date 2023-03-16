@@ -140,4 +140,20 @@ public class RestControllerBase : ControllerBase
 
         };
     }
+    /// <summary>
+    /// 400返回格式处理
+    /// </summary>
+    /// <param name="error"></param>
+    /// <returns></returns>
+    [NonAction]
+    public override BadRequestObjectResult BadRequest([ActionResultObjectValue] object? error)
+    {
+        var res = new {
+            Title = "请求错误",
+            Detail = error?.ToString(),
+            Status = 400,
+            TraceId = HttpContext.TraceIdentifier
+        };
+        return base.BadRequest(res);
+    }
 }
