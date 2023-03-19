@@ -94,11 +94,23 @@ public static class ServiceExtension
                     options.RecordException = true;
                     options.EnrichWithHttpRequest = async (activity, request) =>
                     {
-                        request.EnableBuffering();
-                        request.Body.Position = 0;
-                        var reader = new StreamReader(request.Body);
-                        activity.SetTag("requestBody", await reader.ReadToEndAsync());
-                        request.Body.Position = 0;
+                        var headers = request.Headers;
+                        // 过滤过长或文件类型
+                        var contentLength = request.ContentLength ?? 0;
+                        var contentType = request.ContentType?.ToString();
+                        if (contentLength > maxLength * 2
+                        || (contentType != null && contentType.Contains("multipart/form-data")))
+                        {
+                            activity.SetTag("requestBody", "file upload");
+                        }
+                        else
+                        {
+                            request.EnableBuffering();
+                            request.Body.Position = 0;
+                            var reader = new StreamReader(request.Body);
+                            activity.SetTag("requestBody", await reader.ReadToEndAsync());
+                            request.Body.Position = 0;
+                        }
                     };
 
                     options.EnrichWithHttpResponse = (activity, response) =>
