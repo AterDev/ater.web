@@ -32,6 +32,7 @@ public class EnumSchemaFilter : ISchemaFilter
                             enumData.Add(new OpenApiObject()
                             {
                                 ["name"] = new OpenApiString(f.Name),
+                                ["value"] = new OpenApiInteger((int)f.GetRawConstantValue()!),
                                 ["description"] = new OpenApiString(des.Value.ToString())
                             });
                         }
