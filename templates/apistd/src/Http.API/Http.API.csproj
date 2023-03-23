@@ -19,8 +19,8 @@
 
 	<ItemGroup>
 		<PackageReference Include="Dapr.AspNetCore" Version="1.10.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.3" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.3">
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.4" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.4">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
@@ -29,7 +29,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="7.0.3" />
+		<PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="7.0.4" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Application\Application.csproj" />
@@ -38,7 +38,6 @@
 	<Target Name="SwaggerPostBuildTarget" AfterTargets="Build" Condition="'$(Configuration)' == 'Debug'">
 		<Exec Command="dotnet tool restore" UseUtf8Encoding="Always" />
 	</Target>
-
 
 	<!-- 前端集成 begin,若不集成前端，请删除以下内容 -->
 	<ItemGroup>
