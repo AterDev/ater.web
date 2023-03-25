@@ -17,6 +17,5 @@
 	<ItemGroup>
 		<PackageReference Include="Mapster" Version="7.3.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="7.0.4" />
-		<PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="7.0.4" />
 	</ItemGroup>
 </Project>
