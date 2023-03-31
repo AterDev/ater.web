@@ -4,13 +4,12 @@ namespace Application.Services;
 /// <summary>
 /// 简单封装对象的存储和获取
 /// </summary>
-public class RedisService
+public class CacheService
 {
-    public IDistributedCache Cache { get; }
-
-    public RedisService(IDistributedCache cache)
+    private readonly IDistributedCache _cache;
+    public CacheService(IDistributedCache cache)
     {
-        Cache = cache;
+        _cache = cache;
     }
 
     /// <summary>
@@ -18,14 +17,16 @@ public class RedisService
     /// </summary>
     /// <param name="data">值</param>
     /// <param name="key">键</param>
-    /// <param name="minutes">过期时间</param>
+    /// <param name="sliding">相对过期时间</param>
+    /// <param name="expiration">绝对过期时间</param>
     /// <returns></returns>
-    public async Task SetValueAsync(string key, object data, int minutes)
+    public async Task SetValueAsync(string key, object data, int sliding, int expiration)
     {
-        byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(data);
-        await Cache.SetAsync(key, bytes, new DistributedCacheEntryOptions
+        var bytes = JsonSerializer.SerializeToUtf8Bytes(data);
+        await _cache.SetAsync(key, bytes, new DistributedCacheEntryOptions()
         {
-            SlidingExpiration = TimeSpan.FromMinutes(minutes)
+            SlidingExpiration = TimeSpan.FromSeconds(sliding),
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(expiration)
         });
     }
     /// <summary>
@@ -36,12 +37,12 @@ public class RedisService
     /// <returns></returns>
     public T? GetValue<T>(string key)
     {
-        byte[]? bytes = Cache.Get(key);
+        var bytes = _cache.Get(key);
         if (bytes == null || bytes.Length < 1)
         {
             return default;
         }
-        ReadOnlySpan<byte> readOnlySpan = new(bytes);
+        var readOnlySpan = new ReadOnlySpan<byte>(bytes);
         return JsonSerializer.Deserialize<T>(readOnlySpan);
     }
 }
