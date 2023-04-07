@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
-namespace Core.Entities.System;
+namespace Core.Entities.SystemEntities;
 /// <summary>
 /// 系统用户
 /// </summary>
@@ -54,6 +54,7 @@ public class SystemUser : EntityBase
     public string? Avatar { get; set; }
     public ICollection<SystemRole>? SystemRoles { get; set; }
     public List<SystemLogs>? SystemLogs { get; set; }
+    public List<SystemOrganization>? SystemOrganizations { get; set; }
     /// <summary>
     /// 性别
     /// </summary>

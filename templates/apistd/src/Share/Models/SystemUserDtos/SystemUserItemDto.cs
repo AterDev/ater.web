@@ -1,4 +1,4 @@
-using Core.Entities.System;
+using Core.Entities.SystemEntities;
 
 namespace Share.Models.SystemUserDtos;
 /// <summary>

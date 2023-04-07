@@ -1,5 +1,5 @@
 using Core.Entities;
-using Core.Entities.System;
+using Core.Entities.SystemEntities;
 using Core.Models;
 
 namespace EntityFramework;
@@ -13,6 +13,7 @@ public class ContextBase : DbContext
     public DbSet<SystemPermission> SystemPermissions { get; set; }
     public DbSet<RolePermission> RolePermissions { get; set; }
     public DbSet<SystemLogs> SystemLogs { get; set; }
+    public DbSet<SystemOrganization> SystemOrganizations { get; set; }
 
     public DbSet<User> Users { get; set; }
 

@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using Core.Const;
-using Core.Entities.System;
+using Core.Entities.SystemEntities;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace Http.API.Infrastructure;

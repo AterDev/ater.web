@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace Core.Entities.Content;
+namespace Core.Entities.ContentEntities;
 /// <summary>
 /// 目录
 /// </summary>

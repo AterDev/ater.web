@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Core.Entities.Content;
+using Microsoft.EntityFrameworkCore;
 
 namespace Core.Entities;
 /// <summary>
@@ -53,6 +54,13 @@ public class User : EntityBase
     /// </summary>
     [MaxLength(200)]
     public string? Avatar { get; set; }
+
+
+    #region 用户关联内容
+    //public List<Blog>? Blogs { get; set; }
+    //public List<Catalog>? Catalogs { get; set; }
+    //public List<Tags>? Tags { get; set; }
+    #endregion
 }
 public enum UserType
 {

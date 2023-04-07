@@ -1,4 +1,4 @@
-﻿namespace Core.Entities.System;
+﻿namespace Core.Entities.SystemEntities;
 /// <summary>
 /// 系统日志
 /// </summary>

@@ -4,7 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Entities.Content;
+namespace Core.Entities.ContentEntities;
+/// <summary>
+/// 内容管理基类
+/// </summary>
 public class TextBase : EntityBase
 {
     /// <summary>

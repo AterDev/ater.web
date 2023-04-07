@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Core.Entities.Content;
+namespace Core.Entities.ContentEntities;
 /// <summary>
 /// 标签
 /// </summary>

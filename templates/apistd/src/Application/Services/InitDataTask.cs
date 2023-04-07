@@ -1,5 +1,5 @@
 ﻿using Core.Const;
-using Core.Entities.System;
+using Core.Entities.SystemEntities;
 using Microsoft.Extensions.Configuration;
 
 namespace Application.Services;

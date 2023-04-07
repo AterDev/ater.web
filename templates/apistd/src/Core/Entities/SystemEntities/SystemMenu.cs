@@ -1,4 +1,6 @@
-﻿namespace Core.Entities.System;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Core.Entities.SystemEntities;
 /// <summary>
 /// 系统菜单
 /// </summary>
@@ -22,6 +24,7 @@ public class SystemMenu : EntityBase, ITreeNode<SystemMenu>
     /// <summary>
     /// 父菜单
     /// </summary>
+    [ForeignKey(nameof(ParentId))]
     public SystemMenu? Parent { get; set; }
     public Guid? ParentId { get; set; }
     /// <summary>

@@ -1,4 +1,4 @@
-﻿namespace Core.Entities.Content;
+﻿namespace Core.Entities.ContentEntities;
 /// <summary>
 /// 博客
 /// </summary>
