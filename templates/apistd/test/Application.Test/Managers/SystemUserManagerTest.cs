@@ -1,5 +1,6 @@
 ﻿using Application.IManager;
 using Core.Entities.SystemEntities;
+using Core.Utils;
 using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace Application.Test.Managers;
@@ -17,8 +18,13 @@ public class SystemUserManagerTest : BaseTest
     [Fact]
     public async Task Shoud_AddAsync()
     {
-        var entity = new SystemUser() { UserName = "Test" };
+        var entity = new SystemUser
+        {
+            UserName = "Test",
+            PasswordSalt = HashCrypto.BuildSalt()
+        };
+        entity.PasswordHash = HashCrypto.GeneratePwd("123456", entity.PasswordSalt);
         var res = await manager.AddAsync(entity);
-        Assert.NotNull(res);
+        Assert.Equal(entity.UserName, res.UserName);
     }
 }

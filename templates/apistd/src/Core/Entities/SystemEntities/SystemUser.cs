@@ -6,9 +6,9 @@ namespace Core.Entities.SystemEntities;
 /// 系统用户
 /// </summary>
 //[NgPage("system", "sysuser")]
-[Index(nameof(UserName))]
-[Index(nameof(Email))]
-[Index(nameof(PhoneNumber))]
+[Index(nameof(UserName), IsUnique = true)]
+[Index(nameof(Email), IsUnique = true)]
+[Index(nameof(PhoneNumber), IsUnique = true)]
 [Index(nameof(CreatedTime))]
 [Index(nameof(IsDeleted))]
 public class SystemUser : EntityBase
@@ -24,7 +24,7 @@ public class SystemUser : EntityBase
     [MaxLength(30)]
     public string? RealName { get; set; }
     [MaxLength(100)]
-    public string? Email { get; set; } = null!;
+    public string? Email { get; set; }
     public bool EmailConfirmed { get; set; } = false;
     [JsonIgnore]
     [MaxLength(100)]

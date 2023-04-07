@@ -388,7 +388,8 @@ namespace Http.API.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_SystemRoles_NameValue",
                 table: "SystemRoles",
-                column: "NameValue");
+                column: "NameValue",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_SystemRoleSystemUser_UsersId",
@@ -403,7 +404,8 @@ namespace Http.API.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_SystemUsers_Email",
                 table: "SystemUsers",
-                column: "Email");
+                column: "Email",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_SystemUsers_IsDeleted",
@@ -413,12 +415,14 @@ namespace Http.API.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_SystemUsers_PhoneNumber",
                 table: "SystemUsers",
-                column: "PhoneNumber");
+                column: "PhoneNumber",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_SystemUsers_UserName",
                 table: "SystemUsers",
-                column: "UserName");
+                column: "UserName",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_CreatedTime",
@@ -428,7 +432,8 @@ namespace Http.API.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Email",
                 table: "Users",
-                column: "Email");
+                column: "Email",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_IsDeleted",
@@ -438,12 +443,14 @@ namespace Http.API.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Users_PhoneNumber",
                 table: "Users",
-                column: "PhoneNumber");
+                column: "PhoneNumber",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_UserName",
                 table: "Users",
-                column: "UserName");
+                column: "UserName",
+                unique: true);
         }
 
         /// <inheritdoc />

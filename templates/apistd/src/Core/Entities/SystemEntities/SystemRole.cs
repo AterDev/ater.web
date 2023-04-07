@@ -6,7 +6,7 @@ namespace Core.Entities.SystemEntities;
 /// </summary>
 //[NgPage("system", "sysrole")]
 [Index(nameof(Name))]
-[Index(nameof(NameValue))]
+[Index(nameof(NameValue), IsUnique = true)]
 public class SystemRole : EntityBase
 {
     /// <summary>

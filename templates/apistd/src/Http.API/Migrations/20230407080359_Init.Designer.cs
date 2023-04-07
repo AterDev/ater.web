@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Http.API.Migrations
 {
     [DbContext(typeof(CommandDbContext))]
-    [Migration("20230407074058_Init")]
+    [Migration("20230407080359_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -295,7 +295,8 @@ namespace Http.API.Migrations
 
                     b.HasIndex("Name");
 
-                    b.HasIndex("NameValue");
+                    b.HasIndex("NameValue")
+                        .IsUnique();
 
                     b.ToTable("SystemRoles");
                 });
@@ -364,13 +365,16 @@ namespace Http.API.Migrations
 
                     b.HasIndex("CreatedTime");
 
-                    b.HasIndex("Email");
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.HasIndex("IsDeleted");
 
-                    b.HasIndex("PhoneNumber");
+                    b.HasIndex("PhoneNumber")
+                        .IsUnique();
 
-                    b.HasIndex("UserName");
+                    b.HasIndex("UserName")
+                        .IsUnique();
 
                     b.ToTable("SystemUsers");
                 });
@@ -434,13 +438,16 @@ namespace Http.API.Migrations
 
                     b.HasIndex("CreatedTime");
 
-                    b.HasIndex("Email");
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.HasIndex("IsDeleted");
 
-                    b.HasIndex("PhoneNumber");
+                    b.HasIndex("PhoneNumber")
+                        .IsUnique();
 
-                    b.HasIndex("UserName");
+                    b.HasIndex("UserName")
+                        .IsUnique();
 
                     b.ToTable("Users");
                 });
