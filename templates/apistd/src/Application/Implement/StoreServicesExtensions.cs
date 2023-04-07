@@ -4,11 +4,13 @@ public static class StoreServicesExtensions
 {
     public static void AddDataStore(this IServiceCollection services)
     {
-        _ = services.AddScoped(typeof(DataStoreContext));
-        _ = services.AddScoped(typeof(SystemRoleQueryStore));
-        _ = services.AddScoped(typeof(SystemUserQueryStore));
-        _ = services.AddScoped(typeof(SystemRoleCommandStore));
-        _ = services.AddScoped(typeof(SystemUserCommandStore));
+        services.AddScoped(typeof(DataStoreContext));
+        services.AddScoped(typeof(SystemRoleQueryStore));
+        services.AddScoped(typeof(SystemUserQueryStore));
+        services.AddScoped(typeof(UserQueryStore));
+        services.AddScoped(typeof(SystemRoleCommandStore));
+        services.AddScoped(typeof(SystemUserCommandStore));
+        services.AddScoped(typeof(UserCommandStore));
 
     }
 
@@ -16,8 +18,9 @@ public static class StoreServicesExtensions
     {
         services.AddHttpContextAccessor();
         services.AddTransient<IUserContext, UserContext>();
-        _ = services.AddScoped<ISystemRoleManager, SystemRoleManager>();
-        _ = services.AddScoped<ISystemUserManager, SystemUserManager>();
+        services.AddScoped<ISystemRoleManager, SystemRoleManager>();
+        services.AddScoped<ISystemUserManager, SystemUserManager>();
+        services.AddScoped<IUserManager, UserManager>();
 
     }
 }

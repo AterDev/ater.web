@@ -1,28 +1,31 @@
-﻿using Application.IManager;
-using Core.Entities.SystemEntities;
+using Application.IManager;
+using Core.Entities;
 using Core.Utils;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Share.Models.SystemUserDtos;
+using Share.Models.UserDtos;
 
 namespace Application.Test.Managers;
 
-public class SystemUserManagerTest : BaseTest
+public class UserManagerTest : BaseTest
 {
-    private readonly ISystemUserManager manager;
+    private readonly IUserManager manager;
 
-    public SystemUserManagerTest(WebApplicationFactory<Program> factory) : base(factory)
+    public string RandomString { get; set; }
+
+    public UserManagerTest(WebApplicationFactory<Program> factory) : base(factory)
     {
-        manager = Services.GetRequiredService<ISystemUserManager>();
+        manager = Services.GetRequiredService<IUserManager>();
+        RandomString = DateTime.Now.ToString("MMddmmss");
     }
 
 
     [Fact]
     public async Task Shoud_AddAsync()
     {
-        var entity = new SystemUser
+        var entity = new User
         {
-            UserName = "Test",
-            PasswordSalt = HashCrypto.BuildSalt()
+            UserName = "name" + RandomString,
+            PasswordSalt = HashCrypto.BuildSalt(),
         };
         entity.PasswordHash = HashCrypto.GeneratePwd("123456", entity.PasswordSalt);
         var res = await manager.AddAsync(entity);
@@ -33,12 +36,12 @@ public class SystemUserManagerTest : BaseTest
     [Fact]
     public async Task Should_UpdateAsync()
     {
-        var dto = new SystemUserUpdateDto();
+        var dto = new UserUpdateDto();
         var entity = manager.Command.Db.FirstOrDefault();
 
         if (entity != null)
         {
-            dto.UserName = "updateUser";
+            dto.UserName = "updateUser" + RandomString;
             var res = await manager.UpdateAsync(entity, dto);
             Assert.Equal(dto.UserName, res.UserName);
         }
@@ -47,7 +50,7 @@ public class SystemUserManagerTest : BaseTest
     [Fact]
     public async Task Should_QueryAsync()
     {
-        var filter = new SystemUserFilterDto()
+        var filter = new UserFilterDto()
         {
             PageIndex = 1,
             PageSize = 2
