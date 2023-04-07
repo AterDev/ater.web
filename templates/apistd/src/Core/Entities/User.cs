@@ -1,5 +1,4 @@
-﻿using Core.Entities.Content;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Core.Entities;
 /// <summary>

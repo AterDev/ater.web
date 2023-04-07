@@ -1,5 +1,5 @@
 ﻿using Http.API.Infrastructure;
-namespace Http.API.Controllers.AdminControllers;
+namespace Http.API.Controllers;
 
 
 /// <summary>

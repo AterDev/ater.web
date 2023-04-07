@@ -1,5 +1,5 @@
 ﻿using Application.IManager;
-using Core.Entities.System;
+using Core.Entities.SystemEntities;
 using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace Application.Test.Managers;

@@ -33,13 +33,6 @@ public class RestControllerBase<TManager> : RestControllerBase
     {
         return await _user.GetSystemUserAsync();
     }
-
-    // TODO:角色权限
-    public virtual bool HasPermission()
-    {
-        return true;
-    }
-
 }
 
 /// <summary>
