@@ -1,6 +1,4 @@
-﻿using Core.Models;
-
-namespace Core.Entities;
+﻿namespace Core.Entities.System;
 /// <summary>
 /// 角色权限中间表
 /// </summary>
@@ -14,8 +12,7 @@ public class RolePermission : EntityBase
     public PermissionType PermissionTypeMyProperty { get; set; } = PermissionType.Write;
 
     public SystemRole Role { get; set; } = null!;
-    public Permission Permission { get; set; } = null!;
-
+    public SystemPermission Permission { get; set; } = null!;
 
 }
 /// <summary>

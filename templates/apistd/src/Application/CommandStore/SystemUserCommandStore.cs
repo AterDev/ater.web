@@ -1,3 +1,5 @@
+using Core.Entities.System;
+
 namespace Application.CommandStore;
 public class SystemUserCommandStore : CommandSet<SystemUser>
 {

@@ -1,6 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace Core.Utils;
 /// <summary>
@@ -14,15 +12,15 @@ public static class EnumHelper
     /// <returns></returns>
     public static List<EnumDictionary> ToList(Type type)
     {
-        var result = new List<EnumDictionary>();
-        var enumNames = Enum.GetNames(type);
-        var values = Enum.GetValues(type);
+        List<EnumDictionary> result = new();
+        string[] enumNames = Enum.GetNames(type);
+        Array values = Enum.GetValues(type);
 
         if (enumNames != null)
         {
             for (int i = 0; i < enumNames.Length; i++)
             {
-                var fi = type.GetField(enumNames[i]);
+                FieldInfo? fi = type.GetField(enumNames[i]);
                 if (fi != null)
                 {
                     if (fi.GetCustomAttribute(typeof(DescriptionAttribute), true) is DescriptionAttribute attribute)
@@ -57,11 +55,11 @@ public static class EnumHelper
     /// <returns></returns>
     public static Dictionary<string, List<EnumDictionary>> GetAllEnumInfo()
     {
-        var res = new Dictionary<string, List<EnumDictionary>>();
-        var tyeps = GetEnumTypes(Assembly.GetExecutingAssembly());
-        foreach (var type in tyeps)
+        Dictionary<string, List<EnumDictionary>> res = new();
+        Type[] tyeps = GetEnumTypes(Assembly.GetExecutingAssembly());
+        foreach (Type type in tyeps)
         {
-            var infos = ToList(type);
+            List<EnumDictionary> infos = ToList(type);
             res.Add(type.Name, infos);
         }
         return res;

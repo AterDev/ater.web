@@ -1,7 +1,6 @@
-﻿using Core.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
-namespace Core.Entities;
+namespace Core.Entities.System;
 /// <summary>
 /// 角色表
 /// </summary>
@@ -28,6 +27,19 @@ public class SystemRole : EntityBase
     /// </summary>
     [MaxLength(30)]
     public string? Icon { get; set; }
-
     public ICollection<SystemUser>? Users { get; set; }
+    /// <summary>
+    /// 中间表
+    /// </summary>
+    public List<RolePermission>? RolePermissions { get; set; }
+    /// <summary>
+    /// 权限
+    /// </summary>
+    public List<SystemPermission>? Permissions { get; set; }
+    /// <summary>
+    /// 菜单权限
+    /// </summary>
+    public List<SystemMenu>? Menus { get; set; }
+
+
 }

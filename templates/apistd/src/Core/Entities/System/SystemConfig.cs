@@ -1,19 +1,18 @@
-﻿using Core.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
-namespace Core.Entities;
+namespace Core.Entities.System;
 /// <summary>
-/// 网站配置
+/// 系统配置
 /// </summary>
 [Index(nameof(Key))]
-public class WebConfig : EntityBase
+public class SystemConfig : EntityBase
 {
-    public WebConfig(string key, string value = "")
+    public SystemConfig(string key, string value = "")
     {
         Key = key;
         Value = value;
     }
-    public WebConfig()
+    public SystemConfig()
     {
     }
 

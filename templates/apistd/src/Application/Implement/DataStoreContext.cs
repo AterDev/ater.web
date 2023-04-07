@@ -1,3 +1,5 @@
+using Core.Entities.System;
+
 namespace Application.Implement;
 public class DataStoreContext
 {

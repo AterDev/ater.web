@@ -1,4 +1,3 @@
-using Core.Models;
 using Mapster;
 
 namespace Core.Utils;
@@ -100,54 +99,36 @@ public static partial class Extensions
     public static IOrderedQueryable<T> OrderBy<T>(this IQueryable<T> query, Dictionary<string, bool> dic)
     {
         IOrderedQueryable<T> orderQuery = default!;
-        var parameter = Expression.Parameter(typeof(T), "e");
+        ParameterExpression parameter = Expression.Parameter(typeof(T), "e");
         int count = 0;
-        foreach (var item in dic)
+        foreach (KeyValuePair<string, bool> item in dic)
         {
-            var prop = Expression.PropertyOrField(parameter, item.Key);
-            var body = Expression.MakeMemberAccess(parameter, prop.Member);
-            var selector = Expression.Lambda(body, parameter);
-            MethodCallExpression expression;
-
-            if (count > 0)
-            {
-                if (item.Value)
-                {
-                    expression = Expression.Call(typeof(Queryable),
+            MemberExpression prop = Expression.PropertyOrField(parameter, item.Key);
+            MemberExpression body = Expression.MakeMemberAccess(parameter, prop.Member);
+            LambdaExpression selector = Expression.Lambda(body, parameter);
+            MethodCallExpression expression = count > 0
+                ? item.Value
+                    ? Expression.Call(typeof(Queryable),
                                               "ThenBy",
                                               new Type[] { typeof(T), body.Type },
                                               query.Expression,
-                                              Expression.Quote(selector));
-                }
-                else
-                {
-                    expression = Expression.Call(typeof(Queryable),
+                                              Expression.Quote(selector))
+                    : Expression.Call(typeof(Queryable),
                                               "ThenByDescending",
                                               new Type[] { typeof(T), body.Type },
                                               query.Expression,
-                                              Expression.Quote(selector));
-                }
-            }
-            else
-            {
-                if (item.Value)
-                {
-                    expression = Expression.Call(typeof(Queryable),
+                                              Expression.Quote(selector))
+                : item.Value
+                    ? Expression.Call(typeof(Queryable),
                                               "OrderBy",
                                               new Type[] { typeof(T), body.Type },
                                               query.Expression,
-                                              Expression.Quote(selector));
-                }
-                else
-                {
-                    expression = Expression.Call(typeof(Queryable),
+                                              Expression.Quote(selector))
+                    : Expression.Call(typeof(Queryable),
                                               "OrderByDescending",
                                               new Type[] { typeof(T), body.Type },
                                               query.Expression,
                                               Expression.Quote(selector));
-                }
-            }
-
             orderQuery = (IOrderedQueryable<T>)query.Provider.CreateQuery<T>(expression);
             query = orderQuery;
             count++;
@@ -165,10 +146,10 @@ public static partial class Extensions
     public static List<T> BuildTree<T>(this List<T> nodes) where T : ITreeNode<T>
     {
         nodes.ForEach(n => { n.Children = null; });
-        var nodeDict = nodes.ToDictionary(n => n.Id);
-        var res = new List<T>();
+        Dictionary<Guid, T> nodeDict = nodes.ToDictionary(n => n.Id);
+        List<T> res = new();
 
-        foreach (var node in nodes)
+        foreach (T node in nodes)
         {
             if (node.ParentId == null)
             {

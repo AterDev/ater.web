@@ -1,3 +1,4 @@
+using Core.Entities.System;
 using Share.Models.SystemRoleDtos;
 
 namespace Application.Manager;

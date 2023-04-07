@@ -1,3 +1,5 @@
+using Core.Entities.System;
+
 namespace Share.Models.SystemUserDtos;
 /// <summary>
 /// 系统用户查询筛选
