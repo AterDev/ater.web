@@ -20,6 +20,10 @@ public class DomainManagerBase<TEntity, TUpdate, TFilter, TItem> : IDomainManage
     public CommandSet<TEntity> Command { get; init; }
     public IQueryable<TEntity> Queryable { get; set; }
     /// <summary>
+    /// 错误信息
+    /// </summary>
+    public string ErrorMessage { get; set; } = string.Empty;
+    /// <summary>
     /// 是否自动保存(调用SaveChanges)
     /// </summary>
     public bool AutoSave { get; set; } = true;
