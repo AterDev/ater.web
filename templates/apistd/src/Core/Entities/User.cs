@@ -1,13 +1,12 @@
-﻿using Core.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Core.Entities;
 /// <summary>
 /// 用户账户
 /// </summary>
-[Index(nameof(UserName))]
-[Index(nameof(Email))]
-[Index(nameof(PhoneNumber))]
+[Index(nameof(UserName), IsUnique = true)]
+[Index(nameof(Email), IsUnique = true)]
+[Index(nameof(PhoneNumber), IsUnique = true)]
 [Index(nameof(CreatedTime))]
 [Index(nameof(IsDeleted))]
 public class User : EntityBase
@@ -54,6 +53,13 @@ public class User : EntityBase
     /// </summary>
     [MaxLength(200)]
     public string? Avatar { get; set; }
+
+
+    #region 用户关联内容
+    //public List<Blog>? Blogs { get; set; }
+    //public List<Catalog>? Catalogs { get; set; }
+    //public List<Tags>? Tags { get; set; }
+    #endregion
 }
 public enum UserType
 {

@@ -234,14 +234,14 @@ app.MapFallbackToFile("index.html");
 
 using (app)
 {
-    app.Start();
+    //app.Start();
     // 初始化工作
     await using (AsyncServiceScope scope = app.Services.CreateAsyncScope())
     {
         IServiceProvider provider = scope.ServiceProvider;
         await InitDataTask.InitDataAsync(provider);
     }
-    app.WaitForShutdown();
+    app.Run();
 }
 
 public partial class Program { }

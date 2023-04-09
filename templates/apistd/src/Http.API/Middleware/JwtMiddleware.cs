@@ -6,8 +6,8 @@ namespace Http.API.Middleware;
 public class JwtMiddleware
 {
     private readonly RequestDelegate _next;
-    private readonly RedisService _redis;
-    public JwtMiddleware(RequestDelegate next, RedisService redis)
+    private readonly CacheService _redis;
+    public JwtMiddleware(RequestDelegate next, CacheService redis)
     {
         _next = next;
         _redis = redis;

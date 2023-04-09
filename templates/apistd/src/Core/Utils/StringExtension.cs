@@ -1,5 +1,3 @@
-using Microsoft.Win32.SafeHandles;
-
 namespace Core.Utils;
 
 public static class StringExtension

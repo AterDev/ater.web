@@ -1,3 +1,4 @@
+using Core.Entities.SystemEntities;
 using Share.Models.SystemUserDtos;
 
 namespace Application.IManager;

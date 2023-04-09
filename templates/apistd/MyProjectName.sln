@@ -46,6 +46,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Microservice", "Microservic
 		src\Microservice\README.md = src\Microservice\README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.Test", "test\Application.Test\Application.Test.csproj", "{811203A3-75FE-4AC8-AB45-6789357BE55D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -76,6 +78,10 @@ Global
 		{0F6B0255-A28B-4AF6-BD34-B35B14E90946}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F6B0255-A28B-4AF6-BD34-B35B14E90946}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F6B0255-A28B-4AF6-BD34-B35B14E90946}.Release|Any CPU.Build.0 = Release|Any CPU
+		{811203A3-75FE-4AC8-AB45-6789357BE55D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{811203A3-75FE-4AC8-AB45-6789357BE55D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{811203A3-75FE-4AC8-AB45-6789357BE55D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{811203A3-75FE-4AC8-AB45-6789357BE55D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -89,6 +95,7 @@ Global
 		{5D8DD758-141F-452D-A69C-B2652C1ABF91} = {FB9BEFB4-E921-476F-AC1B-B589C2CA2562}
 		{0F6B0255-A28B-4AF6-BD34-B35B14E90946} = {7FEE554D-ABB8-40A3-8F56-DB0F7D47CBFD}
 		{D484E244-0AF0-455A-9F2C-8A04CE46AA5A} = {FB9BEFB4-E921-476F-AC1B-B589C2CA2562}
+		{811203A3-75FE-4AC8-AB45-6789357BE55D} = {7FEE554D-ABB8-40A3-8F56-DB0F7D47CBFD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E9C122E1-F965-4DE0-BA4B-CFC5D269C768}

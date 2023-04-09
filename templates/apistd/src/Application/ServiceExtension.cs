@@ -77,12 +77,16 @@ public static class ServiceExtension
 
                     options.EnrichWithHttpResponseMessage = (activity, httpResponseMessage) =>
                     {
+                        // TODO:添加自定义过滤
                         if (httpResponseMessage.Content != null)
                         {
-                            // 不要使用await:The stream was already consumed. It cannot be read again
-                            var body = httpResponseMessage.Content.ReadAsStringAsync().Result;
-                            body = body.Length > maxLength ? body[0..maxLength] : body;
-                            activity.SetTag("responseBody", body);
+                            if (httpResponseMessage.Content.Headers?.ContentLength < maxLength)
+                            {
+                                // 不要使用await:The stream was already consumed. It cannot be read again
+                                var body = httpResponseMessage.Content.ReadAsStringAsync().Result;
+                                body = body.Length > maxLength ? body[0..maxLength] : body;
+                                activity.SetTag("responseBody", body);
+                            }
                         }
                     };
                     options.EnrichWithException = (activity, exception) =>

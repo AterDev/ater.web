@@ -1,5 +1,6 @@
 ﻿using Application.QueryStore;
 using Core.Const;
+using Core.Entities.SystemEntities;
 using Http.API.Infrastructure;
 using Share.Models.AuthDtos;
 

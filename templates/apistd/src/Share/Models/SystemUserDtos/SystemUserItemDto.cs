@@ -1,3 +1,5 @@
+using Core.Entities.SystemEntities;
+
 namespace Share.Models.SystemUserDtos;
 /// <summary>
 /// 系统用户列表元素

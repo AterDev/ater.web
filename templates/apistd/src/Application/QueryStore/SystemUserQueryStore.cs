@@ -1,3 +1,5 @@
+using Core.Entities.SystemEntities;
+
 namespace Application.QueryStore;
 public class SystemUserQueryStore : QuerySet<SystemUser>
 {

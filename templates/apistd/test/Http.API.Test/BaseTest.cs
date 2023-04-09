@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Http.API.Test.DatastoreTests;
+namespace Http.API.Test;
 
 public class BaseTest : IClassFixture<WebApplicationFactory<Program>>
 {

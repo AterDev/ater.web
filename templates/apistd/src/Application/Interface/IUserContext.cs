@@ -1,3 +1,5 @@
+using Core.Entities.SystemEntities;
+
 namespace Application.Interface;
 
 /// <summary>

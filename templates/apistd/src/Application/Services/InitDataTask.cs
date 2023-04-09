@@ -1,4 +1,5 @@
 ﻿using Core.Const;
+using Core.Entities.SystemEntities;
 using Microsoft.Extensions.Configuration;
 
 namespace Application.Services;
@@ -25,7 +26,7 @@ public class InitDataTask
             else
             {
                 // 判断是否初始化
-                SystemRole? role = await context.SystemRoles.SingleOrDefaultAsync(r => r.Name.ToLower() == "admin");
+                SystemRole? role = await context.SystemRoles.SingleOrDefaultAsync(r => r.NameValue == Const.AdminUser);
                 if (role == null)
                 {
                     logger.LogInformation("初始化数据");
@@ -60,7 +61,7 @@ public class InitDataTask
         {
             UserName = "admin",
             PasswordSalt = salt,
-            PasswordHash = HashCrypto.GeneratePwd("123456", salt),
+            PasswordHash = HashCrypto.GeneratePwd("Hello.Net", salt),
             SystemRoles = new List<SystemRole>() { role },
         };
         _ = context.SystemRoles.Add(userRole);
@@ -78,10 +79,10 @@ public class InitDataTask
     public static async Task UpdateAsync(CommandDbContext context, IConfiguration configuration)
     {
         // 查询库中版本
-        var version = await context.WebConfigs.Where(c => c.Key == Const.Version).FirstOrDefaultAsync();
+        var version = await context.SystemConfigs.Where(c => c.Key == Const.Version).FirstOrDefaultAsync();
         if (version == null)
         {
-            var config = new WebConfig
+            var config = new SystemConfig
             {
                 IsSystem = true,
                 Valid = true,
