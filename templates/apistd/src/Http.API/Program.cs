@@ -43,7 +43,7 @@ services.AddManager();
 //    options.Configuration = builder.Configuration.GetConnectionString("Redis");
 //    options.InstanceName = builder.Configuration.GetConnectionString("RedisInstanceName");
 //});
-//services.AddSingleton(typeof(RedisService));
+//services.AddSingleton(typeof(CacheService));
 
 
 #region OpenTelemetry:log/trace/metric
@@ -215,7 +215,7 @@ app.UseExceptionHandler(handler =>
         var result = new {
             Title = "异常错误",
             Source = exception?.Source,
-            Detail = exception?.Message,
+            Detail = exception?.Message + exception?.InnerException?.Message,
             StackTrace = exception?.StackTrace,
             Status = 500,
             TraceId = context.TraceIdentifier

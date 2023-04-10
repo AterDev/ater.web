@@ -15,6 +15,8 @@ public interface IUserContext
     public string? CurrentRole { get; set; }
     public List<string>? Roles { get; set; }
     public Guid? GroupId { get; init; }
+
+    Task<bool> ExistAsync();
     Claim? FindClaim(string claimType);
     Task<SystemUser?> GetSystemUserAsync();
     Task<User?> GetUserAsync();

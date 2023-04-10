@@ -5,7 +5,6 @@ public class DataStoreContext
 {
     public QueryDbContext QueryContext { get; init; }
     public CommandDbContext CommandContext { get; init; }
-
     public QuerySet<SystemRole> SystemRoleQuery { get; init; }
     public QuerySet<SystemUser> SystemUserQuery { get; init; }
     public QuerySet<User> UserQuery { get; init; }

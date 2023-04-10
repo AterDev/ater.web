@@ -55,6 +55,17 @@ public class UserContext : IUserContext
         return Roles != null && Roles.Any(r => r.ToLower() == roleName);
     }
 
+    /// <summary>
+    /// ÊÇ·ñ´æÔÚ
+    /// </summary>
+    /// <returns></returns>
+    public async Task<bool> ExistAsync()
+    {
+        return IsAdmin ?
+            await _context.SystemUsers.AnyAsync(u => u.Id == UserId) :
+            await _context.Users.AnyAsync(u => u.Id == UserId);
+    }
+
     public async Task<User?> GetUserAsync()
     {
         return await _context.Users.FindAsync(UserId);

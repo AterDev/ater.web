@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Core.Const;
 using Http.API.Infrastructure;
 using Share.Models.AuthDtos;
@@ -53,6 +54,11 @@ public class UserController : ClientControllerBase<IUserManager>
                     TokenExpires = 60 * 24 * 7,
                 };
                 var roles = new string[] { Const.User, user.UserType.ToString() };
+                jwt.Claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.Email, user.Email??""),
+                };
                 var token = jwt.GetToken(user.Id.ToString(), roles);
 
                 return new AuthResult
