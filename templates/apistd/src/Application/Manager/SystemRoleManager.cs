@@ -1,13 +1,18 @@
-using Core.Entities.SystemEntities;
+using Application.IManager;
 using Share.Models.SystemRoleDtos;
-using Share.Models.SystemUserDtos;
 
 namespace Application.Manager;
 
 public class SystemRoleManager : DomainManagerBase<SystemRole, SystemRoleUpdateDto, SystemRoleFilterDto, SystemRoleItemDto>, ISystemRoleManager
 {
-    public SystemRoleManager(DataStoreContext storeContext) : base(storeContext)
+
+    private readonly IUserContext _userContext;
+    public SystemRoleManager(
+        DataStoreContext storeContext, 
+        IUserContext userContext) : base(storeContext)
     {
+
+        _userContext = userContext;
     }
 
     /// <summary>
@@ -21,17 +26,21 @@ public class SystemRoleManager : DomainManagerBase<SystemRole, SystemRoleUpdateD
         // other required props
         return Task.FromResult(entity);
     }
+
     public override async Task<SystemRole> UpdateAsync(SystemRole entity, SystemRoleUpdateDto dto)
     {
-        // TODO:根据实际业务更新
-        return await base.UpdateAsync(entity, dto);
+      return await base.UpdateAsync(entity, dto);
     }
 
     public override async Task<PageList<SystemRoleItemDto>> FilterAsync(SystemRoleFilterDto filter)
     {
-        // TODO:根据实际业务构建筛选条件
-        // if ... Queryable = ...
-        return await Query.FilterAsync<SystemRoleItemDto>(Queryable, filter.PageIndex, filter.PageSize);
+        /*
+        Queryable = Queryable
+            .WhereNotNull(filter.Name, q => q.Name == filter.Name)
+            .WhereNotNull(filter.NameValue, q => q.NameValue == filter.NameValue)
+        */
+        // TODO: other filter conditions
+        return await Query.FilterAsync<SystemRoleItemDto>(Queryable, filter.PageIndex, filter.PageSize, filter.OrderBy);
     }
 
     /// <summary>

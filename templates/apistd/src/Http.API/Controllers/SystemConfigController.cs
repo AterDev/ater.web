@@ -49,7 +49,7 @@ public class SystemConfigController : ClientControllerBase<ISystemConfigManager>
     [HttpPut("{id}")]
     public async Task<ActionResult<SystemConfig?>> UpdateAsync([FromRoute] Guid id, SystemConfigUpdateDto dto)
     {
-        var current = await manager.GetCurrentAsync(id);
+        var current = await manager.GetOwnedAsync(id);
         if (current == null) return NotFound(ErrorMsg.NotFoundResource);
         return await manager.UpdateAsync(current, dto);
     }

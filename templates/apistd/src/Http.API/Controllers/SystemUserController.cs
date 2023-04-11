@@ -50,7 +50,7 @@ public class SystemUserController : ClientControllerBase<ISystemUserManager>
     [HttpPut("{id}")]
     public async Task<ActionResult<SystemUser?>> UpdateAsync([FromRoute] Guid id, SystemUserUpdateDto dto)
     {
-        var current = await manager.GetCurrentAsync(id);
+        var current = await manager.GetOwnedAsync(id);
         if (current == null) return NotFound(ErrorMsg.NotFoundResource);
         return await manager.UpdateAsync(current, dto);
     }

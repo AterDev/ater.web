@@ -54,7 +54,7 @@ public class SystemLogsController : ClientControllerBase<ISystemLogsManager>
     [HttpPut("{id}")]
     public async Task<ActionResult<SystemLogs?>> UpdateAsync([FromRoute] Guid id, SystemLogsUpdateDto dto)
     {
-        var current = await manager.GetCurrentAsync(id);
+        var current = await manager.GetOwnedAsync(id);
         if (current == null) return NotFound(ErrorMsg.NotFoundResource);
         if (current.SystemUser.Id != dto.SystemUserId)
         {

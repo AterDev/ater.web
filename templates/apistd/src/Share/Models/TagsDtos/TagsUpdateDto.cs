@@ -16,8 +16,6 @@ public class TagsUpdateDto
     /// </summary>
     [MaxLength(20)]
     public string? Color { get; set; }
-    public User User { get; set; } = default!;
-    public List<Blog>? Blogs { get; set; }
     public Guid UserId { get; set; } = default!;
     
 }

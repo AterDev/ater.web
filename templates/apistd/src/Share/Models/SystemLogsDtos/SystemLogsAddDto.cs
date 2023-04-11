@@ -30,7 +30,6 @@ public class SystemLogsAddDto
     /// </summary>
     [MaxLength(200)]
     public string? Description { get; set; }
-    public required SystemUser SystemUser { get; set; }
     public Guid SystemUserId { get; set; }
     
 }

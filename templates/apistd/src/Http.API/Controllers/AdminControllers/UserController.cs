@@ -49,7 +49,7 @@ public class UserController : RestControllerBase<IUserManager>
     [HttpPut("{id}")]
     public async Task<ActionResult<User?>> UpdateAsync([FromRoute] Guid id, UserUpdateDto dto)
     {
-        var current = await manager.GetCurrentAsync(id);
+        var current = await manager.GetOwnedAsync(id);
         if (current == null) return NotFound(ErrorMsg.NotFoundResource);
         return await manager.UpdateAsync(current, dto);
     }

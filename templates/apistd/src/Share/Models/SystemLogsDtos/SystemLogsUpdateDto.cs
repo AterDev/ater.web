@@ -30,7 +30,6 @@ public class SystemLogsUpdateDto
     /// </summary>
     [MaxLength(200)]
     public string? Description { get; set; }
-    public SystemUser SystemUser { get; set; } = default!;
     public Guid SystemUserId { get; set; } = default!;
     
 }

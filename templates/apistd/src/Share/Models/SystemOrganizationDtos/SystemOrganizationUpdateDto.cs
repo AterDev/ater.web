@@ -11,15 +11,6 @@ public class SystemOrganizationUpdateDto
     /// </summary>
     [MaxLength(100)]
     public string Name { get; set; } = default!;
-    /// <summary>
-    /// 子目录
-    /// </summary>
-    public List<SystemOrganization>? Children { get; set; }
-    /// <summary>
-    /// 父目录
-    /// </summary>
-    public SystemOrganization? Parent { get; set; }
     public Guid? ParentId { get; set; }
-    public List<SystemUser>? Users { get; set; }
     
 }

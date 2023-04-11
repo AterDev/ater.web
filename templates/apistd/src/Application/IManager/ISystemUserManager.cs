@@ -1,4 +1,3 @@
-using Core.Entities.SystemEntities;
 using Share.Models.SystemUserDtos;
 
 namespace Application.IManager;
@@ -7,8 +6,17 @@ namespace Application.IManager;
 /// </summary>
 public interface ISystemUserManager : IDomainManager<SystemUser, SystemUserUpdateDto, SystemUserFilterDto, SystemUserItemDto>
 {
-    Task<SystemUser> CreateNewEntityAsync(SystemUserAddDto dto);
-
-    // TODO: 定义业务方法
+	/// <summary>
+    /// 当前用户所拥有的对象
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     Task<SystemUser?> GetOwnedAsync(Guid id);
+
+    /// <summary>
+    /// 创建待添加实体
+    /// </summary>
+    /// <param name="dto"></param>
+    /// <returns></returns>
+    Task<SystemUser> CreateNewEntityAsync(SystemUserAddDto dto);
 }

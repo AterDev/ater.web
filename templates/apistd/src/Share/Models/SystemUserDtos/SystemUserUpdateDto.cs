@@ -1,16 +1,17 @@
 using Core.Entities.SystemEntities;
-
 namespace Share.Models.SystemUserDtos;
 /// <summary>
 /// 系统用户更新时请求结构
 /// </summary>
+//[NgPage("system", "sysuser")]
+/// <inheritdoc cref="Core.Entities.SystemEntities.SystemUser"/>
 public class SystemUserUpdateDto
 {
     /// <summary>
     /// 用户名
     /// </summary>
     [MaxLength(30)]
-    public string? UserName { get; set; }
+    public string UserName { get; set; } = default!;
     /// <summary>
     /// 真实姓名
     /// </summary>
@@ -43,11 +44,9 @@ public class SystemUserUpdateDto
     /// </summary>
     [MaxLength(200)]
     public string? Avatar { get; set; }
-
-
     /// <summary>
     /// 性别
     /// </summary>
     public Sex? Sex { get; set; }
-
+    
 }

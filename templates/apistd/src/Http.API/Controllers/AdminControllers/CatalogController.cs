@@ -54,7 +54,7 @@ public class CatalogController : RestControllerBase<ICatalogManager>
     [HttpPut("{id}")]
     public async Task<ActionResult<Catalog?>> UpdateAsync([FromRoute] Guid id, CatalogUpdateDto dto)
     {
-        var current = await manager.GetCurrentAsync(id);
+        var current = await manager.GetOwnedAsync(id);
         if (current == null) return NotFound(ErrorMsg.NotFoundResource);
         return await manager.UpdateAsync(current, dto);
     }

@@ -1,4 +1,5 @@
 ﻿using Core.Const;
+using Core.Entities;
 using Core.Entities.SystemEntities;
 using Microsoft.Extensions.Configuration;
 
@@ -57,16 +58,27 @@ public class InitDataTask
             NameValue = Const.User,
         };
         string salt = HashCrypto.BuildSalt();
-        SystemUser user = new()
+        SystemUser systemUser = new()
         {
             UserName = "admin",
             PasswordSalt = salt,
             PasswordHash = HashCrypto.GeneratePwd("Hello.Net", salt),
             SystemRoles = new List<SystemRole>() { role },
         };
+
+        var user = new User
+        {
+            Id = new Guid("6e2bb78f-fa51-480d-8200-83d488184621"),
+            UserName = "TestUser",
+            Email = "TestEmail@dusi.dev",
+            PasswordSalt = salt,
+            PasswordHash = HashCrypto.GeneratePwd("Hello.Net", salt),
+        };
+
         _ = context.SystemRoles.Add(userRole);
         _ = context.SystemRoles.Add(role);
-        _ = context.SystemUsers.Add(user);
+        _ = context.SystemUsers.Add(systemUser);
+        _ = context.Users.Add(user);
         _ = await context.SaveChangesAsync();
     }
 

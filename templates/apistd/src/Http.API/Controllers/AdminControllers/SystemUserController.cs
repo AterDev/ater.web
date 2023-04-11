@@ -1,22 +1,21 @@
-using Core.Entities.SystemEntities;
-using Http.API.Infrastructure;
+using Core.Const;
 using Share.Models.SystemUserDtos;
 namespace Http.API.Controllers.AdminControllers;
 
 /// <summary>
 /// 系统用户
 /// </summary>
+//[NgPage("system", "sysuser")]
 public class SystemUserController : RestControllerBase<ISystemUserManager>
 {
-    private readonly IWebHostEnvironment _environment;
+
     public SystemUserController(
         IUserContext user,
         ILogger<SystemUserController> logger,
         ISystemUserManager manager
-,
-        IWebHostEnvironment environment) : base(manager, user, logger)
+        ) : base(manager, user, logger)
     {
-        _environment = environment;
+
     }
 
     /// <summary>
@@ -33,12 +32,12 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
     /// <summary>
     /// 新增
     /// </summary>
-    /// <param name="form"></param>
+    /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<ActionResult<SystemUser>> AddAsync(SystemUserAddDto form)
+    public async Task<ActionResult<SystemUser>> AddAsync(SystemUserAddDto dto)
     {
-        SystemUser entity = form.MapTo<SystemUserAddDto, SystemUser>();
+        var entity = await manager.CreateNewEntityAsync(dto);
         return await manager.AddAsync(entity);
     }
 
@@ -46,13 +45,14 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
     /// 更新
     /// </summary>
     /// <param name="id"></param>
-    /// <param name="form"></param>
+    /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPut("{id}")]
-    public async Task<ActionResult<SystemUser?>> UpdateAsync([FromRoute] Guid id, SystemUserUpdateDto form)
+    public async Task<ActionResult<SystemUser?>> UpdateAsync([FromRoute] Guid id, SystemUserUpdateDto dto)
     {
-        SystemUser? current = await manager.GetCurrentAsync(id);
-        return current == null ? (ActionResult<SystemUser?>)NotFound() : (ActionResult<SystemUser?>)await manager.UpdateAsync(current, form);
+        var current = await manager.GetOwnedAsync(id);
+        if (current == null) return NotFound(ErrorMsg.NotFoundResource);
+        return await manager.UpdateAsync(current, dto);
     }
 
     /// <summary>
@@ -63,70 +63,8 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
     [HttpGet("{id}")]
     public async Task<ActionResult<SystemUser?>> GetDetailAsync([FromRoute] Guid id)
     {
-        SystemUser? res = await manager.FindAsync(id);
-        return res == null ? NotFound() : res;
-    }
-
-    /// <summary>
-    /// 上传图片
-    /// </summary>
-    /// <param name="file"></param>
-    /// <returns></returns>
-    [HttpPost("upload")]
-    public async Task<ActionResult<UploadResult>> UploadImgAsync(IFormFile file)
-    {
-        if (file == null)
-        {
-            return Problem("没有上传的文件", title: "业务错误");
-        }
-        //获取静态资源文件根目录
-        string webRootPath = _environment.WebRootPath;
-        string dir = Path.Combine(webRootPath, "Uploads", "images");
-        if (file.Length > 0)
-        {
-            if (!Directory.Exists(dir))
-            {
-                _ = Directory.CreateDirectory(dir);
-            }
-            string fileExt = Path.GetExtension(file.FileName).ToLowerInvariant();
-            long fileSize = file.Length; //获得文件大小，以字节为单位
-            //判断后缀是否是图片
-            string[] permittedExtensions = new string[] { ".jpeg", ".jpg", ".png" };
-
-            if (fileExt == null)
-            {
-                return Problem("上传的文件没有后缀");
-            }
-            if (!permittedExtensions.Contains(fileExt))
-            {
-                return Problem("请上传jpg、png格式的图片");
-            }
-            if (fileSize > 1024 * 1024 * 1) //M
-            {
-                //上传的文件不能大于1M
-                return Problem("上传的图片应小于1M");
-            }
-            using MemoryStream stream = new();
-            await file.CopyToAsync(stream);
-
-            string fileName = HashCrypto.Md5FileHash(stream);
-            string filePath = Path.Combine(dir, fileName);
-            if (!System.IO.File.Exists(filePath))
-            {
-                // 写入文件
-                using FileStream fileStream = System.IO.File.Create(filePath);
-                file.CopyTo(fileStream);
-                fileStream.Close();
-            }
-            string host = Request.Scheme + "://" + Request.Host.Value;
-            string path = Path.Combine(host, "Uploads", "images", fileName + fileExt);
-            return new UploadResult()
-            {
-                FilePath = path,
-                Url = path,
-            };
-        }
-        return Problem("文件不正确", title: "业务错误");
+        var res = await manager.FindAsync(id);
+        return (res == null) ? NotFound() : res;
     }
 
     /// <summary>
@@ -138,7 +76,10 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
     [HttpDelete("{id}")]
     public async Task<ActionResult<SystemUser?>> DeleteAsync([FromRoute] Guid id)
     {
-        SystemUser? entity = await manager.GetCurrentAsync(id);
-        return entity == null ? (ActionResult<SystemUser?>)NotFound() : (ActionResult<SystemUser?>)await manager.DeleteAsync(entity);
+        // TODO:实现删除逻辑,注意删除权限
+        var entity = await manager.GetOwnedAsync(id);
+        if (entity == null) return NotFound();
+        return Forbid();
+        // return await manager.DeleteAsync(entity);
     }
 }

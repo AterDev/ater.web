@@ -26,4 +26,8 @@
 		<ProjectReference Include="..\..\src\Http.API\Http.API.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Managers\" />
+	</ItemGroup>
+
 </Project>

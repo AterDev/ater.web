@@ -36,12 +36,6 @@ public class BlogUpdateDto
     /// 是否原创
     /// </summary>
     public bool? IsOriginal { get; set; }
-    public User User { get; set; } = default!;
-    /// <summary>
-    /// 所属目录
-    /// </summary>
-    public Catalog Catalog { get; set; } = default!;
-    public List<Tags>? Tags { get; set; }
     /// <summary>
     /// 浏览量
     /// </summary>

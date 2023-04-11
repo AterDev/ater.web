@@ -15,17 +15,7 @@ public class CatalogAddDto
     /// 层级
     /// </summary>
     public short Level { get; set; } = 0;
-    /// <summary>
-    /// 子目录
-    /// </summary>
-    public List<Catalog>? Children { get; set; }
-    /// <summary>
-    /// 父目录
-    /// </summary>
-    public Catalog? Parent { get; set; }
     public Guid? ParentId { get; set; }
-    public List<Blog>? Blogs { get; set; }
-    public required User User { get; set; }
     public Guid UserId { get; set; }
     
 }

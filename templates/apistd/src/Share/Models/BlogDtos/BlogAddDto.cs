@@ -36,12 +36,6 @@ public class BlogAddDto
     /// 是否原创
     /// </summary>
     public bool IsOriginal { get; set; }
-    public required User User { get; set; }
-    /// <summary>
-    /// 所属目录
-    /// </summary>
-    public required Catalog Catalog { get; set; }
-    public List<Tags>? Tags { get; set; }
     /// <summary>
     /// 浏览量
     /// </summary>

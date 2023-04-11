@@ -18,7 +18,6 @@ public class DataStoreContext
     public QuerySet<SystemRole> SystemRoleQuery { get; init; }
     public QuerySet<SystemUser> SystemUserQuery { get; init; }
     public QuerySet<Tags> TagsQuery { get; init; }
-    public QuerySet<TextBase> TextBaseQuery { get; init; }
     public QuerySet<User> UserQuery { get; init; }
     public CommandSet<Blog> BlogCommand { get; init; }
     public CommandSet<Catalog> CatalogCommand { get; init; }
@@ -31,7 +30,6 @@ public class DataStoreContext
     public CommandSet<SystemRole> SystemRoleCommand { get; init; }
     public CommandSet<SystemUser> SystemUserCommand { get; init; }
     public CommandSet<Tags> TagsCommand { get; init; }
-    public CommandSet<TextBase> TextBaseCommand { get; init; }
     public CommandSet<User> UserCommand { get; init; }
 
 
@@ -94,7 +92,6 @@ public class DataStoreContext
         AddCache(SystemUserQuery);
         TagsQuery = tagsQuery;
         AddCache(TagsQuery);
-        AddCache(TextBaseQuery);
         UserQuery = userQuery;
         AddCache(UserQuery);
         BlogCommand = blogCommand;
@@ -119,7 +116,6 @@ public class DataStoreContext
         AddCache(SystemUserCommand);
         TagsCommand = tagsCommand;
         AddCache(TagsCommand);
-        AddCache(TextBaseCommand);
         UserCommand = userCommand;
         AddCache(UserCommand);
 

@@ -1,19 +1,21 @@
-using Core.Entities.SystemEntities;
-using Http.API.Infrastructure;
+using Core.Const;
 using Share.Models.SystemRoleDtos;
 namespace Http.API.Controllers.AdminControllers;
 
 /// <summary>
 /// 角色表
 /// </summary>
+//[NgPage("system", "sysrole")]
 public class SystemRoleController : RestControllerBase<ISystemRoleManager>
 {
+
     public SystemRoleController(
         IUserContext user,
         ILogger<SystemRoleController> logger,
         ISystemRoleManager manager
         ) : base(manager, user, logger)
     {
+
     }
 
     /// <summary>
@@ -30,12 +32,12 @@ public class SystemRoleController : RestControllerBase<ISystemRoleManager>
     /// <summary>
     /// 新增
     /// </summary>
-    /// <param name="form"></param>
+    /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<ActionResult<SystemRole>> AddAsync(SystemRoleAddDto form)
+    public async Task<ActionResult<SystemRole>> AddAsync(SystemRoleAddDto dto)
     {
-        SystemRole entity = form.MapTo<SystemRoleAddDto, SystemRole>();
+        var entity = await manager.CreateNewEntityAsync(dto);
         return await manager.AddAsync(entity);
     }
 
@@ -43,13 +45,14 @@ public class SystemRoleController : RestControllerBase<ISystemRoleManager>
     /// 更新
     /// </summary>
     /// <param name="id"></param>
-    /// <param name="form"></param>
+    /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPut("{id}")]
-    public async Task<ActionResult<SystemRole?>> UpdateAsync([FromRoute] Guid id, SystemRoleUpdateDto form)
+    public async Task<ActionResult<SystemRole?>> UpdateAsync([FromRoute] Guid id, SystemRoleUpdateDto dto)
     {
-        SystemRole? current = await manager.GetCurrentAsync(id);
-        return current == null ? (ActionResult<SystemRole?>)NotFound() : (ActionResult<SystemRole?>)await manager.UpdateAsync(current, form);
+        var current = await manager.GetOwnedAsync(id);
+        if (current == null) return NotFound(ErrorMsg.NotFoundResource);
+        return await manager.UpdateAsync(current, dto);
     }
 
     /// <summary>
@@ -60,8 +63,8 @@ public class SystemRoleController : RestControllerBase<ISystemRoleManager>
     [HttpGet("{id}")]
     public async Task<ActionResult<SystemRole?>> GetDetailAsync([FromRoute] Guid id)
     {
-        SystemRole? res = await manager.FindAsync(id);
-        return res == null ? NotFound() : res;
+        var res = await manager.FindAsync(id);
+        return (res == null) ? NotFound() : res;
     }
 
     /// <summary>
@@ -73,7 +76,10 @@ public class SystemRoleController : RestControllerBase<ISystemRoleManager>
     [HttpDelete("{id}")]
     public async Task<ActionResult<SystemRole?>> DeleteAsync([FromRoute] Guid id)
     {
-        SystemRole? entity = await manager.GetCurrentAsync(id);
-        return entity == null ? (ActionResult<SystemRole?>)NotFound() : (ActionResult<SystemRole?>)await manager.DeleteAsync(entity);
+        // TODO:实现删除逻辑,注意删除权限
+        var entity = await manager.GetOwnedAsync(id);
+        if (entity == null) return NotFound();
+        return Forbid();
+        // return await manager.DeleteAsync(entity);
     }
 }

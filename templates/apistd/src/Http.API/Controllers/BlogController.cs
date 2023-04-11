@@ -59,7 +59,7 @@ public class BlogController : ClientControllerBase<IBlogManager>
     [HttpPut("{id}")]
     public async Task<ActionResult<Blog?>> UpdateAsync([FromRoute] Guid id, BlogUpdateDto dto)
     {
-        var current = await manager.GetCurrentAsync(id);
+        var current = await manager.GetOwnedAsync(id);
         if (current == null) return NotFound(ErrorMsg.NotFoundResource);
         if (current.Catalog.Id != dto.CatalogId)
         {

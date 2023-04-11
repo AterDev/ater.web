@@ -54,7 +54,7 @@ public class TagsController : RestControllerBase<ITagsManager>
     [HttpPut("{id}")]
     public async Task<ActionResult<Tags?>> UpdateAsync([FromRoute] Guid id, TagsUpdateDto dto)
     {
-        var current = await manager.GetCurrentAsync(id);
+        var current = await manager.GetOwnedAsync(id);
         if (current == null) return NotFound(ErrorMsg.NotFoundResource);
         return await manager.UpdateAsync(current, dto);
     }

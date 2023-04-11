@@ -1,13 +1,18 @@
-using Core.Entities.SystemEntities;
-using Share.Models.SystemMenuDtos;
+using Application.IManager;
 using Share.Models.SystemUserDtos;
 
 namespace Application.Manager;
 
 public class SystemUserManager : DomainManagerBase<SystemUser, SystemUserUpdateDto, SystemUserFilterDto, SystemUserItemDto>, ISystemUserManager
 {
-    public SystemUserManager(DataStoreContext storeContext) : base(storeContext)
+
+    private readonly IUserContext _userContext;
+    public SystemUserManager(
+        DataStoreContext storeContext, 
+        IUserContext userContext) : base(storeContext)
     {
+
+        _userContext = userContext;
     }
 
     /// <summary>
@@ -24,15 +29,17 @@ public class SystemUserManager : DomainManagerBase<SystemUser, SystemUserUpdateD
 
     public override async Task<SystemUser> UpdateAsync(SystemUser entity, SystemUserUpdateDto dto)
     {
-        // TODO:根据实际业务更新
-        return await base.UpdateAsync(entity, dto);
+      return await base.UpdateAsync(entity, dto);
     }
 
     public override async Task<PageList<SystemUserItemDto>> FilterAsync(SystemUserFilterDto filter)
     {
-        // TODO:根据实际业务构建筛选条件
-        // if ... Queryable = ...
-        return await Query.FilterAsync<SystemUserItemDto>(Queryable, filter.PageIndex, filter.PageSize);
+        /*
+        Queryable = Queryable
+            .WhereNotNull(filter.UserName, q => q.UserName == filter.UserName)
+        */
+        // TODO: other filter conditions
+        return await Query.FilterAsync<SystemUserItemDto>(Queryable, filter.PageIndex, filter.PageSize, filter.OrderBy);
     }
 
     /// <summary>
@@ -47,4 +54,5 @@ public class SystemUserManager : DomainManagerBase<SystemUser, SystemUserUpdateD
         // query = query.Where(q => q.User.Id == _userContext.UserId);
         return await query.FirstOrDefaultAsync();
     }
+
 }

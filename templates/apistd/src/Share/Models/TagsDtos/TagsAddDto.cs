@@ -16,8 +16,6 @@ public class TagsAddDto
     /// </summary>
     [MaxLength(20)]
     public string? Color { get; set; }
-    public required User User { get; set; }
-    public List<Blog>? Blogs { get; set; }
     public Guid UserId { get; set; }
     
 }

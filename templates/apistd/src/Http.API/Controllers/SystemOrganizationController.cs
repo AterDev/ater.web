@@ -49,7 +49,7 @@ public class SystemOrganizationController : ClientControllerBase<ISystemOrganiza
     [HttpPut("{id}")]
     public async Task<ActionResult<SystemOrganization?>> UpdateAsync([FromRoute] Guid id, SystemOrganizationUpdateDto dto)
     {
-        var current = await manager.GetCurrentAsync(id);
+        var current = await manager.GetOwnedAsync(id);
         if (current == null) return NotFound(ErrorMsg.NotFoundResource);
         return await manager.UpdateAsync(current, dto);
     }

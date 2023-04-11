@@ -38,7 +38,6 @@ public static class StoreServicesExtensions
         services.AddTransient<IUserContext, UserContext>();
         services.AddScoped<IBlogManager, BlogManager>();
         services.AddScoped<ICatalogManager, CatalogManager>();
-        services.AddScoped<IRolePermissionManager, RolePermissionManager>();
         services.AddScoped<ISystemConfigManager, SystemConfigManager>();
         services.AddScoped<ISystemLogsManager, SystemLogsManager>();
         services.AddScoped<ISystemMenuManager, SystemMenuManager>();
