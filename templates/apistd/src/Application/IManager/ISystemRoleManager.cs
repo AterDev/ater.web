@@ -7,5 +7,8 @@ namespace Application.IManager;
 /// </summary>
 public interface ISystemRoleManager : IDomainManager<SystemRole, SystemRoleUpdateDto, SystemRoleFilterDto, SystemRoleItemDto>
 {
+    Task<SystemRole> CreateNewEntityAsync(SystemRoleAddDto dto);
+
     // TODO: 定义业务方法
+    Task<SystemRole?> GetOwnedAsync(Guid id);
 }

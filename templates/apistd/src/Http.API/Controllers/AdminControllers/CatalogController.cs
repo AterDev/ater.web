@@ -1,0 +1,89 @@
+using Core.Const;
+using Share.Models.CatalogDtos;
+namespace Http.API.Controllers.AdminControllers;
+
+/// <summary>
+/// 目录
+/// </summary>
+public class CatalogController : RestControllerBase<ICatalogManager>
+{
+    private readonly IUserManager _userManager;
+
+    public CatalogController(
+        IUserContext user,
+        ILogger<CatalogController> logger,
+        ICatalogManager manager,
+        IUserManager userManager
+        ) : base(manager, user, logger)
+    {
+        _userManager = userManager;
+
+    }
+
+    /// <summary>
+    /// 筛选
+    /// </summary>
+    /// <param name="filter"></param>
+    /// <returns></returns>
+    [HttpPost("filter")]
+    public async Task<ActionResult<PageList<CatalogItemDto>>> FilterAsync(CatalogFilterDto filter)
+    {
+        return await manager.FilterAsync(filter);
+    }
+
+    /// <summary>
+    /// 新增
+    /// </summary>
+    /// <param name="dto"></param>
+    /// <returns></returns>
+    [HttpPost]
+    public async Task<ActionResult<Catalog>> AddAsync(CatalogAddDto dto)
+    {
+        if (!await _userManager.ExistAsync(dto.UserId))
+            return NotFound("不存在的");
+        var entity = await manager.CreateNewEntityAsync(dto);
+        return await manager.AddAsync(entity);
+    }
+
+    /// <summary>
+    /// 更新
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="dto"></param>
+    /// <returns></returns>
+    [HttpPut("{id}")]
+    public async Task<ActionResult<Catalog?>> UpdateAsync([FromRoute] Guid id, CatalogUpdateDto dto)
+    {
+        var current = await manager.GetCurrentAsync(id);
+        if (current == null) return NotFound(ErrorMsg.NotFoundResource);
+        return await manager.UpdateAsync(current, dto);
+    }
+
+    /// <summary>
+    /// 详情
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Catalog?>> GetDetailAsync([FromRoute] Guid id)
+    {
+        var res = await manager.FindAsync(id);
+        return (res == null) ? NotFound() : res;
+    }
+
+    /// <summary>
+    /// ⚠删除
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    // [ApiExplorerSettings(IgnoreApi = true)]
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<Catalog?>> DeleteAsync([FromRoute] Guid id)
+    {
+        // TODO:实现删除逻辑,注意删除权限
+        var entity = await manager.GetOwnedAsync(id);
+        if (entity == null) return NotFound();
+        return Forbid();
+        // return await manager.DeleteAsync(entity);
+    }
+}

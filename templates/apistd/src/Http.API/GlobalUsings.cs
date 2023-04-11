@@ -14,3 +14,13 @@ global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.DependencyInjection;
 global using Share.Models;
+
+
+global using Http.API.Infrastructure;
+global using Core.Const;
+
+
+global using Core.Entities.ContentEntities;
+
+
+global using Core.Entities.SystemEntities;
