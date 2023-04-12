@@ -48,5 +48,5 @@ public class SystemUserUpdateDto
     /// 性别
     /// </summary>
     public Sex? Sex { get; set; }
-    
+
 }

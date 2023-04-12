@@ -43,5 +43,5 @@ public class SystemMenuAddDto
     /// 是否显示
     /// </summary>
     public bool Hidden { get; set; } = true;
-    
+
 }

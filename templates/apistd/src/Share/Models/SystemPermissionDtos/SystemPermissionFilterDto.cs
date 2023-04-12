@@ -1,4 +1,3 @@
-using Core.Entities.SystemEntities;
 namespace Share.Models.SystemPermissionDtos;
 /// <summary>
 /// 权限查询筛选
@@ -14,5 +13,5 @@ public class SystemPermissionFilterDto : FilterBase
     [MaxLength(200)]
     public string? PermissionPath { get; set; }
     public Guid? ParentId { get; set; }
-    
+
 }

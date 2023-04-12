@@ -48,5 +48,5 @@ public class SystemUserAddDto
     /// 性别
     /// </summary>
     public Sex Sex { get; set; } = Sex.Male;
-    
+
 }

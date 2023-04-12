@@ -30,5 +30,5 @@ public class SystemLogsAddDto
     /// </summary>
     [MaxLength(200)]
     public string? Description { get; set; }
-    
+
 }

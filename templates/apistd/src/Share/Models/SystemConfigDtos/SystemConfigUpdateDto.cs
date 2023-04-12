@@ -1,4 +1,3 @@
-using Core.Entities.SystemEntities;
 namespace Share.Models.SystemConfigDtos;
 /// <summary>
 /// 系统配置更新时请求结构
@@ -21,5 +20,5 @@ public class SystemConfigUpdateDto
     /// 组
     /// </summary>
     public string? GroupName { get; set; }
-    
+
 }

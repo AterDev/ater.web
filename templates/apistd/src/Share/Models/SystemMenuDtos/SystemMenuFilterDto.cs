@@ -43,5 +43,5 @@ public class SystemMenuFilterDto : FilterBase
     /// 是否显示
     /// </summary>
     public bool? Hidden { get; set; }
-    
+
 }

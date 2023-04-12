@@ -1,4 +1,3 @@
-using Core.Entities.SystemEntities;
 namespace Share.Models.SystemRoleDtos;
 /// <summary>
 /// 角色概要
@@ -28,5 +27,5 @@ public class SystemRoleShortDto
     public Guid Id { get; set; } = Guid.NewGuid();
     public DateTimeOffset CreatedTime { get; set; } = DateTimeOffset.UtcNow;
     public DateTimeOffset UpdatedTime { get; set; } = DateTimeOffset.UtcNow;
-    
+
 }

@@ -1,4 +1,3 @@
-using Core.Entities;
 namespace Share.Models.UserDtos;
 /// <summary>
 /// 用户账户概要
@@ -47,5 +46,5 @@ public class UserShortDto
     public Guid Id { get; set; } = Guid.NewGuid();
     public DateTimeOffset CreatedTime { get; set; } = DateTimeOffset.UtcNow;
     public DateTimeOffset UpdatedTime { get; set; } = DateTimeOffset.UtcNow;
-    
+
 }

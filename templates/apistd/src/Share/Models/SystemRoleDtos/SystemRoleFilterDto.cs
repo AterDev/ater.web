@@ -1,4 +1,3 @@
-using Core.Entities.SystemEntities;
 namespace Share.Models.SystemRoleDtos;
 /// <summary>
 /// 角色查询筛选
@@ -25,5 +24,5 @@ public class SystemRoleFilterDto : FilterBase
     /// </summary>
     [MaxLength(30)]
     public string? Icon { get; set; }
-    
+
 }

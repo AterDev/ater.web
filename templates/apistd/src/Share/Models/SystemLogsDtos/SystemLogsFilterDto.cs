@@ -31,5 +31,5 @@ public class SystemLogsFilterDto : FilterBase
     [MaxLength(200)]
     public string? Description { get; set; }
     public Guid? SystemUserId { get; set; }
-    
+
 }
