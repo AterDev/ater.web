@@ -15,15 +15,15 @@ public class JwtMiddleware
 
     public async Task Invoke(HttpContext context)
     {
-        string? token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+        var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
         JwtSecurityTokenHandler tokenHandler = new();
 
         JwtSecurityToken jwtToken = tokenHandler.ReadJwtToken(token);
-        string id = jwtToken.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+        var id = jwtToken.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
         if (id != null)
         {
-            bool? isLogin = _redis.GetValue<bool?>(id);
+            var isLogin = _redis.GetValue<bool?>(id);
             if (isLogin.HasValue)
             {
                 await _next(context);

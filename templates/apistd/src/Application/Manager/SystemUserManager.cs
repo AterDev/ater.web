@@ -1,4 +1,3 @@
-using Application.IManager;
 using Share.Models.SystemUserDtos;
 
 namespace Application.Manager;
@@ -8,7 +7,7 @@ public class SystemUserManager : DomainManagerBase<SystemUser, SystemUserUpdateD
 
     private readonly IUserContext _userContext;
     public SystemUserManager(
-        DataStoreContext storeContext, 
+        DataStoreContext storeContext,
         IUserContext userContext) : base(storeContext)
     {
 
@@ -22,14 +21,14 @@ public class SystemUserManager : DomainManagerBase<SystemUser, SystemUserUpdateD
     /// <returns></returns>
     public Task<SystemUser> CreateNewEntityAsync(SystemUserAddDto dto)
     {
-        var entity = dto.MapTo<SystemUserAddDto, SystemUser>();
+        SystemUser entity = dto.MapTo<SystemUserAddDto, SystemUser>();
         // other required props
         return Task.FromResult(entity);
     }
 
     public override async Task<SystemUser> UpdateAsync(SystemUser entity, SystemUserUpdateDto dto)
     {
-      return await base.UpdateAsync(entity, dto);
+        return await base.UpdateAsync(entity, dto);
     }
 
     public override async Task<PageList<SystemUserItemDto>> FilterAsync(SystemUserFilterDto filter)
@@ -47,7 +46,7 @@ public class SystemUserManager : DomainManagerBase<SystemUser, SystemUserUpdateD
     /// <returns></returns>
     public async Task<SystemUser?> GetOwnedAsync(Guid id)
     {
-        var query = Command.Db.Where(q => q.Id == id);
+        IQueryable<SystemUser> query = Command.Db.Where(q => q.Id == id);
         // 获取用户所属的对象
         // query = query.Where(q => q.User.Id == _userContext.UserId);
         return await query.FirstOrDefaultAsync();

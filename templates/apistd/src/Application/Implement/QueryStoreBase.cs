@@ -185,14 +185,7 @@ public class QueryStoreBase<TContext, TEntity> :
             _query = query;
         }
 
-        if (order != null)
-        {
-            _query = _query.OrderBy(order);
-        }
-        else
-        {
-            _query = _query.OrderByDescending(t => t.CreatedTime);
-        }
+        _query = order != null ? _query.OrderBy(order) : (IQueryable<TEntity>)_query.OrderByDescending(t => t.CreatedTime);
         int count = _query.Count();
         List<TItem> data = await _query
             .AsNoTracking()

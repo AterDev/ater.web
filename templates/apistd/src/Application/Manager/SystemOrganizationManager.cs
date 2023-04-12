@@ -1,4 +1,3 @@
-using Application.IManager;
 using Share.Models.SystemOrganizationDtos;
 
 namespace Application.Manager;
@@ -8,7 +7,7 @@ public class SystemOrganizationManager : DomainManagerBase<SystemOrganization, S
 
     private readonly IUserContext _userContext;
     public SystemOrganizationManager(
-        DataStoreContext storeContext, 
+        DataStoreContext storeContext,
         IUserContext userContext) : base(storeContext)
     {
 
@@ -22,14 +21,14 @@ public class SystemOrganizationManager : DomainManagerBase<SystemOrganization, S
     /// <returns></returns>
     public Task<SystemOrganization> CreateNewEntityAsync(SystemOrganizationAddDto dto)
     {
-        var entity = dto.MapTo<SystemOrganizationAddDto, SystemOrganization>();
+        SystemOrganization entity = dto.MapTo<SystemOrganizationAddDto, SystemOrganization>();
         // other required props
         return Task.FromResult(entity);
     }
 
     public override async Task<SystemOrganization> UpdateAsync(SystemOrganization entity, SystemOrganizationUpdateDto dto)
     {
-      return await base.UpdateAsync(entity, dto);
+        return await base.UpdateAsync(entity, dto);
     }
 
     public override async Task<PageList<SystemOrganizationItemDto>> FilterAsync(SystemOrganizationFilterDto filter)
@@ -47,7 +46,7 @@ public class SystemOrganizationManager : DomainManagerBase<SystemOrganization, S
     /// <returns></returns>
     public async Task<SystemOrganization?> GetOwnedAsync(Guid id)
     {
-        var query = Command.Db.Where(q => q.Id == id);
+        IQueryable<SystemOrganization> query = Command.Db.Where(q => q.Id == id);
         // 获取用户所属的对象
         // query = query.Where(q => q.User.Id == _userContext.UserId);
         return await query.FirstOrDefaultAsync();

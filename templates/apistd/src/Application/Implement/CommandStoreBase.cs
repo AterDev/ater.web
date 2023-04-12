@@ -111,7 +111,7 @@ public class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity>, IComm
         if (chunk != null && entities.Count > chunk)
         {
 
-            entities.Chunk(entities.Count / chunk.Value + 1).ToList()
+            entities.Chunk((entities.Count / chunk.Value) + 1).ToList()
                 .ForEach(block =>
                 {
                     _db.AddRange(block);

@@ -22,7 +22,7 @@ public class CacheService
     /// <returns></returns>
     public async Task SetValueAsync(string key, object data, int sliding, int expiration)
     {
-        var bytes = JsonSerializer.SerializeToUtf8Bytes(data);
+        byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(data);
         await _cache.SetAsync(key, bytes, new DistributedCacheEntryOptions()
         {
             SlidingExpiration = TimeSpan.FromSeconds(sliding),
@@ -37,12 +37,12 @@ public class CacheService
     /// <returns></returns>
     public T? GetValue<T>(string key)
     {
-        var bytes = _cache.Get(key);
+        byte[]? bytes = _cache.Get(key);
         if (bytes == null || bytes.Length < 1)
         {
             return default;
         }
-        var readOnlySpan = new ReadOnlySpan<byte>(bytes);
+        ReadOnlySpan<byte> readOnlySpan = new(bytes);
         return JsonSerializer.Deserialize<T>(readOnlySpan);
     }
 }

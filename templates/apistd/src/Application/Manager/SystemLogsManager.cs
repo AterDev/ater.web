@@ -1,4 +1,3 @@
-using Application.IManager;
 using Share.Models.SystemLogsDtos;
 
 namespace Application.Manager;
@@ -8,7 +7,7 @@ public class SystemLogsManager : DomainManagerBase<SystemLogs, SystemLogsUpdateD
 
     private readonly IUserContext _userContext;
     public SystemLogsManager(
-        DataStoreContext storeContext, 
+        DataStoreContext storeContext,
         IUserContext userContext) : base(storeContext)
     {
 
@@ -22,7 +21,7 @@ public class SystemLogsManager : DomainManagerBase<SystemLogs, SystemLogsUpdateD
     /// <returns></returns>
     public Task<SystemLogs> CreateNewEntityAsync(SystemLogsAddDto dto)
     {
-        var entity = dto.MapTo<SystemLogsAddDto, SystemLogs>();
+        SystemLogs entity = dto.MapTo<SystemLogsAddDto, SystemLogs>();
         Command.Db.Entry(entity).Property("SystemUserId").CurrentValue = _userContext.UserId!.Value;
         // or entity.SystemUserId = _userContext.UserId!.Value;
         // other required props
@@ -31,7 +30,7 @@ public class SystemLogsManager : DomainManagerBase<SystemLogs, SystemLogsUpdateD
 
     public override async Task<SystemLogs> UpdateAsync(SystemLogs entity, SystemLogsUpdateDto dto)
     {
-      return await base.UpdateAsync(entity, dto);
+        return await base.UpdateAsync(entity, dto);
     }
 
     public override async Task<PageList<SystemLogsItemDto>> FilterAsync(SystemLogsFilterDto filter)
@@ -52,7 +51,7 @@ public class SystemLogsManager : DomainManagerBase<SystemLogs, SystemLogsUpdateD
     /// <returns></returns>
     public async Task<SystemLogs?> GetOwnedAsync(Guid id)
     {
-        var query = Command.Db.Where(q => q.Id == id);
+        IQueryable<SystemLogs> query = Command.Db.Where(q => q.Id == id);
         // 获取用户所属的对象
         // query = query.Where(q => q.User.Id == _userContext.UserId);
         return await query.FirstOrDefaultAsync();

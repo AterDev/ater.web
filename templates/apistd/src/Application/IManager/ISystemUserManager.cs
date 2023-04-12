@@ -6,7 +6,7 @@ namespace Application.IManager;
 /// </summary>
 public interface ISystemUserManager : IDomainManager<SystemUser, SystemUserUpdateDto, SystemUserFilterDto, SystemUserItemDto>
 {
-	/// <summary>
+    /// <summary>
     /// 当前用户所拥有的对象
     /// </summary>
     /// <param name="id"></param>

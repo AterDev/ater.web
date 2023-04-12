@@ -40,7 +40,7 @@ public class JwtService
         };
         if (roles.Any())
         {
-            foreach (var role in roles)
+            foreach (string role in roles)
             {
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }

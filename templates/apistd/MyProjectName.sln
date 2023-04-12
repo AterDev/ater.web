@@ -22,6 +22,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{F4A37FAE-B90C-481B-AD56-427CE7D95364}"
 	ProjectSection(SolutionItems) = preProject
 		.droplet-config.json = .droplet-config.json
+		.editorconfig = .editorconfig
 		.config\dotnet-tools.json = .config\dotnet-tools.json
 	EndProjectSection
 	ProjectSection(FolderGlobals) = preProject
@@ -46,7 +47,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Microservice", "Microservic
 		src\Microservice\README.md = src\Microservice\README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.Test", "test\Application.Test\Application.Test.csproj", "{811203A3-75FE-4AC8-AB45-6789357BE55D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.Test", "test\Application.Test\Application.Test.csproj", "{811203A3-75FE-4AC8-AB45-6789357BE55D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

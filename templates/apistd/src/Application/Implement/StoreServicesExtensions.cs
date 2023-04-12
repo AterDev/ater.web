@@ -4,38 +4,38 @@ public static class StoreServicesExtensions
 {
     public static void AddDataStore(this IServiceCollection services)
     {
-        services.AddScoped(typeof(DataStoreContext));
-        services.AddScoped(typeof(SystemConfigQueryStore));
-        services.AddScoped(typeof(SystemLogsQueryStore));
-        services.AddScoped(typeof(SystemMenuQueryStore));
-        services.AddScoped(typeof(SystemOrganizationQueryStore));
-        services.AddScoped(typeof(SystemPermissionQueryStore));
-        services.AddScoped(typeof(SystemRoleQueryStore));
-        services.AddScoped(typeof(SystemUserQueryStore));
-        services.AddScoped(typeof(UserQueryStore));
-        services.AddScoped(typeof(SystemConfigCommandStore));
-        services.AddScoped(typeof(SystemLogsCommandStore));
-        services.AddScoped(typeof(SystemMenuCommandStore));
-        services.AddScoped(typeof(SystemOrganizationCommandStore));
-        services.AddScoped(typeof(SystemPermissionCommandStore));
-        services.AddScoped(typeof(SystemRoleCommandStore));
-        services.AddScoped(typeof(SystemUserCommandStore));
-        services.AddScoped(typeof(UserCommandStore));
+        _ = services.AddScoped(typeof(DataStoreContext));
+        _ = services.AddScoped(typeof(SystemConfigQueryStore));
+        _ = services.AddScoped(typeof(SystemLogsQueryStore));
+        _ = services.AddScoped(typeof(SystemMenuQueryStore));
+        _ = services.AddScoped(typeof(SystemOrganizationQueryStore));
+        _ = services.AddScoped(typeof(SystemPermissionQueryStore));
+        _ = services.AddScoped(typeof(SystemRoleQueryStore));
+        _ = services.AddScoped(typeof(SystemUserQueryStore));
+        _ = services.AddScoped(typeof(UserQueryStore));
+        _ = services.AddScoped(typeof(SystemConfigCommandStore));
+        _ = services.AddScoped(typeof(SystemLogsCommandStore));
+        _ = services.AddScoped(typeof(SystemMenuCommandStore));
+        _ = services.AddScoped(typeof(SystemOrganizationCommandStore));
+        _ = services.AddScoped(typeof(SystemPermissionCommandStore));
+        _ = services.AddScoped(typeof(SystemRoleCommandStore));
+        _ = services.AddScoped(typeof(SystemUserCommandStore));
+        _ = services.AddScoped(typeof(UserCommandStore));
 
     }
 
     public static void AddManager(this IServiceCollection services)
     {
-        services.AddHttpContextAccessor();
-        services.AddTransient<IUserContext, UserContext>();
-        services.AddScoped<ISystemConfigManager, SystemConfigManager>();
-        services.AddScoped<ISystemLogsManager, SystemLogsManager>();
-        services.AddScoped<ISystemMenuManager, SystemMenuManager>();
-        services.AddScoped<ISystemOrganizationManager, SystemOrganizationManager>();
-        services.AddScoped<ISystemPermissionManager, SystemPermissionManager>();
-        services.AddScoped<ISystemRoleManager, SystemRoleManager>();
-        services.AddScoped<ISystemUserManager, SystemUserManager>();
-        services.AddScoped<IUserManager, UserManager>();
+        _ = services.AddHttpContextAccessor();
+        _ = services.AddTransient<IUserContext, UserContext>();
+        _ = services.AddScoped<ISystemConfigManager, SystemConfigManager>();
+        _ = services.AddScoped<ISystemLogsManager, SystemLogsManager>();
+        _ = services.AddScoped<ISystemMenuManager, SystemMenuManager>();
+        _ = services.AddScoped<ISystemOrganizationManager, SystemOrganizationManager>();
+        _ = services.AddScoped<ISystemPermissionManager, SystemPermissionManager>();
+        _ = services.AddScoped<ISystemRoleManager, SystemRoleManager>();
+        _ = services.AddScoped<ISystemUserManager, SystemUserManager>();
+        _ = services.AddScoped<IUserManager, UserManager>();
 
     }
 }

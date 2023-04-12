@@ -54,9 +54,9 @@ public class TimedHostedService : IHostedService, IDisposable
     /// </summary>
     public async Task OperateDataBaseAsync(object? state)
     {
-        using var scope = Services.CreateScope();
-        var userManager = scope.ServiceProvider.GetRequiredService<SystemUserManager>();
-        var recentPost = await userManager.Query.Db.OrderByDescending(x => x.CreatedTime)
+        using IServiceScope scope = Services.CreateScope();
+        SystemUserManager userManager = scope.ServiceProvider.GetRequiredService<SystemUserManager>();
+        List<SystemUser> recentPost = await userManager.Query.Db.OrderByDescending(x => x.CreatedTime)
             .Take(20)
             .ToListAsync();
     }
@@ -64,7 +64,7 @@ public class TimedHostedService : IHostedService, IDisposable
     public Task StopAsync(CancellationToken cancellationToken)
     {
         _logger.LogInformation("Timed Hosted Service is stopping.");
-        _timer?.Change(Timeout.Infinite, 0);
+        _ = (_timer?.Change(Timeout.Infinite, 0));
         return Task.CompletedTask;
     }
 

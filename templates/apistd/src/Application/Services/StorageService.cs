@@ -38,12 +38,12 @@ public class StorageService
             return string.Empty;
         }
 
-        var container = new BlobContainerClient(option.BlobConnectionString, BlobName);
+        BlobContainerClient container = new(option.BlobConnectionString, BlobName);
         BlobClient blob = container.GetBlobClient(fileName);
         try
         {
 
-            var res = await blob.UploadAsync(stream, false);
+            Azure.Response<Azure.Storage.Blobs.Models.BlobContentInfo> res = await blob.UploadAsync(stream, false);
             return blob.Uri.AbsoluteUri;
         }
         catch (Exception ex)

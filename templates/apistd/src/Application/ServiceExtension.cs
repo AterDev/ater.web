@@ -29,7 +29,7 @@ public static class ServiceExtension
         Action<TracerProviderBuilder>? tracerProvider = null,
         Action<MeterProviderBuilder>? meterProvider = null)
     {
-        var resource = ResourceBuilder.CreateDefault()
+        ResourceBuilder resource = ResourceBuilder.CreateDefault()
             .AddService(serviceName: serviceName, serviceInstanceId: Environment.MachineName);
 
         otlpOptions ??= new Action<OtlpExporterOptions>(opt =>
@@ -61,15 +61,15 @@ public static class ServiceExtension
                     {
                         if (httpRequestMessage.Content != null)
                         {
-                            var headers = httpRequestMessage.Content.Headers;
+                            System.Net.Http.Headers.HttpContentHeaders headers = httpRequestMessage.Content.Headers;
                             // 过滤过长或文件类型
-                            var contentLength = headers.ContentLength ?? 0;
-                            var contentType = headers.ContentType?.ToString();
+                            long contentLength = headers.ContentLength ?? 0;
+                            string? contentType = headers.ContentType?.ToString();
                             if (contentLength > maxLength * 2
                             || (contentType != null && contentType.Contains("multipart/form-data"))) { }
                             else
                             {
-                                var body = httpRequestMessage.Content.ReadAsStringAsync().Result;
+                                string body = httpRequestMessage.Content.ReadAsStringAsync().Result;
                                 activity.SetTag("requestBody", body);
                             }
                         }
@@ -83,7 +83,7 @@ public static class ServiceExtension
                             if (httpResponseMessage.Content.Headers?.ContentLength < maxLength)
                             {
                                 // 不要使用await:The stream was already consumed. It cannot be read again
-                                var body = httpResponseMessage.Content.ReadAsStringAsync().Result;
+                                string body = httpResponseMessage.Content.ReadAsStringAsync().Result;
                                 body = body.Length > maxLength ? body[0..maxLength] : body;
                                 activity.SetTag("responseBody", body);
                             }
@@ -98,10 +98,10 @@ public static class ServiceExtension
                     options.RecordException = true;
                     options.EnrichWithHttpRequest = async (activity, request) =>
                     {
-                        var headers = request.Headers;
+                        IHeaderDictionary headers = request.Headers;
                         // 过滤过长或文件类型
-                        var contentLength = request.ContentLength ?? 0;
-                        var contentType = request.ContentType?.ToString();
+                        long contentLength = request.ContentLength ?? 0;
+                        string? contentType = request.ContentType?.ToString();
                         if (contentLength > maxLength * 2
                         || (contentType != null && contentType.Contains("multipart/form-data")))
                         {
@@ -111,7 +111,7 @@ public static class ServiceExtension
                         {
                             request.EnableBuffering();
                             request.Body.Position = 0;
-                            var reader = new StreamReader(request.Body);
+                            StreamReader reader = new(request.Body);
                             activity.SetTag("requestBody", await reader.ReadToEndAsync());
                             request.Body.Position = 0;
                         }

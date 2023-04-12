@@ -1,4 +1,3 @@
-using Application.IManager;
 using Share.Models.SystemRoleDtos;
 
 namespace Application.Manager;
@@ -8,7 +7,7 @@ public class SystemRoleManager : DomainManagerBase<SystemRole, SystemRoleUpdateD
 
     private readonly IUserContext _userContext;
     public SystemRoleManager(
-        DataStoreContext storeContext, 
+        DataStoreContext storeContext,
         IUserContext userContext) : base(storeContext)
     {
 
@@ -22,14 +21,14 @@ public class SystemRoleManager : DomainManagerBase<SystemRole, SystemRoleUpdateD
     /// <returns></returns>
     public Task<SystemRole> CreateNewEntityAsync(SystemRoleAddDto dto)
     {
-        var entity = dto.MapTo<SystemRoleAddDto, SystemRole>();
+        SystemRole entity = dto.MapTo<SystemRoleAddDto, SystemRole>();
         // other required props
         return Task.FromResult(entity);
     }
 
     public override async Task<SystemRole> UpdateAsync(SystemRole entity, SystemRoleUpdateDto dto)
     {
-      return await base.UpdateAsync(entity, dto);
+        return await base.UpdateAsync(entity, dto);
     }
 
     public override async Task<PageList<SystemRoleItemDto>> FilterAsync(SystemRoleFilterDto filter)
@@ -48,7 +47,7 @@ public class SystemRoleManager : DomainManagerBase<SystemRole, SystemRoleUpdateD
     /// <returns></returns>
     public async Task<SystemRole?> GetOwnedAsync(Guid id)
     {
-        var query = Command.Db.Where(q => q.Id == id);
+        IQueryable<SystemRole> query = Command.Db.Where(q => q.Id == id);
         // 获取用户所属的对象
         // query = query.Where(q => q.User.Id == _userContext.UserId);
         return await query.FirstOrDefaultAsync();

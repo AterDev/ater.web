@@ -1,13 +1,11 @@
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
+using Application;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Application;
-using Core.Const;
-using System.ComponentModel;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +14,7 @@ ConfigurationManager configuration = builder.Configuration;
 services.AddHttpContextAccessor();
 
 // database sql
-string? connectionString = configuration.GetConnectionString("Default");
+var connectionString = configuration.GetConnectionString("Default");
 services.AddDbContextPool<QueryDbContext>(option =>
 {
     _ = option.UseNpgsql(connectionString, sql =>
@@ -66,7 +64,7 @@ services.AddAuthentication(options =>
 .AddJwtBearer(cfg =>
 {
     cfg.SaveToken = true;
-    string? sign = configuration.GetSection("Authentication")["Schemes:Bearer:Sign"];
+    var sign = configuration.GetSection("Authentication")["Schemes:Bearer:Sign"];
     if (string.IsNullOrEmpty(sign))
     {
         throw new Exception("未找到有效的jwt配置");
@@ -143,8 +141,8 @@ services.AddSwaggerGen(c =>
         Description = "Client API 文档",
         Version = "v1"
     });
-    string[] xmlFiles = Directory.GetFiles(AppContext.BaseDirectory, "*.xml", SearchOption.TopDirectoryOnly);
-    foreach (string item in xmlFiles)
+    var xmlFiles = Directory.GetFiles(AppContext.BaseDirectory, "*.xml", SearchOption.TopDirectoryOnly);
+    foreach (var item in xmlFiles)
     {
         try
         {
@@ -156,7 +154,7 @@ services.AddSwaggerGen(c =>
     c.DescribeAllParametersInCamelCase();
     c.CustomOperationIds((z) =>
     {
-        ControllerActionDescriptor descriptor = (ControllerActionDescriptor)z.ActionDescriptor;
+        var descriptor = (ControllerActionDescriptor)z.ActionDescriptor;
         return $"{descriptor.ControllerName}_{descriptor.ActionName}";
     });
     c.SchemaFilter<EnumSchemaFilter>();
@@ -189,7 +187,7 @@ if (app.Environment.IsDevelopment())
 {
     _ = app.UseCors("default");
     _ = app.UseSwagger();
-    app.UseSwaggerUI(c =>
+    _ = app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/client/swagger.json", name: "client");
         c.SwaggerEndpoint("/swagger/admin/swagger.json", "admin");
@@ -211,12 +209,12 @@ app.UseExceptionHandler(handler =>
     handler.Run(async context =>
     {
         context.Response.StatusCode = 500;
-        var exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
+        Exception? exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
         var result = new {
             Title = "异常错误",
-            Source = exception?.Source,
+            exception?.Source,
             Detail = exception?.Message + exception?.InnerException?.Message,
-            StackTrace = exception?.StackTrace,
+            exception?.StackTrace,
             Status = 500,
             TraceId = context.TraceIdentifier
         };

@@ -1,6 +1,4 @@
 ﻿using Core.Const;
-using Core.Entities;
-using Core.Entities.SystemEntities;
 using Microsoft.Extensions.Configuration;
 
 namespace Application.Services;
@@ -11,7 +9,7 @@ public class InitDataTask
         CommandDbContext context = provider.GetRequiredService<CommandDbContext>();
         ILoggerFactory loggerFactory = provider.GetRequiredService<ILoggerFactory>();
         ILogger<InitDataTask> logger = loggerFactory.CreateLogger<InitDataTask>();
-        var configuration = provider.GetRequiredService<IConfiguration>();
+        IConfiguration configuration = provider.GetRequiredService<IConfiguration>();
 
         string? connectionString = context.Database.GetConnectionString();
         try
@@ -67,7 +65,7 @@ public class InitDataTask
             SystemRoles = new List<SystemRole>() { role },
         };
 
-        var user = new User
+        User user = new()
         {
             Id = new Guid("6e2bb78f-fa51-480d-8200-83d488184621"),
             UserName = "TestUser",
@@ -96,10 +94,10 @@ public class InitDataTask
     public static async Task UpdateAsync(CommandDbContext context, IConfiguration configuration)
     {
         // 查询库中版本
-        var version = await context.SystemConfigs.Where(c => c.Key == Const.Version).FirstOrDefaultAsync();
+        SystemConfig? version = await context.SystemConfigs.Where(c => c.Key == Const.Version).FirstOrDefaultAsync();
         if (version == null)
         {
-            var config = new SystemConfig
+            SystemConfig config = new()
             {
                 IsSystem = true,
                 Valid = true,
@@ -107,22 +105,22 @@ public class InitDataTask
                 // 版本格式:yyMMdd.编号
                 Value = DateTime.UtcNow.ToString("yyMMdd") + ".01"
             };
-            context.Add(config);
-            await context.SaveChangesAsync();
+            _ = context.Add(config);
+            _ = await context.SaveChangesAsync();
             version = config;
         }
         // 比对新版本
-        var newVersion = configuration.GetValue<string>(Const.Version);
+        string? newVersion = configuration.GetValue<string>(Const.Version);
 
-        if (double.TryParse(newVersion, out var newVersionValue)
-            && double.TryParse(version.Value, out var versionValue))
+        if (double.TryParse(newVersion, out double newVersionValue)
+            && double.TryParse(version.Value, out double versionValue))
         {
             if (newVersionValue > versionValue)
             {
                 // TODO:执行更新方法
 
                 version.Value = newVersionValue.ToString();
-                await context.SaveChangesAsync();
+                _ = await context.SaveChangesAsync();
             }
         }
         else
