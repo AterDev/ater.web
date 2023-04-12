@@ -2,6 +2,7 @@ using Application.IManager;
 using Core.Entities.SystemEntities;
 using Core.Utils;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.EntityFrameworkCore;
 using Share.Models.SystemLogsDtos;
 
 namespace Application.Test.Managers;
@@ -20,23 +21,41 @@ public class SystemLogsManagerTest : BaseTest
     [Fact]
     public async Task Shoud_AddAsync()
     {
-        // var entity = new SystemLogs(){ Name = "" + RandomString};
-        // var res = await manager.AddAsync(entity);
-        // Assert.Equal(entity.UserName, res.UserName);
-    }
+        var dto  = new SystemLogsAddDto()
+        {
+            ActionUserName = "ActionUserName" + RandomString,
+            TargetName = "TargetName" + RandomString,
+            Route = "Route" + RandomString,
+            ActionType = 0,
+        };
+        var entity = await manager.CreateNewEntityAsync(dto);
+        var res = await manager.AddAsync(entity);
+        Assert.Equal(entity.ActionUserName, res.ActionUserName);
+        Assert.Equal(entity.TargetName, res.TargetName);
+        Assert.Equal(entity.Route, res.Route);
+        Assert.Equal(entity.ActionType, res.ActionType);
 
+    }
 
     [Fact]
     public async Task Should_UpdateAsync()
     {
-        var dto = new SystemLogsUpdateDto();
-        var entity = manager.Command.Db.FirstOrDefault();
-
+        var dto  = new SystemLogsUpdateDto()
+        {
+            ActionUserName = "ActionUserName" + RandomString,
+            TargetName = "TargetName" + RandomString,
+            Route = "Route" + RandomString,
+            ActionType = 0,
+        };
+        var entity = await manager.Command.Db.FirstOrDefaultAsync();
         if (entity != null)
         {
-            // dto.UserName = "updateUser" + RandomString;
             var res = await manager.UpdateAsync(entity, dto);
-            // Assert.Equal(dto.UserName, res.UserName);
+            Assert.Equal(entity.ActionUserName, res.ActionUserName);
+            Assert.Equal(entity.TargetName, res.TargetName);
+            Assert.Equal(entity.Route, res.Route);
+            Assert.Equal(entity.ActionType, res.ActionType);
+
         }
     }
 

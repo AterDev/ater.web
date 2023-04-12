@@ -34,11 +34,9 @@ public class SystemConfigManager : DomainManagerBase<SystemConfig, SystemConfigU
 
     public override async Task<PageList<SystemConfigItemDto>> FilterAsync(SystemConfigFilterDto filter)
     {
-        /*
         Queryable = Queryable
-            .WhereNotNull(filter.Key, q => q.Key == filter.Key)
-        */
-        // TODO: other filter conditions
+            .WhereNotNull(filter.Key, q => q.Key == filter.Key);
+        // TODO: custom filter conditions
         return await Query.FilterAsync<SystemConfigItemDto>(Queryable, filter.PageIndex, filter.PageSize, filter.OrderBy);
     }
 
@@ -50,7 +48,7 @@ public class SystemConfigManager : DomainManagerBase<SystemConfig, SystemConfigU
     public async Task<SystemConfig?> GetOwnedAsync(Guid id)
     {
         var query = Command.Db.Where(q => q.Id == id);
-        // TODO:获取用户所属的对象
+        // 获取用户所属的对象
         // query = query.Where(q => q.User.Id == _userContext.UserId);
         return await query.FirstOrDefaultAsync();
     }

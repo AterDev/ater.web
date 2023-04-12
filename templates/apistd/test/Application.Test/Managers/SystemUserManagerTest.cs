@@ -2,6 +2,7 @@ using Application.IManager;
 using Core.Entities.SystemEntities;
 using Core.Utils;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.EntityFrameworkCore;
 using Share.Models.SystemUserDtos;
 
 namespace Application.Test.Managers;
@@ -20,23 +21,33 @@ public class SystemUserManagerTest : BaseTest
     [Fact]
     public async Task Shoud_AddAsync()
     {
-        // var entity = new SystemUser(){ Name = "" + RandomString};
-        // var res = await manager.AddAsync(entity);
-        // Assert.Equal(entity.UserName, res.UserName);
-    }
+        var salt = HashCrypto.BuildSalt();
+        var dto = new SystemUserAddDto()
+        {
+            UserName = "UserName" + RandomString,
+            PasswordSalt = salt,
+            PasswordHash = HashCrypto.GeneratePwd("PasswordHash" + RandomString, salt)
+        };
 
+        var entity = await manager.CreateNewEntityAsync(dto);
+        var res = await manager.AddAsync(entity);
+        Assert.Equal(entity.UserName, res.UserName);
+
+    }
 
     [Fact]
     public async Task Should_UpdateAsync()
     {
-        var dto = new SystemUserUpdateDto();
-        var entity = manager.Command.Db.FirstOrDefault();
-
+        var dto = new SystemUserUpdateDto()
+        {
+            UserName = "UserName" + RandomString,
+        };
+        var entity = await manager.Command.Db.FirstOrDefaultAsync();
         if (entity != null)
         {
-            // dto.UserName = "updateUser" + RandomString;
             var res = await manager.UpdateAsync(entity, dto);
-            // Assert.Equal(dto.UserName, res.UserName);
+            Assert.Equal(entity.UserName, res.UserName);
+
         }
     }
 

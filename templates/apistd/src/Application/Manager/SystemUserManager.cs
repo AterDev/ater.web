@@ -34,11 +34,9 @@ public class SystemUserManager : DomainManagerBase<SystemUser, SystemUserUpdateD
 
     public override async Task<PageList<SystemUserItemDto>> FilterAsync(SystemUserFilterDto filter)
     {
-        /*
         Queryable = Queryable
-            .WhereNotNull(filter.UserName, q => q.UserName == filter.UserName)
-        */
-        // TODO: other filter conditions
+            .WhereNotNull(filter.UserName, q => q.UserName == filter.UserName);
+        // TODO: custom filter conditions
         return await Query.FilterAsync<SystemUserItemDto>(Queryable, filter.PageIndex, filter.PageSize, filter.OrderBy);
     }
 
@@ -50,7 +48,7 @@ public class SystemUserManager : DomainManagerBase<SystemUser, SystemUserUpdateD
     public async Task<SystemUser?> GetOwnedAsync(Guid id)
     {
         var query = Command.Db.Where(q => q.Id == id);
-        // TODO:获取用户所属的对象
+        // 获取用户所属的对象
         // query = query.Where(q => q.User.Id == _userContext.UserId);
         return await query.FirstOrDefaultAsync();
     }

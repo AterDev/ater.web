@@ -5,9 +5,6 @@ public static class StoreServicesExtensions
     public static void AddDataStore(this IServiceCollection services)
     {
         services.AddScoped(typeof(DataStoreContext));
-        services.AddScoped(typeof(BlogQueryStore));
-        services.AddScoped(typeof(CatalogQueryStore));
-        services.AddScoped(typeof(RolePermissionQueryStore));
         services.AddScoped(typeof(SystemConfigQueryStore));
         services.AddScoped(typeof(SystemLogsQueryStore));
         services.AddScoped(typeof(SystemMenuQueryStore));
@@ -15,11 +12,7 @@ public static class StoreServicesExtensions
         services.AddScoped(typeof(SystemPermissionQueryStore));
         services.AddScoped(typeof(SystemRoleQueryStore));
         services.AddScoped(typeof(SystemUserQueryStore));
-        services.AddScoped(typeof(TagsQueryStore));
         services.AddScoped(typeof(UserQueryStore));
-        services.AddScoped(typeof(BlogCommandStore));
-        services.AddScoped(typeof(CatalogCommandStore));
-        services.AddScoped(typeof(RolePermissionCommandStore));
         services.AddScoped(typeof(SystemConfigCommandStore));
         services.AddScoped(typeof(SystemLogsCommandStore));
         services.AddScoped(typeof(SystemMenuCommandStore));
@@ -27,7 +20,6 @@ public static class StoreServicesExtensions
         services.AddScoped(typeof(SystemPermissionCommandStore));
         services.AddScoped(typeof(SystemRoleCommandStore));
         services.AddScoped(typeof(SystemUserCommandStore));
-        services.AddScoped(typeof(TagsCommandStore));
         services.AddScoped(typeof(UserCommandStore));
 
     }
@@ -44,5 +36,6 @@ public static class StoreServicesExtensions
         services.AddScoped<ISystemRoleManager, SystemRoleManager>();
         services.AddScoped<ISystemUserManager, SystemUserManager>();
         services.AddScoped<IUserManager, UserManager>();
+
     }
 }

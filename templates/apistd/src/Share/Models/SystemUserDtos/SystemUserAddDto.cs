@@ -21,9 +21,9 @@ public class SystemUserAddDto
     public string? Email { get; set; }
     public bool EmailConfirmed { get; set; } = false;
     [MaxLength(100)]
-    public string PasswordHash { get; set; } = null!;
+    public string PasswordHash { get; set; } = default!;
     [MaxLength(60)]
-    public string PasswordSalt { get; set; } = null!;
+    public string PasswordSalt { get; set; } = default!;
     [MaxLength(20)]
     public string? PhoneNumber { get; set; }
     public bool PhoneNumberConfirmed { get; set; } = false;

@@ -10,7 +10,7 @@ public class SystemMenu : EntityBase, ITreeNode<SystemMenu>
     /// 菜单名称
     /// </summary>
     [MaxLength(60)]
-    public string Name { get; set; } = default!;
+    public required string Name { get; set; }
     /// <summary>
     /// 菜单路径
     /// </summary>
@@ -38,13 +38,13 @@ public class SystemMenu : EntityBase, ITreeNode<SystemMenu>
     /// <summary>
     /// 所属角色
     /// </summary>
-    public List<SystemRole>? Roles { get; set; } = default!;
+    public List<SystemRole>? Roles { get; set; }
 
     /// <summary>
     /// 权限编码
     /// </summary>
     [MaxLength(50)]
-    public string AccessCode { get; set; } = default!;
+    public required string AccessCode { get; set; }
 
     /// <summary>
     /// 菜单类型
@@ -54,12 +54,12 @@ public class SystemMenu : EntityBase, ITreeNode<SystemMenu>
     /// <summary>
     /// 排序
     /// </summary>
-    public int Sort { get; set; } = default!;
+    public int Sort { get; set; } = 0;
 
     /// <summary>
     /// 是否显示
     /// </summary>
-    public bool Hidden { get; set; } = default!;
+    public bool Hidden { get; set; } = true;
 }
 
 public enum MenuType

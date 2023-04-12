@@ -2,6 +2,7 @@ using Application.IManager;
 using Core.Entities.SystemEntities;
 using Core.Utils;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.EntityFrameworkCore;
 using Share.Models.SystemRoleDtos;
 
 namespace Application.Test.Managers;
@@ -20,23 +21,33 @@ public class SystemRoleManagerTest : BaseTest
     [Fact]
     public async Task Shoud_AddAsync()
     {
-        // var entity = new SystemRole(){ Name = "" + RandomString};
-        // var res = await manager.AddAsync(entity);
-        // Assert.Equal(entity.UserName, res.UserName);
-    }
+        var dto  = new SystemRoleAddDto()
+        {
+            Name = "Name" + RandomString,
+            NameValue = "NameValue" + RandomString,
+        };
+        var entity = await manager.CreateNewEntityAsync(dto);
+        var res = await manager.AddAsync(entity);
+        Assert.Equal(entity.Name, res.Name);
+        Assert.Equal(entity.NameValue, res.NameValue);
 
+    }
 
     [Fact]
     public async Task Should_UpdateAsync()
     {
-        var dto = new SystemRoleUpdateDto();
-        var entity = manager.Command.Db.FirstOrDefault();
-
+        var dto  = new SystemRoleUpdateDto()
+        {
+            Name = "Name" + RandomString,
+            NameValue = "NameValue" + RandomString,
+        };
+        var entity = await manager.Command.Db.FirstOrDefaultAsync();
         if (entity != null)
         {
-            // dto.UserName = "updateUser" + RandomString;
             var res = await manager.UpdateAsync(entity, dto);
-            // Assert.Equal(dto.UserName, res.UserName);
+            Assert.Equal(entity.Name, res.Name);
+            Assert.Equal(entity.NameValue, res.NameValue);
+
         }
     }
 

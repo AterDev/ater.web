@@ -39,9 +39,4 @@
 		<PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.0.0-rc9.14" />
 		<PackageReference Include="OpenTelemetry.Instrumentation.SqlClient" Version="1.0.0-rc9.14" />
 	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="IManager\" />
-	  <Folder Include="Manager\" />
-	</ItemGroup>
 </Project>

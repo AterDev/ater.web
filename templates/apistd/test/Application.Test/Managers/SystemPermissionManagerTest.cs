@@ -2,6 +2,7 @@ using Application.IManager;
 using Core.Entities.SystemEntities;
 using Core.Utils;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.EntityFrameworkCore;
 using Share.Models.SystemPermissionDtos;
 
 namespace Application.Test.Managers;
@@ -20,23 +21,29 @@ public class SystemPermissionManagerTest : BaseTest
     [Fact]
     public async Task Shoud_AddAsync()
     {
-        // var entity = new SystemPermission(){ Name = "" + RandomString};
-        // var res = await manager.AddAsync(entity);
-        // Assert.Equal(entity.UserName, res.UserName);
-    }
+        var dto  = new SystemPermissionAddDto()
+        {
+            Name = "Name" + RandomString,
+        };
+        var entity = await manager.CreateNewEntityAsync(dto);
+        var res = await manager.AddAsync(entity);
+        Assert.Equal(entity.Name, res.Name);
 
+    }
 
     [Fact]
     public async Task Should_UpdateAsync()
     {
-        var dto = new SystemPermissionUpdateDto();
-        var entity = manager.Command.Db.FirstOrDefault();
-
+        var dto  = new SystemPermissionUpdateDto()
+        {
+            Name = "Name" + RandomString,
+        };
+        var entity = await manager.Command.Db.FirstOrDefaultAsync();
         if (entity != null)
         {
-            // dto.UserName = "updateUser" + RandomString;
             var res = await manager.UpdateAsync(entity, dto);
-            // Assert.Equal(dto.UserName, res.UserName);
+            Assert.Equal(entity.Name, res.Name);
+
         }
     }
 

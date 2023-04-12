@@ -34,12 +34,10 @@ public class SystemRoleManager : DomainManagerBase<SystemRole, SystemRoleUpdateD
 
     public override async Task<PageList<SystemRoleItemDto>> FilterAsync(SystemRoleFilterDto filter)
     {
-        /*
         Queryable = Queryable
             .WhereNotNull(filter.Name, q => q.Name == filter.Name)
-            .WhereNotNull(filter.NameValue, q => q.NameValue == filter.NameValue)
-        */
-        // TODO: other filter conditions
+            .WhereNotNull(filter.NameValue, q => q.NameValue == filter.NameValue);
+        // TODO: custom filter conditions
         return await Query.FilterAsync<SystemRoleItemDto>(Queryable, filter.PageIndex, filter.PageSize, filter.OrderBy);
     }
 
@@ -51,7 +49,7 @@ public class SystemRoleManager : DomainManagerBase<SystemRole, SystemRoleUpdateD
     public async Task<SystemRole?> GetOwnedAsync(Guid id)
     {
         var query = Command.Db.Where(q => q.Id == id);
-        // TODO:获取用户所属的对象
+        // 获取用户所属的对象
         // query = query.Where(q => q.User.Id == _userContext.UserId);
         return await query.FirstOrDefaultAsync();
     }

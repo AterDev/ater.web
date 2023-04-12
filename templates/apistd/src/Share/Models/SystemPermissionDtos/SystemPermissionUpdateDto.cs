@@ -7,11 +7,12 @@ namespace Share.Models.SystemPermissionDtos;
 public class SystemPermissionUpdateDto
 {
     [MaxLength(30)]
-    public string? Name { get; set; }
+    public string Name { get; set; } = default!;
     /// <summary>
     /// 权限路径
     /// </summary>
     [MaxLength(200)]
     public string? PermissionPath { get; set; }
+    public Guid? ParentId { get; set; }
     
 }

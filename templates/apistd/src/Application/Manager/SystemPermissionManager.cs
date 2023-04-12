@@ -34,10 +34,9 @@ public class SystemPermissionManager : DomainManagerBase<SystemPermission, Syste
 
     public override async Task<PageList<SystemPermissionItemDto>> FilterAsync(SystemPermissionFilterDto filter)
     {
-        /*
         Queryable = Queryable
-        */
-        // TODO: other filter conditions
+            .WhereNotNull(filter.Name, q => q.Name == filter.Name);
+        // TODO: custom filter conditions
         return await Query.FilterAsync<SystemPermissionItemDto>(Queryable, filter.PageIndex, filter.PageSize, filter.OrderBy);
     }
 
@@ -49,7 +48,7 @@ public class SystemPermissionManager : DomainManagerBase<SystemPermission, Syste
     public async Task<SystemPermission?> GetOwnedAsync(Guid id)
     {
         var query = Command.Db.Where(q => q.Id == id);
-        // TODO:获取用户所属的对象
+        // 获取用户所属的对象
         // query = query.Where(q => q.User.Id == _userContext.UserId);
         return await query.FirstOrDefaultAsync();
     }

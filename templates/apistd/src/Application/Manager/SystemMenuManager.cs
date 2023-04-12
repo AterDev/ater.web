@@ -34,10 +34,10 @@ public class SystemMenuManager : DomainManagerBase<SystemMenu, SystemMenuUpdateD
 
     public override async Task<PageList<SystemMenuItemDto>> FilterAsync(SystemMenuFilterDto filter)
     {
-        /*
         Queryable = Queryable
-        */
-        // TODO: other filter conditions
+            .WhereNotNull(filter.Name, q => q.Name == filter.Name)
+            .WhereNotNull(filter.AccessCode, q => q.AccessCode == filter.AccessCode);
+        // TODO: custom filter conditions
         return await Query.FilterAsync<SystemMenuItemDto>(Queryable, filter.PageIndex, filter.PageSize, filter.OrderBy);
     }
 
@@ -49,7 +49,7 @@ public class SystemMenuManager : DomainManagerBase<SystemMenu, SystemMenuUpdateD
     public async Task<SystemMenu?> GetOwnedAsync(Guid id)
     {
         var query = Command.Db.Where(q => q.Id == id);
-        // TODO:获取用户所属的对象
+        // 获取用户所属的对象
         // query = query.Where(q => q.User.Id == _userContext.UserId);
         return await query.FirstOrDefaultAsync();
     }

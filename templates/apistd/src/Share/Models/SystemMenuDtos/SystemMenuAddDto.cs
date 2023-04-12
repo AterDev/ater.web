@@ -10,7 +10,7 @@ public class SystemMenuAddDto
     /// 菜单名称
     /// </summary>
     [MaxLength(60)]
-    public string Name { get; set; } = default!;
+    public required string Name { get; set; }
     /// <summary>
     /// 菜单路径
     /// </summary>
@@ -30,7 +30,7 @@ public class SystemMenuAddDto
     /// 权限编码
     /// </summary>
     [MaxLength(50)]
-    public string AccessCode { get; set; } = default!;
+    public required string AccessCode { get; set; }
     /// <summary>
     /// 菜单类型
     /// </summary>
@@ -38,10 +38,10 @@ public class SystemMenuAddDto
     /// <summary>
     /// 排序
     /// </summary>
-    public int Sort { get; set; } = default!;
+    public int Sort { get; set; } = 0;
     /// <summary>
     /// 是否显示
     /// </summary>
-    public bool Hidden { get; set; } = default!;
+    public bool Hidden { get; set; } = true;
     
 }

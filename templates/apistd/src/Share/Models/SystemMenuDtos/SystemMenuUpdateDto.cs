@@ -10,7 +10,7 @@ public class SystemMenuUpdateDto
     /// 菜单名称
     /// </summary>
     [MaxLength(60)]
-    public string? Name { get; set; }
+    public string Name { get; set; } = default!;
     /// <summary>
     /// 菜单路径
     /// </summary>
@@ -30,7 +30,7 @@ public class SystemMenuUpdateDto
     /// 权限编码
     /// </summary>
     [MaxLength(50)]
-    public string? AccessCode { get; set; }
+    public string AccessCode { get; set; } = default!;
     /// <summary>
     /// 菜单类型
     /// </summary>

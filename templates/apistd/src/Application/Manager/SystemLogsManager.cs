@@ -36,14 +36,12 @@ public class SystemLogsManager : DomainManagerBase<SystemLogs, SystemLogsUpdateD
 
     public override async Task<PageList<SystemLogsItemDto>> FilterAsync(SystemLogsFilterDto filter)
     {
-        /*
         Queryable = Queryable
             .WhereNotNull(filter.ActionUserName, q => q.ActionUserName == filter.ActionUserName)
             .WhereNotNull(filter.TargetName, q => q.TargetName == filter.TargetName)
             .WhereNotNull(filter.ActionType, q => q.ActionType == filter.ActionType)
-            .WhereNotNull(filter.SystemUserId, q => q.SystemUser.Id == filter.SystemUserId)
-        */
-        // TODO: other filter conditions
+            .WhereNotNull(filter.SystemUserId, q => q.SystemUser.Id == filter.SystemUserId);
+        // TODO: custom filter conditions
         return await Query.FilterAsync<SystemLogsItemDto>(Queryable, filter.PageIndex, filter.PageSize, filter.OrderBy);
     }
 
@@ -55,7 +53,7 @@ public class SystemLogsManager : DomainManagerBase<SystemLogs, SystemLogsUpdateD
     public async Task<SystemLogs?> GetOwnedAsync(Guid id)
     {
         var query = Command.Db.Where(q => q.Id == id);
-        // TODO:获取用户所属的对象
+        // 获取用户所属的对象
         // query = query.Where(q => q.User.Id == _userContext.UserId);
         return await query.FirstOrDefaultAsync();
     }

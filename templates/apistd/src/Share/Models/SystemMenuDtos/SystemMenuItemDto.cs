@@ -38,11 +38,11 @@ public class SystemMenuItemDto
     /// <summary>
     /// 排序
     /// </summary>
-    public int Sort { get; set; } = default!;
+    public int Sort { get; set; } = 0;
     /// <summary>
     /// 是否显示
     /// </summary>
-    public bool Hidden { get; set; } = default!;
+    public bool Hidden { get; set; } = true;
     public Guid Id { get; set; } = Guid.NewGuid();
     public DateTimeOffset CreatedTime { get; set; } = DateTimeOffset.UtcNow;
     public DateTimeOffset UpdatedTime { get; set; } = DateTimeOffset.UtcNow;

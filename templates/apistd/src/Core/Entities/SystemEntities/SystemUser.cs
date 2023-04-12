@@ -28,10 +28,10 @@ public class SystemUser : EntityBase
     public bool EmailConfirmed { get; set; } = false;
     [JsonIgnore]
     [MaxLength(100)]
-    public string PasswordHash { get; set; } = null!;
+    public string PasswordHash { get; set; } = default!;
     [JsonIgnore]
     [MaxLength(60)]
-    public string PasswordSalt { get; set; } = null!;
+    public string PasswordSalt { get; set; } = default!;
     [MaxLength(20)]
     public string? PhoneNumber { get; set; }
     public bool PhoneNumberConfirmed { get; set; } = false;

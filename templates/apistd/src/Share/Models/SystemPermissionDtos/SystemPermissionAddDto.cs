@@ -7,7 +7,7 @@ namespace Share.Models.SystemPermissionDtos;
 public class SystemPermissionAddDto
 {
     [MaxLength(30)]
-    public string Name { get; set; } = default!;
+    public required string Name { get; set; }
     /// <summary>
     /// 权限路径
     /// </summary>

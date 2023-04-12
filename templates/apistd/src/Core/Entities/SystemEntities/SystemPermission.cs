@@ -5,7 +5,7 @@
 public class SystemPermission : EntityBase
 {
     [MaxLength(30)]
-    public string Name { get; set; } = default!;
+    public required string Name { get; set; }
     /// <summary>
     /// 父级权限
     /// </summary>

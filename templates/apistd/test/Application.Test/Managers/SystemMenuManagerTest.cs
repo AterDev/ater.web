@@ -2,6 +2,7 @@ using Application.IManager;
 using Core.Entities.SystemEntities;
 using Core.Utils;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.EntityFrameworkCore;
 using Share.Models.SystemMenuDtos;
 
 namespace Application.Test.Managers;
@@ -20,23 +21,33 @@ public class SystemMenuManagerTest : BaseTest
     [Fact]
     public async Task Shoud_AddAsync()
     {
-        // var entity = new SystemMenu(){ Name = "" + RandomString};
-        // var res = await manager.AddAsync(entity);
-        // Assert.Equal(entity.UserName, res.UserName);
-    }
+        var dto  = new SystemMenuAddDto()
+        {
+            Name = "Name" + RandomString,
+            AccessCode = "AccessCode" + RandomString,
+        };
+        var entity = await manager.CreateNewEntityAsync(dto);
+        var res = await manager.AddAsync(entity);
+        Assert.Equal(entity.Name, res.Name);
+        Assert.Equal(entity.AccessCode, res.AccessCode);
 
+    }
 
     [Fact]
     public async Task Should_UpdateAsync()
     {
-        var dto = new SystemMenuUpdateDto();
-        var entity = manager.Command.Db.FirstOrDefault();
-
+        var dto  = new SystemMenuUpdateDto()
+        {
+            Name = "Name" + RandomString,
+            AccessCode = "AccessCode" + RandomString,
+        };
+        var entity = await manager.Command.Db.FirstOrDefaultAsync();
         if (entity != null)
         {
-            // dto.UserName = "updateUser" + RandomString;
             var res = await manager.UpdateAsync(entity, dto);
-            // Assert.Equal(dto.UserName, res.UserName);
+            Assert.Equal(entity.Name, res.Name);
+            Assert.Equal(entity.AccessCode, res.AccessCode);
+
         }
     }
 

@@ -75,10 +75,10 @@ public class SystemOrganizationController : RestControllerBase<ISystemOrganizati
     [HttpDelete("{id}")]
     public async Task<ActionResult<SystemOrganization?>> DeleteAsync([FromRoute] Guid id)
     {
-        // TODO:实现删除逻辑,注意删除权限
+        // 注意删除权限
         var entity = await manager.GetOwnedAsync(id);
         if (entity == null) return NotFound();
-        return Forbid();
-        // return await manager.DeleteAsync(entity);
+        // return Forbid();
+        return await manager.DeleteAsync(entity);
     }
 }

@@ -29,5 +29,5 @@ public class TextBase : EntityBase
     /// 作者
     /// </summary>
     [MaxLength(200)]
-    public required string Authors { get; set; }
+    public string? Authors { get; set; }
 }

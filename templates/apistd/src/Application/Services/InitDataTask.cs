@@ -60,6 +60,7 @@ public class InitDataTask
         string salt = HashCrypto.BuildSalt();
         SystemUser systemUser = new()
         {
+            Id = new Guid("6e2bb78f-fa51-480d-8200-83d488184621"),
             UserName = "admin",
             PasswordSalt = salt,
             PasswordHash = HashCrypto.GeneratePwd("Hello.Net", salt),
@@ -78,8 +79,12 @@ public class InitDataTask
         _ = context.SystemRoles.Add(userRole);
         _ = context.SystemRoles.Add(role);
         _ = context.SystemUsers.Add(systemUser);
+        _ = await context.SaveChangesAsync();
+
+        context.ChangeTracker.Clear();
         _ = context.Users.Add(user);
         _ = await context.SaveChangesAsync();
+
     }
 
     /// <summary>

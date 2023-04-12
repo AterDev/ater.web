@@ -39,8 +39,8 @@ public class SystemLogsController : RestControllerBase<ISystemLogsManager>
     [HttpPost]
     public async Task<ActionResult<SystemLogs>> AddAsync(SystemLogsAddDto dto)
     {
-        if (!await _systemUserManager.ExistAsync(dto.SystemUserId))
-            return NotFound("不存在的");
+        if (!await _user.ExistAsync())
+            return NotFound(ErrorMsg.NotFoundUser);
         var entity = await manager.CreateNewEntityAsync(dto);
         return await manager.AddAsync(entity);
     }
@@ -56,12 +56,7 @@ public class SystemLogsController : RestControllerBase<ISystemLogsManager>
     {
         var current = await manager.GetOwnedAsync(id);
         if (current == null) return NotFound(ErrorMsg.NotFoundResource);
-        if (current.SystemUser.Id != dto.SystemUserId)
-        {
-            var systemUser = await _systemUserManager.GetCurrentAsync(dto.SystemUserId);
-            if (systemUser == null) return NotFound("不存在的");
-            current.SystemUser = systemUser;
-        }        return await manager.UpdateAsync(current, dto);
+        return await manager.UpdateAsync(current, dto);
     }
 
     /// <summary>
@@ -85,10 +80,10 @@ public class SystemLogsController : RestControllerBase<ISystemLogsManager>
     [HttpDelete("{id}")]
     public async Task<ActionResult<SystemLogs?>> DeleteAsync([FromRoute] Guid id)
     {
-        // TODO:实现删除逻辑,注意删除权限
+        // 注意删除权限
         var entity = await manager.GetOwnedAsync(id);
         if (entity == null) return NotFound();
-        return Forbid();
-        // return await manager.DeleteAsync(entity);
+        // return Forbid();
+        return await manager.DeleteAsync(entity);
     }
 }

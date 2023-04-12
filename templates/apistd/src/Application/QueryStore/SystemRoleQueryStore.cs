@@ -1,5 +1,3 @@
-using Core.Entities.SystemEntities;
-
 namespace Application.QueryStore;
 public class SystemRoleQueryStore : QuerySet<SystemRole>
 {

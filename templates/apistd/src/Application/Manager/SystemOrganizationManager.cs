@@ -34,11 +34,9 @@ public class SystemOrganizationManager : DomainManagerBase<SystemOrganization, S
 
     public override async Task<PageList<SystemOrganizationItemDto>> FilterAsync(SystemOrganizationFilterDto filter)
     {
-        /*
         Queryable = Queryable
-            .WhereNotNull(filter.Name, q => q.Name == filter.Name)
-        */
-        // TODO: other filter conditions
+            .WhereNotNull(filter.Name, q => q.Name == filter.Name);
+        // TODO: custom filter conditions
         return await Query.FilterAsync<SystemOrganizationItemDto>(Queryable, filter.PageIndex, filter.PageSize, filter.OrderBy);
     }
 
@@ -50,7 +48,7 @@ public class SystemOrganizationManager : DomainManagerBase<SystemOrganization, S
     public async Task<SystemOrganization?> GetOwnedAsync(Guid id)
     {
         var query = Command.Db.Where(q => q.Id == id);
-        // TODO:获取用户所属的对象
+        // 获取用户所属的对象
         // query = query.Where(q => q.User.Id == _userContext.UserId);
         return await query.FirstOrDefaultAsync();
     }
