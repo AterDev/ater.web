@@ -21,7 +21,7 @@ The web framework with best practices base on ASP.NET Core.
 模板已经发布到[`nuget`](https://www.nuget.org/packages/ater.web.templates)上，请根据你的项目版本下载对应的模板。
 
 ```pwsh
-dotnet new --install ater.web.templates::7.0.0-rc1
+dotnet new --install ater.web.templates::7.1.0-rc1
 ```
 
 ## 创建项目
@@ -72,7 +72,7 @@ npm install
 npm start
 ```  
 
-使用`admin/123456`初始管理账号登录。
+使用`admin/Hello.Net`初始管理账号登录。
 
 # 使用
 请查阅[使用文档](https://github.com/AterDev/ater.docs/tree/dev/cn/ater.web.template)！
