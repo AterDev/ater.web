@@ -31,6 +31,7 @@ services.AddDbContextPool<CommandDbContext>(option =>
     });
 });
 
+services.AddHttpContextAccessor();
 services.AddDataStore();
 services.AddManager();
 

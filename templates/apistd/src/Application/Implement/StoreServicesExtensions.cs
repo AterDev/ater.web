@@ -26,7 +26,6 @@ public static class StoreServicesExtensions
 
     public static void AddManager(this IServiceCollection services)
     {
-        services.AddHttpContextAccessor();
         services.AddTransient<IUserContext, UserContext>();
         services.AddScoped<ISystemConfigManager, SystemConfigManager>();
         services.AddScoped<ISystemLogsManager, SystemLogsManager>();
