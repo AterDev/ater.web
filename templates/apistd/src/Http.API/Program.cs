@@ -11,7 +11,6 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 IServiceCollection services = builder.Services;
 ConfigurationManager configuration = builder.Configuration;
-services.AddHttpContextAccessor();
 
 // database sql
 var connectionString = configuration.GetConnectionString("Default");

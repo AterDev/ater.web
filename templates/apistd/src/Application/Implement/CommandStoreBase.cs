@@ -66,7 +66,7 @@ public class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity>, IComm
     /// <returns></returns>
     public virtual async Task<TEntity> CreateAsync(TEntity entity)
     {
-        _ = await _db.AddAsync(entity);
+        await _db.AddAsync(entity);
         return entity;
     }
 
@@ -77,7 +77,7 @@ public class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity>, IComm
     /// <returns></returns>
     public virtual TEntity Update(TEntity entity)
     {
-        _ = _db.Update(entity);
+        _db.Update(entity);
         return entity;
     }
 
@@ -94,7 +94,7 @@ public class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity>, IComm
         }
         else
         {
-            _ = _db.Remove(entity!);
+            _db.Remove(entity!);
         }
         return entity;
     }
@@ -115,13 +115,13 @@ public class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity>, IComm
                 .ForEach(block =>
                 {
                     _db.AddRange(block);
-                    _ = Context.SaveChanges();
+                    Context.SaveChanges();
                 });
         }
         else
         {
             await _db.AddRangeAsync(entities);
-            _ = await SaveChangeAsync();
+            await SaveChangeAsync();
         }
         return entities;
     }

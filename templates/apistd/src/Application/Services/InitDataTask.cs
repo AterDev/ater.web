@@ -74,14 +74,14 @@ public class InitDataTask
             PasswordHash = HashCrypto.GeneratePwd("Hello.Net", salt),
         };
 
-        _ = context.SystemRoles.Add(userRole);
-        _ = context.SystemRoles.Add(role);
-        _ = context.SystemUsers.Add(systemUser);
-        _ = await context.SaveChangesAsync();
+        context.SystemRoles.Add(userRole);
+        context.SystemRoles.Add(role);
+        context.SystemUsers.Add(systemUser);
+        await context.SaveChangesAsync();
 
         context.ChangeTracker.Clear();
-        _ = context.Users.Add(user);
-        _ = await context.SaveChangesAsync();
+        context.Users.Add(user);
+        await context.SaveChangesAsync();
 
     }
 
@@ -105,8 +105,8 @@ public class InitDataTask
                 // 版本格式:yyMMdd.编号
                 Value = DateTime.UtcNow.ToString("yyMMdd") + ".01"
             };
-            _ = context.Add(config);
-            _ = await context.SaveChangesAsync();
+            context.Add(config);
+            await context.SaveChangesAsync();
             version = config;
         }
         // 比对新版本
@@ -120,7 +120,7 @@ public class InitDataTask
                 // TODO:执行更新方法
 
                 version.Value = newVersionValue.ToString();
-                _ = await context.SaveChangesAsync();
+                await context.SaveChangesAsync();
             }
         }
         else
