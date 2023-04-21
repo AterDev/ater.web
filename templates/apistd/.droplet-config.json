@@ -8,10 +8,10 @@
   "ApiPath": "Http.API",
   "IdStyle": "Id",
   "IdType": "Guid",
-  "IsSplitController": false,
-  "Version": "7.0",
   "CreatedTimeName": "CreatedTime",
   "UpdatedTimeName": "UpdatedTime",
+  "IsSplitController": false,
+  "Version": "7.0",
   "SwaggerPath": null,
   "WebAppPath": null
 }

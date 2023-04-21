@@ -32,3 +32,4 @@ public interface ICommandStoreExt<TId, TEntity>
 public interface ICommandStoreExt<TEntity> : ICommandStoreExt<Guid, TEntity>
      where TEntity : EntityBase
 { }
+

@@ -1,8 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Application.Implement;
 
-public class DomainManagerBase<TEntity, TUpdate, TFilter, TItem> : IDomainManager<TEntity, TUpdate, TFilter, TItem>
+public class DomainManagerBase<TEntity, TUpdate, TFilter, TItem> 
     where TEntity : EntityBase
     where TFilter : FilterBase
 {
@@ -19,10 +19,6 @@ public class DomainManagerBase<TEntity, TUpdate, TFilter, TItem> : IDomainManage
     /// </summary>
     public CommandSet<TEntity> Command { get; init; }
     public IQueryable<TEntity> Queryable { get; set; }
-    /// <summary>
-    /// 错误信息
-    /// </summary>
-    public string ErrorMessage { get; set; } = string.Empty;
     /// <summary>
     /// 是否自动保存(调用SaveChanges)
     /// </summary>
@@ -46,7 +42,7 @@ public class DomainManagerBase<TEntity, TUpdate, TFilter, TItem> : IDomainManage
     {
         if (AutoSave)
         {
-            await SaveChangesAsync();
+            _ = await SaveChangesAsync();
         }
     }
 
@@ -67,12 +63,20 @@ public class DomainManagerBase<TEntity, TUpdate, TFilter, TItem> : IDomainManage
         return res;
     }
 
+    [Obsolete("use GetCurrentAsync")]
+    public virtual async Task<TEntity?> GetCurrent(Guid id, params string[]? navigations)
+    {
+        return await Command.FindAsync(e => e.Id == id, navigations);
+    }
+
+
     public virtual async Task<TEntity> UpdateAsync(TEntity entity, TUpdate dto)
     {
-        entity.Merge(dto, true);
+        _ = entity.Merge(dto, false);
         entity.UpdatedTime = DateTimeOffset.UtcNow;
+        TEntity res = Command.Update(entity);
         await AutoSaveAsync();
-        return entity;
+        return res;
     }
 
     public virtual async Task<TEntity?> DeleteAsync(TEntity entity, bool softDelete = true)
@@ -88,16 +92,10 @@ public class DomainManagerBase<TEntity, TUpdate, TFilter, TItem> : IDomainManage
         return await Query.FindAsync(q => q.Id == id);
     }
 
-    /// <summary>
-    /// Query条件查询列表
-    /// </summary>
-    /// <param name="whereExp"></param>
-    /// <returns></returns>
-    public virtual async Task<List<TEntity>> ListAsync(Expression<Func<TEntity, bool>>? whereExp)
+    public async Task<TDto?> FindAsync<TDto>(Expression<Func<TEntity, bool>>? whereExp) where TDto : class
     {
-        return await Query.ListAsync(whereExp);
+        return await Query.FindAsync<TDto>(whereExp);
     }
-
     /// <summary>
     /// 是否存在
     /// </summary>
@@ -109,21 +107,7 @@ public class DomainManagerBase<TEntity, TUpdate, TFilter, TItem> : IDomainManage
     }
 
     /// <summary>
-    /// 分页筛选，需要重写该方法
-    /// </summary>
-    /// <param name="filter"></param>
-    /// <returns></returns>
-    public virtual async Task<PageList<TItem>> FilterAsync(TFilter filter)
-    {
-        return await Query.FilterAsync<TItem>(Queryable, filter.PageIndex, filter.PageSize, filter.OrderBy);
-    }
-    public async Task<TDto?> FindAsync<TDto>(Expression<Func<TEntity, bool>>? whereExp) where TDto : class
-    {
-        return await Query.FindAsync<TDto>(whereExp);
-    }
-
-    /// <summary>
-    /// Query条件查询列表
+    /// 条件查询列表
     /// </summary>
     /// <typeparam name="TDto">返回类型</typeparam>
     /// <param name="whereExp"></param>
@@ -131,6 +115,29 @@ public class DomainManagerBase<TEntity, TUpdate, TFilter, TItem> : IDomainManage
     public async Task<List<TDto>> ListAsync<TDto>(Expression<Func<TEntity, bool>>? whereExp) where TDto : class
     {
         return await Query.ListAsync<TDto>(whereExp);
+    }
+    public async Task<List<TEntity>> ListAsync(Expression<Func<TEntity, bool>>? whereExp)
+    {
+        return await Query.ListAsync(whereExp);
+    }
+
+    /// <summary>
+    /// 获取当前查询构造对象
+    /// </summary>
+    /// <returns></returns>
+    public IQueryable<TEntity> GetQueryable()
+    {
+        return Query._query;
+    }
+
+    /// <summary>
+    /// 分页筛选，需要重写该方法
+    /// </summary>
+    /// <param name="filter"></param>
+    /// <returns></returns>
+    public virtual async Task<PageList<TItem>> FilterAsync(TFilter filter)
+    {
+        return await Query.FilterAsync<TItem>(Queryable, filter.PageIndex, filter.PageSize, filter.OrderBy);
     }
 
 }

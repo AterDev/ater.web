@@ -1,6 +1,11 @@
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Application.Implement;
+/// <summary>
+/// 可写仓储基类,请勿直接修改本类内容
+/// </summary>
+/// <typeparam name="TContext"></typeparam>
+/// <typeparam name="TEntity"></typeparam>
 public class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity>, ICommandStoreExt<TEntity>
     where TContext : DbContext
     where TEntity : EntityBase
@@ -66,7 +71,7 @@ public class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity>, IComm
     /// <returns></returns>
     public virtual async Task<TEntity> CreateAsync(TEntity entity)
     {
-        await _db.AddAsync(entity);
+        _ = await _db.AddAsync(entity);
         return entity;
     }
 
@@ -77,7 +82,7 @@ public class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity>, IComm
     /// <returns></returns>
     public virtual TEntity Update(TEntity entity)
     {
-        _db.Update(entity);
+        _ = _db.Update(entity);
         return entity;
     }
 
@@ -94,7 +99,7 @@ public class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity>, IComm
         }
         else
         {
-            _db.Remove(entity!);
+            _ = _db.Remove(entity!);
         }
         return entity;
     }
@@ -111,17 +116,17 @@ public class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity>, IComm
         if (chunk != null && entities.Count > chunk)
         {
 
-            entities.Chunk((entities.Count / chunk.Value) + 1).ToList()
+            entities.Chunk(entities.Count / chunk.Value + 1).ToList()
                 .ForEach(block =>
                 {
                     _db.AddRange(block);
-                    Context.SaveChanges();
+                    _ = Context.SaveChanges();
                 });
         }
         else
         {
             await _db.AddRangeAsync(entities);
-            await SaveChangeAsync();
+            _ = await SaveChangeAsync();
         }
         return entities;
     }
