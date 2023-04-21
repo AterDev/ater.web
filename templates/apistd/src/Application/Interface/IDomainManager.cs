@@ -1,4 +1,6 @@
 using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+
 namespace Application.Interface;
 
 /// <summary>
@@ -10,4 +12,7 @@ public interface IDomainManager<TEntity>
     DataStoreContext Stores { get; init; }
     QuerySet<TEntity> Query { get; init; }
     CommandSet<TEntity> Command { get; init; }
+    public IQueryable<TEntity> Queryable { get; set; }
+    public bool AutoSave { get; set; }
+    public DatabaseFacade Database { get; init; }
 }

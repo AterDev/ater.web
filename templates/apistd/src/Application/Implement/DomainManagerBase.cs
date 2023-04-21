@@ -24,6 +24,7 @@ public class DomainManagerBase<TEntity, TUpdate, TFilter, TItem>
     /// </summary>
     public bool AutoSave { get; set; } = true;
     public DatabaseFacade Database { get; init; }
+    protected readonly IUserContext? _userContext;
     public DomainManagerBase(DataStoreContext storeContext)
     {
         Stores = storeContext;
@@ -31,6 +32,15 @@ public class DomainManagerBase<TEntity, TUpdate, TFilter, TItem>
         Command = Stores.CommandSet<TEntity>();
         Queryable = Query._query;
         Database = Command.Database;
+    }
+    public DomainManagerBase(DataStoreContext storeContext, IUserContext userContext)
+    {
+        Stores = storeContext;
+        Query = Stores.QuerySet<TEntity>();
+        Command = Stores.CommandSet<TEntity>();
+        Queryable = Query._query;
+        Database = Command.Database;
+        _userContext = userContext;
     }
 
     public async Task<int> SaveChangesAsync()
