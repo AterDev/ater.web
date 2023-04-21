@@ -9,7 +9,7 @@
   "IdStyle": "Id",
   "IdType": "Guid",
   "IsSplitController": false,
-  "Version": 1,
+  "Version": "7.0",
   "CreatedTimeName": "CreatedTime",
   "UpdatedTimeName": "UpdatedTime",
   "SwaggerPath": null,
