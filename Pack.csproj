@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<PackageType>Template</PackageType>
-		<PackageVersion>7.1.0-rc1</PackageVersion>
+		<PackageVersion>7.1.0-rc2</PackageVersion>
 		<PackageId>ater.web.templates</PackageId>
 		<Title>Ater Web Templates</Title>
 		<Authors>ater.niltor</Authors>
@@ -26,6 +26,7 @@
 		3 添加Application.Test测试项目;
 		4 部分细节完善;
 		5 增加更多管理功能默认实现;
+		6 调整了Manager的接口继承关系，以便通过接口方法可以直接跳转到实现，而不是基类的接口
 		</PackageReleaseNotes>
 		<NoWarn>$(NoWarn);NU5128;NU5110;NU5111</NoWarn>
 		<NoDefaultExcludes>true</NoDefaultExcludes>
