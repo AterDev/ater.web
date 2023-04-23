@@ -97,15 +97,17 @@ public class DataStoreContext
     {
         var typename = typeof(TEntity).Name + "QueryStore";
         var set = GetSet(typename);
-        if (set == null) throw new ArgumentNullException($"{typename} class object not found");
-        return (QuerySet<TEntity>)set;
+        return set == null
+            ? throw new ArgumentNullException($"{typename} class object not found")
+            : (QuerySet<TEntity>)set;
     }
     public CommandSet<TEntity> CommandSet<TEntity>() where TEntity : EntityBase
     {
         var typename = typeof(TEntity).Name + "CommandStore";
         var set = GetSet(typename);
-        if (set == null) throw new ArgumentNullException($"{typename} class object not found");
-        return (CommandSet<TEntity>)set;
+        return set == null
+            ? throw new ArgumentNullException($"{typename} class object not found")
+            : (CommandSet<TEntity>)set;
     }
 
     private void AddCache(object set)
