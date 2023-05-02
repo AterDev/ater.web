@@ -6,24 +6,6 @@ public class DataStoreContext
     public QueryDbContext QueryContext { get; init; }
     public CommandDbContext CommandContext { get; init; }
 
-    public QuerySet<SystemConfig> SystemConfigQuery { get; init; }
-    public QuerySet<SystemLogs> SystemLogsQuery { get; init; }
-    public QuerySet<SystemMenu> SystemMenuQuery { get; init; }
-    public QuerySet<SystemOrganization> SystemOrganizationQuery { get; init; }
-    public QuerySet<SystemPermission> SystemPermissionQuery { get; init; }
-    public QuerySet<SystemRole> SystemRoleQuery { get; init; }
-    public QuerySet<SystemUser> SystemUserQuery { get; init; }
-    public QuerySet<User> UserQuery { get; init; }
-    public CommandSet<SystemConfig> SystemConfigCommand { get; init; }
-    public CommandSet<SystemLogs> SystemLogsCommand { get; init; }
-    public CommandSet<SystemMenu> SystemMenuCommand { get; init; }
-    public CommandSet<SystemOrganization> SystemOrganizationCommand { get; init; }
-    public CommandSet<SystemPermission> SystemPermissionCommand { get; init; }
-    public CommandSet<SystemRole> SystemRoleCommand { get; init; }
-    public CommandSet<SystemUser> SystemUserCommand { get; init; }
-    public CommandSet<User> UserCommand { get; init; }
-
-
     /// <summary>
     /// 绑在对象
     /// </summary>
@@ -46,45 +28,28 @@ public class DataStoreContext
         SystemRoleCommandStore systemRoleCommand,
         SystemUserCommandStore systemUserCommand,
         UserCommandStore userCommand,
-
         QueryDbContext queryDbContext,
         CommandDbContext commandDbContext
     )
     {
         QueryContext = queryDbContext;
         CommandContext = commandDbContext;
-        SystemConfigQuery = systemConfigQuery;
-        AddCache(SystemConfigQuery);
-        SystemLogsQuery = systemLogsQuery;
-        AddCache(SystemLogsQuery);
-        SystemMenuQuery = systemMenuQuery;
-        AddCache(SystemMenuQuery);
-        SystemOrganizationQuery = systemOrganizationQuery;
-        AddCache(SystemOrganizationQuery);
-        SystemPermissionQuery = systemPermissionQuery;
-        AddCache(SystemPermissionQuery);
-        SystemRoleQuery = systemRoleQuery;
-        AddCache(SystemRoleQuery);
-        SystemUserQuery = systemUserQuery;
-        AddCache(SystemUserQuery);
-        UserQuery = userQuery;
-        AddCache(UserQuery);
-        SystemConfigCommand = systemConfigCommand;
-        AddCache(SystemConfigCommand);
-        SystemLogsCommand = systemLogsCommand;
-        AddCache(SystemLogsCommand);
-        SystemMenuCommand = systemMenuCommand;
-        AddCache(SystemMenuCommand);
-        SystemOrganizationCommand = systemOrganizationCommand;
-        AddCache(SystemOrganizationCommand);
-        SystemPermissionCommand = systemPermissionCommand;
-        AddCache(SystemPermissionCommand);
-        SystemRoleCommand = systemRoleCommand;
-        AddCache(SystemRoleCommand);
-        SystemUserCommand = systemUserCommand;
-        AddCache(SystemUserCommand);
-        UserCommand = userCommand;
-        AddCache(UserCommand);
+        AddCache(systemConfigQuery);
+        AddCache(systemLogsQuery);
+        AddCache(systemMenuQuery);
+        AddCache(systemOrganizationQuery);
+        AddCache(systemPermissionQuery);
+        AddCache(systemRoleQuery);
+        AddCache(systemUserQuery);
+        AddCache(userQuery);
+        AddCache(systemConfigCommand);
+        AddCache(systemLogsCommand);
+        AddCache(systemMenuCommand);
+        AddCache(systemOrganizationCommand);
+        AddCache(systemPermissionCommand);
+        AddCache(systemRoleCommand);
+        AddCache(systemUserCommand);
+        AddCache(userCommand);
 
     }
 
