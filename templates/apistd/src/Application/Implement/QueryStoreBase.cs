@@ -193,9 +193,9 @@ public class QueryStoreBase<TContext, TEntity> :
         int count = _query.Count();
         List<TItem> data = await _query
             .AsNoTracking()
+            .OrderByDescending(t => t.CreatedTime)
             .Skip((pageIndex - 1) * pageSize)
             .Take(pageSize)
-            .OrderByDescending(t => t.CreatedTime)
             .ProjectTo<TItem>()
             .ToListAsync();
         ResetQuery();
@@ -206,7 +206,6 @@ public class QueryStoreBase<TContext, TEntity> :
             PageIndex = pageIndex
         };
     }
-
 }
 
 
