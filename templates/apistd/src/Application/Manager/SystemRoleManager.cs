@@ -4,8 +4,6 @@ namespace Application.Manager;
 
 public class SystemRoleManager : DomainManagerBase<SystemRole, SystemRoleUpdateDto, SystemRoleFilterDto, SystemRoleItemDto>, ISystemRoleManager
 {
-
-    private readonly IUserContext _userContext;
     public SystemRoleManager(
         DataStoreContext storeContext,
         IUserContext userContext) : base(storeContext)

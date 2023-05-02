@@ -4,8 +4,6 @@ namespace Application.Manager;
 
 public class SystemUserManager : DomainManagerBase<SystemUser, SystemUserUpdateDto, SystemUserFilterDto, SystemUserItemDto>, ISystemUserManager
 {
-
-    private readonly IUserContext _userContext;
     public SystemUserManager(
         DataStoreContext storeContext,
         IUserContext userContext) : base(storeContext)

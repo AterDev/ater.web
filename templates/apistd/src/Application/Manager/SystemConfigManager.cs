@@ -4,8 +4,6 @@ namespace Application.Manager;
 
 public class SystemConfigManager : DomainManagerBase<SystemConfig, SystemConfigUpdateDto, SystemConfigFilterDto, SystemConfigItemDto>, ISystemConfigManager
 {
-
-    private readonly IUserContext _userContext;
     public SystemConfigManager(
         DataStoreContext storeContext,
         IUserContext userContext) : base(storeContext)

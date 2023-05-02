@@ -4,8 +4,6 @@ namespace Application.Manager;
 
 public class SystemOrganizationManager : DomainManagerBase<SystemOrganization, SystemOrganizationUpdateDto, SystemOrganizationFilterDto, SystemOrganizationItemDto>, ISystemOrganizationManager
 {
-
-    private readonly IUserContext _userContext;
     public SystemOrganizationManager(
         DataStoreContext storeContext,
         IUserContext userContext) : base(storeContext)

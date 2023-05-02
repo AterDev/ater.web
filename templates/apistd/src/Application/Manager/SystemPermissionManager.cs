@@ -4,8 +4,6 @@ namespace Application.Manager;
 
 public class SystemPermissionManager : DomainManagerBase<SystemPermission, SystemPermissionUpdateDto, SystemPermissionFilterDto, SystemPermissionItemDto>, ISystemPermissionManager
 {
-
-    private readonly IUserContext _userContext;
     public SystemPermissionManager(
         DataStoreContext storeContext,
         IUserContext userContext) : base(storeContext)

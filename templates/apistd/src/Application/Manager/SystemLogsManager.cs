@@ -4,8 +4,6 @@ namespace Application.Manager;
 
 public class SystemLogsManager : DomainManagerBase<SystemLogs, SystemLogsUpdateDto, SystemLogsFilterDto, SystemLogsItemDto>, ISystemLogsManager
 {
-
-    private readonly IUserContext _userContext;
     public SystemLogsManager(
         DataStoreContext storeContext,
         IUserContext userContext) : base(storeContext)

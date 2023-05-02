@@ -1,7 +1,4 @@
 ﻿using Application.QueryStore;
-using Core.Const;
-using Core.Entities.SystemEntities;
-using Http.API.Infrastructure;
 using Share.Models.AuthDtos;
 
 namespace Http.API.Controllers.AdminControllers;
@@ -11,6 +8,7 @@ namespace Http.API.Controllers.AdminControllers;
 /// </summary>
 [AllowAnonymous]
 [Route("api/admin/[controller]")]
+[ApiExplorerSettings(GroupName = "admin")]
 public class AuthController : RestControllerBase
 {
     private readonly SystemUserQueryStore _store;
@@ -46,12 +44,12 @@ public class AuthController : RestControllerBase
 
         if (HashCrypto.Validate(dto.Password, user.PasswordSalt, user.PasswordHash))
         {
-            string? sign = _config.GetSection("Authentication")["Schemes:Bearer:Sign"];
-            string? issuer = _config.GetSection("Authentication")["Schemes:Bearer:ValidIssuer"];
+            var sign = _config.GetSection("Authentication")["Schemes:Bearer:Sign"];
+            var issuer = _config.GetSection("Authentication")["Schemes:Bearer:ValidIssuer"];
             //var audiences = _config.GetSection("Authentication:Schemes:Bearer:ValidAudiences").Get<string[]>();
 
             //var audience = string.Join(",", audiences);
-            string? audience = _config.GetSection("Authentication")["Schemes:Bearer:ValidAudiences"];
+            var audience = _config.GetSection("Authentication")["Schemes:Bearer:ValidAudiences"];
             var roles = user.SystemRoles?.Select(r => r.NameValue)?.ToList();
             //var time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             //1天后过期
@@ -66,7 +64,7 @@ public class AuthController : RestControllerBase
                 // 添加管理员用户标识
                 roles?.Add(Const.AdminUser);
 
-                string token = jwt.GetToken(user.Id.ToString(), roles?.ToArray() ?? new string[] { Const.AdminUser });
+                var token = jwt.GetToken(user.Id.ToString(), roles?.ToArray() ?? new string[] { Const.AdminUser });
 
                 // 登录状态存储到Redis
                 //await _redis.SetValueAsync("login" + user.Id.ToString(), true, 60 * 24 * 7);

@@ -4,8 +4,6 @@ namespace Application.Manager;
 
 public class SystemMenuManager : DomainManagerBase<SystemMenu, SystemMenuUpdateDto, SystemMenuFilterDto, SystemMenuItemDto>, ISystemMenuManager
 {
-
-    private readonly IUserContext _userContext;
     public SystemMenuManager(
         DataStoreContext storeContext,
         IUserContext userContext) : base(storeContext)

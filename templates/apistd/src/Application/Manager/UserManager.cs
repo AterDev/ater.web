@@ -4,8 +4,6 @@ namespace Application.Manager;
 
 public class UserManager : DomainManagerBase<User, UserUpdateDto, UserFilterDto, UserItemDto>, IUserManager
 {
-
-    private readonly IUserContext _userContext;
     public UserManager(
         DataStoreContext storeContext,
         IUserContext userContext) : base(storeContext)
