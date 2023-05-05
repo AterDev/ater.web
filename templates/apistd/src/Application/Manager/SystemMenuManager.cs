@@ -8,7 +8,6 @@ public class SystemMenuManager : DomainManagerBase<SystemMenu, SystemMenuUpdateD
         DataStoreContext storeContext,
         IUserContext userContext) : base(storeContext)
     {
-
         _userContext = userContext;
     }
 

@@ -6,7 +6,8 @@ public class SystemLogsManager : DomainManagerBase<SystemLogs, SystemLogsUpdateD
 {
     public SystemLogsManager(
         DataStoreContext storeContext,
-        IUserContext userContext) : base(storeContext)
+        ILogger<SystemLogsManager> logger,
+        IUserContext userContext) : base(storeContext, logger)
     {
         _userContext = userContext;
     }

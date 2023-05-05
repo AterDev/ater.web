@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Application.Implement;
 
-public partial class DomainManagerBase<TEntity, TUpdate, TFilter, TItem> 
+public partial class DomainManagerBase<TEntity, TUpdate, TFilter, TItem>
     where TEntity : EntityBase
     where TFilter : FilterBase
 {
@@ -25,6 +25,8 @@ public partial class DomainManagerBase<TEntity, TUpdate, TFilter, TItem>
     public bool AutoSave { get; set; } = true;
     public DatabaseFacade Database { get; init; }
     protected IUserContext? _userContext;
+    protected readonly ILogger _logger;
+
     public DomainManagerBase(DataStoreContext storeContext)
     {
         Stores = storeContext;
@@ -32,8 +34,20 @@ public partial class DomainManagerBase<TEntity, TUpdate, TFilter, TItem>
         Command = Stores.CommandSet<TEntity>();
         Queryable = Query._query;
         Database = Command.Database;
+        _logger = LoggerFactory.Create(builder => builder.AddConsole())
+            .CreateLogger<DataStoreContext>();
     }
-    public DomainManagerBase(DataStoreContext storeContext, IUserContext userContext)
+
+    public DomainManagerBase(DataStoreContext storeContext, ILogger logger)
+    {
+        Stores = storeContext;
+        Query = Stores.QuerySet<TEntity>();
+        Command = Stores.CommandSet<TEntity>();
+        Queryable = Query._query;
+        Database = Command.Database;
+        _logger = logger;
+    }
+    public DomainManagerBase(DataStoreContext storeContext, IUserContext userContext, ILogger logger)
     {
         Stores = storeContext;
         Query = Stores.QuerySet<TEntity>();
@@ -41,6 +55,7 @@ public partial class DomainManagerBase<TEntity, TUpdate, TFilter, TItem>
         Queryable = Query._query;
         Database = Command.Database;
         _userContext = userContext;
+        _logger = logger;
     }
 
     public async Task<int> SaveChangesAsync()
@@ -72,13 +87,6 @@ public partial class DomainManagerBase<TEntity, TUpdate, TFilter, TItem>
         await AutoSaveAsync();
         return res;
     }
-
-    [Obsolete("use GetCurrentAsync")]
-    public virtual async Task<TEntity?> GetCurrent(Guid id, params string[]? navigations)
-    {
-        return await Command.FindAsync(e => e.Id == id, navigations);
-    }
-
 
     public virtual async Task<TEntity> UpdateAsync(TEntity entity, TUpdate dto)
     {

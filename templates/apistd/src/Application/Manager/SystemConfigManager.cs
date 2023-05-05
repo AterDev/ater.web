@@ -8,7 +8,6 @@ public class SystemConfigManager : DomainManagerBase<SystemConfig, SystemConfigU
         DataStoreContext storeContext,
         IUserContext userContext) : base(storeContext)
     {
-
         _userContext = userContext;
     }
 
