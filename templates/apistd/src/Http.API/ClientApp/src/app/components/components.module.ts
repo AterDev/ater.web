@@ -79,13 +79,11 @@ const MaterialModules = [
   imports: [
     CommonModule,
     RouterModule,
-    CKEditorModule,
     ...MaterialModules,
   ],
   exports: [
     CommonModule,
     RouterModule,
-    CKEditorModule,
     ...MaterialModules,
     LayoutComponent,
     NavigationComponent,
