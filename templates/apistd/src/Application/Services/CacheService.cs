@@ -13,6 +13,24 @@ public class CacheService
     }
 
     /// <summary>
+    /// 缓存存储
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="data"></param>
+    /// <param name="expiration"></param>
+    /// <returns></returns>
+    public async Task SetValueAsync(string key, object data, int? expiration)
+    {
+        byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(data);
+        var option = new DistributedCacheEntryOptions();
+        if (expiration != null)
+        {
+            option.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(expiration.Value);
+        }
+        await _cache.SetAsync(key, bytes, option);
+    }
+
+    /// <summary>
     /// 保存到缓存
     /// </summary>
     /// <param name="data">值</param>

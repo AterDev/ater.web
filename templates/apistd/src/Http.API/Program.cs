@@ -12,7 +12,7 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 IServiceCollection services = builder.Services;
 ConfigurationManager configuration = builder.Configuration;
 
-// database sql
+// config database, use postgresql as default;
 var connectionString = configuration.GetConnectionString("Default");
 services.AddDbContextPool<QueryDbContext>(option =>
 {
@@ -31,18 +31,18 @@ services.AddDbContextPool<CommandDbContext>(option =>
     });
 });
 
+// config redis
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    options.InstanceName = builder.Configuration.GetConnectionString("RedisInstanceName");
+});
+services.AddSingleton(typeof(CacheService));
+
+// inject datastores and managers
 services.AddHttpContextAccessor();
 services.AddDataStore();
 services.AddManager();
-
-// redis
-//builder.Services.AddStackExchangeRedisCache(options =>
-//{
-//    options.Configuration = builder.Configuration.GetConnectionString("Redis");
-//    options.InstanceName = builder.Configuration.GetConnectionString("RedisInstanceName");
-//});
-//services.AddSingleton(typeof(CacheService));
-
 
 #region OpenTelemetry:log/trace/metric
 var otlpEndpoint = configuration.GetSection("OTLP")
@@ -54,8 +54,8 @@ services.AddOpenTelemetry("MyProjectName", opt =>
 });
 
 #endregion
-#region 接口相关内容:jwt/授权/cors
-// use jwt
+#region 接口相关内容:jwt/authorization/cors
+// config jwt
 services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -81,7 +81,7 @@ services.AddAuthentication(options =>
     };
 });
 
-// TODO:验证策略定义
+// config authorization
 services.AddAuthorization(options =>
 {
     options.AddPolicy(Const.User, policy =>
@@ -90,7 +90,7 @@ services.AddAuthorization(options =>
         policy.RequireRole(Const.AdminUser));
 });
 
-// cors配置 
+// config cors
 services.AddCors(options =>
 {
     options.AddPolicy("default", builder =>

@@ -8,7 +8,6 @@ public class SystemLogsManager : DomainManagerBase<SystemLogs, SystemLogsUpdateD
         DataStoreContext storeContext,
         IUserContext userContext) : base(storeContext)
     {
-
         _userContext = userContext;
     }
 
@@ -20,7 +19,7 @@ public class SystemLogsManager : DomainManagerBase<SystemLogs, SystemLogsUpdateD
     public Task<SystemLogs> CreateNewEntityAsync(SystemLogsAddDto dto)
     {
         SystemLogs entity = dto.MapTo<SystemLogsAddDto, SystemLogs>();
-        Command.Db.Entry(entity).Property("SystemUserId").CurrentValue = _userContext.UserId!.Value;
+        Command.Db.Entry(entity).Property("SystemUserId").CurrentValue = _userContext!.UserId!.Value;
         // or entity.SystemUserId = _userContext.UserId!.Value;
         // other required props
         return Task.FromResult(entity);
