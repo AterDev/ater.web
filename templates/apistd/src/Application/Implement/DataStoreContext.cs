@@ -1,6 +1,9 @@
 using Core.Entities;
 using Core.Entities.SystemEntities;
 namespace Application.Implement;
+/// <summary>
+/// 仓储上下文
+/// </summary>
 public class DataStoreContext
 {
     public QueryDbContext QueryContext { get; init; }

@@ -1,4 +1,4 @@
-using Core.Const;
+using Application.AppConst;
 using Share.Models.SystemMenuDtos;
 namespace Http.API.Controllers.AdminControllers;
 

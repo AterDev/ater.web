@@ -1,4 +1,4 @@
-﻿namespace Core.Const;
+﻿namespace Application.AppConst;
 /// <summary>
 /// 错误信息
 /// </summary>

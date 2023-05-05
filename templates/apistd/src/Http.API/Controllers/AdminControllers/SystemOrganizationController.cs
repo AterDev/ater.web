@@ -1,4 +1,4 @@
-using Core.Const;
+using Application.AppConst;
 using Share.Models.SystemOrganizationDtos;
 namespace Http.API.Controllers.AdminControllers;
 
