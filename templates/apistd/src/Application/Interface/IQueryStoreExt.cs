@@ -1,6 +1,6 @@
 namespace Application.Interface;
 /// <summary>
-/// 高级查询接口
+/// 扩展接口
 /// </summary>
 public interface IQueryStoreExt<TEntity>
 {

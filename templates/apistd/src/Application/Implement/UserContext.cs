@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Application.Implement;
 
-public class UserContext : IUserContext
+public partial class UserContext : IUserContext
 {
     public Guid? UserId { get; init; }
     public Guid? SessionId { get; init; }
