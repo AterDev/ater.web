@@ -5,7 +5,7 @@
 		<RootNamespace>Http.API</RootNamespace>
 		<Nullable>enable</Nullable>
 		<SpaRoot>ClientApp\</SpaRoot>
-		<SpaProxyServerUrl>https://localhost:14200</SpaProxyServerUrl>
+		<SpaProxyServerUrl>http://localhost:14200</SpaProxyServerUrl>
 	</PropertyGroup>
 
 	<PropertyGroup>
