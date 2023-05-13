@@ -1,6 +1,4 @@
-﻿using Application.Manager;
-
-namespace Http.API.Worker;
+﻿namespace Http.API.Worker;
 /// <summary>
 /// 后台计时器示例
 /// </summary>
@@ -55,7 +53,7 @@ public class TimedHostedService : IHostedService, IDisposable
     public async Task OperateDataBaseAsync(object? state)
     {
         using IServiceScope scope = Services.CreateScope();
-        SystemUserManager userManager = scope.ServiceProvider.GetRequiredService<SystemUserManager>();
+        ISystemUserManager userManager = scope.ServiceProvider.GetRequiredService<ISystemUserManager>();
         List<SystemUser> recentPost = await userManager.Query.Db.OrderByDescending(x => x.CreatedTime)
             .Take(20)
             .ToListAsync();

@@ -31,8 +31,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{F4A37F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{8377B34A-79F0-47E0-96E1-0AF7B2ACE75C}"
 	ProjectSection(SolutionItems) = preProject
-		scripts\default.ps1 = scripts\default.ps1
 		scripts\EFMigrations.ps1 = scripts\EFMigrations.ps1
+		scripts\RunAPI.ps1 = scripts\RunAPI.ps1
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{171177E5-11DA-47B2-B9C3-EDFC480A9C6E}"
