@@ -43,9 +43,7 @@ public class TestUserContext : IUserContext
             UserName = Username!,
             Email = Email,
         };
-#pragma warning disable CS8619 // 值中的引用类型的为 Null 性与目标类型不匹配。
-        return Task.FromResult(user);
-#pragma warning restore CS8619 // 值中的引用类型的为 Null 性与目标类型不匹配。
+        return Task.FromResult(user)!;
     }
 
     public bool IsRole(string roleName)

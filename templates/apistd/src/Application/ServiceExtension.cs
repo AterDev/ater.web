@@ -41,9 +41,9 @@ public static class ServiceExtension
         {
             options.SetResourceBuilder(resource);
             options.AddOtlpExporter(otlpOptions);
-            options.ParseStateValues = true;
-            options.IncludeFormattedMessage = true;
-            options.IncludeScopes = true;
+            //options.ParseStateValues = true;
+            //options.IncludeFormattedMessage = true;
+            //options.IncludeScopes = true;
 #if DEBUG
             options.AddConsoleExporter();
 #endif
