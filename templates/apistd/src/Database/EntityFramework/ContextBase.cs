@@ -7,8 +7,8 @@ namespace EntityFramework;
 public class ContextBase : DbContext
 {
     public DbSet<SystemUser> SystemUsers { get; set; }
-    public DbSet<SystemConfig> SystemConfigs { get; set; }
     public DbSet<SystemRole> SystemRoles { get; set; }
+    public DbSet<SystemConfig> SystemConfigs { get; set; }
     public DbSet<SystemMenu> SystemMenus { get; set; }
     public DbSet<SystemPermission> SystemPermissions { get; set; }
     public DbSet<RolePermission> RolePermissions { get; set; }
