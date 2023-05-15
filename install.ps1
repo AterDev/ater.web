@@ -1,4 +1,7 @@
 try {
+    if (Test-Path ./nuget) {
+        Remove-Item ./nuget -Force -Recurse
+    }
     dotnet pack 
     # get package info
     $VersionNode = Select-Xml -Path ./Pack.csproj -XPath '/Project//PropertyGroup/PackageVersion'
