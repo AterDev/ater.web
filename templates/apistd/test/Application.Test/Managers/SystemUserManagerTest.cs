@@ -1,5 +1,4 @@
 using Application.IManager;
-using Core.Entities.SystemEntities;
 using Core.Utils;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
@@ -18,8 +17,16 @@ public class SystemUserManagerTest : BaseTest
         RandomString = DateTime.Now.ToString("MMddmmss");
     }
 
+
     [Fact]
-    public async Task Shoud_AddAsync()
+    public async Task SystemUser_Should_Pass()
+    {
+        await Shoud_AddAsync();
+        await Should_UpdateAsync();
+        await Should_QueryAsync();
+    }
+
+    async internal Task Shoud_AddAsync()
     {
         var salt = HashCrypto.BuildSalt();
         var dto = new SystemUserAddDto()
@@ -35,8 +42,7 @@ public class SystemUserManagerTest : BaseTest
 
     }
 
-    [Fact]
-    public async Task Should_UpdateAsync()
+    async internal Task Should_UpdateAsync()
     {
         var dto = new SystemUserUpdateDto()
         {
@@ -51,8 +57,7 @@ public class SystemUserManagerTest : BaseTest
         }
     }
 
-    [Fact]
-    public async Task Should_QueryAsync()
+    async internal Task Should_QueryAsync()
     {
         var filter = new SystemUserFilterDto()
         {

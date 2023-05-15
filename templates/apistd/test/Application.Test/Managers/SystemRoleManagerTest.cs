@@ -1,6 +1,4 @@
 using Application.IManager;
-using Core.Entities.SystemEntities;
-using Core.Utils;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Share.Models.SystemRoleDtos;
@@ -18,10 +16,17 @@ public class SystemRoleManagerTest : BaseTest
         RandomString = DateTime.Now.ToString("MMddmmss");
     }
 
+
     [Fact]
-    public async Task Shoud_AddAsync()
+    public async Task SystemRole_Should_Pass()
     {
-        var dto  = new SystemRoleAddDto()
+        await Shoud_AddAsync();
+        await Should_UpdateAsync();
+        await Should_QueryAsync();
+    }
+    async internal Task Shoud_AddAsync()
+    {
+        var dto = new SystemRoleAddDto()
         {
             Name = "Name" + RandomString,
             NameValue = "NameValue" + RandomString,
@@ -33,10 +38,9 @@ public class SystemRoleManagerTest : BaseTest
 
     }
 
-    [Fact]
-    public async Task Should_UpdateAsync()
+    async internal Task Should_UpdateAsync()
     {
-        var dto  = new SystemRoleUpdateDto()
+        var dto = new SystemRoleUpdateDto()
         {
             Name = "Name" + RandomString,
             NameValue = "NameValue" + RandomString,
@@ -50,9 +54,7 @@ public class SystemRoleManagerTest : BaseTest
 
         }
     }
-
-    [Fact]
-    public async Task Should_QueryAsync()
+    async internal Task Should_QueryAsync()
     {
         var filter = new SystemRoleFilterDto()
         {
