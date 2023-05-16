@@ -21,7 +21,7 @@ public class FilterBase
     }
 
     /// <summary>
-    /// 排序
+    /// 排序,field=>是否正序
     /// </summary>
     public Dictionary<string, bool>? OrderBy { get; set; }
 
