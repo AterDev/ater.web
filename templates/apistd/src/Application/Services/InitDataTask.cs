@@ -29,7 +29,7 @@ public class InitDataTask
                 if (role == null)
                 {
                     logger.LogInformation("初始化数据");
-                    await InitRoleAndUserAsync(context, logger);
+                    await InitRoleAndUserAsync(context, configuration, logger);
                 }
                 await UpdateAsync(context, configuration);
             }
@@ -43,8 +43,9 @@ public class InitDataTask
     /// <summary>
     /// 初始化角色和管理用户
     /// </summary>
-    public static async Task InitRoleAndUserAsync(CommandDbContext context, ILogger<InitDataTask> logger)
+    public static async Task InitRoleAndUserAsync(CommandDbContext context, IConfiguration configuration, ILogger<InitDataTask> logger)
     {
+        var defaultPassword = configuration.GetValue<string>("Key:DefaultPassword") ?? "Hello.Net";
         SystemRole role = new()
         {
             Name = Const.AdminUser,
@@ -61,7 +62,7 @@ public class InitDataTask
             Id = new Guid("6e2bb78f-fa51-480d-8200-83d488184621"),
             UserName = "admin",
             PasswordSalt = salt,
-            PasswordHash = HashCrypto.GeneratePwd("Hello.Net", salt),
+            PasswordHash = HashCrypto.GeneratePwd(defaultPassword, salt),
             SystemRoles = new List<SystemRole>() { role },
         };
 
@@ -71,7 +72,7 @@ public class InitDataTask
             UserName = "TestUser",
             Email = "TestEmail@dusi.dev",
             PasswordSalt = salt,
-            PasswordHash = HashCrypto.GeneratePwd("Hello.Net", salt),
+            PasswordHash = HashCrypto.GeneratePwd(defaultPassword, salt),
         };
 
         try
