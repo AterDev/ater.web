@@ -29,7 +29,7 @@ public class InitDataTask
                 if (role == null)
                 {
                     logger.LogInformation("初始化数据");
-                    await InitRoleAndUserAsync(context);
+                    await InitRoleAndUserAsync(context, logger);
                 }
                 await UpdateAsync(context, configuration);
             }
@@ -43,7 +43,7 @@ public class InitDataTask
     /// <summary>
     /// 初始化角色和管理用户
     /// </summary>
-    public static async Task InitRoleAndUserAsync(CommandDbContext context)
+    public static async Task InitRoleAndUserAsync(CommandDbContext context, ILogger<InitDataTask> logger)
     {
         SystemRole role = new()
         {
@@ -74,15 +74,21 @@ public class InitDataTask
             PasswordHash = HashCrypto.GeneratePwd("Hello.Net", salt),
         };
 
-        context.SystemRoles.Add(userRole);
-        context.SystemRoles.Add(role);
-        context.SystemUsers.Add(systemUser);
-        await context.SaveChangesAsync();
+        try
+        {
+            context.SystemRoles.Add(userRole);
+            context.SystemRoles.Add(role);
+            context.SystemUsers.Add(systemUser);
+            await context.SaveChangesAsync();
 
-        context.ChangeTracker.Clear();
-        context.Users.Add(user);
-        await context.SaveChangesAsync();
-
+            context.ChangeTracker.Clear();
+            context.Users.Add(user);
+            await context.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            logger.LogError("初始化角色用户时出错,请确认您的数据库没有数据！{message}", ex.Message);
+        }
     }
 
     /// <summary>
