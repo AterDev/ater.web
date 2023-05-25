@@ -4,7 +4,6 @@ public class CustomBadRequest : ObjectResult
 {
     public CustomBadRequest(ActionContext context, object? value) : base(value)
     {
-
         StatusCode = 400;
         Value = new {
             Title = "请求参数错误",

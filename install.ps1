@@ -2,6 +2,10 @@ try {
     if (Test-Path ./nuget) {
         Remove-Item ./nuget -Force -Recurse
     }
+    if (Test-Path ./templates/apistd/src/Http.API/Migrations) {
+        Remove-Item ./templates/apistd/src/Http.API/Migrations -Force -Recurse
+    }
+    
     dotnet pack 
     # get package info
     $VersionNode = Select-Xml -Path ./Pack.csproj -XPath '/Project//PropertyGroup/PackageVersion'
