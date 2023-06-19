@@ -17,6 +17,5 @@ public static partial class StoreServicesExtensions
         services.AddTransient<IUserContext, UserContext>();
         services.AddScoped<ISystemRoleManager, SystemRoleManager>();
         services.AddScoped<ISystemUserManager, SystemUserManager>();
-
     }
 }
