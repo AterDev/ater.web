@@ -6,7 +6,7 @@ try {
         Remove-Item ./templates/apistd/src/Http.API/Migrations -Force -Recurse
     }
     
-    dotnet pack 
+    dotnet pack -c release -o ./nuget
     # get package info
     $VersionNode = Select-Xml -Path ./Pack.csproj -XPath '/Project//PropertyGroup/PackageVersion'
     $PackageNode = Select-Xml -Path ./Pack.csproj -XPath '/Project//PropertyGroup/PackageId'
