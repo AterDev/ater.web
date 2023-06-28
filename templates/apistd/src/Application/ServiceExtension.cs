@@ -49,7 +49,7 @@ public static class ServiceExtension
             var logging = components.Logging;
             if (db != null)
             {
-                switch (db)
+                switch (db.ToLower())
                 {
                     case AppSetting.PGSQL:
                         services.AddPgsqlDbContext(configuration);
@@ -62,7 +62,7 @@ public static class ServiceExtension
 
             if (cache != null)
             {
-                switch (cache)
+                switch (cache.ToLower())
                 {
                     case AppSetting.REDIS:
                         services.AddRedisCache(configuration);
@@ -75,7 +75,7 @@ public static class ServiceExtension
 
             if (logging != null)
             {
-                switch (logging)
+                switch (logging.ToLower())
                 {
                     case AppSetting.OTLP:
                         services.AddOpenTelemetry("MyProjectName", opt =>
