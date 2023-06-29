@@ -6,9 +6,9 @@ public class SystemRoleManager : DomainManagerBase<SystemRole, SystemRoleUpdateD
 {
     public SystemRoleManager(
         DataStoreContext storeContext,
-        IUserContext userContext) : base(storeContext)
+        ILogger<SystemRoleManager> logger,
+        IUserContext userContext) : base(storeContext, logger)
     {
-
         _userContext = userContext;
     }
 
