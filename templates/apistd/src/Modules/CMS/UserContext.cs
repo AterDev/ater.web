@@ -32,8 +32,8 @@ public partial class UserContext : IUserContext
     public List<string>? Roles { get; set; }
     public Guid? GroupId { get; init; }
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly CommandDbContext _context;
-    public UserContext(IHttpContextAccessor httpContextAccessor, CommandDbContext context)
+    private readonly CmsCommandDb _context;
+    public UserContext(IHttpContextAccessor httpContextAccessor, CmsCommandDb context)
     {
         _httpContextAccessor = httpContextAccessor;
         if (Guid.TryParse(FindClaim(ClaimTypes.NameIdentifier)?.Value, out Guid userId) && userId != Guid.Empty)

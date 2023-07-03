@@ -3,10 +3,10 @@ namespace EntityFramework;
 /// <summary>
 /// 只读数据库上下文
 /// </summary>
-public class QueryDbContext : ContextBase
+public class CmsQueryDb : ContextBase
 {
 
-    public QueryDbContext(DbContextOptions<QueryDbContext> options) : base(options)
+    public CmsQueryDb(DbContextOptions<CmsQueryDb> options) : base(options)
     {
         ChangeTracker.AutoDetectChangesEnabled = false;
     }

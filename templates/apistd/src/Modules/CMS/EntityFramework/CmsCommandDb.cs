@@ -1,7 +1,7 @@
 ﻿namespace EntityFramework;
-public class CommandDbContext : ContextBase
+public class CmsCommandDb : ContextBase
 {
-    public CommandDbContext(DbContextOptions<CommandDbContext> options) : base(options)
+    public CmsCommandDb(DbContextOptions<CmsCommandDb> options) : base(options)
     {
 
     }
