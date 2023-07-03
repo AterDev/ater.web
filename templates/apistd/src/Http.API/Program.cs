@@ -1,6 +1,7 @@
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using Application;
+using Application.Const;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 IServiceCollection services = builder.Services;
@@ -13,10 +14,10 @@ services.AddWebComponent(configuration);
 // 2 api安全相关配置
 services.AddAuthorization(options =>
 {
-    options.AddPolicy(Const.User, policy =>
-        policy.RequireRole(Const.AdminUser, Const.User));
-    options.AddPolicy(Const.AdminUser, policy =>
-        policy.RequireRole(Const.AdminUser));
+    options.AddPolicy(AppConst.User, policy =>
+        policy.RequireRole(AppConst.AdminUser, AppConst.User));
+    options.AddPolicy(AppConst.AdminUser, policy =>
+        policy.RequireRole(AppConst.AdminUser));
 });
 // config cors
 services.AddCors(options =>

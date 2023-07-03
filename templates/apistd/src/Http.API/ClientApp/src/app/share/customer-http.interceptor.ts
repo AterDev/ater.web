@@ -59,9 +59,13 @@ export class CustomerHttpInterceptor implements HttpInterceptor {
           if (error.error.detail) {
             errors.detail = error.error.detail;
           }
+          if (error.error.title) {
+            errors.detail = error.error.title + ':' + errors.detail;
+          }
         }
         break;
     }
+    errors.status = error.status;
     this.snb.open(errors.detail);
     return throwError(() => errors);
   }

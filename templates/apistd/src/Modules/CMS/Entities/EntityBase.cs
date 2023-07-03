@@ -1,6 +1,7 @@
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Core.Models;
+namespace CMS.Entities;
 
 /// <summary>
 /// 数据加基础字段模型

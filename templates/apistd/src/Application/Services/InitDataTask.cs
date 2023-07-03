@@ -1,4 +1,4 @@
-﻿using Core.Const;
+﻿
 using Microsoft.Extensions.Configuration;
 
 namespace Application.Services;
@@ -25,7 +25,7 @@ public class InitDataTask
             else
             {
                 // 判断是否初始化
-                SystemRole? role = await context.SystemRoles.SingleOrDefaultAsync(r => r.NameValue == Const.AdminUser);
+                SystemRole? role = await context.SystemRoles.SingleOrDefaultAsync(r => r.NameValue == AppConst.AdminUser);
                 if (role == null)
                 {
                     logger.LogInformation("初始化数据");
@@ -48,13 +48,13 @@ public class InitDataTask
         var defaultPassword = configuration.GetValue<string>("Key:DefaultPassword") ?? "Hello.Net";
         SystemRole role = new()
         {
-            Name = Const.AdminUser,
-            NameValue = Const.AdminUser,
+            Name = AppConst.AdminUser,
+            NameValue = AppConst.AdminUser,
         };
         SystemRole userRole = new()
         {
-            Name = Const.User,
-            NameValue = Const.User,
+            Name = AppConst.User,
+            NameValue = AppConst.User,
         };
         string salt = HashCrypto.BuildSalt();
         SystemUser systemUser = new()
@@ -101,14 +101,14 @@ public class InitDataTask
     public static async Task UpdateAsync(CommandDbContext context, IConfiguration configuration)
     {
         // 查询库中版本
-        SystemConfig? version = await context.SystemConfigs.Where(c => c.Key == Const.Version).FirstOrDefaultAsync();
+        SystemConfig? version = await context.SystemConfigs.Where(c => c.Key == AppConst.Version).FirstOrDefaultAsync();
         if (version == null)
         {
             SystemConfig config = new()
             {
                 IsSystem = true,
                 Valid = true,
-                Key = Const.Version,
+                Key = AppConst.Version,
                 // 版本格式:yyMMdd.编号
                 Value = DateTime.UtcNow.ToString("yyMMdd") + ".01"
             };
@@ -117,7 +117,7 @@ public class InitDataTask
             version = config;
         }
         // 比对新版本
-        string? newVersion = configuration.GetValue<string>(Const.Version);
+        string? newVersion = configuration.GetValue<string>(AppConst.Version);
 
         if (double.TryParse(newVersion, out double newVersionValue)
             && double.TryParse(version.Value, out double versionValue))

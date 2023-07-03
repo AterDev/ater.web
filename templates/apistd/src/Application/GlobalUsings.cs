@@ -4,6 +4,7 @@ global using System.Security.Claims;
 global using System.Text;
 global using System.Text.Json;
 global using Application.CommandStore;
+global using Application.Const;
 global using Application.IManager;
 global using Application.Implement;
 global using Application.Interface;

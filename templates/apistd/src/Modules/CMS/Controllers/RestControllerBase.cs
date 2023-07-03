@@ -1,7 +1,6 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
+﻿using Microsoft.AspNetCore.Mvc.Infrastructure;
 
-namespace Http.API.Infrastructure;
+namespace CMS.Controllers;
 
 /// <summary>
 /// 管理后台权限控制器
@@ -26,6 +25,8 @@ public class RestControllerBase<TManager> : RestControllerBase
         _user = user;
         _logger = logger;
     }
+
+
 }
 
 /// <summary>
@@ -51,6 +52,7 @@ public class ClientControllerBase<TManager> : RestControllerBase
         _user = user;
         _logger = logger;
     }
+
 }
 
 /// <summary>

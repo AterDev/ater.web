@@ -1,6 +1,12 @@
-﻿namespace Core.Const;
-public static class Const
+﻿namespace CMS;
+/// <summary>
+/// 应用程序常量
+/// </summary>
+public static class AppConst
 {
+    public const string DefaultStateName = "statestore";
+    public const string DefaultPubSubName = "pubsub";
+
     /// <summary>
     /// 管理员policy
     /// </summary>

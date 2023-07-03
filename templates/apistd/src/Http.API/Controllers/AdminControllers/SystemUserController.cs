@@ -1,4 +1,4 @@
-using Application.AppConst;
+using Application.Const;
 using Share.Models.SystemUserDtos;
 namespace Http.API.Controllers.AdminControllers;
 
@@ -78,7 +78,10 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
     {
         // 注意删除权限
         var entity = await manager.GetOwnedAsync(id);
-        if (entity == null) return NotFound();
+        if (entity == null)
+        {
+            return NotFound();
+        }
         // return Forbid();
         return await manager.DeleteAsync(entity);
     }
