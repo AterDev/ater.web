@@ -17,7 +17,7 @@ public class TestController : RestControllerBase
     public async Task<List<Blog>> GetAsync()
     {
 
-        var res = await _blogManager.Query.Db.ToListAsync();
+        List<Blog> res = await _blogManager.Query.Db.ToListAsync();
         return res;
     }
 

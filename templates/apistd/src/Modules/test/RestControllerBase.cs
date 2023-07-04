@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc.Infrastructure;
+using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
-namespace CMS.Controllers;
+namespace test.Infrastructure;
 
 /// <summary>
 /// 管理后台权限控制器
 /// </summary>
 [Route("api/admin/[controller]")]
-[Authorize(AppConst.AdminUser)]
+[Authorize(Const.AdminUser)]
 [ApiExplorerSettings(GroupName = "admin")]
 public class RestControllerBase<TManager> : RestControllerBase
      where TManager : class
@@ -26,6 +27,18 @@ public class RestControllerBase<TManager> : RestControllerBase
         _logger = logger;
     }
 
+    /*
+    protected async Task<SystemUser?> GetUserAsync()
+    {
+        return await _user.GetSystemUserAsync();
+    }
+    */
+
+    // TODO:角色权限
+    public virtual bool HasPermission()
+    {
+        return true;
+    }
 
 }
 
@@ -33,7 +46,7 @@ public class RestControllerBase<TManager> : RestControllerBase
 /// 用户端权限控制器
 /// </summary>
 /// <typeparam name="TManager"></typeparam>
-[Authorize(AppConst.User)]
+[Authorize(Const.User)]
 [ApiExplorerSettings(GroupName = "client")]
 public class ClientControllerBase<TManager> : RestControllerBase
      where TManager : class
@@ -52,7 +65,12 @@ public class ClientControllerBase<TManager> : RestControllerBase
         _user = user;
         _logger = logger;
     }
-
+    /*
+    protected async Task<User?> GetUserAsync()
+    {
+        return await _user.GetUserAsync();
+    }
+    */
 }
 
 /// <summary>
@@ -63,70 +81,6 @@ public class ClientControllerBase<TManager> : RestControllerBase
 [Produces("application/json")]
 public class RestControllerBase : ControllerBase
 {
-
-    /// <summary>
-    /// 404返回格式处理
-    /// </summary>
-    /// <param name="value"></param>
-    /// <returns></returns>
-    [NonAction]
-    public override NotFoundObjectResult NotFound([ActionResultObjectValue] object? value)
-    {
-        var res = new
-        {
-            Title = "访问的资源不存在",
-            Detail = value?.ToString(),
-            Status = 404,
-            TraceId = HttpContext.TraceIdentifier
-        };
-        Activity? at = Activity.Current;
-        _ = (at?.SetTag("responseBody", value));
-        return base.NotFound(res);
-    }
-
-    /// <summary>
-    /// 409返回格式处理
-    /// </summary>
-    /// <param name="error"></param>
-    /// <returns></returns>
-    [NonAction]
-    public override ConflictObjectResult Conflict([ActionResultObjectValue] object? error)
-    {
-        var res = new
-        {
-            Title = "重复的资源",
-            Detail = error?.ToString(),
-            Status = 409,
-            TraceId = HttpContext.TraceIdentifier
-        };
-        Activity? at = Activity.Current;
-        _ = (at?.SetTag("responseBody", error));
-        return base.Conflict(res);
-    }
-
-    /// <summary>
-    /// 500业务错误
-    /// </summary>
-    /// <param name="detail"></param>
-    /// <returns></returns>
-    [NonAction]
-    public ObjectResult Problem(string? detail = null)
-    {
-        var res = new
-        {
-            Title = "业务错误",
-            Detail = detail,
-            Status = 500,
-            TraceId = HttpContext.TraceIdentifier
-        };
-        Activity? at = Activity.Current;
-        _ = (at?.SetTag("responseBody", detail));
-        return new ObjectResult(res)
-        {
-            StatusCode = 500,
-
-        };
-    }
     /// <summary>
     /// 400返回格式处理
     /// </summary>
@@ -143,5 +97,65 @@ public class RestControllerBase : ControllerBase
             TraceId = HttpContext.TraceIdentifier
         };
         return base.BadRequest(res);
+    }
+    /// <summary>
+    /// 404返回格式处理
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    [NonAction]
+    public override NotFoundObjectResult NotFound([ActionResultObjectValue] object? value)
+    {
+        var res = new {
+            Title = "访问的资源不存在",
+            Detail = value?.ToString(),
+            Status = 404,
+            TraceId = HttpContext.TraceIdentifier
+        };
+        var at = Activity.Current;
+        at?.SetTag("responseBody", value);
+        return base.NotFound(res);
+    }
+
+    /// <summary>
+    /// 409返回格式处理
+    /// </summary>
+    /// <param name="error"></param>
+    /// <returns></returns>
+    [NonAction]
+    public override ConflictObjectResult Conflict([ActionResultObjectValue] object? error)
+    {
+        var res = new {
+            Title = "重复的资源",
+            Detail = error?.ToString(),
+            Status = 409,
+            TraceId = HttpContext.TraceIdentifier
+        };
+        var at = Activity.Current;
+        at?.SetTag("responseBody", error);
+        return base.Conflict(res);
+    }
+
+    /// <summary>
+    /// 500业务错误
+    /// </summary>
+    /// <param name="detail"></param>
+    /// <returns></returns>
+    [NonAction]
+    public ObjectResult Problem(string? detail = null)
+    {
+        var res = new {
+            Title = "业务错误",
+            Detail = detail,
+            Status = 500,
+            TraceId = HttpContext.TraceIdentifier
+        };
+        var at = Activity.Current;
+        at?.SetTag("responseBody", detail);
+        return new ObjectResult(res)
+        {
+            StatusCode = 500,
+
+        };
     }
 }
