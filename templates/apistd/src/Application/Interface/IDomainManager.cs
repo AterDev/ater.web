@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore.Infrastructure;
-
 namespace Application.Interface;
 
 /// <summary>

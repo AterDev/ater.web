@@ -1,4 +1,3 @@
-using Application.Const;
 using Share.Models.SystemUserDtos;
 namespace Http.API.Controllers.AdminControllers;
 
@@ -51,7 +50,11 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
     public async Task<ActionResult<SystemUser?>> UpdateAsync([FromRoute] Guid id, SystemUserUpdateDto dto)
     {
         var current = await manager.GetOwnedAsync(id);
-        if (current == null) return NotFound(ErrorMsg.NotFoundResource);
+        if (current == null)
+        {
+            return NotFound(ErrorMsg.NotFoundResource);
+        }
+
         return await manager.UpdateAsync(current, dto);
     }
 

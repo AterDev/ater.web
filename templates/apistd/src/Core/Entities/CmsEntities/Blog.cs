@@ -1,8 +1,6 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CMS.Entities;
+namespace Core.Entities.CmsEntities;
 /// <summary>
 /// 博客
 /// </summary>

@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Application.Implement;
 /// <summary>
-/// 可写仓储基类,请勿直接修改本类内容
+/// 读写仓储基类,请勿直接修改基类内容 
 /// </summary>
 /// <typeparam name="TContext"></typeparam>
 /// <typeparam name="TEntity"></typeparam>
@@ -103,7 +103,6 @@ public partial class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity
         }
         return entity;
     }
-
 
     /// <summary>
     /// 批量创建

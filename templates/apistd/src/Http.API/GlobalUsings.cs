@@ -14,3 +14,7 @@ global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.EntityFrameworkCore;
 global using Share.Models;
+
+global using Microsoft.Extensions.DependencyInjection;
+global using Core.Entities.CmsEntities;
+global using Core.Models;

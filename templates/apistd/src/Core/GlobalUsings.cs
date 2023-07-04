@@ -4,3 +4,4 @@ global using System.Linq;
 global using System.Linq.Expressions;
 global using System.Text;
 global using Core.Models;
+global using Microsoft.EntityFrameworkCore;

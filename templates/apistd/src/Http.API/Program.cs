@@ -1,7 +1,6 @@
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using Application;
-using Application.Const;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 IServiceCollection services = builder.Services;

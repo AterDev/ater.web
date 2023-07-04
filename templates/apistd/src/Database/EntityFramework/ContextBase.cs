@@ -1,10 +1,11 @@
 using Core.Entities;
+using Core.Entities.CmsEntities;
 using Core.Entities.SystemEntities;
 using Core.Models;
 
 namespace EntityFramework;
 
-public class ContextBase : DbContext
+public partial class ContextBase : DbContext
 {
     public DbSet<SystemUser> SystemUsers { get; set; }
     public DbSet<SystemRole> SystemRoles { get; set; }
@@ -16,6 +17,7 @@ public class ContextBase : DbContext
     public DbSet<SystemOrganization> SystemOrganizations { get; set; }
 
     public DbSet<User> Users { get; set; }
+    public DbSet<Blog> Blogs { get; set; }
 
     public ContextBase(DbContextOptions options) : base(options)
     {

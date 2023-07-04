@@ -1,4 +1,3 @@
-using Application.Const;
 using Share.Models.SystemRoleDtos;
 namespace Http.API.Controllers.AdminControllers;
 
@@ -51,7 +50,11 @@ public class SystemRoleController : RestControllerBase<ISystemRoleManager>
     public async Task<ActionResult<SystemRole?>> UpdateAsync([FromRoute] Guid id, SystemRoleUpdateDto dto)
     {
         var current = await manager.GetOwnedAsync(id);
-        if (current == null) return NotFound(ErrorMsg.NotFoundResource);
+        if (current == null)
+        {
+            return NotFound(ErrorMsg.NotFoundResource);
+        }
+
         return await manager.UpdateAsync(current, dto);
     }
 
@@ -78,7 +81,10 @@ public class SystemRoleController : RestControllerBase<ISystemRoleManager>
     {
         // 注意删除权限
         var entity = await manager.GetOwnedAsync(id);
-        if (entity == null) return NotFound();
+        if (entity == null)
+        {
+            return NotFound();
+        }
         // return Forbid();
         return await manager.DeleteAsync(entity);
     }

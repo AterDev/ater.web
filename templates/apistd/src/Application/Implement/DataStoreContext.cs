@@ -13,8 +13,10 @@ public class DataStoreContext
     private readonly Dictionary<string, object> StoreCache = new();
 
     public DataStoreContext(
+        BlogQueryStore blogQuery,
         SystemRoleQueryStore systemRoleQuery,
         SystemUserQueryStore systemUserQuery,
+        BlogCommandStore blogCommand,
         SystemRoleCommandStore systemRoleCommand,
         SystemUserCommandStore systemUserCommand,
 
@@ -24,8 +26,10 @@ public class DataStoreContext
     {
         QueryContext = queryDbContext;
         CommandContext = commandDbContext;
+        AddCache(blogQuery);
         AddCache(systemRoleQuery);
         AddCache(systemUserQuery);
+        AddCache(blogCommand);
         AddCache(systemRoleCommand);
         AddCache(systemUserCommand);
 

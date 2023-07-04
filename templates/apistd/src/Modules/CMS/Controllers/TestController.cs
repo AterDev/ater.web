@@ -1,14 +1,24 @@
-﻿namespace CMS.Controllers;
+﻿using Core.Entities.CmsEntities;
+
+namespace CMS.Controllers;
 /// <summary>
 /// 模块接口
 /// </summary>
 [ApiExplorerSettings(GroupName = "client")]
 public class TestController : RestControllerBase
 {
-    [HttpGet]
-    public string Get()
+    private readonly IBlogManager _blogManager;
+    public TestController(IBlogManager blogManager)
     {
-        return "hello world";
+        _blogManager = blogManager;
+    }
+
+    [HttpGet]
+    public async Task<List<Blog>> GetAsync()
+    {
+
+        var res = await _blogManager.Query.Db.ToListAsync();
+        return res;
     }
 
 }
