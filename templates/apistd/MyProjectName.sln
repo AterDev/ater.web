@@ -25,9 +25,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{F4A37F
 		.editorconfig = .editorconfig
 		.config\dotnet-tools.json = .config\dotnet-tools.json
 	EndProjectSection
-	ProjectSection(FolderGlobals) = preProject
-		D_5_4codes_4ater_1web_4templates_4apistd_4_1droplet-config_1json__JsonSchema = https://docs.gradle.com/build-cache-node/schema/build-cache-node-config-schema-5.json
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{8377B34A-79F0-47E0-96E1-0AF7B2ACE75C}"
 	ProjectSection(SolutionItems) = preProject
@@ -49,9 +46,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.Test", "test\Ap
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{A55B3441-BB43-4DB8-84C7-1E7368189451}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CMS", "src\Modules\CMS\CMS.csproj", "{CE9B1465-119F-452E-8470-51D2A55B1C8C}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "src\Modules\Test\Test.csproj", "{54298DB6-C059-442E-81D6-A0F8F48EB204}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CMS", "src\Modules\CMS\CMS.csproj", "{44B8B14C-AB91-425A-A3E8-B4FEA58E7A47}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,14 +78,10 @@ Global
 		{811203A3-75FE-4AC8-AB45-6789357BE55D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{811203A3-75FE-4AC8-AB45-6789357BE55D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{811203A3-75FE-4AC8-AB45-6789357BE55D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CE9B1465-119F-452E-8470-51D2A55B1C8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CE9B1465-119F-452E-8470-51D2A55B1C8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CE9B1465-119F-452E-8470-51D2A55B1C8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CE9B1465-119F-452E-8470-51D2A55B1C8C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{54298DB6-C059-442E-81D6-A0F8F48EB204}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{54298DB6-C059-442E-81D6-A0F8F48EB204}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{54298DB6-C059-442E-81D6-A0F8F48EB204}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{54298DB6-C059-442E-81D6-A0F8F48EB204}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44B8B14C-AB91-425A-A3E8-B4FEA58E7A47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44B8B14C-AB91-425A-A3E8-B4FEA58E7A47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44B8B14C-AB91-425A-A3E8-B4FEA58E7A47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44B8B14C-AB91-425A-A3E8-B4FEA58E7A47}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -105,8 +96,7 @@ Global
 		{D484E244-0AF0-455A-9F2C-8A04CE46AA5A} = {FB9BEFB4-E921-476F-AC1B-B589C2CA2562}
 		{811203A3-75FE-4AC8-AB45-6789357BE55D} = {7FEE554D-ABB8-40A3-8F56-DB0F7D47CBFD}
 		{A55B3441-BB43-4DB8-84C7-1E7368189451} = {FB9BEFB4-E921-476F-AC1B-B589C2CA2562}
-		{CE9B1465-119F-452E-8470-51D2A55B1C8C} = {A55B3441-BB43-4DB8-84C7-1E7368189451}
-		{54298DB6-C059-442E-81D6-A0F8F48EB204} = {A55B3441-BB43-4DB8-84C7-1E7368189451}
+		{44B8B14C-AB91-425A-A3E8-B4FEA58E7A47} = {A55B3441-BB43-4DB8-84C7-1E7368189451}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E9C122E1-F965-4DE0-BA4B-CFC5D269C768}

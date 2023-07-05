@@ -6,4 +6,3 @@ public class BlogQueryStore : QuerySet<Blog>
     }
 }
 
-
