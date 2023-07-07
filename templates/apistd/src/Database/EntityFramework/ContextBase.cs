@@ -1,5 +1,4 @@
 using Core.Entities;
-using Core.Entities.CmsEntities;
 using Core.Entities.SystemEntities;
 using Core.Models;
 
@@ -15,9 +14,7 @@ public partial class ContextBase : DbContext
     public DbSet<RolePermission> RolePermissions { get; set; }
     public DbSet<SystemLogs> SystemLogs { get; set; }
     public DbSet<SystemOrganization> SystemOrganizations { get; set; }
-
     public DbSet<User> Users { get; set; }
-    public DbSet<Blog> Blogs { get; set; }
 
     public ContextBase(DbContextOptions options) : base(options)
     {

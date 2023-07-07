@@ -2,9 +2,8 @@
 
 namespace Core.Entities.SystemEntities;
 /// <summary>
-/// 角色表
+/// 系统角色
 /// </summary>
-//[NgPage("system", "sysrole")]
 [Index(nameof(Name))]
 [Index(nameof(NameValue), IsUnique = true)]
 public class SystemRole : EntityBase
