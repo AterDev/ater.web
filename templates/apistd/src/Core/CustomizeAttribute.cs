@@ -1,4 +1,7 @@
 ﻿namespace Core;
+/// <summary>
+/// Angular page 生成标记
+/// </summary>
 [AttributeUsage(AttributeTargets.Class)]
 public class NgPageAttribute : Attribute
 {
@@ -18,6 +21,9 @@ public class NgPageAttribute : Attribute
     }
 }
 
+/// <summary>
+/// 模块标记
+/// </summary>
 [AttributeUsage(AttributeTargets.Class)]
 public class ModuleAttribute : Attribute
 {
