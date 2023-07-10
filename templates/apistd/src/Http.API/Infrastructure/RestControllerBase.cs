@@ -7,7 +7,7 @@ namespace Http.API.Infrastructure;
 /// 管理后台权限控制器
 /// </summary>
 [Route("api/admin/[controller]")]
-[Authorize(Const.AdminUser)]
+[Authorize(AppConst.AdminUser)]
 [ApiExplorerSettings(GroupName = "admin")]
 public class RestControllerBase<TManager> : RestControllerBase
      where TManager : class
@@ -26,18 +26,13 @@ public class RestControllerBase<TManager> : RestControllerBase
         _user = user;
         _logger = logger;
     }
-
-    protected async Task<SystemUser?> GetUserAsync()
-    {
-        return await _user.GetSystemUserAsync();
-    }
 }
 
 /// <summary>
 /// 用户端权限控制器
 /// </summary>
 /// <typeparam name="TManager"></typeparam>
-[Authorize(Const.User)]
+[Authorize(AppConst.User)]
 [ApiExplorerSettings(GroupName = "client")]
 public class ClientControllerBase<TManager> : RestControllerBase
      where TManager : class
@@ -55,11 +50,6 @@ public class ClientControllerBase<TManager> : RestControllerBase
         this.manager = manager;
         _user = user;
         _logger = logger;
-    }
-
-    protected async Task<User?> GetUserAsync()
-    {
-        return await _user.GetUserAsync();
     }
 }
 
@@ -80,7 +70,8 @@ public class RestControllerBase : ControllerBase
     [NonAction]
     public override NotFoundObjectResult NotFound([ActionResultObjectValue] object? value)
     {
-        var res = new {
+        var res = new
+        {
             Title = "访问的资源不存在",
             Detail = value?.ToString(),
             Status = 404,
@@ -99,7 +90,8 @@ public class RestControllerBase : ControllerBase
     [NonAction]
     public override ConflictObjectResult Conflict([ActionResultObjectValue] object? error)
     {
-        var res = new {
+        var res = new
+        {
             Title = "重复的资源",
             Detail = error?.ToString(),
             Status = 409,
@@ -118,7 +110,8 @@ public class RestControllerBase : ControllerBase
     [NonAction]
     public ObjectResult Problem(string? detail = null)
     {
-        var res = new {
+        var res = new
+        {
             Title = "业务错误",
             Detail = detail,
             Status = 500,
@@ -140,7 +133,8 @@ public class RestControllerBase : ControllerBase
     [NonAction]
     public override BadRequestObjectResult BadRequest([ActionResultObjectValue] object? error)
     {
-        var res = new {
+        var res = new
+        {
             Title = "请求错误",
             Detail = error?.ToString(),
             Status = 400,

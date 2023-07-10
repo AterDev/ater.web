@@ -6,4 +6,3 @@ public class SystemUserQueryStore : QuerySet<SystemUser>
     }
 }
 
-

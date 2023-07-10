@@ -5,5 +5,3 @@ public class SystemRoleQueryStore : QuerySet<SystemRole>
     {
     }
 }
-
-

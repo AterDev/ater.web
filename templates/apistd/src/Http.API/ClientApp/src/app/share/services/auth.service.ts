@@ -14,7 +14,7 @@ export class AuthService extends BaseService {
    * @param data LoginDto
    */
   login(data: LoginDto): Observable<AuthResult> {
-    const url = `/api/Auth`;
+    const url = `/api/admin/Auth`;
     return this.request<AuthResult>('post', url, data);
   }
 
@@ -23,7 +23,7 @@ export class AuthService extends BaseService {
    * @param id string
    */
   logout(id: string): Observable<boolean> {
-    const url = `/api/Auth/${id}`;
+    const url = `/api/admin/Auth/${id}`;
     return this.request<boolean>('get', url);
   }
 

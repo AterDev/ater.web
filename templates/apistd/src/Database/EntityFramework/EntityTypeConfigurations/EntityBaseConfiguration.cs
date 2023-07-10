@@ -10,7 +10,6 @@ internal abstract class EntityBaseConfiguration<Entity> : IEntityTypeConfigurati
 {
     public virtual void Configure(EntityTypeBuilder<Entity> builder)
     {
-        _ = builder.HasQueryFilter(x => !x.IsDeleted);
     }
     //public abstract void ConfigureOther(EntityTypeBuilder<Entity> builder);
 }

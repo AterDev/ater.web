@@ -1,7 +1,6 @@
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using Application;
-using Microsoft.AspNetCore.Diagnostics;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 IServiceCollection services = builder.Services;
@@ -14,10 +13,10 @@ services.AddWebComponent(configuration);
 // 2 api安全相关配置
 services.AddAuthorization(options =>
 {
-    options.AddPolicy(Const.User, policy =>
-        policy.RequireRole(Const.AdminUser, Const.User));
-    options.AddPolicy(Const.AdminUser, policy =>
-        policy.RequireRole(Const.AdminUser));
+    options.AddPolicy(AppConst.User, policy =>
+        policy.RequireRole(AppConst.AdminUser, AppConst.User));
+    options.AddPolicy(AppConst.AdminUser, policy =>
+        policy.RequireRole(AppConst.AdminUser));
 });
 // config cors
 services.AddCors(options =>
@@ -50,16 +49,15 @@ services.AddControllers()
     });
 
 WebApplication app = builder.Build();
-
 if (app.Environment.IsDevelopment())
 {
     app.UseCors("default");
     app.UseSwagger();
     app.UseSwaggerUI(c =>
-   {
-       c.SwaggerEndpoint("/swagger/client/swagger.json", name: "client");
-       c.SwaggerEndpoint("/swagger/admin/swagger.json", "admin");
-   });
+    {
+        c.SwaggerEndpoint("/swagger/client/swagger.json", name: "client");
+        c.SwaggerEndpoint("/swagger/admin/swagger.json", "admin");
+    });
 }
 else
 {
@@ -72,23 +70,7 @@ else
 app.UseStaticFiles();
 
 // 异常统一处理
-app.UseExceptionHandler(handler =>
-{
-    handler.Run(async context =>
-    {
-        context.Response.StatusCode = 500;
-        Exception? exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
-        var result = new {
-            Title = "异常错误",
-            exception?.Source,
-            Detail = exception?.Message + exception?.InnerException?.Message,
-            exception?.StackTrace,
-            Status = 500,
-            TraceId = context.TraceIdentifier
-        };
-        await context.Response.WriteAsJsonAsync(result);
-    });
-});
+app.UseExceptionHandler(ExceptionHandler.Handler());
 
 app.UseHealthChecks("/health");
 app.UseRouting();

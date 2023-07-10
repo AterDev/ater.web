@@ -2,6 +2,8 @@ import { Injectable } from "@angular/core";
 import { AuthResult } from "../share/models/auth/auth-result.model";
 // import { AuthResult } from "../share/models/auth/auth-result.model";
 
+const AdminUser = "AdminUser";
+
 @Injectable({ providedIn: 'root' })
 export class LoginService {
   isLogin = false;
@@ -15,7 +17,7 @@ export class LoginService {
   saveLoginState(data: AuthResult): void {
     this.isLogin = true;
     this.userName = data.username;
-    if (data.roles.includes("Admin")) {
+    if (data.roles.includes(AdminUser)) {
       this.isAdmin = true;
     }
     localStorage.setItem("id", data.id);
@@ -32,7 +34,7 @@ export class LoginService {
     if (userId && token && username) {
       this.userName = username;
       this.isLogin = true;
-      if (role?.toLowerCase() == "admin")
+      if (role?.toLowerCase() == AdminUser.toLowerCase())
         this.isAdmin = true;
     } else {
       this.isLogin = false;

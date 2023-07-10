@@ -1,12 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<PackageType>Template</PackageType>
-		<PackageVersion>7.1.0</PackageVersion>
+		<PackageVersion>7.2.0</PackageVersion>
 		<PackageId>ater.web.templates</PackageId>
 		<Title>Ater Web Templates</Title>
 		<Authors>ater.niltor</Authors>
-		<Description>Templates to create ater.web framework.
-基于ASP.NET Core的Web开发模板.</Description>
+		<Description>
+			Templates to create ater.web framework.
+			基于ASP.NET Core的Web开发模板.
+		</Description>
 		<PackageTags>dotnet-new;templates;webapi;framework</PackageTags>
 		<TargetFramework>netstandard2.1</TargetFramework>
 		<IncludeContentInPack>true</IncludeContentInPack>
@@ -21,28 +23,24 @@
 		<RepositoryUrl>https://github.com/AterDev/ater.web</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageReleaseNotes>
-		1 更新包版本，优化依赖关系;
-		2 引入Dapr1.10;
-		3 添加Application.Test测试项目;
-		4 部分细节完善;
-		5 增加更多管理功能默认实现;
-		6 调整了Manager的接口继承关系，以便通过接口方法可以直接跳转到实现，而不是基类的接口
+			1 简化服务注册
+			2 增加更多配置
 		</PackageReleaseNotes>
 		<NoWarn>$(NoWarn);NU5128;NU5110;NU5111</NoWarn>
 		<NoDefaultExcludes>true</NoDefaultExcludes>
 	</PropertyGroup>
 	<ItemGroup>
-		<Content Include="templates\**\*" Exclude="templates\**\bin\**;templates\**\obj\**;templates\**\.vs\**;templates\**\node_modules\**;templates\**\.angular\**;templates\**\*.lock" />
+		<Content Include="templates\**\*" Exclude="templates\**\bin\**;templates\**\obj\**;templates\**\.vs\**;templates\**\node_modules\**;templates\**\.angular\**;templates\**\*.lock;templates\**\src\Modules\**;templates\**\.tmp\**" />
 		<Compile Remove="**\*" />
 	</ItemGroup>
 	<ItemGroup>
-	  <None Update="logo.jpg">
-	    <Pack>True</Pack>
-	    <PackagePath>\</PackagePath>
-	  </None>
-	  <None Update="README.md">
-	    <Pack>True</Pack>
-	    <PackagePath>\</PackagePath>
-	  </None>
+		<None Update="logo.jpg">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Update="README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
 	</ItemGroup>
 </Project>

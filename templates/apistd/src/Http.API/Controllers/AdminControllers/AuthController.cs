@@ -1,4 +1,5 @@
-﻿using Application.QueryStore;
+﻿using Application.Const;
+using Application.QueryStore;
 using Share.Models.AuthDtos;
 
 namespace Http.API.Controllers.AdminControllers;
@@ -62,16 +63,16 @@ public class AuthController : RestControllerBase
                     TokenExpires = 60 * 24 * 7,
                 };
                 // 添加管理员用户标识
-                roles?.Add(Const.AdminUser);
+                roles?.Add(AppConst.AdminUser);
 
-                var token = jwt.GetToken(user.Id.ToString(), roles?.ToArray() ?? new string[] { Const.AdminUser });
+                var token = jwt.GetToken(user.Id.ToString(), roles?.ToArray() ?? new string[] { AppConst.AdminUser });
 
                 // 登录状态存储到Redis
                 //await _redis.SetValueAsync("login" + user.Id.ToString(), true, 60 * 24 * 7);
                 return new AuthResult
                 {
                     Id = user.Id,
-                    Roles = roles?.ToArray() ?? new string[] { Const.AdminUser },
+                    Roles = roles?.ToArray() ?? new string[] { AppConst.AdminUser },
                     Token = token,
                     Username = user.UserName
                 };

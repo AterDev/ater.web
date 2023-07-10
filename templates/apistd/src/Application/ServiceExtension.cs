@@ -10,21 +10,23 @@ using Share.Options;
 
 namespace Application;
 
-
+/// <summary>
+/// 应用配置常量
+/// </summary>
 public static class AppSetting
 {
-    public const string NONE = "none";
-    public const string PGSQL = "pgsql";
-    public const string SQLSERVER = "sqlserver";
-    public const string REDIS = "redis";
-    public const string MEMORY = "memory";
-    public const string SERILOG = "serilog";
-    public const string OTLP = "otlp";
-    public const string COMMAND_DB = "CommandDb";
-    public const string QUERY_DB = "QueryDb";
-    public const string CACHE = "Cache";
-    public const string CACHE_INSTANCE_NAME = "CacheInstanceName";
-    public const string LOGGING = "Logging";
+    public const string None = "none";
+    public const string PostgreSQL = "postgresql";
+    public const string SQLServer = "sqlserver";
+    public const string Redis = "redis";
+    public const string Memory = "memory";
+    public const string Otlp = "otlp";
+
+    public const string CommandDB = "CommandDb";
+    public const string QueryDB = "QueryDb";
+    public const string Cache = "Cache";
+    public const string CacheInstanceName = "CacheInstanceName";
+    public const string Logging = "Logging";
 }
 
 /// <summary>
@@ -49,12 +51,12 @@ public static class ServiceExtension
             var logging = components.Logging;
             if (db != null)
             {
-                switch (db)
+                switch (db.ToLower())
                 {
-                    case AppSetting.PGSQL:
+                    case AppSetting.PostgreSQL:
                         services.AddPgsqlDbContext(configuration);
                         break;
-                    case AppSetting.SQLSERVER:
+                    case AppSetting.SQLServer:
                         services.AddSqlServerDbContext(configuration);
                         break;
                 }
@@ -62,12 +64,12 @@ public static class ServiceExtension
 
             if (cache != null)
             {
-                switch (cache)
+                switch (cache.ToLower())
                 {
-                    case AppSetting.REDIS:
+                    case AppSetting.Redis:
                         services.AddRedisCache(configuration);
                         break;
-                    case AppSetting.MEMORY:
+                    case AppSetting.Memory:
                         services.AddMemoryCache();
                         break;
                 }
@@ -75,12 +77,12 @@ public static class ServiceExtension
 
             if (logging != null)
             {
-                switch (logging)
+                switch (logging.ToLower())
                 {
-                    case AppSetting.OTLP:
+                    case AppSetting.Otlp:
                         services.AddOpenTelemetry("MyProjectName", opt =>
                         {
-                            opt.Endpoint = new Uri(configuration.GetConnectionString(AppSetting.LOGGING)
+                            opt.Endpoint = new Uri(configuration.GetConnectionString(AppSetting.Logging)
                                 ?? "http://localhost:4317");
                         });
                         break;
@@ -99,8 +101,8 @@ public static class ServiceExtension
     /// <returns></returns>
     public static IServiceCollection AddPgsqlDbContext(this IServiceCollection services, IConfiguration configuration)
     {
-        var commandString = configuration.GetConnectionString(AppSetting.COMMAND_DB);
-        var queryString = configuration.GetConnectionString(AppSetting.QUERY_DB);
+        var commandString = configuration.GetConnectionString(AppSetting.CommandDB);
+        var queryString = configuration.GetConnectionString(AppSetting.QueryDB);
         services.AddDbContextPool<QueryDbContext>(option =>
         {
             option.UseNpgsql(queryString, sql =>
@@ -128,8 +130,8 @@ public static class ServiceExtension
     /// <returns></returns>
     public static IServiceCollection AddSqlServerDbContext(this IServiceCollection services, IConfiguration configuration)
     {
-        var commandString = configuration.GetConnectionString(AppSetting.COMMAND_DB);
-        var queryString = configuration.GetConnectionString(AppSetting.QUERY_DB);
+        var commandString = configuration.GetConnectionString(AppSetting.CommandDB);
+        var queryString = configuration.GetConnectionString(AppSetting.QueryDB);
         services.AddDbContextPool<QueryDbContext>(option =>
         {
             option.UseSqlServer(queryString, sql =>
@@ -159,8 +161,8 @@ public static class ServiceExtension
     {
         return services.AddStackExchangeRedisCache(options =>
         {
-            options.Configuration = configuration.GetConnectionString(AppSetting.CACHE);
-            options.InstanceName = configuration.GetConnectionString(AppSetting.CACHE_INSTANCE_NAME);
+            options.Configuration = configuration.GetConnectionString(AppSetting.Cache);
+            options.InstanceName = configuration.GetConnectionString(AppSetting.CacheInstanceName);
         });
     }
     /// <summary>

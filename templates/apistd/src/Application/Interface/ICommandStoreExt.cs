@@ -1,9 +1,4 @@
 namespace Application.Interface;
-/// <summary>
-/// 扩展接口
-/// </summary>
-/// <typeparam name="TId"></typeparam>
-/// <typeparam name="TEntity"></typeparam>
 public interface ICommandStoreExt<TId, TEntity>
     where TEntity : EntityBase
 {

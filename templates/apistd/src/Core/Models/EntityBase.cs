@@ -16,6 +16,14 @@ public abstract class EntityBase
     /// <summary>
     /// 软删除
     /// </summary>
-    public bool IsDeleted { get; set; } = false;
+    public bool IsDeleted { get; set; }
+
+    /*
+    /// <summary>
+    /// 租户标识
+    /// </summary>
+    [MaxLength(200)]
+    public string? Tanant { get; set; }
+    */
 }
 

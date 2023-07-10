@@ -6,9 +6,9 @@ public class SystemUserManager : DomainManagerBase<SystemUser, SystemUserUpdateD
 {
     public SystemUserManager(
         DataStoreContext storeContext,
-        IUserContext userContext) : base(storeContext)
+        ILogger<SystemUserManager> logger,
+        IUserContext userContext) : base(storeContext, logger)
     {
-
         _userContext = userContext;
     }
 
