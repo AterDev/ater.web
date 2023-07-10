@@ -1,11 +1,9 @@
 ﻿using System.Text.Json.Serialization;
-using Microsoft.EntityFrameworkCore;
 
 namespace Entity.SystemEntities;
 /// <summary>
 /// 系统用户
 /// </summary>
-//[NgPage("system", "sysuser")]
 [Index(nameof(UserName), IsUnique = true)]
 [Index(nameof(Email), IsUnique = true)]
 [Index(nameof(PhoneNumber), IsUnique = true)]

@@ -1,11 +1,9 @@
-using Entity.SystemEntities;
 using Share.Models.SystemUserDtos;
 namespace Http.API.Controllers.AdminControllers;
 
 /// <summary>
 /// 系统用户
 /// </summary>
-//[NgPage("system", "sysuser")]
 public class SystemUserController : RestControllerBase<ISystemUserManager>
 {
 

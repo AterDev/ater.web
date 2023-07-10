@@ -1,4 +1,5 @@
 ﻿using Application;
+using Ater.Web.Abstracture;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using OpenTelemetry.Exporter;
@@ -201,7 +202,7 @@ public static class ServiceExtension
 #endif
         });
         // 返回内容最大长度截取
-        int maxLength = 2048;
+        var maxLength = 2048;
         tracerProvider ??= new Action<TracerProviderBuilder>(options =>
         {
             options.AddSource(serviceName)
@@ -215,10 +216,10 @@ public static class ServiceExtension
                         {
                             System.Net.Http.Headers.HttpContentHeaders headers = httpRequestMessage.Content.Headers;
                             // 过滤过长或文件类型
-                            long contentLength = headers.ContentLength ?? 0;
-                            string? contentType = headers.ContentType?.ToString();
+                            var contentLength = headers.ContentLength ?? 0;
+                            var contentType = headers.ContentType?.ToString();
                             if (contentLength > maxLength * 2
-                            || (contentType != null && contentType.Contains("multipart/form-data"))) { }
+                            || contentType != null && contentType.Contains("multipart/form-data")) { }
                             else
                             {
                                 string body = httpRequestMessage.Content.ReadAsStringAsync().Result;
@@ -255,7 +256,7 @@ public static class ServiceExtension
                         long contentLength = request.ContentLength ?? 0;
                         string? contentType = request.ContentType?.ToString();
                         if (contentLength > maxLength * 2
-                        || (contentType != null && contentType.Contains("multipart/form-data")))
+                        || contentType != null && contentType.Contains("multipart/form-data"))
                         {
                             activity.SetTag("requestBody", "file upload");
                         }

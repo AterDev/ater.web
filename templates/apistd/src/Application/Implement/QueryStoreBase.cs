@@ -38,7 +38,6 @@ public partial class QueryStoreBase<TContext, TEntity> :
         Database = Context.Database;
     }
 
-
     private void ResetQuery()
     {
         _query = EnableGlobalQuery
@@ -96,7 +95,6 @@ public partial class QueryStoreBase<TContext, TEntity> :
         return res;
     }
 
-
     public virtual async Task<List<TEntity>> ListAsync(Expression<Func<TEntity, bool>>? whereExp)
     {
         Expression<Func<TEntity, bool>> exp = e => true;
@@ -148,7 +146,7 @@ public partial class QueryStoreBase<TContext, TEntity> :
 
         _query = query;
 
-        int count = _query.Count();
+        var count = _query.Count();
         List<TItem> data = await _query
             .OrderByDescending(t => t.CreatedTime)
             .Skip((pageIndex - 1) * pageSize)
@@ -190,7 +188,7 @@ public partial class QueryStoreBase<TContext, TEntity> :
         {
             _query = _query.OrderBy(order);
         }
-        int count = _query.Count();
+        var count = _query.Count();
         List<TItem> data = await _query
             .AsNoTracking()
             .OrderByDescending(t => t.CreatedTime)
@@ -207,7 +205,6 @@ public partial class QueryStoreBase<TContext, TEntity> :
         };
     }
 }
-
 
 public class QuerySet<TEntity> : QueryStoreBase<QueryDbContext, TEntity>
     where TEntity : EntityBase

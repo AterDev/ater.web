@@ -1,5 +1,6 @@
+
 using Microsoft.EntityFrameworkCore.Infrastructure;
-namespace Application.Interface;
+namespace Application.IManager;
 
 /// <summary>
 /// 仓储数据管理接口

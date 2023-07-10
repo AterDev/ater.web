@@ -1,4 +1,4 @@
-﻿namespace Share.Models;
+﻿namespace Ater.Web.Core.Models;
 /// <summary>
 /// 过滤
 /// </summary>
@@ -11,9 +11,11 @@ public class FilterBase
     /// <summary>
     /// 默认最大1000
     /// </summary>
-    public int PageSize {
+    public int PageSize
+    {
         get => _pageSize;
-        set {
+        set
+        {
             _pageSize = value;
             if (value > 1000) { _pageSize = 1000; }
             if (value < 0) { _pageSize = 0; }

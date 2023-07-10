@@ -1,4 +1,7 @@
-namespace Application.Implement;
+
+using Application.Implement;
+
+namespace Application;
 public class DataStoreContext
 {
     public QueryDbContext QueryContext { get; init; }

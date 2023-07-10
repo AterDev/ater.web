@@ -22,7 +22,7 @@ public class DaprFacade
         {
             { "ttlInSeconds", seconds.ToString() }
         };
-        await Dapr.SaveStateAsync<T>(Const.AppConst.DefaultStateName, key, value, metadata: metadata);
+        await Dapr.SaveStateAsync(Const.AppConst.DefaultStateName, key, value, metadata: metadata);
     }
     public static async Task SaveStateAsync<T>(string store, string key, T value, int seconds)
     {
@@ -51,12 +51,12 @@ public class DaprFacade
 
     public static async Task PublishAsync<T>(string topic, T data)
     {
-        await PublishAsync<T>(Const.AppConst.DefaultPubSubName, topic, data);
+        await PublishAsync(Const.AppConst.DefaultPubSubName, topic, data);
     }
 
 
     public static async Task PublishAsync<T>(string name, string topic, T data)
     {
-        await Dapr.PublishEventAsync<T>(name, topic, data);
+        await Dapr.PublishEventAsync(name, topic, data);
     }
 }

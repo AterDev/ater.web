@@ -1,4 +1,4 @@
-using Entity.CmsEntities;
+using Application.Implement;
 
 namespace Application.CommandStore;
 public class BlogCommandStore : CommandSet<Blog>

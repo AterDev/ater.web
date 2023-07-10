@@ -42,7 +42,7 @@ public partial class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity
         IQueryable<TEntity> _query = _db.Where(whereExp).AsQueryable();
         if (navigations != null)
         {
-            foreach (string item in navigations)
+            foreach (var item in navigations)
             {
                 _query = _query.Include(item);
             }

@@ -10,8 +10,11 @@
 		<DocumentationFile></DocumentationFile>
 		<NoWarn>1701;1702;1591;1587</NoWarn>
 	</PropertyGroup>
+
 	<ItemGroup>
-		<Folder Include="Services\" />
+	  <Compile Remove="Services\**" />
+	  <EmbeddedResource Remove="Services\**" />
+	  <None Remove="Services\**" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\Entity\Entity.csproj" />

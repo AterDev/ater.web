@@ -1,4 +1,4 @@
-﻿namespace Share.Options;
+﻿namespace Ater.Web.Abstracture;
 /// <summary>
 /// 应用组件配置
 /// </summary>

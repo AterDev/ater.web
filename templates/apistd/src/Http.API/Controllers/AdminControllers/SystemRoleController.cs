@@ -1,11 +1,9 @@
-using Entity.SystemEntities;
 using Share.Models.SystemRoleDtos;
 namespace Http.API.Controllers.AdminControllers;
 
 /// <summary>
 /// 角色表
 /// </summary>
-//[NgPage("system", "sysrole")]
 public class SystemRoleController : RestControllerBase<ISystemRoleManager>
 {
 

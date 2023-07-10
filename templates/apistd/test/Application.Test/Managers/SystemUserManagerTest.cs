@@ -1,5 +1,5 @@
 using Application.IManager;
-using Core.Utils;
+using Ater.Web.Core.Utils;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Share.Models.SystemUserDtos;
@@ -16,7 +16,6 @@ public class SystemUserManagerTest : BaseTest
         manager = Services.GetRequiredService<ISystemUserManager>();
         RandomString = DateTime.Now.ToString("MMddmmss");
     }
-
 
     [Fact]
     public async Task SystemUser_Should_Pass()

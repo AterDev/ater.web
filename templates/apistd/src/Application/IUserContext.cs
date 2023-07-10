@@ -1,7 +1,4 @@
-using Entity;
-using Entity.SystemEntities;
-
-namespace Application.Interface;
+namespace Application;
 
 /// <summary>
 /// 用户上下文

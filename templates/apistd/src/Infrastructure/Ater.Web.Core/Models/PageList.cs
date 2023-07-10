@@ -1,4 +1,4 @@
-﻿namespace Share.Models;
+﻿namespace Ater.Web.Core.Models;
 public class PageList<T>
 {
     public int Count { get; set; } = 0;

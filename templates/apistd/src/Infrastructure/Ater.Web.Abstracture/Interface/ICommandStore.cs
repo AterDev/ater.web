@@ -1,4 +1,4 @@
-namespace Application.Interface;
+namespace Ater.Web.Abstracture.Interface;
 
 /// <summary>
 /// 仓储命令

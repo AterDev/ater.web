@@ -1,5 +1,4 @@
-﻿using Application.Interface;
-using Microsoft.AspNetCore.Mvc.Testing;
+﻿using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace Application.Test;
 
