@@ -3,7 +3,7 @@ namespace Share.Models.SystemRoleDtos;
 /// 角色概要
 /// </summary>
 //[NgPage("system", "sysrole")]
-/// <inheritdoc cref="Core.Entities.SystemEntities.SystemRole"/>
+/// <inheritdoc cref="Entity.SystemEntities.SystemRole"/>
 public class SystemRoleShortDto
 {
     /// <summary>

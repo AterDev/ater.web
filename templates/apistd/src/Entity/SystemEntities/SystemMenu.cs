@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Core.Entities.SystemEntities;
+namespace Entity.SystemEntities;
 /// <summary>
 /// 系统菜单
 /// </summary>

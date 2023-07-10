@@ -1,10 +1,11 @@
-using Core.Entities.SystemEntities;
+using Entity.SystemEntities;
+
 namespace Share.Models.SystemUserDtos;
 /// <summary>
 /// 系统用户添加时请求结构
 /// </summary>
 //[NgPage("system", "sysuser")]
-/// <inheritdoc cref="Core.Entities.SystemEntities.SystemUser"/>
+/// <inheritdoc cref="Entity.SystemEntities.SystemUser"/>
 public class SystemUserAddDto
 {
     /// <summary>

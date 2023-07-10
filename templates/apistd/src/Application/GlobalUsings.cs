@@ -8,17 +8,14 @@ global using Application.Const;
 global using Application.IManager;
 global using Application.Implement;
 global using Application.Interface;
-global using Application.Manager;
 global using Application.QueryStore;
-global using Core.Entities;
-global using Core.Entities.SystemEntities;
-global using Core.Models;
-global using Core.Utils;
+global using Ater.Web.Core.Models;
+global using Ater.Web.Core.Utils;
+global using Entity;
+global using Entity.CmsEntities;
+global using Entity.SystemEntities;
 global using EntityFramework;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Logging;
 global using Share.Models;
-
-
-global using Core.Entities.CmsEntities;

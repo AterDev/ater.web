@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
-namespace Core.Entities.SystemEntities;
+namespace Entity.SystemEntities;
 /// <summary>
 /// 系统用户
 /// </summary>

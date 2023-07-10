@@ -3,7 +3,7 @@ namespace Share.Models.SystemRoleDtos;
 /// 角色更新时请求结构
 /// </summary>
 //[NgPage("system", "sysrole")]
-/// <inheritdoc cref="Core.Entities.SystemEntities.SystemRole"/>
+/// <inheritdoc cref="Entity.SystemEntities.SystemRole"/>
 public class SystemRoleUpdateDto
 {
     /// <summary>

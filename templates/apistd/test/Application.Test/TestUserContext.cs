@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using Application.Interface;
-using Core.Entities;
-using Core.Entities.SystemEntities;
+using Entity;
+using Entity.SystemEntities;
 
 namespace Application.Test;
 

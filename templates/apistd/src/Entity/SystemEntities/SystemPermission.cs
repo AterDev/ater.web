@@ -1,4 +1,4 @@
-﻿namespace Core.Entities.SystemEntities;
+﻿namespace Entity.SystemEntities;
 /// <summary>
 /// 权限
 /// </summary>

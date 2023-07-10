@@ -1,5 +1,4 @@
-﻿using Core.Models;
-
+﻿
 namespace EntityFramework;
 /// <summary>
 /// 只读数据库上下文

@@ -1,5 +1,4 @@
-﻿using Core.Entities;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace EntityFramework.EntityTypeConfigurations;
 internal class UserConfiguration : EntityBaseConfiguration<User>
 {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Core.Entities;
+namespace Entity;
 /// <summary>
 /// 用户账户
 /// </summary>

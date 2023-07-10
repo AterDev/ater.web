@@ -1,3 +1,6 @@
+using Entity;
+using Entity.SystemEntities;
+
 namespace Application.Interface;
 
 /// <summary>

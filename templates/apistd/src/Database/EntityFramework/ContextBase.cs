@@ -1,6 +1,4 @@
-using Core.Entities;
-using Core.Entities.SystemEntities;
-using Core.Models;
+using Entity.SystemEntities;
 
 namespace EntityFramework;
 

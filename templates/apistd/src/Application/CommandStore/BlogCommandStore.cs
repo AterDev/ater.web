@@ -1,3 +1,5 @@
+using Entity.CmsEntities;
+
 namespace Application.CommandStore;
 public class BlogCommandStore : CommandSet<Blog>
 {

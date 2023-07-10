@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Core.Entities.SystemEntities;
+namespace Entity.SystemEntities;
 /// <summary>
 /// 系统角色
 /// </summary>

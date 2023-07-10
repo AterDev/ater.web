@@ -11,7 +11,7 @@
   "CreatedTimeName": "CreatedTime",
   "UpdatedTimeName": "UpdatedTime",
   "IsSplitController": false,
-  "Version": "7.1",
+  "Version": "8.0.0",
   "SwaggerPath": null,
   "WebAppPath": null
 }

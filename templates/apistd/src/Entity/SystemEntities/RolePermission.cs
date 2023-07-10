@@ -1,4 +1,4 @@
-﻿namespace Core.Entities.SystemEntities;
+﻿namespace Entity.SystemEntities;
 /// <summary>
 /// 角色权限中间表
 /// </summary>

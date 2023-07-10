@@ -1,3 +1,5 @@
+using Entity.CmsEntities;
+
 namespace Application.QueryStore;
 public class BlogQueryStore : QuerySet<Blog>
 {

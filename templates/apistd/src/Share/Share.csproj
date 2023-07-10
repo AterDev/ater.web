@@ -11,9 +11,9 @@
 		<NoWarn>1701;1702;1591;1587</NoWarn>
 	</PropertyGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\Core\Core.csproj" />
+		<Folder Include="Services\" />
 	</ItemGroup>
 	<ItemGroup>
-		<Folder Include="Services\" />
+	  <ProjectReference Include="..\Entity\Entity.csproj" />
 	</ItemGroup>
 </Project>

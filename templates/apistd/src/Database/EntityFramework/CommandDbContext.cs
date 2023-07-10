@@ -1,6 +1,4 @@
-﻿using Core.Models;
-
-namespace EntityFramework;
+﻿namespace EntityFramework;
 public class CommandDbContext : ContextBase
 {
     public CommandDbContext(DbContextOptions<CommandDbContext> options) : base(options)

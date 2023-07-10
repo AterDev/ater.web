@@ -1,9 +1,10 @@
-using Core.Entities.CmsEntities;
+using Entity.CmsEntities;
+
 namespace Share.Models.BlogDtos;
 /// <summary>
 /// 博客查询筛选
 /// </summary>
-/// <inheritdoc cref="Core.Entities.CmsEntities.Blog"/>
+/// <inheritdoc cref="Entity.CmsEntities.Blog"/>
 public class BlogFilterDto : FilterBase
 {
     /// <summary>

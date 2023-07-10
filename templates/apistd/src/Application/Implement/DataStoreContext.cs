@@ -1,11 +1,8 @@
-using Core.Entities.SystemEntities;
 namespace Application.Implement;
 public class DataStoreContext
 {
     public QueryDbContext QueryContext { get; init; }
     public CommandDbContext CommandContext { get; init; }
-
-
 
     /// <summary>
     /// 绑在对象
@@ -44,16 +41,16 @@ public class DataStoreContext
     {
         var typename = typeof(TEntity).Name + "QueryStore";
         var set = GetSet(typename);
-        return set == null 
-            ? throw new ArgumentNullException($"{typename} class object not found") 
+        return set == null
+            ? throw new ArgumentNullException($"{typename} class object not found")
             : (QuerySet<TEntity>)set;
     }
     public CommandSet<TEntity> CommandSet<TEntity>() where TEntity : EntityBase
     {
         var typename = typeof(TEntity).Name + "CommandStore";
         var set = GetSet(typename);
-        return set == null 
-            ? throw new ArgumentNullException($"{typename} class object not found") 
+        return set == null
+            ? throw new ArgumentNullException($"{typename} class object not found")
             : (CommandSet<TEntity>)set;
     }
 

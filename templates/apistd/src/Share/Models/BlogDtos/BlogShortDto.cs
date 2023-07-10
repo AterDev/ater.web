@@ -1,9 +1,11 @@
-using Core.Entities.CmsEntities;
+using Entity;
+using Entity.CmsEntities;
+
 namespace Share.Models.BlogDtos;
 /// <summary>
 /// 博客概要
 /// </summary>
-/// <inheritdoc cref="Core.Entities.CmsEntities.Blog"/>
+/// <inheritdoc cref="Entity.CmsEntities.Blog"/>
 public class BlogShortDto
 {
     /// <summary>
