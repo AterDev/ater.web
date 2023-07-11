@@ -27,12 +27,14 @@
       "modifiers": [
         {
           "condition": "(Grpc)",
-          "exclude": []
+          "exclude": [
+            "../src/Http.API/**"
+          ]
         },
         {
           "condition": "(!Grpc)",
           "exclude": [
-            "**/A/**"
+            "../src/Grpc.API/**"
           ]
         }
       ]
