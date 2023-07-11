@@ -2,7 +2,7 @@ using Application.CommandStore;
 using Application.Manager;
 using Application.QueryStore;
 
-namespace Http.API.Infrastructure;
+namespace Grpc.API;
 
 /// <summary>
 /// 业务数据服务注入扩展

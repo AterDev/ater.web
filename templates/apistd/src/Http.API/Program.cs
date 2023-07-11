@@ -1,6 +1,5 @@
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
-using Application;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 IServiceCollection services = builder.Services;
@@ -29,6 +28,7 @@ services.AddCors(options =>
 
 // 3 数据及业务接口注入
 services.AddHttpContextAccessor();
+services.AddTransient<IUserContext, UserContext>();
 services.AddDataStore();
 services.AddManager();
 

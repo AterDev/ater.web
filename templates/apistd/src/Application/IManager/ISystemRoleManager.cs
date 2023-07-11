@@ -1,11 +1,11 @@
-using Entity.SystemEntities;
 using Share.Models.SystemRoleDtos;
 
 namespace Application.IManager;
 /// <summary>
 /// 定义实体业务接口规范
 /// </summary>
-public interface ISystemRoleManager :IDomainManager<SystemRole>{
+public interface ISystemRoleManager : IDomainManager<SystemRole>
+{
     /// <summary>
     /// 当前用户所拥有的对象
     /// </summary>

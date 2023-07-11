@@ -1,18 +1,41 @@
 {
-    "$schema": "http://json.schemastore.org/template",
-    "author": "ater.niltor",
-    "classifications": [
-        "Web",
-        "WebAPI",
-        "Framework"
-    ],
-    "identity": "Ater.Web.Framework",
-    "name": "Ater Web API ",
-    "shortName": "atapi",
-    "tags": {
-        "language": "C#",
-        "type": "project"
-    },
-    "sourceName": "MyProjectName",
-    "preferNameDirectory": true
+  "$schema": "http://json.schemastore.org/template",
+  "author": "ater.niltor",
+  "classifications": [
+    "Web",
+    "WebAPI",
+    "Framework"
+  ],
+  "identity": "Ater.Web.Framework",
+  "name": "Ater Web API ",
+  "shortName": "atapi",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "sourceName": "MyProjectName",
+  "preferNameDirectory": true,
+  "symbols": {
+    "Grpc": {
+      "type": "parameter",
+      "defaultValue": "false",
+      "datatype": "bool"
+    }
+  },
+  "sources": [
+    {
+      "modifiers": [
+        {
+          "condition": "(Grpc)",
+          "exclude": []
+        },
+        {
+          "condition": "(!Grpc)",
+          "exclude": [
+            "**/A/**"
+          ]
+        }
+      ]
+    }
+  ]
 }
