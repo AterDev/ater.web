@@ -16,25 +16,26 @@
   "sourceName": "MyProjectName",
   "preferNameDirectory": true,
   "symbols": {
-    "Grpc": {
+    "grpc": {
       "type": "parameter",
       "defaultValue": "false",
-      "datatype": "bool"
+      "datatype": "bool",
+      "description": "Enable gRPC API"
     }
   },
   "sources": [
     {
       "modifiers": [
         {
-          "condition": "(Grpc)",
+          "condition": "(grpc)",
           "exclude": [
-            "../src/Http.API/**"
+            "src/Http.API/**"
           ]
         },
         {
-          "condition": "(!Grpc)",
+          "condition": "(!grpc)",
           "exclude": [
-            "../src/Grpc.API/**"
+            "src/Grpc.API/**"
           ]
         }
       ]

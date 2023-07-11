@@ -12,14 +12,14 @@ try {
 
     $location = Get-Location
     # 处理模块实体
-    $entityPath = Join-Path $location "./templates/apistd/src/Core/Entities"
+    $entityPath = Join-Path $location "./templates/apistd/src/Entity"
 
     # get all directiories in entityPath 
     $entityDirs = Get-ChildItem -Path $entityPath -Directory
     $tmp = Join-Path $entityPath "./.tmp"
 
     if (!(Test-Path $tmp)) {
-        New-Item -Path $tmp -ItemType Directory -Force
+        New-Item -Path $tmp -ItemType Directory -Force | Out-Null
     }
 
     # traverse entityDirs get which name is not SystemEntities and move to tmp directory
@@ -29,6 +29,7 @@ try {
             Move-Item -Path $dir.FullName -Destination $dest -Force
         }
     }
+
     # pack
     dotnet pack -c release -o ./nuget
 
