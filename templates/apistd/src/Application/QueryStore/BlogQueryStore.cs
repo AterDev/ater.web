@@ -1,5 +1,5 @@
 using Application.Implement;
-using Entity.CmsEntities;
+using Entity.CMSEntities;
 
 namespace Application.QueryStore;
 public class BlogQueryStore : QuerySet<Blog>

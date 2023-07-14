@@ -1,10 +1,10 @@
-using Entity.CmsEntities;
+using Entity.CMSEntities;
 
 namespace Share.Models.BlogDtos;
 /// <summary>
 /// 博客列表元素
 /// </summary>
-/// <inheritdoc cref="Entity.CmsEntities.Blog"/>
+/// <inheritdoc cref="Entity.CMSEntities.Blog"/>
 public class BlogItemDto
 {
     /// <summary>

@@ -7,7 +7,7 @@ global using Application.IManager;
 global using Application.Implement;
 global using Ater.Web.Core.Models;
 global using Ater.Web.Core.Utils;
-global using Entity.CmsEntities;
+global using Entity.CMSEntities;
 global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.EntityFrameworkCore;

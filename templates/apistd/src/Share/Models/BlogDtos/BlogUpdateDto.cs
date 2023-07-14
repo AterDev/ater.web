@@ -1,10 +1,10 @@
-using Entity.CmsEntities;
+using Entity.CMSEntities;
 
 namespace Share.Models.BlogDtos;
 /// <summary>
 /// 博客更新时请求结构
 /// </summary>
-/// <inheritdoc cref="Entity.CmsEntities.Blog"/>
+/// <inheritdoc cref="Entity.CMSEntities.Blog"/>
 public class BlogUpdateDto
 {
     /// <summary>

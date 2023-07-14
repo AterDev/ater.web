@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Entity.CmsEntities;
+namespace Entity.CMSEntities;
 /// <summary>
 /// 目录
 /// </summary>

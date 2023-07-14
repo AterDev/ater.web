@@ -3,10 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32228.430
 MinimumVisualStudioVersion = 10.0.40219.1
-#if (!grpc)
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Http.API", "src\Http.API\Http.API.csproj", "{47439004-13F3-4A35-A824-4E679E5368E1}"
 EndProject
-#endif
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FB9BEFB4-E921-476F-AC1B-B589C2CA2562}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{7FEE554D-ABB8-40A3-8F56-DB0F7D47CBFD}"
@@ -37,49 +35,37 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{171177E5-1
 		docs\docs.md = docs\docs.md
 	EndProjectSection
 EndProject
-#if (!grpc)
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Microservice", "Microservice", "{D484E244-0AF0-455A-9F2C-8A04CE46AA5A}"
 	ProjectSection(SolutionItems) = preProject
 		src\Microservice\README.md = src\Microservice\README.md
 	EndProjectSection
 EndProject
-#endif
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.Test", "test\Application.Test\Application.Test.csproj", "{811203A3-75FE-4AC8-AB45-6789357BE55D}"
 EndProject
-#if (!grpc)
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{A55B3441-BB43-4DB8-84C7-1E7368189451}"
 EndProject
-#endif
-#if (1==0)
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CMS", "src\Modules\CMS\CMS.csproj", "{44B8B14C-AB91-425A-A3E8-B4FEA58E7A47}"
 EndProject
-#endif
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{FF4255E1-DD92-4795-ADD0-A44872A1EDC2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ater.Web.Core", "src\Infrastructure\Ater.Web.Core\Ater.Web.Core.csproj", "{679DCD9B-68AD-4274-A7F3-2511993BF86B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ater.Web.Abstracture", "src\Infrastructure\Ater.Web.Abstracture\Ater.Web.Abstracture.csproj", "{F2DACAE1-B157-4E25-A753-E7F051AE7C7E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ater.Web.AspNetCore", "src\Infrastructure\Ater.Web.AspNetCore\Ater.Web.AspNetCore.csproj", "{C6FBBC06-8E99-418F-B70D-49006E598B25}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entity", "src\Entity\Entity.csproj", "{058C1FD4-C4B6-4694-9AEF-1E19B059A70F}"
 EndProject
-#if (grpc)
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Grpc.API", "src\Grpc.API\Grpc.API.csproj", "{2D9FB9D7-019C-4E63-85FC-71D24A37A54D}"
 EndProject
-#endif
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		#if (!grpc)
 		{47439004-13F3-4A35-A824-4E679E5368E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{47439004-13F3-4A35-A824-4E679E5368E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47439004-13F3-4A35-A824-4E679E5368E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47439004-13F3-4A35-A824-4E679E5368E1}.Release|Any CPU.Build.0 = Release|Any CPU
-		#endif
 		{604DD880-14E9-4475-9380-19660BB64F98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{604DD880-14E9-4475-9380-19660BB64F98}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{604DD880-14E9-4475-9380-19660BB64F98}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -96,12 +82,10 @@ Global
 		{811203A3-75FE-4AC8-AB45-6789357BE55D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{811203A3-75FE-4AC8-AB45-6789357BE55D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{811203A3-75FE-4AC8-AB45-6789357BE55D}.Release|Any CPU.Build.0 = Release|Any CPU
-		#if (1==0)
 		{44B8B14C-AB91-425A-A3E8-B4FEA58E7A47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{44B8B14C-AB91-425A-A3E8-B4FEA58E7A47}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44B8B14C-AB91-425A-A3E8-B4FEA58E7A47}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44B8B14C-AB91-425A-A3E8-B4FEA58E7A47}.Release|Any CPU.Build.0 = Release|Any CPU
-		#endif
 		{679DCD9B-68AD-4274-A7F3-2511993BF86B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{679DCD9B-68AD-4274-A7F3-2511993BF86B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{679DCD9B-68AD-4274-A7F3-2511993BF86B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -110,28 +94,20 @@ Global
 		{F2DACAE1-B157-4E25-A753-E7F051AE7C7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F2DACAE1-B157-4E25-A753-E7F051AE7C7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F2DACAE1-B157-4E25-A753-E7F051AE7C7E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C6FBBC06-8E99-418F-B70D-49006E598B25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C6FBBC06-8E99-418F-B70D-49006E598B25}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C6FBBC06-8E99-418F-B70D-49006E598B25}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C6FBBC06-8E99-418F-B70D-49006E598B25}.Release|Any CPU.Build.0 = Release|Any CPU
 		{058C1FD4-C4B6-4694-9AEF-1E19B059A70F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{058C1FD4-C4B6-4694-9AEF-1E19B059A70F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{058C1FD4-C4B6-4694-9AEF-1E19B059A70F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{058C1FD4-C4B6-4694-9AEF-1E19B059A70F}.Release|Any CPU.Build.0 = Release|Any CPU
-		#if (grpc)
 		{2D9FB9D7-019C-4E63-85FC-71D24A37A54D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2D9FB9D7-019C-4E63-85FC-71D24A37A54D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D9FB9D7-019C-4E63-85FC-71D24A37A54D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D9FB9D7-019C-4E63-85FC-71D24A37A54D}.Release|Any CPU.Build.0 = Release|Any CPU
-		#endif
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		#if (!grpc)
 		{47439004-13F3-4A35-A824-4E679E5368E1} = {FB9BEFB4-E921-476F-AC1B-B589C2CA2562}
-		#endif
 		{604DD880-14E9-4475-9380-19660BB64F98} = {FB9BEFB4-E921-476F-AC1B-B589C2CA2562}
 		{7D9A9611-5FA8-44D7-8393-6A38FC30D6FB} = {FB9BEFB4-E921-476F-AC1B-B589C2CA2562}
 		{9BDFBC64-469E-4CE6-B1AB-36C8E5E2E4E4} = {7D9A9611-5FA8-44D7-8393-6A38FC30D6FB}
@@ -139,17 +115,12 @@ Global
 		{D484E244-0AF0-455A-9F2C-8A04CE46AA5A} = {FB9BEFB4-E921-476F-AC1B-B589C2CA2562}
 		{811203A3-75FE-4AC8-AB45-6789357BE55D} = {7FEE554D-ABB8-40A3-8F56-DB0F7D47CBFD}
 		{A55B3441-BB43-4DB8-84C7-1E7368189451} = {FB9BEFB4-E921-476F-AC1B-B589C2CA2562}
-		#if (1==0)
 		{44B8B14C-AB91-425A-A3E8-B4FEA58E7A47} = {A55B3441-BB43-4DB8-84C7-1E7368189451}
-		#endif
 		{FF4255E1-DD92-4795-ADD0-A44872A1EDC2} = {FB9BEFB4-E921-476F-AC1B-B589C2CA2562}
 		{679DCD9B-68AD-4274-A7F3-2511993BF86B} = {FF4255E1-DD92-4795-ADD0-A44872A1EDC2}
 		{F2DACAE1-B157-4E25-A753-E7F051AE7C7E} = {FF4255E1-DD92-4795-ADD0-A44872A1EDC2}
-		{C6FBBC06-8E99-418F-B70D-49006E598B25} = {FF4255E1-DD92-4795-ADD0-A44872A1EDC2}
 		{058C1FD4-C4B6-4694-9AEF-1E19B059A70F} = {FB9BEFB4-E921-476F-AC1B-B589C2CA2562}
-		#if (grpc)
 		{2D9FB9D7-019C-4E63-85FC-71D24A37A54D} = {FB9BEFB4-E921-476F-AC1B-B589C2CA2562}
-		#endif
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E9C122E1-F965-4DE0-BA4B-CFC5D269C768}
