@@ -16,6 +16,11 @@ public partial class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity
     /// </summary>
     protected readonly DbSet<TEntity> _db;
     public DbSet<TEntity> Db => _db;
+
+    /// <summary>
+    /// use DataStoreContext.CommandContext to access writable DbContext
+    /// this will be not avaliable in the future
+    /// </summary>
     public TContext Context { get; }
     public DatabaseFacade Database { get; init; }
     public bool EnableSoftDelete { get; set; } = true;

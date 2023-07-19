@@ -18,7 +18,12 @@ public partial class QueryStoreBase<TContext, TEntity> :
     /// </summary>
     protected readonly DbSet<TEntity> _db;
     public DbSet<TEntity> Db => _db;
-    public TContext Context { get; }
+
+    /// <summary>
+    /// Obsolete: use DataStoreContext.QueryContext to access readonly DbContext
+    /// </summary>
+    [Obsolete("use DataStoreContext.QueryContext")]
+    public TContext? Context { get; }
     public DatabaseFacade Database { get; init; }
     public IQueryable<TEntity> _query { get; set; }
 
@@ -29,7 +34,6 @@ public partial class QueryStoreBase<TContext, TEntity> :
 
     public QueryStoreBase(TContext context, ILogger logger)
     {
-        Context = context;
         _logger = logger;
         _db = context.Set<TEntity>();
         _query = EnableGlobalQuery
