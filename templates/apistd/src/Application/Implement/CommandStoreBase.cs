@@ -26,8 +26,8 @@ public partial class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity
     {
         Context = context;
         _logger = logger;
-        _db = Context.Set<TEntity>();
-        Database = Context.Database;
+        _db = context.Set<TEntity>();
+        Database = context.Database;
     }
 
     public virtual async Task<int> SaveChangeAsync()

@@ -31,11 +31,11 @@ public partial class QueryStoreBase<TContext, TEntity> :
     {
         Context = context;
         _logger = logger;
-        _db = Context.Set<TEntity>();
+        _db = context.Set<TEntity>();
         _query = EnableGlobalQuery
             ? _db.AsQueryable()
             : _db.IgnoreQueryFilters().AsQueryable();
-        Database = Context.Database;
+        Database = context.Database;
     }
 
     private void ResetQuery()
