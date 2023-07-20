@@ -1,14 +1,14 @@
 ﻿{
   "RootPath": "./",
   "ProjectId": "60ec520e-259e-41f4-89c0-ecb74cafbe90",
-  "DtoPath": "src/Share",
-  "EntityPath": "src/Entity",
-  "DbContextPath": "src/Database/EntityFramework",
-  "StorePath": "src/Application",
+  "DtoPath": "src\\Share",
+  "EntityPath": "src\\Entity",
+  "DbContextPath": "src\\Database\\EntityFramework",
+  "ApplicationPath": "src\\Application",
   //#if (grpc)
-  "ApiPath": "src/Grpc.API",
+  "ApiPath": "src\\Grpc.API",
   //#else
-  "ApiPath": "src/Http.API",
+  "ApiPath": "src\\Http.API",
   //#endif
   "IdStyle": "Id",
   "IdType": "Guid",
