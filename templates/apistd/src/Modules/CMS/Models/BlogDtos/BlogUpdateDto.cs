@@ -1,11 +1,11 @@
 using Entity.CMSEntities;
 
-namespace CMS.Dtos.BlogDtos;
+namespace CMS.Models.BlogDtos;
 /// <summary>
-/// 博客列表元素
+/// 博客更新时请求结构
 /// </summary>
 /// <inheritdoc cref="Blog"/>
-public class BlogItemDto
+public class BlogUpdateDto
 {
     /// <summary>
     /// 标题
@@ -18,6 +18,11 @@ public class BlogItemDto
     [MaxLength(300)]
     public string? Description { get; set; }
     /// <summary>
+    /// 内容
+    /// </summary>
+    [MaxLength(10000)]
+    public string Content { get; set; } = default!;
+    /// <summary>
     /// 作者
     /// </summary>
     [MaxLength(200)]
@@ -28,33 +33,35 @@ public class BlogItemDto
     [MaxLength(200)]
     public string? TranslateTitle { get; set; }
     /// <summary>
+    /// 翻译内容
+    /// </summary>
+    [MaxLength(12000)]
+    public string? TranslateContent { get; set; }
+    /// <summary>
     /// 语言类型
     /// </summary>
-    public LanguageType LanguageType { get; set; } = LanguageType.CN;
+    public LanguageType? LanguageType { get; set; }
     /// <summary>
     /// 全站类别
     /// </summary>
-    public BlogType BlogType { get; set; }
+    public BlogType? BlogType { get; set; }
     /// <summary>
     /// 是否审核
     /// </summary>
-    public bool IsAudit { get; set; } = false;
+    public bool? IsAudit { get; set; }
     /// <summary>
     /// 是否公开
     /// </summary>
-    public bool IsPublic { get; set; } = true;
+    public bool? IsPublic { get; set; }
     /// <summary>
     /// 是否原创
     /// </summary>
-    public bool IsOriginal { get; set; }
-    public Guid UserId { get; set; }
-    public Guid CatalogId { get; set; }
+    public bool? IsOriginal { get; set; }
+    public Guid? UserId { get; set; }
+    public Guid? CatalogId { get; set; }
     /// <summary>
     /// 浏览量
     /// </summary>
-    public int ViewCount { get; set; }
-    public Guid Id { get; set; } = Guid.NewGuid();
-    public DateTimeOffset CreatedTime { get; set; } = DateTimeOffset.UtcNow;
-    public DateTimeOffset UpdatedTime { get; set; } = DateTimeOffset.UtcNow;
+    public int? ViewCount { get; set; }
 
 }

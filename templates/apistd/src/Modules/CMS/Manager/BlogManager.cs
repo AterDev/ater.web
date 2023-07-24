@@ -1,8 +1,8 @@
 using Application.Implement;
 using Entity.CMSEntities;
 using Ater.Web.Core.Models;
-using CMS.Dtos.BlogDtos;
 using CMS.IManager;
+using CMS.Models.BlogDtos;
 
 namespace CMS.Manager;
 /// <summary>

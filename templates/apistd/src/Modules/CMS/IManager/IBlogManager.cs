@@ -1,5 +1,5 @@
 using Ater.Web.Core.Models;
-using CMS.Dtos.BlogDtos;
+using CMS.Models.BlogDtos;
 using Entity.CMSEntities;
 
 namespace CMS.IManager;
