@@ -1,4 +1,3 @@
-global using System;
 global using System.Linq.Expressions;
 global using System.Security.Claims;
 global using System.Text;
@@ -12,7 +11,6 @@ global using Ater.Web.Abstracture.Interface;
 global using Ater.Web.Core.Models;
 global using Ater.Web.Core.Utils;
 global using Entity;
-global using Entity.CMSEntities;
 global using Entity.SystemEntities;
 global using EntityFramework;
 global using Microsoft.EntityFrameworkCore;
