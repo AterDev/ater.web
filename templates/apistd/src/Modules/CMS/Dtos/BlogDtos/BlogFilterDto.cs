@@ -1,42 +1,30 @@
-using Entity.CMSEntities;
-
-namespace Share.Models.BlogDtos;
+namespace CMS.Dtos.BlogDtos;
 /// <summary>
-/// 博客更新时请求结构
+/// 博客查询筛选
 /// </summary>
-/// <inheritdoc cref="Entity.CMSEntities.Blog"/>
-public class BlogUpdateDto
+/// <inheritdoc cref="Blog"/>
+public class BlogFilterDto : FilterBase
 {
     /// <summary>
     /// 标题
     /// </summary>
     [MaxLength(100)]
-    public string Title { get; set; } = default!;
+    public string? Title { get; set; }
     /// <summary>
     /// 描述
     /// </summary>
     [MaxLength(300)]
     public string? Description { get; set; }
     /// <summary>
-    /// 内容
-    /// </summary>
-    [MaxLength(10000)]
-    public string Content { get; set; } = default!;
-    /// <summary>
     /// 作者
     /// </summary>
     [MaxLength(200)]
-    public string Authors { get; set; } = default!;
+    public string? Authors { get; set; }
     /// <summary>
     /// 标题
     /// </summary>
     [MaxLength(200)]
     public string? TranslateTitle { get; set; }
-    /// <summary>
-    /// 翻译内容
-    /// </summary>
-    [MaxLength(12000)]
-    public string? TranslateContent { get; set; }
     /// <summary>
     /// 语言类型
     /// </summary>
@@ -63,5 +51,5 @@ public class BlogUpdateDto
     /// 浏览量
     /// </summary>
     public int? ViewCount { get; set; }
-    
+
 }

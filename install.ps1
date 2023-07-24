@@ -30,11 +30,12 @@ try {
         }
     }
 
+
     # pack
     dotnet pack -c release -o ./nuget
 
     # move back
-    $entityDirs = Get-ChildItem -Path $tmp -Directory
+    $entityDirs = Get-ChildItem -Path $tmp  -Directory
     foreach ($dir in $entityDirs) {
         $dest = Join-Path $entityPath $dir.Name
         Move-Item -Path $dir.FullName -Destination $dest -Force

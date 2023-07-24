@@ -1,10 +1,10 @@
 using Application.Implement;
-using Application.IManager;
-using Share.Models.BlogDtos;
 using Entity.CMSEntities;
 using Ater.Web.Core.Models;
+using CMS.Dtos.BlogDtos;
+using CMS.IManager;
 
-namespace Application.Manager;
+namespace CMS.Manager;
 /// <summary>
 /// 博客
 /// </summary>
@@ -12,7 +12,7 @@ public class BlogManager : DomainManagerBase<Blog, BlogUpdateDto, BlogFilterDto,
 {
 
     public BlogManager(
-        DataStoreContext storeContext, 
+        DataStoreContext storeContext,
         ILogger<BlogManager> logger,
         IUserContext userContext) : base(storeContext, logger)
     {

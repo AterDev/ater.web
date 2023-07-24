@@ -1,14 +1,14 @@
 using Ater.Web.Core.Models;
+using CMS.Dtos.BlogDtos;
 using Entity.CMSEntities;
-using Share.Models.BlogDtos;
 
-namespace Application.IManager;
+namespace CMS.IManager;
 /// <summary>
 /// 定义实体业务接口规范
 /// </summary>
 public interface IBlogManager : IDomainManager<Blog>
 {
-	/// <summary>
+    /// <summary>
     /// 当前用户所拥有的对象
     /// </summary>
     /// <param name="id"></param>

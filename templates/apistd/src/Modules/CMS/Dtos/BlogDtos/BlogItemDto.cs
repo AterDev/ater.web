@@ -1,17 +1,17 @@
 using Entity.CMSEntities;
 
-namespace Share.Models.BlogDtos;
+namespace CMS.Dtos.BlogDtos;
 /// <summary>
-/// 博客查询筛选
+/// 博客列表元素
 /// </summary>
-/// <inheritdoc cref="Entity.CMSEntities.Blog"/>
-public class BlogFilterDto : FilterBase
+/// <inheritdoc cref="Blog"/>
+public class BlogItemDto
 {
     /// <summary>
     /// 标题
     /// </summary>
     [MaxLength(100)]
-    public string? Title { get; set; }
+    public string Title { get; set; } = default!;
     /// <summary>
     /// 描述
     /// </summary>
@@ -21,7 +21,7 @@ public class BlogFilterDto : FilterBase
     /// 作者
     /// </summary>
     [MaxLength(200)]
-    public string? Authors { get; set; }
+    public string Authors { get; set; } = default!;
     /// <summary>
     /// 标题
     /// </summary>
@@ -30,28 +30,31 @@ public class BlogFilterDto : FilterBase
     /// <summary>
     /// 语言类型
     /// </summary>
-    public LanguageType? LanguageType { get; set; }
+    public LanguageType LanguageType { get; set; } = LanguageType.CN;
     /// <summary>
     /// 全站类别
     /// </summary>
-    public BlogType? BlogType { get; set; }
+    public BlogType BlogType { get; set; }
     /// <summary>
     /// 是否审核
     /// </summary>
-    public bool? IsAudit { get; set; }
+    public bool IsAudit { get; set; } = false;
     /// <summary>
     /// 是否公开
     /// </summary>
-    public bool? IsPublic { get; set; }
+    public bool IsPublic { get; set; } = true;
     /// <summary>
     /// 是否原创
     /// </summary>
-    public bool? IsOriginal { get; set; }
-    public Guid? UserId { get; set; }
-    public Guid? CatalogId { get; set; }
+    public bool IsOriginal { get; set; }
+    public Guid UserId { get; set; }
+    public Guid CatalogId { get; set; }
     /// <summary>
     /// 浏览量
     /// </summary>
-    public int? ViewCount { get; set; }
-    
+    public int ViewCount { get; set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
+    public DateTimeOffset CreatedTime { get; set; } = DateTimeOffset.UtcNow;
+    public DateTimeOffset UpdatedTime { get; set; } = DateTimeOffset.UtcNow;
+
 }

@@ -1,11 +1,12 @@
+using Entity;
 using Entity.CMSEntities;
 
-namespace Share.Models.BlogDtos;
+namespace CMS.Dtos.BlogDtos;
 /// <summary>
-/// 博客列表元素
+/// 博客概要
 /// </summary>
-/// <inheritdoc cref="Entity.CMSEntities.Blog"/>
-public class BlogItemDto
+/// <inheritdoc cref="Blog"/>
+public class BlogShortDto
 {
     /// <summary>
     /// 标题
@@ -47,7 +48,12 @@ public class BlogItemDto
     /// 是否原创
     /// </summary>
     public bool IsOriginal { get; set; }
+    public User User { get; set; } = default!;
     public Guid UserId { get; set; }
+    /// <summary>
+    /// 所属目录
+    /// </summary>
+    public Catalog Catalog { get; set; } = default!;
     public Guid CatalogId { get; set; }
     /// <summary>
     /// 浏览量
@@ -56,5 +62,5 @@ public class BlogItemDto
     public Guid Id { get; set; } = Guid.NewGuid();
     public DateTimeOffset CreatedTime { get; set; } = DateTimeOffset.UtcNow;
     public DateTimeOffset UpdatedTime { get; set; } = DateTimeOffset.UtcNow;
-    
+
 }
