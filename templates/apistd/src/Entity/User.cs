@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace Entity;
+﻿namespace Entity;
 /// <summary>
 /// 用户账户
 /// </summary>
@@ -53,7 +51,6 @@ public class User : EntityBase
     /// </summary>
     [MaxLength(200)]
     public string? Avatar { get; set; }
-
 
     #region 用户关联内容
     //public List<Blog>? Blogs { get; set; }

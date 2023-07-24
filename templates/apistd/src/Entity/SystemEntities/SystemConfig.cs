@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace Entity.SystemEntities;
+﻿namespace Entity.SystemEntities;
 /// <summary>
 /// 系统配置
 /// </summary>

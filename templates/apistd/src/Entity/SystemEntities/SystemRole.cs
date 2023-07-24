@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace Entity.SystemEntities;
+﻿namespace Entity.SystemEntities;
 /// <summary>
 /// 系统角色
 /// </summary>
@@ -39,6 +37,5 @@ public class SystemRole : EntityBase
     /// 菜单权限
     /// </summary>
     public List<SystemMenu>? Menus { get; set; }
-
 
 }

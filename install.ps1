@@ -30,6 +30,8 @@ try {
         }
     }
 
+    # 移除模块项目引用
+
 
     # pack
     dotnet pack -c release -o ./nuget
@@ -40,6 +42,8 @@ try {
         $dest = Join-Path $entityPath $dir.Name
         Move-Item -Path $dir.FullName -Destination $dest -Force
     }
+    
+    # 复原模块项目引用
 
     # delete tmp directory
     Remove-Item $tmp -Force -Recurse
