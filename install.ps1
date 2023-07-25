@@ -1,3 +1,98 @@
+#region 函数定义
+# 移动模块到临时目录
+function TempModule([string]$solutionPath, [string]$moduleName) {
+    Write-Host "move module:"$moduleName
+    # temp save
+    $tmp = Join-Path $solutionPath "./.tmp"
+    if (!(Test-Path $tmp)) {
+        New-Item -Path $tmp -ItemType Directory -Force | Out-Null
+    }
+    $destDir = Join-Path $tmp $moduleName
+    # move entity to tmp   
+    $entityPath = Join-Path $solutionPath "./src/Entity" $moduleName"Entities"
+    $entityDestDir = Join-Path $destDir "Entities"
+
+    if (!(Test-Path $entityDestDir)) {
+        New-Item -Path $entityDestDir -ItemType Directory -Force | Out-Null
+    }
+    # get entity names by cs file name without extension
+    $entityNames = Get-ChildItem -Path $entityPath -Filter "*.cs" | ForEach-Object { $_.BaseName }
+
+    Move-Item -Path $entityPath -Destination $entityDestDir -Force
+    # move store to tmp
+    $applicationPath = Join-Path $solutionPath "./src/Application"
+    $applicationDestDir = Join-Path $destDir "Application"
+
+    if (!(Test-Path $applicationDestDir)) {
+        New-Item -Path $applicationDestDir -ItemType Directory -Force | Out-Null
+    }
+
+    foreach ($entityName in $entityNames) {
+        $queryStorePath = Join-Path $applicationPath "QueryStore" $entityName"QueryStore.cs"
+        $commandStorePath = Join-Path $applicationPath "CommandStore" $entityName"CommandStore.cs"
+
+        if ((Test-Path $queryStorePath)) {
+            Move-Item -Path $queryStorePath -Destination $applicationDestDir -Force
+        }
+        if ((Test-Path $commandStorePath)) {
+            Move-Item -Path $commandStorePath -Destination $applicationDestDir -Force
+        }
+    }
+
+    Write-Host "Update DataStoreContext"
+    # DatastoreContext.cs
+    $contextPath = Join-Path $applicationPath "DataStoreContext.cs"
+    # 保存原文件
+    if (!(Test-Path (Join-Path $applicationDestDir "DataStoreContext.cs"))) {
+        Copy-Item -Path $contextPath -Destination $applicationDestDir
+    }
+    $contextContent = Get-Content $contextPath
+
+
+    foreach ($entityName in $entityNames) {
+        $name = $name.Substring(0, 1).ToLower() + $name.Substring(1)
+        $contextContent = $contextContent | Where-Object { $_ -notmatch $name + "Query" -and $_ -notmatch $name + "Command" } 
+    }
+    Set-Content $contextPath $contextContent -Force
+}
+
+# 复原模块内容
+function RestoreModule ([string]$solutionPath, [string]$moduleName) {
+    Write-Host "restore module:"$moduleName
+    $tmp = Join-Path $solutionPath "./.tmp"
+    if (!(Test-Path $tmp)) {
+
+        # restore module  entity and application from tmp
+        $destDir = Join-Path $tmp $moduleName
+        $entityDestDir = Join-Path $destDir "Entities"
+        $applicationDestDir = Join-Path $destDir "Application"
+
+        $entityPath = Join-Path $solutionPath "./src/Entity" $moduleName"Entities"
+        $applicationPath = Join-Path $solutionPath "./src/Application"
+
+        Move-Item -Path $entityDestDir -Destination $entityPath -Force
+
+        $entityNames = Get-ChildItem -Path $entityPath -Filter "*.cs" | ForEach-Object { $_.BaseName }
+
+        foreach ($entityName in $entityNames) {
+            $queryStorePath = Join-Path $applicationPath "QueryStore" $entityName+"QueryStore.cs"
+            $queryStoreDestPath = Join-Path $applicationDestDir $entityName+"QueryStore.cs"
+            Move-Item -Path $queryStoreDestPath -Destination $queryStorePath -Force
+
+            $commandStorePath = Join-Path $applicationPath "CommandStore" $entityName+"CommandStore.cs"
+            $commandStoreDestPath = Join-Path $applicationDestDir $entityName+"CommandStore.cs"
+            Move-Item -Path $commandStoreDestPath -Destination $commandStorePath -Force
+        }
+
+        # DataStoreContext.cs
+        $contextPath = Join-Path $applicationPath "DataStoreContext.cs"
+        $contextDestPath = Join-Path $applicationDestDir "DataStoreContext.cs"
+        Move-Item -Path $contextDestPath -Destination $contextPath -Force
+    }
+}
+
+#endregion
+
 try {
     $OutputEncoding = [Console]::OutputEncoding = [Text.UTF8Encoding]::UTF8
 
@@ -27,27 +122,27 @@ try {
         $content = Get-Content $file
         $match = $content | Select-String -Pattern $regex -AllMatches | Select-Object -ExpandProperty Matches
         $moduleName = $match.Groups[1].Value
-
         # add modulename  to modulesNames if not exist 
         if ($modulesNames -notcontains $moduleName) {
             $modulesNames += $moduleName
         }
     }
-    $solutionPath = Join-Path $location "./templates/apistd"
 
-    foreach ($moduleName in $moduleNames) {
-        TempModule($solutionPath, $moduleName)
+    Write-Host "find modules:"$modulesNames;
+    $solutionPath = Join-Path $location "./templates/apistd"
+    foreach ($moduleName in $modulesNames) {
+        TempModule $solutionPath $moduleName
     }
 
     # pack
     dotnet pack -c release -o ./nuget
 
     foreach ($moduleName in $moduleNames) {
-        RestoreModule($solutionPath, $moduleName)
+        RestoreModule $solutionPath $moduleName
     }
 
     # delete tmp directory
-    # Remove-Item $tmp -Force -Recurse
+    Remove-Item $tmp -Force -Recurse
 
     # get package info
     $VersionNode = Select-Xml -Path ./Pack.csproj -XPath '/Project//PropertyGroup/PackageVersion'
@@ -60,83 +155,8 @@ try {
     dotnet new install .\nuget\$PackageId.$Version.nupkg
 }
 catch {
-    Write-Host $_.Exception.Message
+    Write-Error $_.Exception.Message
 }
 
-# 移动模块到临时目录
-function TempModule($solutionPath, $moduleName) {
-    # temp save
-    $tmp = Join-Path $solutionPath "./.tmp"
-    if (!(Test-Path $tmp)) {
-        New-Item -Path $tmp -ItemType Directory -Force | Out-Null
-    }
-    $destDir = Join-Path $tmp $moduleName
-    # move entity to tmp   
-    $entityPath = Join-Path $solutionPath "./src/Entity" $moduleName+"Entities"
-    $entityDestDir = Join-Path $destDir "Entities"
-    Move-Item -Path $entityPath -Destination $entityDestDir -Force
 
-    # get entity names by cs file name without extension
-    $entityNames = Get-ChildItem -Path $entityPath -Filter "*.cs" | ForEach-Object { $_.BaseName }
-
-    # move store to tmp
-    $applicationPath = Join-Path $solutionPath "./src/Application"
-    $applicationDestDir = Join-Path $destDir "Application"
-
-    foreach ($entityName in $entityNames) {
-        $storePaths = @(Join-Path $applicationPath "CommandStore" $entityName+"CommandStore.cs",
-            Join-Path $applicationPath "QueryStore", $entityName+"QueryStore.cs")
-        foreach ($storePath in $storePaths) {
-            Move-Item -Path $storePath -Destination $applicationDestDir -Force
-        }   
-    }
-
-    # DatastoreContext.cs
-    $contextPath = Join-Path $applicationPath "DatastoreContext.cs"
-    # 保存原文件
-    if (!Test-Path (Join-Path $applicationDestDir "DatastoreContext.cs")) {
-        Move-Item -Path $contextPath -Destination $applicationDestDir
-    }
-
-    $contextContent = Get-Content $contextPath
-    foreach ($entityName in $entityNames) {
-        $name = $string.Substring(0, 1).ToLower() + $string.Substring(1)
-        $contextContent = $contextContent | Where-Object { $_ -notmatch $name + "Query" -and $_ -notmatch $name + "Command" } 
-    }
-    Set-Content $contextPath $contextContent -Force
-}
-
-# 复原模块内容
-function RestoreModule ($solutionPath, $moduleName) {
-    $tmp = Join-Path $solutionPath "./.tmp"
-    if (!(Test-Path $tmp)) {
-
-        # restore module  entity and application from tmp
-        $destDir = Join-Path $tmp $moduleName
-        $entityDestDir = Join-Path $destDir "Entities"
-        $applicationDestDir = Join-Path $destDir "Application"
-
-        $entityPath = Join-Path $solutionPath "./src/Entity" $moduleName+"Entities"
-        $applicationPath = Join-Path $solutionPath "./src/Application"
-
-        Move-Item -Path $entityDestDir -Destination $entityPath -Force
-
-        $entityNames = Get-ChildItem -Path $entityPath -Filter "*.cs" | ForEach-Object { $_.BaseName }
-
-        foreach ($entityName in $entityNames) {
-            $queryStorePath = Join-Path $applicationPath "QueryStore" $entityName+"QueryStore.cs"
-            $queryStoreDestPath = Join-Path $applicationDestDir $entityName+"QueryStore.cs"
-            Move-Item -Path $queryStoreDestPath -Destination $queryStorePath -Force
-
-            $commandStorePath = Join-Path $applicationPath "CommandStore" $entityName+"CommandStore.cs"
-            $commandStoreDestPath = Join-Path $applicationDestDir $entityName+"CommandStore.cs"
-            Move-Item -Path $commandStoreDestPath -Destination $commandStorePath -Force
-        }
-
-        # DataStoreContext.cs
-        $contextPath = Join-Path $applicationPath "DatastoreContext.cs"
-        $contextDestPath = Join-Path $applicationDestDir "DatastoreContext.cs"
-        Move-Item -Path $contextDestPath -Destination $contextPath -Force
-    }
-}
     
