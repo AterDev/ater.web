@@ -18,7 +18,7 @@ function TempModule([string]$solutionPath, [string]$moduleName) {
     # get entity names by cs file name without extension
     $entityNames = Get-ChildItem -Path $entityPath -Filter "*.cs" | ForEach-Object { $_.BaseName }
 
-    Move-Item -Path $entityPath -Destination $entityDestDir -Force
+    Move-Item -Path $entityPath\* -Destination $entityDestDir -Force
     # move store to tmp
     $applicationPath = Join-Path $solutionPath "./src/Application"
     $applicationDestDir = Join-Path $destDir "Application"
@@ -50,7 +50,7 @@ function TempModule([string]$solutionPath, [string]$moduleName) {
 
 
     foreach ($entityName in $entityNames) {
-        $name = $name.Substring(0, 1).ToLower() + $name.Substring(1)
+        $name = $entityName.Substring(0, 1).ToLower() + $entityName.Substring(1)
         $contextContent = $contextContent | Where-Object { $_ -notmatch $name + "Query" -and $_ -notmatch $name + "Command" } 
     }
     Set-Content $contextPath $contextContent -Force
@@ -60,8 +60,7 @@ function TempModule([string]$solutionPath, [string]$moduleName) {
 function RestoreModule ([string]$solutionPath, [string]$moduleName) {
     Write-Host "restore module:"$moduleName
     $tmp = Join-Path $solutionPath "./.tmp"
-    if (!(Test-Path $tmp)) {
-
+    if ((Test-Path $tmp)) {
         # restore module  entity and application from tmp
         $destDir = Join-Path $tmp $moduleName
         $entityDestDir = Join-Path $destDir "Entities"
@@ -69,53 +68,59 @@ function RestoreModule ([string]$solutionPath, [string]$moduleName) {
 
         $entityPath = Join-Path $solutionPath "./src/Entity" $moduleName"Entities"
         $applicationPath = Join-Path $solutionPath "./src/Application"
+        $entityNames = Get-ChildItem -Path $entityDestDir -Filter "*.cs" | ForEach-Object { $_.BaseName }
 
-        Move-Item -Path $entityDestDir -Destination $entityPath -Force
-
-        $entityNames = Get-ChildItem -Path $entityPath -Filter "*.cs" | ForEach-Object { $_.BaseName }
+        Move-Item -Path $entityDestDir\* -Destination $entityPath -Force
 
         foreach ($entityName in $entityNames) {
-            $queryStorePath = Join-Path $applicationPath "QueryStore" $entityName+"QueryStore.cs"
-            $queryStoreDestPath = Join-Path $applicationDestDir $entityName+"QueryStore.cs"
-            Move-Item -Path $queryStoreDestPath -Destination $queryStorePath -Force
+            $queryStorePath = Join-Path $applicationPath "QueryStore" $entityName"QueryStore.cs"
+            $queryStoreDestPath = Join-Path $applicationDestDir $entityName"QueryStore.cs"
 
-            $commandStorePath = Join-Path $applicationPath "CommandStore" $entityName+"CommandStore.cs"
-            $commandStoreDestPath = Join-Path $applicationDestDir $entityName+"CommandStore.cs"
-            Move-Item -Path $commandStoreDestPath -Destination $commandStorePath -Force
+            if ((Test-Path $queryStoreDestPath)) {
+                Move-Item -Path $queryStoreDestPath -Destination $queryStorePath -Force
+            }
+
+            $commandStorePath = Join-Path $applicationPath "CommandStore" $entityName"CommandStore.cs"
+            $commandStoreDestPath = Join-Path $applicationDestDir $entityName"CommandStore.cs"
+            if (Test-Path $commandStoreDestPath) {
+                Move-Item -Path $commandStoreDestPath -Destination $commandStorePath -Force
+            }
         }
 
         # DataStoreContext.cs
         $contextPath = Join-Path $applicationPath "DataStoreContext.cs"
         $contextDestPath = Join-Path $applicationDestDir "DataStoreContext.cs"
-        Move-Item -Path $contextDestPath -Destination $contextPath -Force
+
+        if (Test-Path $contextDestPath) {
+            Move-Item -Path $contextDestPath -Destination $contextPath -Force
+        }
     }
 }
 
 #endregion
+$OutputEncoding = [Console]::OutputEncoding = [Text.UTF8Encoding]::UTF8
+Write-Host "Clean files"
+# delete files
+if (Test-Path ./nuget) {
+    Remove-Item ./nuget -Force -Recurse
+}
+if (Test-Path ./templates/apistd/src/Http.API/Migrations) {
+    Remove-Item ./templates/apistd/src/Http.API/Migrations -Force -Recurse
+}
+$location = Get-Location
+$entityPath = Join-Path $location "./templates/apistd/src/Entity"
+# 获取模块
+$entityFiles = Get-ChildItem -Path $entityPath -Filter "*.cs" -Recurse |`
+    Select-String -Pattern "\[Module" -List |`
+    Select-Object -ExpandProperty Path
+
+# 模块名称
+$modulesNames = @()
+
+$solutionPath = Join-Path $location "./templates/apistd"
+$tmp = Join-Path $solutionPath "./.tmp"
 
 try {
-    $OutputEncoding = [Console]::OutputEncoding = [Text.UTF8Encoding]::UTF8
-
-    Write-Host "Clean files"
-    # delete files
-    if (Test-Path ./nuget) {
-        Remove-Item ./nuget -Force -Recurse
-    }
-    if (Test-Path ./templates/apistd/src/Http.API/Migrations) {
-        Remove-Item ./templates/apistd/src/Http.API/Migrations -Force -Recurse
-    }
-
-    $location = Get-Location
-
-    $entityPath = Join-Path $location "./templates/apistd/src/Entity"
-    # 获取模块
-    $entityFiles = Get-ChildItem -Path $entityPath -Filter "*.cs" -Recurse |`
-        Select-String -Pattern "\[Module" -List |`
-        Select-Object -ExpandProperty Path
-
-    # 模块名称
-    $modulesNames = @()
-
     # 获取模块名称
     $regex = '\[Module\("(.+?)"\)\]';
     foreach ($file in $entityFiles) {
@@ -129,7 +134,7 @@ try {
     }
 
     Write-Host "find modules:"$modulesNames;
-    $solutionPath = Join-Path $location "./templates/apistd"
+
     foreach ($moduleName in $modulesNames) {
         TempModule $solutionPath $moduleName
     }
@@ -137,7 +142,7 @@ try {
     # pack
     dotnet pack -c release -o ./nuget
 
-    foreach ($moduleName in $moduleNames) {
+    foreach ($moduleName in $modulesNames) {
         RestoreModule $solutionPath $moduleName
     }
 
@@ -156,6 +161,7 @@ try {
 }
 catch {
     Write-Error $_.Exception.Message
+    Remove-Item $tmp -Force -Recurse
 }
 
 
