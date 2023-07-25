@@ -29,7 +29,6 @@ public class DataStoreContext
         AddCache(blogCommand);
         AddCache(systemRoleCommand);
         AddCache(systemUserCommand);
-
     }
 
     public async Task<int> SaveChangesAsync()
