@@ -18,6 +18,7 @@ public static class AppSetting
     public const string None = "none";
     public const string PostgreSQL = "postgresql";
     public const string SQLServer = "sqlserver";
+    public const string MySQL = "mysql";
     public const string Redis = "redis";
     public const string Memory = "memory";
     public const string Otlp = "otlp";
@@ -114,6 +115,30 @@ public static class ServiceExtension
         services.AddDbContextPool<CommandDbContext>(option =>
         {
             option.UseNpgsql(commandString, sql =>
+            {
+                sql.MigrationsAssembly("Http.API");
+                sql.CommandTimeout(10);
+            });
+        });
+        return services;
+    }
+
+    public static IServiceCollection AddMySQLDbContext(this IServiceCollection services, IConfiguration configuration)
+    {
+        var commandString = configuration.GetConnectionString(AppSetting.CommandDB);
+        var queryString = configuration.GetConnectionString(AppSetting.QueryDB);
+
+        services.AddDbContextPool<QueryDbContext>(option =>
+        {
+            option.UseMySql(queryString, ServerVersion.AutoDetect(queryString), sql =>
+            {
+                sql.MigrationsAssembly("Http.API");
+                sql.CommandTimeout(10);
+            });
+        });
+        services.AddDbContextPool<CommandDbContext>(option =>
+        {
+            option.UseMySql(commandString, ServerVersion.AutoDetect(commandString), sql =>
             {
                 sql.MigrationsAssembly("Http.API");
                 sql.CommandTimeout(10);
