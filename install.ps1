@@ -48,19 +48,24 @@ function TempModule([string]$solutionPath, [string]$moduleName) {
     }
     $contextContent = Get-Content $contextPath
 
-
     foreach ($entityName in $entityNames) {
         $name = $entityName.Substring(0, 1).ToLower() + $entityName.Substring(1)
         $contextContent = $contextContent | Where-Object { $_ -notmatch $name + "Query" -and $_ -notmatch $name + "Command" } 
     }
     Set-Content $contextPath $contextContent -Force
 
-    # StoreServicesExtensions.cs
-    $apiPath = Join-Path $solutionPath "./src/Http.API"
-    $servicesExtensionsPath = Join-Path $apiPath "Infrastructure" "StoreServicesExtensions.cs"
-    if (!(Test-Path (Join-Path $applicationDestDir "StoreServicesExtensions.cs"))) {
-        Copy-Item -Path $contextPath -Destination $applicationDestDir
+    # ManagerServiceCollectionExtensions.cs
+    $servicesExtensionsPath = Join-Path $applicationPath "ManagerServiceCollectionExtensions.cs"
+    if (!(Test-Path (Join-Path $applicationDestDir "ManagerServiceCollectionExtensions.cs"))) {
+        Copy-Item -Path $servicesExtensionsPath -Destination $applicationDestDir
     }
+    $content = Get-Content $servicesExtensionsPath
+    foreach ($entityName in $entityNames) {
+        $name = $entityName
+        $content = $content | Where-Object { $_ -notmatch $name + "QueryStore" -and $_ -notmatch $name + "CommandStore"
+            -and $_ -notmatch $name + "Manager" } 
+    }
+    Set-Content $servicesExtensionsPath $content -Force
 
 }
 
@@ -101,6 +106,13 @@ function RestoreModule ([string]$solutionPath, [string]$moduleName) {
 
         if (Test-Path $contextDestPath) {
             Move-Item -Path $contextDestPath -Destination $contextPath -Force
+        }
+        # ManagerServiceCollectionExtensions.cs
+        $servicesExtensionsPath = Join-Path $applicationPath "ManagerServiceCollectionExtensions.cs"
+        $servicesExtensionsDestPath = Join-Path $applicationDestDir "ManagerServiceCollectionExtensions.cs"
+
+        if (Test-Path $servicesExtensionsDestPath) {
+            Move-Item -Path $servicesExtensionsDestPath -Destination $servicesExtensionsPath -Force
         }
     }
 }
