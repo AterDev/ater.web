@@ -6,7 +6,7 @@ using Microsoft.OpenApi.Models;
 
 namespace Http.API.Infrastructure;
 
-public static class ServiceExtension
+public static class ServiceCollectionExtension
 {
     /// <summary>
     /// 添加web服务组件，如身份认证/swagger/cors/健康检查内容

@@ -62,11 +62,9 @@ function TempModule([string]$solutionPath, [string]$moduleName) {
     $content = Get-Content $servicesExtensionsPath
     foreach ($entityName in $entityNames) {
         $name = $entityName
-        $content = $content | Where-Object { $_ -notmatch $name + "QueryStore" -and $_ -notmatch $name + "CommandStore"
-            -and $_ -notmatch $name + "Manager" } 
+        $content = $content | Where-Object { $_ -notmatch $name + "QueryStore" -and $_ -notmatch $name + "CommandStore" -and $_ -notmatch $name + "Manager" } 
     }
     Set-Content $servicesExtensionsPath $content -Force
-
 }
 
 # 复原模块内容
