@@ -54,6 +54,11 @@ function TempModule([string]$solutionPath, [string]$moduleName) {
         $contextContent = $contextContent | Where-Object { $_ -notmatch $name + "Query" -and $_ -notmatch $name + "Command" } 
     }
     Set-Content $contextPath $contextContent -Force
+
+    # StoreServicesExtensions.cs
+    $apiPath = Join-Path $solutionPath "./src/Http.API"
+    $servicesExtensionsPath = Join-Path $apiPath "StoreServicesExtensions.cs"
+
 }
 
 # 复原模块内容

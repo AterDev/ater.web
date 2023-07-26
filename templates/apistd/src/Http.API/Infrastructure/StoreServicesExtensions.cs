@@ -18,7 +18,6 @@ public static partial class StoreServicesExtensions
         services.AddScoped(typeof(BlogCommandStore));
         services.AddScoped(typeof(SystemRoleCommandStore));
         services.AddScoped(typeof(SystemUserCommandStore));
-
     }
 
     public static void AddManager(this IServiceCollection services)

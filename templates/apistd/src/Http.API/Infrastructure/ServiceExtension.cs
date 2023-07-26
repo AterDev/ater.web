@@ -3,19 +3,18 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Share.Options;
 
 namespace Http.API.Infrastructure;
 
 public static class ServiceExtension
 {
     /// <summary>
-    /// 添加web服务组件，如授权/验证/swagger/cors等内容
+    /// 添加web服务组件，如身份认证/swagger/cors/健康检查内容
     /// </summary>
     /// <param name="services"></param>
     /// <param name="configuration"></param>
     /// <returns></returns>
-    public static IServiceCollection AddWebComponent(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddWebComponents(this IServiceCollection services, IConfiguration configuration)
     {
         var components = configuration.GetSection("Components").Get<AppComponentConfig>();
         if (components != null)
@@ -29,6 +28,7 @@ public static class ServiceExtension
                 services.AddJwtAuthentication(configuration);
             }
         }
+        services.AddCors();
         services.AddHealthChecks();
         return services;
     }
@@ -135,6 +135,18 @@ public static class ServiceExtension
             {
                 Type = "string",
                 Format = "date"
+            });
+        });
+        return services;
+    }
+
+    public static IServiceCollection AddCors(this IServiceCollection services)
+    {
+        services.AddCors(options =>
+        {
+            options.AddPolicy("default", builder =>
+            {
+                builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
             });
         });
         return services;

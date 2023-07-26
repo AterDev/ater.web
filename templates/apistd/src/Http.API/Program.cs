@@ -7,23 +7,15 @@ ConfigurationManager configuration = builder.Configuration;
 
 // 1 基础组件
 services.AddAppComponents(configuration);
-services.AddWebComponent(configuration);
+services.AddWebComponents(configuration);
 
-// 2 api安全相关配置
+// 2 授权配置
 services.AddAuthorization(options =>
 {
     options.AddPolicy(AppConst.User, policy =>
         policy.RequireRole(AppConst.AdminUser, AppConst.User));
     options.AddPolicy(AppConst.AdminUser, policy =>
         policy.RequireRole(AppConst.AdminUser));
-});
-// config cors
-services.AddCors(options =>
-{
-    options.AddPolicy("default", builder =>
-    {
-        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
-    });
 });
 
 // 3 数据及业务接口注入
@@ -61,7 +53,6 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    // 生产环境需要新的配置
     app.UseCors("default");
     //app.UseHsts();
     app.UseHttpsRedirection();
@@ -91,4 +82,5 @@ using (app)
     app.Run();
 }
 
+// for test project
 public partial class Program { }
