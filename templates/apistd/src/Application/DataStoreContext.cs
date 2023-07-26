@@ -1,4 +1,4 @@
-// 仓储上下文，由ater.droplet.cli生成，请勿修改
+// 仓储上下文，由ater.dry生成，请勿修改
 
 namespace Application;
 public class DataStoreContext
