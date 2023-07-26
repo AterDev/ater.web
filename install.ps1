@@ -57,7 +57,10 @@ function TempModule([string]$solutionPath, [string]$moduleName) {
 
     # StoreServicesExtensions.cs
     $apiPath = Join-Path $solutionPath "./src/Http.API"
-    $servicesExtensionsPath = Join-Path $apiPath "StoreServicesExtensions.cs"
+    $servicesExtensionsPath = Join-Path $apiPath "Infrastructure" "StoreServicesExtensions.cs"
+    if (!(Test-Path (Join-Path $applicationDestDir "StoreServicesExtensions.cs"))) {
+        Copy-Item -Path $contextPath -Destination $applicationDestDir
+    }
 
 }
 

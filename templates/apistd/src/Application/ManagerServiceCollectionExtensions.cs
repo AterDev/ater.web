@@ -1,13 +1,12 @@
-using Application.CommandStore;
-using Application.Manager;
-using Application.QueryStore;
+// 本文件由ater.droplet.cli工具自动生成.
 
-namespace Http.API.Infrastructure;
+using Application.Manager;
+namespace Application;
 
 /// <summary>
 /// 业务数据服务注入扩展
 /// </summary>
-public static partial class StoreServicesExtensions
+public static partial class ManagerServiceCollectionExtensions
 {
     public static void AddDataStore(this IServiceCollection services)
     {

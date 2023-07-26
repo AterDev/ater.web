@@ -33,9 +33,8 @@ public static class AppSetting
 /// <summary>
 /// 服务注册扩展
 /// </summary>
-public static class ServiceExtension
+public static partial class AppServiceCollectionExtensions
 {
-
     /// <summary>
     /// 添加应用组件,如数据库/缓存/日志等
     /// </summary>
