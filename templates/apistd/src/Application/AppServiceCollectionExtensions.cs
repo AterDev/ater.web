@@ -285,11 +285,14 @@ public static partial class AppServiceCollectionExtensions
                         }
                         else
                         {
-                            request.EnableBuffering();
-                            request.Body.Position = 0;
-                            StreamReader reader = new(request.Body);
-                            activity.SetTag("requestBody", await reader.ReadToEndAsync());
-                            request.Body.Position = 0;
+                            if (request.Body.CanRead)
+                            {
+                                request.EnableBuffering();
+                                request.Body.Position = 0;
+                                StreamReader reader = new(request.Body);
+                                activity.SetTag("requestBody", await reader.ReadToEndAsync());
+                                request.Body.Position = 0;
+                            }
                         }
                     };
 
