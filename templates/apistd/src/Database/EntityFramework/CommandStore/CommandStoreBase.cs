@@ -1,6 +1,8 @@
+using System.Linq.Expressions;
+using Ater.Web.Abstracture.Interface;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
-namespace Application.Implement;
+namespace EntityFramework.CommandStore;
 /// <summary>
 /// 读写仓储基类,请勿直接修改基类内容 
 /// </summary>

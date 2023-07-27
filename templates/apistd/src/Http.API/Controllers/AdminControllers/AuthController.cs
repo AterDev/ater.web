@@ -1,6 +1,6 @@
 ﻿using Application.Const;
-using Application.QueryStore;
 using Entity.SystemEntities;
+using EntityFramework.QueryStore;
 using Share.Models.AuthDtos;
 
 namespace Http.API.Controllers.AdminControllers;

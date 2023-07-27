@@ -1,6 +1,5 @@
 // 仓储上下文，由ater.dry生成，请勿修改
-
-namespace Application;
+namespace EntityFramework;
 public class DataStoreContext
 {
     public QueryDbContext QueryContext { get; init; }

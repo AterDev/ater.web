@@ -1,6 +1,7 @@
+
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
-namespace Application.Implement;
+namespace EntityFramework.QueryStore;
 
 /// <summary>
 /// 只读仓储基类,请勿直接修改基类内容

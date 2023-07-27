@@ -22,7 +22,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Database\EntityFramework\EntityFramework.csproj" />
-		<ProjectReference Include="..\Infrastructure\Ater.Web.Abstracture\Ater.Web.Abstracture.csproj" />
 		<ProjectReference Include="..\Share\Share.csproj" />
 	</ItemGroup>
 

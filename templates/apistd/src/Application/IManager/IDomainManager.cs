@@ -1,3 +1,5 @@
+using EntityFramework.CommandStore;
+using EntityFramework.QueryStore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 namespace Application.IManager;
 
