@@ -41,7 +41,8 @@ function TempModule([string]$solutionPath, [string]$moduleName) {
 
     Write-Host "Update DataStoreContext"
     # DatastoreContext.cs
-    $contextPath = Join-Path $applicationPath "DataStoreContext.cs"
+    $entityFrameworkDir = Join-Path $solutionPath "./src/Database/EntityFramework"
+    $contextPath = Join-Path $entityFrameworkDir "DataStoreContext.cs"
     # 保存原文件
     if (!(Test-Path (Join-Path $applicationDestDir "DataStoreContext.cs"))) {
         Copy-Item -Path $contextPath -Destination $applicationDestDir
@@ -99,7 +100,8 @@ function RestoreModule ([string]$solutionPath, [string]$moduleName) {
         }
 
         # DataStoreContext.cs
-        $contextPath = Join-Path $applicationPath "DataStoreContext.cs"
+        $entityFrameworkDir = Join-Path $solutionPath "./src/Database/EntityFramework"
+        $contextPath = Join-Path $entityFrameworkDir "DataStoreContext.cs"
         $contextDestPath = Join-Path $applicationDestDir "DataStoreContext.cs"
 
         if (Test-Path $contextDestPath) {
