@@ -12,15 +12,6 @@
 		<NoWarn>1701;1702;1591</NoWarn>
 	</PropertyGroup>
 	<ItemGroup>
-		<Compile Remove="CommandDataStore\**" />
-		<Compile Remove="QueryDataStore\**" />
-		<EmbeddedResource Remove="CommandDataStore\**" />
-		<EmbeddedResource Remove="QueryDataStore\**" />
-		<None Remove="CommandDataStore\**" />
-		<None Remove="QueryDataStore\**" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<ProjectReference Include="..\Database\EntityFramework\EntityFramework.csproj" />
 		<ProjectReference Include="..\Share\Share.csproj" />
 	</ItemGroup>

@@ -5,6 +5,7 @@ global using System.Text.Json;
 global using Application.Const;
 global using Application.IManager;
 global using Application.Implement;
+global using Application.Manager;
 global using Ater.Web.Core.Models;
 global using Ater.Web.Core.Utils;
 global using Entity;

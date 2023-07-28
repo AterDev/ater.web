@@ -1,9 +1,5 @@
 // 本文件由ater.dry工具自动生成.
 
-using Application.Manager;
-using EntityFramework.CommandStore;
-using EntityFramework.QueryStore;
-
 namespace Application;
 
 /// <summary>
