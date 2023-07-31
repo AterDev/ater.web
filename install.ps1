@@ -2,25 +2,27 @@
 # 移动模块到临时目录
 function TempModule([string]$solutionPath, [string]$moduleName) {
     Write-Host "move module:"$moduleName
-    # temp save
     $tmp = Join-Path $solutionPath "./.tmp"
+    $entityPath = Join-Path $solutionPath "./src/Entity" $moduleName"Entities"
+    $applicationPath = Join-Path $solutionPath "./src/Application"
+    $entityFrameworkPath = Join-Path $solutionPath "./src/Database/EntityFramework"
+
+    # temp save
     if (!(Test-Path $tmp)) {
         New-Item -Path $tmp -ItemType Directory -Force | Out-Null
     }
     $destDir = Join-Path $tmp $moduleName
-    # move entity to tmp   
-    $entityPath = Join-Path $solutionPath "./src/Entity" $moduleName"Entities"
-    $entityDestDir = Join-Path $destDir "Entities"
 
+    # move entity to tmp   
+    $entityDestDir = Join-Path $destDir "Entities"
     if (!(Test-Path $entityDestDir)) {
         New-Item -Path $entityDestDir -ItemType Directory -Force | Out-Null
     }
     # get entity names by cs file name without extension
     $entityNames = Get-ChildItem -Path $entityPath -Filter "*.cs" | ForEach-Object { $_.BaseName }
-
     Move-Item -Path $entityPath\* -Destination $entityDestDir -Force
+
     # move store to tmp
-    $applicationPath = Join-Path $solutionPath "./src/Application"
     $applicationDestDir = Join-Path $destDir "Application"
 
     if (!(Test-Path $applicationDestDir)) {
@@ -28,8 +30,8 @@ function TempModule([string]$solutionPath, [string]$moduleName) {
     }
 
     foreach ($entityName in $entityNames) {
-        $queryStorePath = Join-Path $applicationPath "QueryStore" $entityName"QueryStore.cs"
-        $commandStorePath = Join-Path $applicationPath "CommandStore" $entityName"CommandStore.cs"
+        $queryStorePath = Join-Path $entityFrameworkPath "QueryStore" $entityName"QueryStore.cs"
+        $commandStorePath = Join-Path $entityFrameworkPath "CommandStore" $entityName"CommandStore.cs"
 
         if ((Test-Path $queryStorePath)) {
             Move-Item -Path $queryStorePath -Destination $applicationDestDir -Force
@@ -41,8 +43,7 @@ function TempModule([string]$solutionPath, [string]$moduleName) {
 
     Write-Host "Update DataStoreContext"
     # DatastoreContext.cs
-    $entityFrameworkDir = Join-Path $solutionPath "./src/Database/EntityFramework"
-    $contextPath = Join-Path $entityFrameworkDir "DataStoreContext.cs"
+    $contextPath = Join-Path $entityFrameworkPath "DataStoreContext.cs"
     # 保存原文件
     if (!(Test-Path (Join-Path $applicationDestDir "DataStoreContext.cs"))) {
         Copy-Item -Path $contextPath -Destination $applicationDestDir
@@ -77,22 +78,24 @@ function RestoreModule ([string]$solutionPath, [string]$moduleName) {
         $destDir = Join-Path $tmp $moduleName
         $entityDestDir = Join-Path $destDir "Entities"
         $applicationDestDir = Join-Path $destDir "Application"
-
+        
         $entityPath = Join-Path $solutionPath "./src/Entity" $moduleName"Entities"
         $applicationPath = Join-Path $solutionPath "./src/Application"
+        $entityFrameworkPath = Join-Path $solutionPath "./src/Database/EntityFramework"
         $entityNames = Get-ChildItem -Path $entityDestDir -Filter "*.cs" | ForEach-Object { $_.BaseName }
 
         Move-Item -Path $entityDestDir\* -Destination $entityPath -Force
 
+        # stores
         foreach ($entityName in $entityNames) {
-            $queryStorePath = Join-Path $applicationPath "QueryStore" $entityName"QueryStore.cs"
+            $queryStorePath = Join-Path $entityFrameworkPath "QueryStore" $entityName"QueryStore.cs"
             $queryStoreDestPath = Join-Path $applicationDestDir $entityName"QueryStore.cs"
 
             if ((Test-Path $queryStoreDestPath)) {
                 Move-Item -Path $queryStoreDestPath -Destination $queryStorePath -Force
             }
 
-            $commandStorePath = Join-Path $applicationPath "CommandStore" $entityName"CommandStore.cs"
+            $commandStorePath = Join-Path $entityFrameworkPath "CommandStore" $entityName"CommandStore.cs"
             $commandStoreDestPath = Join-Path $applicationDestDir $entityName"CommandStore.cs"
             if (Test-Path $commandStoreDestPath) {
                 Move-Item -Path $commandStoreDestPath -Destination $commandStorePath -Force
@@ -100,8 +103,7 @@ function RestoreModule ([string]$solutionPath, [string]$moduleName) {
         }
 
         # DataStoreContext.cs
-        $entityFrameworkDir = Join-Path $solutionPath "./src/Database/EntityFramework"
-        $contextPath = Join-Path $entityFrameworkDir "DataStoreContext.cs"
+        $contextPath = Join-Path $entityFrameworkPath "DataStoreContext.cs"
         $contextDestPath = Join-Path $applicationDestDir "DataStoreContext.cs"
 
         if (Test-Path $contextDestPath) {
