@@ -7,10 +7,6 @@ function TempModule([string]$solutionPath, [string]$moduleName) {
     $applicationPath = Join-Path $solutionPath "./src/Application"
     $entityFrameworkPath = Join-Path $solutionPath "./src/Database/EntityFramework"
 
-    # temp save
-    if (!(Test-Path $tmp)) {
-        New-Item -Path $tmp -ItemType Directory -Force | Out-Null
-    }
     $destDir = Join-Path $tmp $moduleName
 
     # move entity to tmp   
@@ -68,8 +64,10 @@ function TempModule([string]$solutionPath, [string]$moduleName) {
     }
     Set-Content $servicesExtensionsPath $content -Force
 
-    # reference project
-    
+    # remove module reference project
+    $moduleProjectFile = Join-Path $solutionPath "src/Modules" $moduleName "$moduleName.csproj"
+    $apiProjectFile = Join-Path $solutionPath "src/Http.API/Http.API.csproj"
+    dotnet remove $apiProjectFile reference $moduleProjectFile
 }
 
 # 复原模块内容
@@ -144,6 +142,9 @@ $modulesNames = @()
 
 $solutionPath = Join-Path $location "./templates/apistd"
 $tmp = Join-Path $solutionPath "./.tmp"
+if (!(Test-Path $tmp)) {
+    New-Item -Path $tmp -ItemType Directory -Force | Out-Null
+}
 
 try {
     # 获取模块名称
@@ -157,6 +158,9 @@ try {
             $modulesNames += $moduleName
         }
     }
+    # backup sln file
+    $apiProjectFile = Join-Path $solutionPath "src/Http.API/Http.API.csproj"
+    Copy-Item -Path $apiProjectFile -Destination $tmp -Force
 
     Write-Host "find modules:"$modulesNames;
 
@@ -170,6 +174,9 @@ try {
     foreach ($moduleName in $modulesNames) {
         RestoreModule $solutionPath $moduleName
     }
+
+    # restore sln file
+    Copy-Item -Path $tmp\Http.API.csproj -Destination $solutionPath\src\Http.API -Force
 
     # delete tmp directory
     Remove-Item $tmp -Force -Recurse
