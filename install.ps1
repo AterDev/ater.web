@@ -67,6 +67,9 @@ function TempModule([string]$solutionPath, [string]$moduleName) {
         $content = $content | Where-Object { $_ -notmatch $name + "QueryStore" -and $_ -notmatch $name + "CommandStore" -and $_ -notmatch $name + "Manager" } 
     }
     Set-Content $servicesExtensionsPath $content -Force
+
+    # reference project
+    
 }
 
 # 复原模块内容
