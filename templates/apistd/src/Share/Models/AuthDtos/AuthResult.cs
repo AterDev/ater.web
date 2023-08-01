@@ -16,4 +16,5 @@ public class AuthResult
     /// token
     /// </summary>
     public string Token { get; set; } = default!;
+    public List<SystemPermissionGroup>? PermissionGroups { get; set; }
 }

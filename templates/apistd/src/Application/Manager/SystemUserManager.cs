@@ -47,8 +47,7 @@ public class SystemUserManager : DomainManagerBase<SystemUser, SystemUserUpdateD
     {
         var smtp = _config.GetSection("Smtp").Get<SmtpOption>() ?? throw new ArgumentNullException("未找到Smtp选项!");
 
-        await SmtpService.Create(smtp.Host, smtp.Port, true)
-            .SetCredentials(smtp.Username, smtp.Password)
+        await SmtpService.Create(smtp.Host, smtp.Port, true).SetCredentials(smtp.Username, smtp.Password)
             .SendEmailAsync(smtp.DisplayName, smtp.From, email, subject, htmlContent);
     }
 

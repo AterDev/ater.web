@@ -54,13 +54,12 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
     /// </summary>
     /// <param name="dto"></param>
     /// <returns></returns>
-    [HttpPut("Login")]
+    [HttpPut("login")]
     [AllowAnonymous]
     public async Task<ActionResult<AuthResult>> LoginAsync(LoginDto dto)
     {
         // 查询用户
         var user = await manager.Query.Db.Where(u => u.UserName.Equals(dto.UserName))
-            .AsNoTracking()
             .FirstOrDefaultAsync();
         if (user == null)
         {
@@ -142,7 +141,7 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
     /// 退出 
     /// </summary>
     /// <returns></returns>
-    [HttpPut("{id}")]
+    [HttpPut("logout/{id}")]
     public async Task<ActionResult<bool>> LogoutAsync([FromRoute] Guid id)
     {
         if (await manager.ExistAsync(id))
