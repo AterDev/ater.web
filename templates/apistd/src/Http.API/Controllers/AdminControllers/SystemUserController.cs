@@ -10,15 +10,19 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
 {
     private readonly CacheService _cache;
     private readonly IConfiguration _config;
+    private readonly IEmailService _emailService;
+
     public SystemUserController(
         IUserContext user,
         ILogger<SystemUserController> logger,
         ISystemUserManager manager,
         CacheService cache,
-        IConfiguration config) : base(manager, user, logger)
+        IConfiguration config,
+        IEmailService emailService) : base(manager, user, logger)
     {
         _cache = cache;
         _config = config;
+        _emailService = emailService;
     }
 
     /// <summary>
@@ -40,12 +44,12 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
         {
             return Conflict("验证码已发送!");
         }
-        // 缓存，默认60秒过期
-        await _cache.SetValueAsync(key, captcha, 60);
+        // 缓存，默认5分钟过期
+        await _cache.SetValueAsync(key, captcha, 60 * 5);
         // 自定义html内容
         var htmlContent = $"登录验证码:{captcha}";
         // 使用 smtp，可替换成其他
-        await manager.SendVerifyEmailAsync(email, "登录验证码", htmlContent);
+        await _emailService.SendLoginVerifyAsync(email, captcha);
         return Ok();
     }
 

@@ -21,6 +21,7 @@
 		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.32.0" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.32.0" />
 		<PackageReference Include="Dapr.Client" Version="1.11.0" />
+		<PackageReference Include="MailKit" Version="4.1.0" />
 		<!--应用组件 -->
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.9" />
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4" />

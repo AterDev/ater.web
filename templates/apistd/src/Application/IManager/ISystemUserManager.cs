@@ -29,6 +29,5 @@ public interface ISystemUserManager : IDomainManager<SystemUser>
     Task<SystemUser?> DeleteAsync(SystemUser entity, bool softDelete = true);
     Task<bool> ExistAsync(Guid id);
     string GetCaptcha(int length = 6);
-    Task SendVerifyEmailAsync(string email, string subject, string htmlContent);
     void LoadRolesWithPermissions(SystemUser user);
 }

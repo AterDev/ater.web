@@ -26,6 +26,7 @@ services.AddManager();
 
 // 4 其他自定义选项及服务
 services.AddSingleton(typeof(CacheService));
+services.AddSingleton<IEmailService, EmailService>();
 
 services.AddControllers()
     .ConfigureApiBehaviorOptions(o =>
