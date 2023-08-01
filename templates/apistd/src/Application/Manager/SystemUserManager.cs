@@ -1,21 +1,27 @@
 using Application.Services;
+using Microsoft.Extensions.Configuration;
 using Share.Models.SystemUserDtos;
+using Share.Options;
 
 namespace Application.Manager;
 
 public class SystemUserManager : DomainManagerBase<SystemUser, SystemUserUpdateDto, SystemUserFilterDto, SystemUserItemDto>, ISystemUserManager
 {
     private readonly CacheService _cache;
+    private readonly IConfiguration _config;
+
     private string? ErrorMessage { get; }
 
     public SystemUserManager(
         DataStoreContext storeContext,
         ILogger<SystemUserManager> logger,
         IUserContext userContext,
-        CacheService cache) : base(storeContext, logger)
+        CacheService cache,
+        IConfiguration config) : base(storeContext, logger)
     {
         _userContext = userContext;
         _cache = cache;
+        _config = config;
     }
 
     /// <summary>
@@ -27,6 +33,38 @@ public class SystemUserManager : DomainManagerBase<SystemUser, SystemUserUpdateD
     public string GetCaptcha(int length = 6)
     {
         return HashCrypto.GetRnd(length);
+    }
+
+    /// <summary>
+    /// 发送验证码
+    /// </summary>
+    /// <param name="email"></param>
+    /// <param name="subject"></param>
+    /// <param name="htmlContent"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentNullException"></exception>
+    public async Task SendVerifyEmailAsync(string email, string subject, string htmlContent)
+    {
+        var smtp = _config.GetSection("Smtp").Get<SmtpOption>() ?? throw new ArgumentNullException("未找到Smtp选项!");
+
+        await SmtpService.Create(smtp.Host, smtp.Port, true)
+            .SetCredentials(smtp.Username, smtp.Password)
+            .SendEmailAsync(smtp.DisplayName, smtp.From, email, subject, htmlContent);
+    }
+
+    /// <summary>
+    /// 获取用户角色权限信息
+    /// </summary>
+    /// <returns></returns>
+    public void LoadRolesWithPermissions(SystemUser user)
+    {
+        Stores.QueryContext.Entry(user)
+            .Collection(u => u.SystemRoles)
+            .Query()
+            .Include(r => r.Menus)
+            .Include(r => r.PermissionGroups)
+                .ThenInclude(g => g.Permissions)
+            .Load();
     }
 
     /// <summary>

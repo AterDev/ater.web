@@ -145,7 +145,7 @@ public static partial class Extensions
     /// <returns></returns>
     public static List<T> BuildTree<T>(this List<T> nodes) where T : ITreeNode<T>
     {
-        nodes.ForEach(n => { n.Children = null; });
+        nodes.ForEach(n => { n.Children = new List<T>(); });
         var nodeDict = nodes.ToDictionary(n => n.Id);
         List<T> res = new();
 

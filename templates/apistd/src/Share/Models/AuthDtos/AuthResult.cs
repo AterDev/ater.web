@@ -1,4 +1,6 @@
-﻿namespace Share.Models.AuthDtos;
+﻿using Entity.SystemEntities;
+
+namespace Share.Models.AuthDtos;
 
 public class AuthResult
 {
@@ -8,6 +10,8 @@ public class AuthResult
     /// </summary>
     public string Username { get; set; } = default!;
     public string[] Roles { get; set; } = default!;
+
+    public List<SystemMenu>? Menus { get; set; }
     /// <summary>
     /// token
     /// </summary>

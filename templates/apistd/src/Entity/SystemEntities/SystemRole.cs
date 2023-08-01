@@ -28,11 +28,8 @@ public class SystemRole : EntityBase
     /// <summary>
     /// 中间表
     /// </summary>
-    public ICollection<RolePermission> RolePermissions { get; set; } = new List<RolePermission>();
-    /// <summary>
-    /// 权限
-    /// </summary>
-    public ICollection<SystemPermission> Permissions { get; set; } = new List<SystemPermission>();
+    public ICollection<SystemPermissionGroup> PermissionGroups { get; set; } = new List<SystemPermissionGroup>();
+
     /// <summary>
     /// 菜单权限
     /// </summary>

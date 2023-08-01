@@ -1,5 +1,3 @@
-using Entity.SystemEntities;
-
 namespace EntityFramework;
 
 public partial class ContextBase : DbContext
@@ -9,7 +7,7 @@ public partial class ContextBase : DbContext
     public DbSet<SystemConfig> SystemConfigs { get; set; }
     public DbSet<SystemMenu> SystemMenus { get; set; }
     public DbSet<SystemPermission> SystemPermissions { get; set; }
-    public DbSet<RolePermission> RolePermissions { get; set; }
+    public DbSet<SystemPermissionGroup> SystemPermissionGroups { get; set; }
     public DbSet<SystemLogs> SystemLogs { get; set; }
     public DbSet<SystemOrganization> SystemOrganizations { get; set; }
     public DbSet<User> Users { get; set; }

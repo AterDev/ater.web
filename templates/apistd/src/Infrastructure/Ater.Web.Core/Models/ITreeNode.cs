@@ -8,5 +8,5 @@ public interface ITreeNode<T>
 
     public Guid? ParentId { get; set; }
 
-    public List<T>? Children { get; set; }
+    public List<T> Children { get; set; }
 }
