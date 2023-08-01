@@ -28,4 +28,5 @@ public interface ISystemUserManager : IDomainManager<SystemUser>
     Task<PageList<SystemUserItemDto>> FilterAsync(SystemUserFilterDto filter);
     Task<SystemUser?> DeleteAsync(SystemUser entity, bool softDelete = true);
     Task<bool> ExistAsync(Guid id);
+    string GetCaptcha(int length = 6);
 }

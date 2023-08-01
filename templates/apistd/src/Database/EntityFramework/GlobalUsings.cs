@@ -7,3 +7,6 @@ global using EntityFramework.CommandStore;
 global using EntityFramework.QueryStore;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.Logging;
+
+
+global using Entity.SystemEntities;

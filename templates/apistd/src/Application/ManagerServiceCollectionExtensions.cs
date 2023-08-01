@@ -1,26 +1,30 @@
-// 本文件由ater.dry工具自动生成.
-
+// 鏈枃浠剁敱ater.dry宸ュ叿鑷姩鐢熸垚.
 namespace Application;
 
-/// <summary>
-/// 业务数据服务注入扩展
-/// </summary>
 public static partial class ManagerServiceCollectionExtensions
 {
     public static void AddDataStore(this IServiceCollection services)
     {
         services.AddScoped(typeof(DataStoreContext));
         services.AddScoped(typeof(BlogQueryStore));
+        services.AddScoped(typeof(SystemMenuQueryStore));
         services.AddScoped(typeof(SystemRoleQueryStore));
         services.AddScoped(typeof(SystemUserQueryStore));
+        services.AddScoped(typeof(UserQueryStore));
         services.AddScoped(typeof(BlogCommandStore));
+        services.AddScoped(typeof(SystemMenuCommandStore));
         services.AddScoped(typeof(SystemRoleCommandStore));
         services.AddScoped(typeof(SystemUserCommandStore));
+        services.AddScoped(typeof(UserCommandStore));
+
     }
 
     public static void AddManager(this IServiceCollection services)
     {
+        services.AddScoped<ISystemMenuManager, SystemMenuManager>();
         services.AddScoped<ISystemRoleManager, SystemRoleManager>();
         services.AddScoped<ISystemUserManager, SystemUserManager>();
+        services.AddScoped<IUserManager, UserManager>();
+
     }
 }

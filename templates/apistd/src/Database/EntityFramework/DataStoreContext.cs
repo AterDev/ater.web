@@ -1,9 +1,13 @@
-// 仓储上下文，由ater.dry生成，请勿修改
+using Entity;
+using Entity.CMSEntities;
+using Entity.SystemEntities;
 namespace EntityFramework;
 public class DataStoreContext
 {
     public QueryDbContext QueryContext { get; init; }
     public CommandDbContext CommandContext { get; init; }
+
+
 
     /// <summary>
     /// 绑在对象
@@ -12,11 +16,15 @@ public class DataStoreContext
 
     public DataStoreContext(
         BlogQueryStore blogQuery,
+        SystemMenuQueryStore systemMenuQuery,
         SystemRoleQueryStore systemRoleQuery,
         SystemUserQueryStore systemUserQuery,
+        UserQueryStore userQuery,
         BlogCommandStore blogCommand,
+        SystemMenuCommandStore systemMenuCommand,
         SystemRoleCommandStore systemRoleCommand,
         SystemUserCommandStore systemUserCommand,
+        UserCommandStore userCommand,
 
         QueryDbContext queryDbContext,
         CommandDbContext commandDbContext
@@ -25,11 +33,16 @@ public class DataStoreContext
         QueryContext = queryDbContext;
         CommandContext = commandDbContext;
         AddCache(blogQuery);
+        AddCache(systemMenuQuery);
         AddCache(systemRoleQuery);
         AddCache(systemUserQuery);
+        AddCache(userQuery);
         AddCache(blogCommand);
+        AddCache(systemMenuCommand);
         AddCache(systemRoleCommand);
         AddCache(systemUserCommand);
+        AddCache(userCommand);
+
     }
 
     public async Task<int> SaveChangesAsync()
@@ -41,16 +54,16 @@ public class DataStoreContext
     {
         var typename = typeof(TEntity).Name + "QueryStore";
         var set = GetSet(typename);
-        return set == null
-            ? throw new ArgumentNullException($"{typename} class object not found")
+        return set == null 
+            ? throw new ArgumentNullException($"{typename} class object not found") 
             : (QuerySet<TEntity>)set;
     }
     public CommandSet<TEntity> CommandSet<TEntity>() where TEntity : EntityBase
     {
         var typename = typeof(TEntity).Name + "CommandStore";
         var set = GetSet(typename);
-        return set == null
-            ? throw new ArgumentNullException($"{typename} class object not found")
+        return set == null 
+            ? throw new ArgumentNullException($"{typename} class object not found") 
             : (CommandSet<TEntity>)set;
     }
 

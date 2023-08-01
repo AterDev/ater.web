@@ -87,10 +87,10 @@ public class HashCrypto
     /// <param name="useSpe"></param>
     /// <param name="custom"></param>
     /// <returns></returns>
-    public static string? GetRnd(int length = 4, bool useNum = true, bool useLow = false, bool useUpp = true, bool useSpe = false, string custom = "")
+    public static string GetRnd(int length = 4, bool useNum = true, bool useLow = false, bool useUpp = true, bool useSpe = false, string custom = "")
     {
         var b = new byte[4];
-        string? s = null;
+        string s = string.Empty;
         var str = custom;
         if (useNum) { str += "0123456789"; }
         if (useLow) { str += "abcdefghijklmnopqrstuvwxyz"; }

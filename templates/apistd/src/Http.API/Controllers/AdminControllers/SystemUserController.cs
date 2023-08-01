@@ -6,14 +6,32 @@ namespace Http.API.Controllers.AdminControllers;
 /// </summary>
 public class SystemUserController : RestControllerBase<ISystemUserManager>
 {
-
+    private readonly CacheService _cache;
     public SystemUserController(
         IUserContext user,
         ILogger<SystemUserController> logger,
-        ISystemUserManager manager
-        ) : base(manager, user, logger)
+        ISystemUserManager manager,
+        CacheService cache) : base(manager, user, logger)
     {
+        _cache = cache;
+    }
 
+    [HttpPost("verifyCode")]
+    public async Task<ActionResult> SendVerifyCodeAsync(string targetAddress)
+    {
+        var captcha = manager.GetCaptcha();
+        var key = "VerifyCode:" + targetAddress;
+        if (_cache.GetValue<string>(key) != null)
+        {
+            return Conflict("验证码已发送!");
+        }
+        // 缓存，默认60过期
+        await _cache.SetValueAsync(key, captcha, 60);
+
+        // 使用 smtp，可替换成其他
+        SmtpService.Create()
+            .SetCredentials()
+            .SendEmailAsync(targetAddress, "验证码", captcha);
     }
 
     /// <summary>

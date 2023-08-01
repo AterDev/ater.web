@@ -1,15 +1,32 @@
+using Application.Services;
 using Share.Models.SystemUserDtos;
 
 namespace Application.Manager;
 
 public class SystemUserManager : DomainManagerBase<SystemUser, SystemUserUpdateDto, SystemUserFilterDto, SystemUserItemDto>, ISystemUserManager
 {
+    private readonly CacheService _cache;
+    private string? ErrorMessage { get; }
+
     public SystemUserManager(
         DataStoreContext storeContext,
         ILogger<SystemUserManager> logger,
-        IUserContext userContext) : base(storeContext, logger)
+        IUserContext userContext,
+        CacheService cache) : base(storeContext, logger)
     {
         _userContext = userContext;
+        _cache = cache;
+    }
+
+    /// <summary>
+    /// 获取验证码
+    /// 也可自己实现图片验证码
+    /// </summary>
+    /// <param name="length">验证码长度</param>
+    /// <returns></returns>
+    public string GetCaptcha(int length = 6)
+    {
+        return HashCrypto.GetRnd(length);
     }
 
     /// <summary>

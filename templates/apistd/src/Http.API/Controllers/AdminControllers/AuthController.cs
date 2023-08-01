@@ -1,6 +1,4 @@
-﻿using Application.Const;
-using Entity.SystemEntities;
-using EntityFramework.QueryStore;
+﻿using EntityFramework.QueryStore;
 using Share.Models.AuthDtos;
 
 namespace Http.API.Controllers.AdminControllers;
@@ -21,7 +19,6 @@ public class AuthController : RestControllerBase
         //RedisService redis,
         SystemUserQueryStore store)
     {
-        //_store = userDataStore;
         _config = config;
         //_redis = redis;
         _store = store;
