@@ -34,11 +34,11 @@ public class SystemMenu : EntityBase, ITreeNode<SystemMenu>
     /// <summary>
     /// 子菜单
     /// </summary>
-    public List<SystemMenu>? Children { get; set; }
+    public List<SystemMenu> Children { get; set; } = new List<SystemMenu>();
     /// <summary>
     /// 所属角色
     /// </summary>
-    public List<SystemRole>? Roles { get; set; }
+    public ICollection<SystemRole> Roles { get; set; } = new List<SystemRole>();
 
     /// <summary>
     /// 权限编码
@@ -54,12 +54,13 @@ public class SystemMenu : EntityBase, ITreeNode<SystemMenu>
     /// <summary>
     /// 排序
     /// </summary>
-    public int Sort { get; set; } = 0;
+    public int Sort { get; set; }
 
     /// <summary>
     /// 是否显示
     /// </summary>
     public bool Hidden { get; set; } = true;
+
 }
 
 public enum MenuType

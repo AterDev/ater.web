@@ -18,24 +18,24 @@ public class SystemRole : EntityBase
     /// <summary>
     /// 是否系统内置,系统内置不可删除
     /// </summary>
-    public bool IsSystem { get; set; } = false;
+    public bool IsSystem { get; set; }
     /// <summary>
     /// 图标
     /// </summary>
     [MaxLength(30)]
     public string? Icon { get; set; }
-    public ICollection<SystemUser>? Users { get; set; }
+    public ICollection<SystemUser> Users { get; set; } = new List<SystemUser>();
     /// <summary>
     /// 中间表
     /// </summary>
-    public List<RolePermission>? RolePermissions { get; set; }
+    public ICollection<RolePermission> RolePermissions { get; set; } = new List<RolePermission>();
     /// <summary>
     /// 权限
     /// </summary>
-    public List<SystemPermission>? Permissions { get; set; }
+    public ICollection<SystemPermission> Permissions { get; set; } = new List<SystemPermission>();
     /// <summary>
     /// 菜单权限
     /// </summary>
-    public List<SystemMenu>? Menus { get; set; }
+    public ICollection<SystemMenu> Menus { get; set; } = new List<SystemMenu>();
 
 }

@@ -15,7 +15,7 @@ public class SystemOrganization : EntityBase, ITreeNode<SystemOrganization>
     /// <summary>
     /// 子目录
     /// </summary>
-    public List<SystemOrganization>? Children { get; set; }
+    public List<SystemOrganization> Children { get; set; } = new List<SystemOrganization>();
 
     /// <summary>
     /// 父目录
@@ -23,5 +23,5 @@ public class SystemOrganization : EntityBase, ITreeNode<SystemOrganization>
     [ForeignKey(nameof(ParentId))]
     public SystemOrganization? Parent { get; set; }
     public Guid? ParentId { get; set; }
-    public List<SystemUser>? Users { get; set; }
+    public ICollection<SystemUser> Users { get; set; } = new List<SystemUser>();
 }

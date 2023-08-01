@@ -15,6 +15,6 @@ public class SystemPermission : EntityBase
     /// </summary>
     [MaxLength(200)]
     public string? PermissionPath { get; set; }
-    public List<SystemRole>? Roles { get; set; }
-    public List<RolePermission>? RolePermissions { get; set; }
+    public ICollection<SystemRole> Roles { get; set; } = new List<SystemRole>();
+    public ICollection<RolePermission> RolePermissions { get; set; } = new List<RolePermission>();
 }
