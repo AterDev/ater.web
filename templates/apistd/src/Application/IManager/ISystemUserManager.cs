@@ -30,4 +30,5 @@ public interface ISystemUserManager : IDomainManager<SystemUser>
     Task<bool> ExistAsync(Guid id);
     string GetCaptcha(int length = 6);
     Task SendVerifyEmailAsync(string email, string subject, string htmlContent);
+    void LoadRolesWithPermissions(SystemUser user);
 }

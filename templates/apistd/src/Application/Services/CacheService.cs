@@ -47,6 +47,17 @@ public class CacheService
             AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(expiration)
         });
     }
+
+    /// <summary>
+    /// 清除缓存
+    /// </summary>
+    /// <param name="key"></param>
+    /// <returns></returns>
+    public async Task RemoveAsync(string key)
+    {
+        await _cache.RemoveAsync(key);
+    }
+
     /// <summary>
     /// 获取缓存
     /// </summary>

@@ -67,6 +67,20 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
             return NotFound("不存在该用户");
         }
 
+        // 可将 dto.VerifyCode 设置为必填，以强制验证
+        if (dto.VerifyCode != null)
+        {
+            var key = "VerifyCode:" + user.Email;
+            var cacheCode = _cache.GetValue<string>(key);
+            if (cacheCode == null)
+            {
+                return NotFound("验证码已过期");
+            }
+            if (!cacheCode.Equals(dto.VerifyCode))
+            {
+                return NotFound("验证码错误");
+            }
+        }
         if (HashCrypto.Validate(dto.Password, user.PasswordSalt, user.PasswordHash))
         {
             // 获取Jwt配置
@@ -76,19 +90,21 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
             var issuer = jwtOption.ValidIssuer;
             var audience = jwtOption.ValidAudiences;
 
-            //var time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-            //1天后过期
+            // 构建返回内容
             if (!string.IsNullOrWhiteSpace(sign) &&
                 !string.IsNullOrWhiteSpace(issuer) &&
                 !string.IsNullOrWhiteSpace(audience))
             {
+                // 加载关联数据
                 manager.LoadRolesWithPermissions(user);
+
                 var roles = user.SystemRoles?.Select(r => r.NameValue)?.ToList()
                     ?? new List<string> { AppConst.AdminUser };
-
+                // 过期时间:minutes
+                var expired = 60 * 24;
                 JwtService jwt = new(sign, audience, issuer)
                 {
-                    TokenExpires = 60 * 24 * 7,
+                    TokenExpires = expired,
                 };
                 // 添加管理员用户标识
                 if (!roles.Contains(AppConst.AdminUser))
@@ -96,8 +112,8 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
                     roles.Add(AppConst.AdminUser);
                 }
                 var token = jwt.GetToken(user.Id.ToString(), roles.ToArray());
-                // 登录状态存储到Redis
-                //await _redis.SetValueAsync("login" + user.Id.ToString(), true, 60 * 24 * 7);
+                // 缓存登录状态
+                await _cache.SetValueAsync("Login" + user.Id.ToString(), true, expired * 60);
 
                 var menus = user.SystemRoles?.SelectMany(r => r.Menus).ToList();
                 var permissionGroups = user.SystemRoles?.SelectMany(r => r.PermissionGroups).ToList();
@@ -129,11 +145,13 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
     [HttpPut("{id}")]
     public async Task<ActionResult<bool>> LogoutAsync([FromRoute] Guid id)
     {
-        //var user = await _store.FindAsync(id);
-        //if (user == null) return NotFound();
-        // 清除redis登录状态
-        //await _redis.Cache.RemoveAsync(id.ToString());
-        return await Task.FromResult(true);
+        if (await manager.ExistAsync(id))
+        {
+            // 清除缓存状态
+            await _cache.RemoveAsync(id.ToString());
+            return Ok();
+        }
+        return NotFound();
     }
 
     /// <summary>
