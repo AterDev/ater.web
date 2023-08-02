@@ -249,5 +249,4 @@ public class UserController : ClientControllerBase<IUserManager>
         var res = await manager.FindAsync(id);
         return (res == null) ? NotFound() : res;
     }
-
 }
