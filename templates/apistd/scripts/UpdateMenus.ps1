@@ -1,11 +1,11 @@
 <# 
-±¾½Å±¾ÊÇÓÃÀ´Í¬²½Ç°¶ËÎ¬»¤µÄmenus.jsonµ½Êý¾Ý¿â
-±¾½Å±¾ÓÉÇ°¶Ë¿ª·¢ÈËÔ±Ö´ÐÐ£¬Ö´ÐÐÇ°ÏÈÈ·¶¨Â·¾¶ºÍurl·ûºÏÊµ¼ÊÇé¿ö
-Èç¹ûÒª¸üÐÂÉú²ú»·¾³£¬ÇëÐ¯´ø²ÎÊý production
-json¸ñÊ½Ê¾Àý:
+æœ¬è„šæœ¬æ˜¯ç”¨æ¥åŒæ­¥å‰ç«¯ç»´æŠ¤çš„menus.jsonåˆ°æ•°æ®åº“
+æœ¬è„šæœ¬ç”±å‰ç«¯å¼€å‘äººå‘˜æ‰§è¡Œï¼Œæ‰§è¡Œå‰å…ˆç¡®å®šè·¯å¾„å’Œurlç¬¦åˆå®žé™…æƒ…å†µ
+å¦‚æžœè¦æ›´æ–°ç”Ÿäº§çŽ¯å¢ƒï¼Œè¯·æºå¸¦å‚æ•° production
+jsonæ ¼å¼ç¤ºä¾‹:
 [
   {
-    "name": "ÏµÍ³ÉèÖÃ",
+    "name": "ç³»ç»Ÿè®¾ç½®",
     "accessCode": "80000",
     "menuType": 0,
     "children": []
@@ -23,13 +23,13 @@ $PSDefaultParameterValues['*:Encoding'] = 'utf8'
 
 $location = Get-Location
 cd ./src
-# ¶¨ÒåÇ°¶Ëmenus.jsonÂ·¾¶
+# å®šä¹‰å‰ç«¯menus.jsonè·¯å¾„
 $content = Get-Content .\json\menus.json  -Encoding UTF8
 $url = 'http://localhost:5002'
 
 try {
   if ($Environment.ToLower() -eq 'production') {
-    # ¶¨ÒåÉú²ú»·¾³µØÖ·
+    # å®šä¹‰ç”Ÿäº§çŽ¯å¢ƒåœ°å€
     $url = 'https://production.com'
     Write-Host "production"
   }
