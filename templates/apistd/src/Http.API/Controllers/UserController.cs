@@ -27,11 +27,67 @@ public class UserController : ClientControllerBase<IUserManager>
     }
 
     /// <summary>
+    /// 用户注册
+    /// </summary>
+    /// <param name="dto"></param>
+    /// <returns></returns>
+    [HttpPost]
+    public async Task<ActionResult<User>> RegisterAsync(RegisterDto dto)
+    {
+        // 判断重复用户名
+        if (manager.Query.Db.Any(q => q.UserName.Equals(dto.UserName)))
+        {
+            return Conflict("用户名存在");
+        }
+        // TODO:根据实际需求自定义验证码逻辑
+        if (dto.VerifyCode != null)
+        {
+            if (dto.Email == null)
+            {
+                return BadRequest("邮箱不能为空");
+            }
+            var key = "RegVerifyCode:" + dto.Email;
+            var code = _cache.GetValue<string>(key);
+            if (code == null)
+            {
+                return BadRequest("验证码已过期");
+            }
+            if (!code.Equals(dto.VerifyCode))
+            {
+                return BadRequest("验证码错误");
+            }
+        }
+        return await manager.RegisterAsync(dto);
+    }
+
+    /// <summary>
+    /// 注册邮箱验证码
+    /// </summary>
+    /// <param name="email"></param>
+    /// <returns></returns>
+    [HttpPost("regVerifyCode")]
+    [AllowAnonymous]
+    public async Task<ActionResult> SendRegVerifyCodeAsync(string email)
+    {
+        var captcha = manager.GetCaptcha();
+        var key = "RegVerifyCode:" + email;
+        if (_cache.GetValue<string>(key) != null)
+        {
+            return Conflict("验证码已发送!");
+        }
+        // 缓存，默认5分钟过期
+        await _cache.SetValueAsync(key, captcha, 60 * 5);
+        // 使用 smtp，可替换成其他
+        await _emailService.SendRegisterVerifyAsync(email, captcha);
+        return Ok();
+    }
+
+    /// <summary>
     /// 登录时，发送邮箱验证码
     /// </summary>
     /// <param name="email"></param>
     /// <returns></returns>
-    [HttpPost("verifyCode")]
+    [HttpPost("loginVerifyCode")]
     [AllowAnonymous]
     public async Task<ActionResult> SendVerifyCodeAsync(string email)
     {
@@ -40,15 +96,13 @@ public class UserController : ClientControllerBase<IUserManager>
             return NotFound("不存在的邮箱账号");
         }
         var captcha = manager.GetCaptcha();
-        var key = "VerifyCode:" + email;
+        var key = "LoginVerifyCode:" + email;
         if (_cache.GetValue<string>(key) != null)
         {
             return Conflict("验证码已发送!");
         }
         // 缓存，默认5分钟过期
         await _cache.SetValueAsync(key, captcha, 60 * 5);
-        // 自定义html内容
-        var htmlContent = $"登录验证码:{captcha}";
         // 使用 smtp，可替换成其他
         await _emailService.SendLoginVerifyAsync(email, captcha);
         return Ok();
@@ -152,15 +206,22 @@ public class UserController : ClientControllerBase<IUserManager>
     }
 
     /// <summary>
-    /// 用户注册
+    /// 修改密码
     /// </summary>
-    /// <param name="dto"></param>
     /// <returns></returns>
-    [HttpPost]
-    public async Task<ActionResult<User>> AddAsync(UserAddDto dto)
+    [HttpPut("changePassword")]
+    public async Task<ActionResult<User>> ChangePassword(string password, string newPassword)
     {
-        var entity = await manager.CreateNewEntityAsync(dto);
-        return await manager.AddAsync(entity);
+        if (!await manager.ExistAsync(_user.UserId!.Value))
+        {
+            return NotFound("");
+        }
+        var user = await manager.GetCurrentAsync(_user.UserId!.Value);
+        if (!HashCrypto.Validate(password, user!.PasswordSalt, user.PasswordHash))
+        {
+            return Problem("当前密码不正确");
+        }
+        return await manager.ChangePasswordAsync(user, newPassword);
     }
 
     /// <summary>
@@ -189,19 +250,4 @@ public class UserController : ClientControllerBase<IUserManager>
         return (res == null) ? NotFound() : res;
     }
 
-    /// <summary>
-    /// ⚠删除
-    /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
-    // [ApiExplorerSettings(IgnoreApi = true)]
-    [HttpDelete("{id}")]
-    public async Task<ActionResult<User?>> DeleteAsync([FromRoute] Guid id)
-    {
-        // 注意删除权限
-        var entity = await manager.GetCurrentAsync(id);
-        if (entity == null) { return NotFound(); };
-        // return Forbid();
-        return await manager.DeleteAsync(entity);
-    }
 }

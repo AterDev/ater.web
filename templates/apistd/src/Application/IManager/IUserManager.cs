@@ -53,4 +53,6 @@ public interface IUserManager : IDomainManager<User>
     Task<User?> DeleteAsync(User entity, bool softDelete = true);
     Task<bool> ExistAsync(Guid id);
     string GetCaptcha(int length = 6);
+    Task<User> ChangePasswordAsync(User user, string newPassword);
+    Task<User> RegisterAsync(RegisterDto dto);
 }

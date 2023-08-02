@@ -199,6 +199,25 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
     }
 
     /// <summary>
+    /// 修改密码
+    /// </summary>
+    /// <returns></returns>
+    [HttpPut("changePassword")]
+    public async Task<ActionResult<SystemUser>> ChangePassword(string password, string newPassword)
+    {
+        if (!await manager.ExistAsync(_user.UserId!.Value))
+        {
+            return NotFound("");
+        }
+        var user = await manager.GetCurrentAsync(_user.UserId!.Value);
+        if (!HashCrypto.Validate(password, user!.PasswordSalt, user.PasswordHash))
+        {
+            return Problem("当前密码不正确");
+        }
+        return await manager.ChangePasswordAsync(user, newPassword);
+    }
+
+    /// <summary>
     /// 详情
     /// </summary>
     /// <param name="id"></param>

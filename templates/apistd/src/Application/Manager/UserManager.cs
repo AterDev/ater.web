@@ -28,6 +28,42 @@ public class UserManager : DomainManagerBase<User, UserUpdateDto, UserFilterDto,
     }
 
     /// <summary>
+    /// 更新密码
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="newPassword"></param>
+    /// <returns></returns>
+    public async Task<User> ChangePasswordAsync(User user, string newPassword)
+    {
+        user.PasswordSalt = HashCrypto.BuildSalt();
+        user.PasswordHash = HashCrypto.GeneratePwd(newPassword, user.PasswordSalt);
+        Command.Update(user);
+        await Command.SaveChangeAsync();
+        return user;
+    }
+
+    /// <summary>
+    /// 用户注册
+    /// </summary>
+    /// <param name="dto"></param>
+    /// <returns></returns>
+    public async Task<User> RegisterAsync(RegisterDto dto)
+    {
+        var user = new User
+        {
+            UserName = dto.UserName,
+            PasswordSalt = HashCrypto.BuildSalt()
+        };
+        user.PasswordHash = HashCrypto.GeneratePwd(dto.Password, user.PasswordSalt);
+        if (dto.Email != null)
+        {
+            user.Email = dto.Email;
+        }
+        await AddAsync(user);
+        return user;
+    }
+
+    /// <summary>
     /// 创建待添加实体
     /// </summary>
     /// <param name="dto"></param>

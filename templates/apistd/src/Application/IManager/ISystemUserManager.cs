@@ -30,4 +30,5 @@ public interface ISystemUserManager : IDomainManager<SystemUser>
     Task<bool> ExistAsync(Guid id);
     string GetCaptcha(int length = 6);
     void LoadRolesWithPermissions(SystemUser user);
+    Task<SystemUser> ChangePasswordAsync(SystemUser user, string newPassword);
 }

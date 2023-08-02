@@ -47,9 +47,11 @@ public class SystemMenuManager : DomainManagerBase<SystemMenu, SystemMenuUpdateD
             Command.RemoveRange(needDeleteMenus);
             currentMenus = currentMenus.Except(needDeleteMenus).ToList();
         }
+
         // 菜单新增与更新
         foreach (var menu in flatMenus)
         {
+
             if (currentMenus.Any(c => c.AccessCode == menu.AccessCode))
             {
                 var index = currentMenus.FindIndex(m => m.AccessCode.Equals(menu.AccessCode));

@@ -27,6 +27,21 @@ public class SystemUserManager : DomainManagerBase<SystemUser, SystemUserUpdateD
     }
 
     /// <summary>
+    /// 更新密码
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="newPassword"></param>
+    /// <returns></returns>
+    public async Task<SystemUser> ChangePasswordAsync(SystemUser user, string newPassword)
+    {
+        user.PasswordSalt = HashCrypto.BuildSalt();
+        user.PasswordHash = HashCrypto.GeneratePwd(newPassword, user.PasswordSalt);
+        Command.Update(user);
+        await Command.SaveChangeAsync();
+        return user;
+    }
+
+    /// <summary>
     /// 获取用户角色权限信息
     /// </summary>
     /// <returns></returns>
