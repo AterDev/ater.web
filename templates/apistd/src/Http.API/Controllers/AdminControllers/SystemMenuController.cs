@@ -29,6 +29,30 @@ public class SystemMenuController : RestControllerBase<ISystemMenuManager>
     }
 
     /// <summary>
+    /// 同步菜单
+    /// </summary>
+    /// <param name="token"></param>
+    /// <param name="menus"></param>
+    /// <returns></returns>
+    [ApiExplorerSettings(IgnoreApi = true)]
+    [HttpPost("sync/{token}")]
+    [AllowAnonymous]
+    public async Task<ActionResult<bool>> SyncSystemMenus(string token, List<SystemMenuSyncDto> menus)
+    {
+        // 不经过jwt验证，定义自己的key用来开发时同步菜单
+        if (token != "MyProjectNameDefaultKey")
+        {
+            return Forbid();
+        }
+
+        if (menus != null && menus.Any())
+        {
+            return await manager.SyncSystemMenusAsync(menus);
+        }
+        return false;
+    }
+
+    /// <summary>
     /// 新增
     /// </summary>
     /// <param name="dto"></param>

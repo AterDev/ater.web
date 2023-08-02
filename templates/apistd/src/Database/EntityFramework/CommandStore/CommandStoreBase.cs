@@ -1,5 +1,3 @@
-using System.Linq.Expressions;
-using Ater.Web.Abstracture.Interface;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace EntityFramework.CommandStore;
@@ -23,7 +21,7 @@ public partial class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity
     /// use DataStoreContext.CommandContext to access writable DbContext
     /// this will be not avaliable in the future
     /// </summary>
-    public TContext Context { get; }
+    protected TContext Context { get; }
     public DatabaseFacade Database { get; init; }
     public bool EnableSoftDelete { get; set; } = true;
 
@@ -62,7 +60,7 @@ public partial class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity
     /// </summary>
     /// <param name="whereExp"></param>
     /// <returns></returns>
-    public virtual async Task<List<TEntity>> ListAsync(Expression<Func<TEntity, bool>>? whereExp)
+    public virtual async Task<List<TEntity>> ListAsync(Expression<Func<TEntity, bool>>? whereExp = null)
     {
         Expression<Func<TEntity, bool>> exp = e => true;
         whereExp ??= exp;
@@ -94,7 +92,7 @@ public partial class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity
     }
 
     /// <summary>
-    /// 删除实体,若未找到，返回null
+    /// 移除实体,若未找到，返回null
     /// </summary>
     /// <param name="entity"></param>
     /// <returns></returns>
@@ -109,6 +107,25 @@ public partial class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity
             _ = _db.Remove(entity!);
         }
         return entity;
+    }
+
+    /// <summary>
+    /// 移除实体
+    /// </summary>
+    /// <param name="entities"></param>
+    public virtual void RemoveRange(List<TEntity> entities)
+    {
+        if (EnableSoftDelete)
+        {
+            foreach (var entity in entities)
+            {
+                entity.IsDeleted = true;
+            }
+        }
+        else
+        {
+            _db.RemoveRange(entities);
+        }
     }
 
     /// <summary>

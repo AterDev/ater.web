@@ -52,4 +52,5 @@ public interface IUserManager : IDomainManager<User>
     Task<PageList<UserItemDto>> FilterAsync(UserFilterDto filter);
     Task<User?> DeleteAsync(User entity, bool softDelete = true);
     Task<bool> ExistAsync(Guid id);
+    string GetCaptcha(int length = 6);
 }

@@ -6,7 +6,7 @@ namespace Application.IManager;
 /// </summary>
 public interface ISystemMenuManager : IDomainManager<SystemMenu>
 {
-	/// <summary>
+    /// <summary>
     /// 当前用户所拥有的对象
     /// </summary>
     /// <param name="id"></param>
@@ -40,10 +40,9 @@ public interface ISystemMenuManager : IDomainManager<SystemMenu>
     /// <summary>
     /// 列表条件查询
     /// </summary>
-    /// <typeparam name="TDto"></typeparam>
     /// <param name="whereExp"></param>
     /// <returns></returns>
-    Task<List<TDto>> ListAsync<TDto>(Expression<Func<SystemMenu, bool>>? whereExp) where TDto : class;
+    Task<List<SystemMenu>> ListAsync(Expression<Func<SystemMenu, bool>>? whereExp = null);
     /// <summary>
     /// 分页查询
     /// </summary>
@@ -52,4 +51,5 @@ public interface ISystemMenuManager : IDomainManager<SystemMenu>
     Task<PageList<SystemMenuItemDto>> FilterAsync(SystemMenuFilterDto filter);
     Task<SystemMenu?> DeleteAsync(SystemMenu entity, bool softDelete = true);
     Task<bool> ExistAsync(Guid id);
+    Task<bool> SyncSystemMenusAsync(List<SystemMenuSyncDto> menus);
 }

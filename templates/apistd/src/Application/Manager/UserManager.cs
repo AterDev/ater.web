@@ -1,5 +1,3 @@
-using Application.Implement;
-using Application.IManager;
 using Share.Models.UserDtos;
 
 namespace Application.Manager;
@@ -10,12 +8,23 @@ public class UserManager : DomainManagerBase<User, UserUpdateDto, UserFilterDto,
 {
 
     public UserManager(
-        DataStoreContext storeContext, 
+        DataStoreContext storeContext,
         ILogger<UserManager> logger,
         IUserContext userContext) : base(storeContext, logger)
     {
 
         _userContext = userContext;
+    }
+
+    /// <summary>
+    /// 获取验证码
+    /// 也可自己实现图片验证码
+    /// </summary>
+    /// <param name="length">验证码长度</param>
+    /// <returns></returns>
+    public string GetCaptcha(int length = 6)
+    {
+        return HashCrypto.GetRnd(length);
     }
 
     /// <summary>
