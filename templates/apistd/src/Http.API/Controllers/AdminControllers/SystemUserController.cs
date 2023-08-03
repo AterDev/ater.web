@@ -202,7 +202,7 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
     /// </summary>
     /// <returns></returns>
     [HttpPut("changePassword")]
-    public async Task<ActionResult<SystemUser>> ChangePassword(string password, string newPassword)
+    public async Task<ActionResult<bool>> ChangePassword(string password, string newPassword)
     {
         if (!await manager.ExistAsync(_user.UserId!.Value))
         {

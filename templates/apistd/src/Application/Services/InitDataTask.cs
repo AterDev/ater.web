@@ -1,6 +1,4 @@
-﻿using Entity;
-using Entity.SystemEntities;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 
 namespace Application.Services;
 public class InitDataTask
@@ -46,44 +44,43 @@ public class InitDataTask
     /// </summary>
     public static async Task InitRoleAndUserAsync(CommandDbContext context, IConfiguration configuration, ILogger<InitDataTask> logger)
     {
-        var defaultPassword = configuration.GetValue<string>("Key:DefaultPassword") ?? "Hello.Net";
-        SystemRole role = new()
+        var defaultPassword = configuration.GetValue<string>("Key:DefaultPassword");
+        if (string.IsNullOrWhiteSpace(defaultPassword))
+        {
+            defaultPassword = "Hello.Net";
+        }
+        SystemRole superRole = new()
+        {
+            Name = AppConst.SuperAdmin,
+            NameValue = AppConst.SuperAdmin,
+        };
+        SystemRole adminRole = new()
         {
             Name = AppConst.AdminUser,
             NameValue = AppConst.AdminUser,
         };
-        SystemRole userRole = new()
-        {
-            Name = AppConst.User,
-            NameValue = AppConst.User,
-        };
         string salt = HashCrypto.BuildSalt();
         SystemUser systemUser = new()
         {
-            Id = new Guid("6e2bb78f-fa51-480d-8200-83d488184621"),
             UserName = "admin",
             PasswordSalt = salt,
             PasswordHash = HashCrypto.GeneratePwd(defaultPassword, salt),
-            SystemRoles = new List<SystemRole>() { role },
+            SystemRoles = new List<SystemRole>() { superRole, adminRole },
         };
 
         User user = new()
         {
-            Id = new Guid("6e2bb78f-fa51-480d-8200-83d488184621"),
             UserName = "TestUser",
-            Email = "TestEmail@dusi.dev",
+            Email = "TestEmail@domain",
             PasswordSalt = salt,
             PasswordHash = HashCrypto.GeneratePwd(defaultPassword, salt),
         };
 
         try
         {
-            context.SystemRoles.Add(userRole);
-            context.SystemRoles.Add(role);
+            context.SystemRoles.Add(adminRole);
+            context.SystemRoles.Add(superRole);
             context.SystemUsers.Add(systemUser);
-            await context.SaveChangesAsync();
-
-            context.ChangeTracker.Clear();
             context.Users.Add(user);
             await context.SaveChangesAsync();
         }

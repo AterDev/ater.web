@@ -1,0 +1,3 @@
+﻿@Http.API_HostAddress = http://localhost:5002
+@Http.Token = token
+

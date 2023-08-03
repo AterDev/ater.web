@@ -28,7 +28,7 @@ services.AddManager();
 services.AddSingleton(typeof(CacheService));
 services.AddSingleton<IEmailService, EmailService>();
 
-services.AddControllers()
+services.AddControllersWithViews()
     .ConfigureApiBehaviorOptions(o =>
     {
         o.InvalidModelStateResponseFactory = context =>
@@ -68,6 +68,7 @@ app.UseHealthChecks("/health");
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapDefaultControllerRoute();
 
 app.MapFallbackToFile("index.html");

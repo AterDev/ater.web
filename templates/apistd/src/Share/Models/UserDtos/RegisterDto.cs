@@ -10,12 +10,14 @@ public class RegisterDto
     /// 用户名
     /// </summary>
     [MaxLength(40)]
+    [Required(ErrorMessage = "用户名必填")]
     public required string UserName { get; set; }
 
     /// <summary>
     /// 邮箱
     /// </summary>
     [MaxLength(100)]
+    [EmailAddress]
     public string? Email { get; set; }
 
     /// <summary>
@@ -26,5 +28,6 @@ public class RegisterDto
     /// 密码
     /// </summary>
     [MaxLength(60)]
+    [Required(ErrorMessage = "密码必填")]
     public required string Password { get; set; }
 }

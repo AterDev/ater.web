@@ -12,7 +12,8 @@ public static class ExceptionHandler
             {
                 context.Response.StatusCode = 500;
                 Exception? exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
-                var result = new {
+                var result = new
+                {
                     Title = "异常错误",
                     exception?.Source,
                     Detail = exception?.Message + exception?.InnerException?.Message,

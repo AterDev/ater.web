@@ -32,6 +32,7 @@ public class UserController : ClientControllerBase<IUserManager>
     /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPost]
+    [AllowAnonymous]
     public async Task<ActionResult<User>> RegisterAsync(RegisterDto dto)
     {
         // 判断重复用户名
@@ -61,7 +62,7 @@ public class UserController : ClientControllerBase<IUserManager>
     }
 
     /// <summary>
-    /// 注册邮箱验证码
+    /// 注册时，发送邮箱验证码
     /// </summary>
     /// <param name="email"></param>
     /// <returns></returns>
@@ -133,11 +134,11 @@ public class UserController : ClientControllerBase<IUserManager>
             var cacheCode = _cache.GetValue<string>(key);
             if (cacheCode == null)
             {
-                return NotFound("验证码已过期");
+                return BadRequest("验证码已过期");
             }
             if (!cacheCode.Equals(dto.VerifyCode))
             {
-                return NotFound("验证码错误");
+                return BadRequest("验证码错误");
             }
         }
         if (HashCrypto.Validate(dto.Password, user.PasswordSalt, user.PasswordHash))
@@ -163,9 +164,9 @@ public class UserController : ClientControllerBase<IUserManager>
                     TokenExpires = expired,
                 };
                 // 添加管理员用户标识
-                if (!roles.Contains(AppConst.AdminUser))
+                if (!roles.Contains(AppConst.User))
                 {
-                    roles.Add(AppConst.AdminUser);
+                    roles.Add(AppConst.User);
                 }
                 var token = jwt.GetToken(user.Id.ToString(), roles.ToArray());
                 // 缓存登录状态

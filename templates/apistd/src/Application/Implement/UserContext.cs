@@ -1,5 +1,3 @@
-using Entity;
-using Entity.SystemEntities;
 using Microsoft.AspNetCore.Http;
 
 namespace Application.Implement;
@@ -10,7 +8,10 @@ public partial class UserContext : IUserContext
     public Guid? SessionId { get; init; }
     public string? Username { get; init; }
     public string? Email { get; set; }
-    public bool IsAdmin { get; init; } = false;
+    /// <summary>
+    /// 是否为管理员
+    /// </summary>
+    public bool IsAdmin { get; init; }
     public string? CurrentRole { get; set; }
     public List<string>? Roles { get; set; }
     public Guid? GroupId { get; init; }
@@ -36,7 +37,7 @@ public partial class UserContext : IUserContext
             .Select(c => c.Value).ToList();
         if (Roles != null)
         {
-            IsAdmin = Roles.Any(r => r.ToLower().Equals("admin"));
+            IsAdmin = Roles.Any(r => r.Equals(AppConst.AdminUser));
         }
         _context = context;
     }
@@ -53,7 +54,7 @@ public partial class UserContext : IUserContext
     /// <returns></returns>
     public bool IsRole(string roleName)
     {
-        return Roles != null && Roles.Any(r => r.ToLower() == roleName);
+        return Roles != null && Roles.Any(r => r == roleName);
     }
 
     /// <summary>
