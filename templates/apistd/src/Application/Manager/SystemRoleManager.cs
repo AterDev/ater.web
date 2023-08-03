@@ -34,7 +34,6 @@ public class SystemRoleManager : DomainManagerBase<SystemRole, SystemRoleUpdateD
         Queryable = Queryable
             .WhereNotNull(filter.Name, q => q.Name == filter.Name)
             .WhereNotNull(filter.NameValue, q => q.NameValue == filter.NameValue);
-        // TODO: custom filter conditions
         return await Query.FilterAsync<SystemRoleItemDto>(Queryable, filter.PageIndex, filter.PageSize, filter.OrderBy);
     }
 

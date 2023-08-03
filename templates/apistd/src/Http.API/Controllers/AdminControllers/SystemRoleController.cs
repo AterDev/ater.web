@@ -4,6 +4,7 @@ namespace Http.API.Controllers.AdminControllers;
 /// <summary>
 /// 角色表
 /// </summary>
+[Authorize(AppConst.SuperAdmin)]
 public class SystemRoleController : RestControllerBase<ISystemRoleManager>
 {
 
@@ -17,7 +18,7 @@ public class SystemRoleController : RestControllerBase<ISystemRoleManager>
     }
 
     /// <summary>
-    /// 筛选
+    /// 筛选 ✅
     /// </summary>
     /// <param name="filter"></param>
     /// <returns></returns>
@@ -28,7 +29,7 @@ public class SystemRoleController : RestControllerBase<ISystemRoleManager>
     }
 
     /// <summary>
-    /// 新增
+    /// 新增 ✅
     /// </summary>
     /// <param name="dto"></param>
     /// <returns></returns>
