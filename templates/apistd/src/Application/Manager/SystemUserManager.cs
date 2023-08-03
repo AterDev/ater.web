@@ -77,6 +77,13 @@ public class SystemUserManager : DomainManagerBase<SystemUser, SystemUserUpdateD
 
     public override async Task<SystemUser> UpdateAsync(SystemUser entity, SystemUserUpdateDto dto)
     {
+
+        if (dto.Password != null)
+        {
+            entity.PasswordSalt = HashCrypto.BuildSalt();
+            entity.PasswordHash = HashCrypto.GeneratePwd(dto.Password, entity.PasswordSalt);
+        }
+
         return await base.UpdateAsync(entity, dto);
     }
 
@@ -84,7 +91,20 @@ public class SystemUserManager : DomainManagerBase<SystemUser, SystemUserUpdateD
     {
         Queryable = Queryable
             .WhereNotNull(filter.UserName, q => q.UserName == filter.UserName);
-        // TODO: custom filter conditions
+
+        Queryable = Queryable
+           .WhereNotNull(filter.RealName, q => q.RealName == filter.RealName);
+        Queryable = Queryable
+           .WhereNotNull(filter.Email, q => q.Email == filter.Email);
+        Queryable = Queryable
+           .WhereNotNull(filter.PhoneNumber, q => q.PhoneNumber == filter.PhoneNumber);
+        Queryable = Queryable
+            .WhereNotNull(filter.Sex, q => q.Sex == filter.Sex);
+        Queryable = Queryable
+            .WhereNotNull(filter.EmailConfirmed, q => q.EmailConfirmed == filter.EmailConfirmed);
+        Queryable = Queryable
+            .WhereNotNull(filter.PhoneNumberConfirmed, q => q.PhoneNumberConfirmed == filter.PhoneNumberConfirmed);
+
         return await Query.FilterAsync<SystemUserItemDto>(Queryable, filter.PageIndex, filter.PageSize, filter.OrderBy);
     }
 

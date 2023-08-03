@@ -62,7 +62,7 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
     public async Task<ActionResult<AuthResult>> LoginAsync(LoginDto dto)
     {
         // 查询用户
-        var user = await manager.Query.Db.Where(u => u.UserName.Equals(dto.UserName))
+        var user = await manager.Command.Db.Where(u => u.UserName.Equals(dto.UserName))
             .FirstOrDefaultAsync();
         if (user == null)
         {
@@ -119,6 +119,11 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
 
                 var menus = user.SystemRoles?.SelectMany(r => r.Menus).ToList();
                 var permissionGroups = user.SystemRoles?.SelectMany(r => r.PermissionGroups).ToList();
+
+                // 记录登录时间
+                user.LastLoginTime = DateTimeOffset.UtcNow;
+                await manager.Command.SaveChangeAsync();
+
                 return new AuthResult
                 {
                     Id = user.Id,
@@ -157,7 +162,7 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
     }
 
     /// <summary>
-    /// 筛选
+    /// 筛选 ✅
     /// </summary>
     /// <param name="filter"></param>
     /// <returns></returns>
@@ -182,7 +187,7 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
     }
 
     /// <summary>
-    /// 更新
+    /// 更新 ✅
     /// </summary>
     /// <param name="id"></param>
     /// <param name="dto"></param>
@@ -191,7 +196,7 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
     [Authorize(AppConst.SuperAdmin)]
     public async Task<ActionResult<SystemUser?>> UpdateAsync([FromRoute] Guid id, SystemUserUpdateDto dto)
     {
-        var current = await manager.GetOwnedAsync(id);
+        var current = await manager.GetCurrentAsync(id);
         if (current == null)
         {
             return NotFound(ErrorMsg.NotFoundResource);
@@ -220,7 +225,7 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
     }
 
     /// <summary>
-    /// 详情
+    /// 详情 ✅
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
@@ -234,7 +239,7 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
     }
 
     /// <summary>
-    /// ⚠删除
+    /// ⚠删除 ✅
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
@@ -243,12 +248,11 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
     public async Task<ActionResult<SystemUser?>> DeleteAsync([FromRoute] Guid id)
     {
         // 注意删除权限
-        var entity = await manager.GetOwnedAsync(id);
+        var entity = await manager.GetCurrentAsync(id);
         if (entity == null)
         {
             return NotFound();
         }
-        // return Forbid();
         return await manager.DeleteAsync(entity);
     }
 }
