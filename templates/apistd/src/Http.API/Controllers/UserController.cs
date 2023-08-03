@@ -227,15 +227,14 @@ public class UserController : ClientControllerBase<IUserManager>
     }
 
     /// <summary>
-    /// 更新
+    /// 更新信息
     /// </summary>
-    /// <param name="id"></param>
     /// <param name="dto"></param>
     /// <returns></returns>
-    [HttpPut("{id}")]
-    public async Task<ActionResult<User?>> UpdateAsync([FromRoute] Guid id, UserUpdateDto dto)
+    [HttpPut]
+    public async Task<ActionResult<User?>> UpdateAsync(UserUpdateDto dto)
     {
-        var current = await manager.GetCurrentAsync(id);
+        var current = await manager.GetCurrentAsync(_user.UserId!.Value);
         if (current == null) { return NotFound(ErrorMsg.NotFoundResource); };
         return await manager.UpdateAsync(current, dto);
     }
@@ -243,12 +242,11 @@ public class UserController : ClientControllerBase<IUserManager>
     /// <summary>
     /// 详情
     /// </summary>
-    /// <param name="id"></param>
     /// <returns></returns>
-    [HttpGet("{id}")]
-    public async Task<ActionResult<User?>> GetDetailAsync([FromRoute] Guid id)
+    [HttpGet]
+    public async Task<ActionResult<User?>> GetDetailAsync()
     {
-        var res = await manager.FindAsync(id);
-        return (res == null) ? NotFound() : res;
+        var res = await manager.FindAsync(_user.UserId!.Value);
+        return (res == null) ? NotFound(ErrorMsg.NotFoundResource) : res;
     }
 }

@@ -101,7 +101,6 @@ public class UserManager : DomainManagerBase<User, UserUpdateDto, UserFilterDto,
     {
         var query = Command.Db.Where(q => q.Id == id);
         // 获取用户所属的对象
-        // query = query.Where(q => q.User.Id == _userContext.UserId);
         return await query.FirstOrDefaultAsync();
     }
 

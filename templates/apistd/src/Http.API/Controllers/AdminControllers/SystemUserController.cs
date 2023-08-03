@@ -162,6 +162,7 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
     /// <param name="filter"></param>
     /// <returns></returns>
     [HttpPost("filter")]
+    [Authorize(AppConst.SuperAdmin)]
     public async Task<ActionResult<PageList<SystemUserItemDto>>> FilterAsync(SystemUserFilterDto filter)
     {
         return await manager.FilterAsync(filter);
@@ -186,6 +187,7 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
     /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPut("{id}")]
+    [Authorize(AppConst.SuperAdmin)]
     public async Task<ActionResult<SystemUser?>> UpdateAsync([FromRoute] Guid id, SystemUserUpdateDto dto)
     {
         var current = await manager.GetOwnedAsync(id);
@@ -224,7 +226,9 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
     [HttpGet("{id}")]
     public async Task<ActionResult<SystemUser?>> GetDetailAsync([FromRoute] Guid id)
     {
-        var res = await manager.FindAsync(id);
+        var res = _user.IsRole(AppConst.SuperAdmin)
+            ? await manager.FindAsync(id)
+            : await manager.FindAsync(_user.UserId!.Value);
         return (res == null) ? NotFound() : res;
     }
 
@@ -233,8 +237,8 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    // [ApiExplorerSettings(IgnoreApi = true)]
     [HttpDelete("{id}")]
+    [Authorize(AppConst.SuperAdmin)]
     public async Task<ActionResult<SystemUser?>> DeleteAsync([FromRoute] Guid id)
     {
         // 注意删除权限
