@@ -63,7 +63,15 @@ public class SystemUserManager : DomainManagerBase<SystemUser, SystemUserUpdateD
     public Task<SystemUser> CreateNewEntityAsync(SystemUserAddDto dto)
     {
         SystemUser entity = dto.MapTo<SystemUserAddDto, SystemUser>();
-        // other required props
+        // 密码处理
+        entity.PasswordSalt = HashCrypto.BuildSalt();
+        entity.PasswordHash = HashCrypto.GeneratePwd(dto.Password, entity.PasswordSalt);
+        // 角色处理
+        if (dto.RoleIds != null && dto.RoleIds.Any())
+        {
+            var roles = Stores.CommandContext.SystemRoles.Where(r => dto.RoleIds.Contains(r.Id));
+            entity.SystemRoles = roles.ToList();
+        }
         return Task.FromResult(entity);
     }
 

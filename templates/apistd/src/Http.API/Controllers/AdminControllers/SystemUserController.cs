@@ -26,7 +26,7 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
     }
 
     /// <summary>
-    /// 登录时，发送邮箱验证码
+    /// 登录时，发送邮箱验证码 ✅
     /// </summary>
     /// <param name="email"></param>
     /// <returns></returns>
@@ -53,11 +53,11 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
     }
 
     /// <summary>
-    /// 登录获取Token
+    /// 登录获取Token ✅
     /// </summary>
     /// <param name="dto"></param>
     /// <returns></returns>
-    [HttpPut(AppConst.LoginCachePrefix)]
+    [HttpPut("login")]
     [AllowAnonymous]
     public async Task<ActionResult<AuthResult>> LoginAsync(LoginDto dto)
     {
@@ -141,7 +141,7 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
     }
 
     /// <summary>
-    /// 退出 
+    /// 退出 ✅
     /// </summary>
     /// <returns></returns>
     [HttpPut("logout/{id}")]
@@ -169,11 +169,12 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
     }
 
     /// <summary>
-    /// 新增
+    /// 新增 ✅
     /// </summary>
     /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPost]
+    [Authorize(AppConst.SuperAdmin)]
     public async Task<ActionResult<SystemUser>> AddAsync(SystemUserAddDto dto)
     {
         var entity = await manager.CreateNewEntityAsync(dto);
@@ -200,7 +201,7 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
     }
 
     /// <summary>
-    /// 修改密码
+    /// 修改密码 ✅
     /// </summary>
     /// <returns></returns>
     [HttpPut("changePassword")]

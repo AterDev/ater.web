@@ -4,7 +4,6 @@ namespace Share.Models.SystemUserDtos;
 /// <summary>
 /// 系统用户添加时请求结构
 /// </summary>
-//[NgPage("system", "sysuser")]
 /// <inheritdoc cref="Entity.SystemEntities.SystemUser"/>
 public class SystemUserAddDto
 {
@@ -14,34 +13,30 @@ public class SystemUserAddDto
     [MaxLength(30)]
     public required string UserName { get; set; }
     /// <summary>
+    /// 密码
+    /// </summary>
+    [MaxLength(60)]
+    public required string Password { get; set; }
+
+    /// <summary>
     /// 真实姓名
     /// </summary>
     [MaxLength(30)]
     public string? RealName { get; set; }
+    /// <summary>
+    /// 邮箱
+    /// </summary>
     [MaxLength(100)]
+    [EmailAddress()]
     public string? Email { get; set; }
-    public bool EmailConfirmed { get; set; } = false;
-    [MaxLength(100)]
-    public string PasswordHash { get; set; } = default!;
-    [MaxLength(60)]
-    public string PasswordSalt { get; set; } = default!;
+    /// <summary>
+    /// 手机号
+    /// </summary>
     [MaxLength(20)]
+    [Phone()]
     public string? PhoneNumber { get; set; }
-    public bool PhoneNumberConfirmed { get; set; } = false;
-    public bool TwoFactorEnabled { get; set; } = false;
-    public DateTimeOffset? LockoutEnd { get; set; }
-    public bool LockoutEnabled { get; set; } = false;
-    public int AccessFailedCount { get; set; } = 0;
     /// <summary>
-    /// 最后登录时间
-    /// </summary>
-    public DateTimeOffset? LastLoginTime { get; set; }
-    /// <summary>
-    /// 密码重试次数
-    /// </summary>
-    public int RetryCount { get; set; } = 0;
-    /// <summary>
-    /// 头像url
+    /// 头像 url
     /// </summary>
     [MaxLength(200)]
     public string? Avatar { get; set; }
@@ -50,4 +45,8 @@ public class SystemUserAddDto
     /// </summary>
     public Sex Sex { get; set; } = Sex.Male;
 
+    /// <summary>
+    /// 角色id
+    /// </summary>
+    public List<Guid>? RoleIds { get; set; }
 }

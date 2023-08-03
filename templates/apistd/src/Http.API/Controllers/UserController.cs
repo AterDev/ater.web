@@ -27,7 +27,7 @@ public class UserController : ClientControllerBase<IUserManager>
     }
 
     /// <summary>
-    /// 用户注册
+    /// 用户注册 ✅
     /// </summary>
     /// <param name="dto"></param>
     /// <returns></returns>
@@ -62,7 +62,7 @@ public class UserController : ClientControllerBase<IUserManager>
     }
 
     /// <summary>
-    /// 注册时，发送邮箱验证码
+    /// 注册时，发送邮箱验证码 ✅
     /// </summary>
     /// <param name="email"></param>
     /// <returns></returns>
@@ -84,7 +84,7 @@ public class UserController : ClientControllerBase<IUserManager>
     }
 
     /// <summary>
-    /// 登录时，发送邮箱验证码
+    /// 登录时，发送邮箱验证码 ✅
     /// </summary>
     /// <param name="email"></param>
     /// <returns></returns>
@@ -111,7 +111,7 @@ public class UserController : ClientControllerBase<IUserManager>
     }
 
     /// <summary>
-    /// 登录获取Token
+    /// 登录获取Token ✅
     /// </summary>
     /// <param name="dto"></param>
     /// <returns></returns>
@@ -192,7 +192,7 @@ public class UserController : ClientControllerBase<IUserManager>
     }
 
     /// <summary>
-    /// 退出 
+    /// 退出 ✅
     /// </summary>
     /// <returns></returns>
     [HttpPut("logout/{id}")]
@@ -227,7 +227,7 @@ public class UserController : ClientControllerBase<IUserManager>
     }
 
     /// <summary>
-    /// 更新信息
+    /// 更新信息 
     /// </summary>
     /// <param name="dto"></param>
     /// <returns></returns>

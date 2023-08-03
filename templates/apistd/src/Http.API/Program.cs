@@ -12,10 +12,16 @@ services.AddWebComponents(configuration);
 // 2 授权配置
 services.AddAuthorization(options =>
 {
+    // 用户
     options.AddPolicy(AppConst.User, policy =>
-        policy.RequireRole(AppConst.AdminUser, AppConst.User));
+        policy.RequireRole(AppConst.User));
+
+    // 管理员
     options.AddPolicy(AppConst.AdminUser, policy =>
-        policy.RequireRole(AppConst.AdminUser));
+        policy.RequireRole(AppConst.SuperAdmin, AppConst.AdminUser));
+    // 超级管理员
+    options.AddPolicy(AppConst.SuperAdmin, policy =>
+        policy.RequireRole(AppConst.SuperAdmin));
 });
 
 // 3 数据及业务接口注入
