@@ -33,13 +33,12 @@ public class UserManager : DomainManagerBase<User, UserUpdateDto, UserFilterDto,
     /// <param name="user"></param>
     /// <param name="newPassword"></param>
     /// <returns></returns>
-    public async Task<User> ChangePasswordAsync(User user, string newPassword)
+    public async Task<bool> ChangePasswordAsync(User user, string newPassword)
     {
         user.PasswordSalt = HashCrypto.BuildSalt();
         user.PasswordHash = HashCrypto.GeneratePwd(newPassword, user.PasswordSalt);
         Command.Update(user);
-        await Command.SaveChangeAsync();
-        return user;
+        return await Command.SaveChangeAsync() > 0;
     }
 
     /// <summary>

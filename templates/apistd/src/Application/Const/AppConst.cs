@@ -20,4 +20,13 @@ public static class AppConst
     /// 版本
     /// </summary>
     public const string Version = "Version";
+
+    /// <summary>
+    /// 用户登录缓存前缀
+    /// </summary>
+    public const string LoginCachePrefix = "Login_";
+    /// <summary>
+    /// 验证码缓存前缀
+    /// </summary>
+    public const string VerifyCodeCachePrefix = "VerifyCode_";
 }

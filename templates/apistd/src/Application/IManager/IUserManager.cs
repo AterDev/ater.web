@@ -6,7 +6,7 @@ namespace Application.IManager;
 /// </summary>
 public interface IUserManager : IDomainManager<User>
 {
-	/// <summary>
+    /// <summary>
     /// 当前用户所拥有的对象
     /// </summary>
     /// <param name="id"></param>
@@ -53,6 +53,6 @@ public interface IUserManager : IDomainManager<User>
     Task<User?> DeleteAsync(User entity, bool softDelete = true);
     Task<bool> ExistAsync(Guid id);
     string GetCaptcha(int length = 6);
-    Task<User> ChangePasswordAsync(User user, string newPassword);
     Task<User> RegisterAsync(RegisterDto dto);
+    Task<bool> ChangePasswordAsync(User user, string newPassword);
 }

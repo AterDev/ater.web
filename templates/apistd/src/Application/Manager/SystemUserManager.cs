@@ -32,13 +32,12 @@ public class SystemUserManager : DomainManagerBase<SystemUser, SystemUserUpdateD
     /// <param name="user"></param>
     /// <param name="newPassword"></param>
     /// <returns></returns>
-    public async Task<SystemUser> ChangePasswordAsync(SystemUser user, string newPassword)
+    public async Task<bool> ChangePasswordAsync(SystemUser user, string newPassword)
     {
         user.PasswordSalt = HashCrypto.BuildSalt();
         user.PasswordHash = HashCrypto.GeneratePwd(newPassword, user.PasswordSalt);
         Command.Update(user);
-        await Command.SaveChangeAsync();
-        return user;
+        return await Command.SaveChangeAsync() > 0;
     }
 
     /// <summary>

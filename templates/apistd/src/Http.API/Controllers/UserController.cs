@@ -46,7 +46,7 @@ public class UserController : ClientControllerBase<IUserManager>
             {
                 return BadRequest("邮箱不能为空");
             }
-            var key = "RegVerifyCode:" + dto.Email;
+            var key = AppConst.VerifyCodeCachePrefix + dto.Email;
             var code = _cache.GetValue<string>(key);
             if (code == null)
             {
@@ -70,15 +70,15 @@ public class UserController : ClientControllerBase<IUserManager>
     public async Task<ActionResult> SendRegVerifyCodeAsync(string email)
     {
         var captcha = manager.GetCaptcha();
-        var key = "RegVerifyCode:" + email;
+        var key = AppConst.VerifyCodeCachePrefix + email;
         if (_cache.GetValue<string>(key) != null)
         {
             return Conflict("验证码已发送!");
         }
-        // 缓存，默认5分钟过期
-        await _cache.SetValueAsync(key, captcha, 60 * 5);
         // 使用 smtp，可替换成其他
         await _emailService.SendRegisterVerifyAsync(email, captcha);
+        // 缓存，默认5分钟过期
+        await _cache.SetValueAsync(key, captcha, 60 * 5);
         return Ok();
     }
 
@@ -96,15 +96,16 @@ public class UserController : ClientControllerBase<IUserManager>
             return NotFound("不存在的邮箱账号");
         }
         var captcha = manager.GetCaptcha();
-        var key = "LoginVerifyCode:" + email;
+        var key = AppConst.VerifyCodeCachePrefix + email;
         if (_cache.GetValue<string>(key) != null)
         {
             return Conflict("验证码已发送!");
         }
-        // 缓存，默认5分钟过期
-        await _cache.SetValueAsync(key, captcha, 60 * 5);
         // 使用 smtp，可替换成其他
         await _emailService.SendLoginVerifyAsync(email, captcha);
+        // 缓存，默认5分钟过期
+        await _cache.SetValueAsync(key, captcha, 60 * 5);
+
         return Ok();
     }
 
@@ -128,7 +129,7 @@ public class UserController : ClientControllerBase<IUserManager>
         // 可将 dto.VerifyCode 设置为必填，以强制验证
         if (dto.VerifyCode != null)
         {
-            var key = "VerifyCode:" + user.Email;
+            var key = AppConst.VerifyCodeCachePrefix + user.Email;
             var cacheCode = _cache.GetValue<string>(key);
             if (cacheCode == null)
             {
@@ -168,7 +169,7 @@ public class UserController : ClientControllerBase<IUserManager>
                 }
                 var token = jwt.GetToken(user.Id.ToString(), roles.ToArray());
                 // 缓存登录状态
-                await _cache.SetValueAsync("UserLogin" + user.Id.ToString(), true, expired * 60);
+                await _cache.SetValueAsync(AppConst.LoginCachePrefix + user.Id.ToString(), true, expired * 60);
 
                 return new AuthResult
                 {
@@ -199,7 +200,7 @@ public class UserController : ClientControllerBase<IUserManager>
         if (await manager.ExistAsync(id))
         {
             // 清除缓存状态
-            await _cache.RemoveAsync(id.ToString());
+            await _cache.RemoveAsync(AppConst.LoginCachePrefix + id.ToString());
             return Ok();
         }
         return NotFound();
@@ -210,7 +211,7 @@ public class UserController : ClientControllerBase<IUserManager>
     /// </summary>
     /// <returns></returns>
     [HttpPut("changePassword")]
-    public async Task<ActionResult<User>> ChangePassword(string password, string newPassword)
+    public async Task<ActionResult<bool>> ChangePassword(string password, string newPassword)
     {
         if (!await manager.ExistAsync(_user.UserId!.Value))
         {
