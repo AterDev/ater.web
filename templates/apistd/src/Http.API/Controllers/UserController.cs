@@ -208,7 +208,7 @@ public class UserController : ClientControllerBase<IUserManager>
     }
 
     /// <summary>
-    /// 修改密码
+    /// 修改密码 ✅
     /// </summary>
     /// <returns></returns>
     [HttpPut("changePassword")]
@@ -227,7 +227,7 @@ public class UserController : ClientControllerBase<IUserManager>
     }
 
     /// <summary>
-    /// 更新信息 
+    /// 更新信息：头像 ✅
     /// </summary>
     /// <param name="dto"></param>
     /// <returns></returns>
@@ -240,7 +240,7 @@ public class UserController : ClientControllerBase<IUserManager>
     }
 
     /// <summary>
-    /// 详情
+    /// 详情 ✅
     /// </summary>
     /// <returns></returns>
     [HttpGet]
