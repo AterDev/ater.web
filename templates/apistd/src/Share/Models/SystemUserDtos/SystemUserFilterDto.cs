@@ -28,5 +28,9 @@ public class SystemUserFilterDto : FilterBase
     /// 性别
     /// </summary>
     public Sex? Sex { get; set; }
+    /// <summary>
+    /// 角色id
+    /// </summary>
+    public Guid? RoleId { get; set; }
 
 }

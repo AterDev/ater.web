@@ -41,7 +41,7 @@ public class SystemRoleController : RestControllerBase<ISystemRoleManager>
     }
 
     /// <summary>
-    /// 更新
+    /// 更新 ✅
     /// </summary>
     /// <param name="id"></param>
     /// <param name="dto"></param>
@@ -59,7 +59,7 @@ public class SystemRoleController : RestControllerBase<ISystemRoleManager>
     }
 
     /// <summary>
-    /// 详情
+    /// 详情 ✅
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
@@ -71,7 +71,7 @@ public class SystemRoleController : RestControllerBase<ISystemRoleManager>
     }
 
     /// <summary>
-    /// ⚠删除
+    /// ⚠删除 ✅
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>

@@ -14,6 +14,7 @@ public class SystemRole : EntityBase
     /// <summary>
     /// 角色名，系统标识
     /// </summary>
+    [MaxLength(60)]
     public required string NameValue { get; set; } = string.Empty;
     /// <summary>
     /// 是否系统内置,系统内置不可删除

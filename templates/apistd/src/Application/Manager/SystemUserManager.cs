@@ -98,6 +98,11 @@ public class SystemUserManager : DomainManagerBase<SystemUser, SystemUserUpdateD
             .WhereNotNull(filter.EmailConfirmed, q => q.EmailConfirmed == filter.EmailConfirmed)
             .WhereNotNull(filter.PhoneNumberConfirmed, q => q.PhoneNumberConfirmed == filter.PhoneNumberConfirmed);
 
+        if (filter.RoleId != null)
+        {
+            Queryable = Queryable.Where(q => q.SystemRoles.Any(r => r.Id == filter.RoleId));
+        }
+
         return await Query.FilterAsync<SystemUserItemDto>(Queryable, filter.PageIndex, filter.PageSize, filter.OrderBy);
     }
 
