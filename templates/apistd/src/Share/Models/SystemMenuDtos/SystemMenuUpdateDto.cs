@@ -10,7 +10,7 @@ public class SystemMenuUpdateDto
     /// 菜单名称
     /// </summary>
     [MaxLength(60)]
-    public string Name { get; set; } = default!;
+    public string? Name { get; set; }
     /// <summary>
     /// 菜单路径
     /// </summary>
@@ -21,7 +21,6 @@ public class SystemMenuUpdateDto
     /// </summary>
     [MaxLength(30)]
     public string? Icon { get; set; }
-    public Guid? ParentId { get; set; }
     /// <summary>
     ///  是否有效
     /// </summary>

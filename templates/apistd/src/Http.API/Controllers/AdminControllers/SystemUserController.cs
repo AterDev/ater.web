@@ -63,7 +63,7 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
     {
         // 查询用户
         var user = await manager.Command.Db.Where(u => u.UserName.Equals(dto.UserName))
-            .FirstOrDefaultAsync();
+            .SingleOrDefaultAsync();
         if (user == null)
         {
             return NotFound("不存在该用户");

@@ -43,13 +43,9 @@ public interface ISystemMenuManager : IDomainManager<SystemMenu>
     /// <param name="whereExp"></param>
     /// <returns></returns>
     Task<List<SystemMenu>> ListAsync(Expression<Func<SystemMenu, bool>>? whereExp = null);
-    /// <summary>
-    /// 分页查询
-    /// </summary>
-    /// <param name="filter"></param>
-    /// <returns></returns>
-    Task<PageList<SystemMenuItemDto>> FilterAsync(SystemMenuFilterDto filter);
+
     Task<SystemMenu?> DeleteAsync(SystemMenu entity, bool softDelete = true);
     Task<bool> ExistAsync(Guid id);
     Task<bool> SyncSystemMenusAsync(List<SystemMenuSyncDto> menus);
+    Task<PageList<SystemMenu>> FilterAsync(SystemMenuFilterDto filter);
 }

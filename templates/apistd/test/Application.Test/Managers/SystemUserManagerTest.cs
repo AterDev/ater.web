@@ -31,8 +31,7 @@ public class SystemUserManagerTest : BaseTest
         var dto = new SystemUserAddDto()
         {
             UserName = "UserName" + RandomString,
-            PasswordSalt = salt,
-            PasswordHash = HashCrypto.GeneratePwd("PasswordHash" + RandomString, salt)
+            Password = "123456"
         };
 
         var entity = await manager.CreateNewEntityAsync(dto);

@@ -4,8 +4,9 @@ namespace Share.Models.SystemMenuDtos;
 /// 系统菜单列表元素
 /// </summary>
 /// <inheritdoc cref="Entity.SystemEntities.SystemMenu"/>
-public class SystemMenuItemDto
+public class SystemMenuItemDto : ITreeNode<SystemMenuItemDto>
 {
+    public Guid Id { get; set; }
     /// <summary>
     /// 菜单名称
     /// </summary>
@@ -38,10 +39,10 @@ public class SystemMenuItemDto
     /// <summary>
     /// 排序
     /// </summary>
-    public int Sort { get; set; } = 0;
+    public int Sort { get; set; }
     /// <summary>
     /// 是否显示
     /// </summary>
     public bool Hidden { get; set; } = true;
-    
+    public List<SystemMenuItemDto> Children { get; set; } = new List<SystemMenuItemDto>();
 }

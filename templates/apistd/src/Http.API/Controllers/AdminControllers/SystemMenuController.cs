@@ -5,9 +5,9 @@ namespace Http.API.Controllers.AdminControllers;
 /// 系统菜单
 /// </summary>
 /// <see cref="Application.Manager.SystemMenuManager"/>
+[Authorize(AppConst.SuperAdmin)]
 public class SystemMenuController : RestControllerBase<ISystemMenuManager>
 {
-
     public SystemMenuController(
         IUserContext user,
         ILogger<SystemMenuController> logger,
@@ -18,18 +18,18 @@ public class SystemMenuController : RestControllerBase<ISystemMenuManager>
     }
 
     /// <summary>
-    /// 筛选
+    /// 筛选 ✅
     /// </summary>
     /// <param name="filter"></param>
     /// <returns></returns>
     [HttpPost("filter")]
-    public async Task<ActionResult<PageList<SystemMenuItemDto>>> FilterAsync(SystemMenuFilterDto filter)
+    public async Task<ActionResult<PageList<SystemMenu>>> FilterAsync(SystemMenuFilterDto filter)
     {
         return await manager.FilterAsync(filter);
     }
 
     /// <summary>
-    /// 同步菜单
+    /// 菜单同步 ✅
     /// </summary>
     /// <param name="token"></param>
     /// <param name="menus"></param>
@@ -53,19 +53,26 @@ public class SystemMenuController : RestControllerBase<ISystemMenuManager>
     }
 
     /// <summary>
-    /// 新增
+    /// 新增 ✅
     /// </summary>
     /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPost]
     public async Task<ActionResult<SystemMenu>> AddAsync(SystemMenuAddDto dto)
     {
+        if (dto.ParentId != null)
+        {
+            if (!await manager.ExistAsync(dto.ParentId.Value))
+            {
+                return NotFound(ErrorMsg.NotFoundResource);
+            }
+        }
         var entity = await manager.CreateNewEntityAsync(dto);
         return await manager.AddAsync(entity);
     }
 
     /// <summary>
-    /// 更新
+    /// 更新 ✅
     /// </summary>
     /// <param name="id"></param>
     /// <param name="dto"></param>
@@ -79,19 +86,7 @@ public class SystemMenuController : RestControllerBase<ISystemMenuManager>
     }
 
     /// <summary>
-    /// 详情
-    /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
-    [HttpGet("{id}")]
-    public async Task<ActionResult<SystemMenu?>> GetDetailAsync([FromRoute] Guid id)
-    {
-        var res = await manager.FindAsync(id);
-        return (res == null) ? NotFound() : res;
-    }
-
-    /// <summary>
-    /// ⚠删除
+    /// ⚠删除 ✅
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
@@ -102,7 +97,6 @@ public class SystemMenuController : RestControllerBase<ISystemMenuManager>
         // 注意删除权限
         var entity = await manager.GetCurrentAsync(id);
         if (entity == null) { return NotFound(); };
-        // return Forbid();
         return await manager.DeleteAsync(entity);
     }
 }

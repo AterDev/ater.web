@@ -46,9 +46,10 @@ public class SystemUserManager : DomainManagerBase<SystemUser, SystemUserUpdateD
     /// <returns></returns>
     public void LoadRolesWithPermissions(SystemUser user)
     {
-        Stores.QueryContext.Entry(user)
+        Stores.CommandContext.Entry(user)
             .Collection(u => u.SystemRoles)
             .Query()
+            .AsNoTracking()
             .Include(r => r.Menus)
             .Include(r => r.PermissionGroups)
                 .ThenInclude(g => g.Permissions)

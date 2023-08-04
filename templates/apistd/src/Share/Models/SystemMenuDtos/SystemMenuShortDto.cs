@@ -42,7 +42,7 @@ public class SystemMenuShortDto
     /// <summary>
     /// 排序
     /// </summary>
-    public int Sort { get; set; } = 0;
+    public int Sort { get; set; }
     /// <summary>
     /// 是否显示
     /// </summary>

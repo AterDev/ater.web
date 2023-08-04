@@ -1,6 +1,4 @@
 using Application.IManager;
-using Entity;
-using Ater.Web.Core.Utils;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Share.Models.UserDtos;
@@ -55,14 +53,7 @@ public class UserManagerTest : BaseTest
     {
         var dto = new UserUpdateDto()
         {
-            UserName = "UpdateUserName" + RandomString,
-            UserType = 0,
-            EmailConfirmed = true,
-            PhoneNumberConfirmed = true,
-            TwoFactorEnabled = true,
-            LockoutEnabled = true,
-            AccessFailedCount = 0,
-            RetryCount = 0,
+
         };
         var entity = await manager.Command.Db.FirstOrDefaultAsync();
         if (entity != null)

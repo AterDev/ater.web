@@ -24,7 +24,11 @@ public class SystemMenuManager : DomainManagerBase<SystemMenu, SystemMenuUpdateD
     public async Task<SystemMenu> CreateNewEntityAsync(SystemMenuAddDto dto)
     {
         var entity = dto.MapTo<SystemMenuAddDto, SystemMenu>();
-        // other required props
+        if (dto.ParentId != null)
+        {
+            entity.ParentId = dto.ParentId.Value;
+        }
+
         return await Task.FromResult(entity);
     }
 
@@ -121,20 +125,30 @@ public class SystemMenuManager : DomainManagerBase<SystemMenu, SystemMenuUpdateD
         return await base.UpdateAsync(entity, dto);
     }
 
-    public override async Task<PageList<SystemMenuItemDto>> FilterAsync(SystemMenuFilterDto filter)
+    public new async Task<PageList<SystemMenu>> FilterAsync(SystemMenuFilterDto filter)
     {
-        Queryable = Queryable
-            .WhereNotNull(filter.Name, q => q.Name == filter.Name)
-            .WhereNotNull(filter.IsValid, q => q.IsValid == filter.IsValid)
-            .WhereNotNull(filter.AccessCode, q => q.AccessCode == filter.AccessCode)
-            .WhereNotNull(filter.MenuType, q => q.MenuType == filter.MenuType)
-            .WhereNotNull(filter.Hidden, q => q.Hidden == filter.Hidden);
-
-        filter.OrderBy = new Dictionary<string, bool>
+        List<SystemMenu>? menus;
+        if (filter.ParentId != null)
         {
-            ["Sort"] = true
+            menus = await Queryable.Where(q => q.Parent != null && q.ParentId == filter.ParentId)
+                .ToListAsync();
+        }
+        else
+        {
+            menus = await Queryable.AsNoTracking()
+            .OrderByDescending(t => t.Sort)
+                .ThenByDescending(t => t.CreatedTime)
+            .Skip((filter.PageIndex - 1) * filter.PageIndex)
+            .Take(filter.PageSize)
+            .ToListAsync();
+            menus = menus.BuildTree();
+        }
+
+        return new PageList<SystemMenu>()
+        {
+            Data = menus,
+            PageIndex = filter.PageIndex
         };
-        return await Query.FilterAsync<SystemMenuItemDto>(Queryable, filter.PageIndex, filter.PageSize, filter.OrderBy);
     }
 
     /// <summary>
