@@ -39,6 +39,32 @@ public class SystemRoleManager : DomainManagerBase<SystemRole, SystemRoleUpdateD
     }
 
     /// <summary>
+    /// 获取菜单
+    /// </summary>
+    /// <param name="systemRoles"></param>
+    /// <returns></returns>
+    public async Task<List<SystemMenu>> GetSystemMenusAsync(List<SystemRole> systemRoles)
+    {
+        var ids = systemRoles.Select(r => r.Id);
+        return await Stores.CommandContext.SystemMenus
+            .Where(m => m.Roles.Any(r => ids.Contains(r.Id)))
+        .ToListAsync();
+    }
+
+    /// <summary>
+    /// 获取权限组
+    /// </summary>
+    /// <param name="systemRoles"></param>
+    /// <returns></returns>
+    public async Task<List<SystemPermissionGroup>> GetPermissionGroupsAsync(List<SystemRole> systemRoles)
+    {
+        var ids = systemRoles.Select(r => r.Id);
+        return await Stores.CommandContext.SystemPermissionGroups
+            .Where(m => m.Roles.Any(r => ids.Contains(r.Id)))
+            .ToListAsync();
+    }
+
+    /// <summary>
     /// 当前用户所拥有的对象
     /// </summary>
     /// <param name="id"></param>
@@ -66,14 +92,13 @@ public class SystemRoleManager : DomainManagerBase<SystemRole, SystemRoleUpdateD
             await Stores.CommandContext.Entry(current)
                 .Collection(r => r.Menus)
                 .LoadAsync();
+
             current.Menus = new List<SystemMenu>();
 
             var menus = await Stores.CommandContext.SystemMenus
                 .Where(m => dto.MenuIds.Contains(m.Id))
                 .ToListAsync();
-
             current.Menus = menus;
-
             await Command.SaveChangeAsync();
             return current;
         }

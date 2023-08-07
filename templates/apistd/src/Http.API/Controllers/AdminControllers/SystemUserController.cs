@@ -11,6 +11,7 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
     private readonly CacheService _cache;
     private readonly IConfiguration _config;
     private readonly IEmailService _emailService;
+    private readonly ISystemRoleManager _roleManager;
 
     public SystemUserController(
         IUserContext user,
@@ -18,11 +19,13 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
         ISystemUserManager manager,
         CacheService cache,
         IConfiguration config,
-        IEmailService emailService) : base(manager, user, logger)
+        IEmailService emailService,
+        ISystemRoleManager roleManager) : base(manager, user, logger)
     {
         _cache = cache;
         _config = config;
         _emailService = emailService;
+        _roleManager = roleManager;
     }
 
     /// <summary>
@@ -63,6 +66,7 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
     {
         // 查询用户
         var user = await manager.Command.Db.Where(u => u.UserName.Equals(dto.UserName))
+            .AsNoTracking()
             .Include(u => u.SystemRoles)
             .SingleOrDefaultAsync();
         if (user == null)
@@ -99,7 +103,6 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
                 !string.IsNullOrWhiteSpace(audience))
             {
                 // 加载关联数据
-                manager.LoadRolesWithPermissions(user);
 
                 var roles = user.SystemRoles?.Select(r => r.NameValue)?.ToList()
                     ?? new List<string> { AppConst.AdminUser };
@@ -118,8 +121,13 @@ public class SystemUserController : RestControllerBase<ISystemUserManager>
                 // 缓存登录状态
                 await _cache.SetValueAsync(AppConst.LoginCachePrefix + user.Id.ToString(), true, expired * 60);
 
-                var menus = user.SystemRoles?.SelectMany(r => r.Menus).ToList();
-                var permissionGroups = user.SystemRoles?.SelectMany(r => r.PermissionGroups).ToList();
+                var menus = new List<SystemMenu>();
+                var permissionGroups = new List<SystemPermissionGroup>();
+                if (user.SystemRoles != null)
+                {
+                    menus = await _roleManager.GetSystemMenusAsync(user.SystemRoles.ToList());
+                    permissionGroups = await _roleManager.GetPermissionGroupsAsync(user.SystemRoles.ToList());
+                }
 
                 // 记录登录时间
                 user.LastLoginTime = DateTimeOffset.UtcNow;

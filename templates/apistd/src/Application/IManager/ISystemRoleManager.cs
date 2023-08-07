@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
 using Share.Models.SystemMenuDtos;
 using Share.Models.SystemRoleDtos;
 
@@ -31,4 +30,6 @@ public interface ISystemRoleManager : IDomainManager<SystemRole>
     Task<SystemRole?> DeleteAsync(SystemRole entity, bool softDelete = true);
     Task<bool> ExistAsync(Guid id);
     Task<SystemRole?> UpdateMenusAsync(SystemRole current, SystemRoleUpdateMenusDto dto);
+    Task<List<SystemMenu>> GetSystemMenusAsync(List<SystemRole> systemRoles);
+    Task<List<SystemPermissionGroup>> GetPermissionGroupsAsync(List<SystemRole> systemRoles);
 }

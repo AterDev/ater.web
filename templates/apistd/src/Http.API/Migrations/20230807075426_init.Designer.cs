@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Http.API.Migrations
 {
     [DbContext(typeof(CommandDbContext))]
-    [Migration("20230801074814_20230801-154805")]
-    partial class _20230801154805
+    [Migration("20230807075426_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -75,6 +75,21 @@ namespace Http.API.Migrations
                     b.HasIndex("UsersId");
 
                     b.ToTable("SystemOrganizationSystemUser");
+                });
+
+            modelBuilder.Entity("SystemPermissionGroupSystemRole", b =>
+                {
+                    b.Property<Guid>("PermissionGroupsId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("RolesId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("PermissionGroupsId", "RolesId");
+
+                    b.HasIndex("RolesId");
+
+                    b.ToTable("SystemPermissionGroupSystemRole");
                 });
 
             modelBuilder.Entity("SystemRoleSystemUser", b =>
@@ -257,11 +272,6 @@ namespace Http.API.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("character varying(30)");
 
-                    b.Property<Guid?>("SystemRoleId")
-                        .HasColumnType("uuid");
-
-                    b.HasIndex("SystemRoleId");
-
                     b.ToTable("SystemPermissionGroups");
                 });
 
@@ -283,7 +293,8 @@ namespace Http.API.Migrations
 
                     b.Property<string>("NameValue")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(60)
+                        .HasColumnType("character varying(60)");
 
                     b.HasIndex("Name");
 
@@ -474,6 +485,21 @@ namespace Http.API.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("SystemPermissionGroupSystemRole", b =>
+                {
+                    b.HasOne("Entity.SystemEntities.SystemPermissionGroup", null)
+                        .WithMany()
+                        .HasForeignKey("PermissionGroupsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entity.SystemEntities.SystemRole", null)
+                        .WithMany()
+                        .HasForeignKey("RolesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("SystemRoleSystemUser", b =>
                 {
                     b.HasOne("Entity.SystemEntities.SystemRole", null)
@@ -529,13 +555,6 @@ namespace Http.API.Migrations
                     b.Navigation("Group");
                 });
 
-            modelBuilder.Entity("Entity.SystemEntities.SystemPermissionGroup", b =>
-                {
-                    b.HasOne("Entity.SystemEntities.SystemRole", null)
-                        .WithMany("PermissionGroups")
-                        .HasForeignKey("SystemRoleId");
-                });
-
             modelBuilder.Entity("Entity.SystemEntities.SystemMenu", b =>
                 {
                     b.Navigation("Children");
@@ -549,11 +568,6 @@ namespace Http.API.Migrations
             modelBuilder.Entity("Entity.SystemEntities.SystemPermissionGroup", b =>
                 {
                     b.Navigation("Permissions");
-                });
-
-            modelBuilder.Entity("Entity.SystemEntities.SystemRole", b =>
-                {
-                    b.Navigation("PermissionGroups");
                 });
 
             modelBuilder.Entity("Entity.SystemEntities.SystemUser", b =>

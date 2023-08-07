@@ -41,22 +41,6 @@ public class SystemUserManager : DomainManagerBase<SystemUser, SystemUserUpdateD
     }
 
     /// <summary>
-    /// 获取用户角色权限信息
-    /// </summary>
-    /// <returns></returns>
-    public void LoadRolesWithPermissions(SystemUser user)
-    {
-        Stores.CommandContext.Entry(user)
-            .Collection(u => u.SystemRoles)
-            .Query()
-            .AsNoTracking()
-            .Include(r => r.Menus)
-            .Include(r => r.PermissionGroups)
-                .ThenInclude(g => g.Permissions)
-            .Load();
-    }
-
-    /// <summary>
     /// 创建待添加实体
     /// </summary>
     /// <param name="dto"></param>
@@ -120,4 +104,8 @@ public class SystemUserManager : DomainManagerBase<SystemUser, SystemUserUpdateD
         return await query.FirstOrDefaultAsync();
     }
 
+    public void LoadRolesWithPermissions(SystemUser user)
+    {
+        throw new NotImplementedException();
+    }
 }

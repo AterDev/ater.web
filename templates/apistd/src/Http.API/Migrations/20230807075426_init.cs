@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Http.API.Migrations
 {
     /// <inheritdoc />
-    public partial class _20230801154805 : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -81,6 +81,22 @@ namespace Http.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SystemPermissionGroups",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    UpdatedTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    Name = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
+                    Description = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SystemPermissionGroups", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "SystemRoles",
                 columns: table => new
                 {
@@ -89,7 +105,7 @@ namespace Http.API.Migrations
                     UpdatedTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     Name = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
-                    NameValue = table.Column<string>(type: "text", nullable: false),
+                    NameValue = table.Column<string>(type: "character varying(60)", maxLength: 60, nullable: false),
                     IsSystem = table.Column<bool>(type: "boolean", nullable: false),
                     Icon = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: true)
                 },
@@ -158,6 +174,31 @@ namespace Http.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SystemPermissions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    UpdatedTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    Name = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
+                    Description = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                    Enable = table.Column<bool>(type: "boolean", nullable: false),
+                    PermissionType = table.Column<int>(type: "integer", nullable: false),
+                    GroupId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SystemPermissions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SystemPermissions_SystemPermissionGroups_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "SystemPermissionGroups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "SystemMenuSystemRole",
                 columns: table => new
                 {
@@ -182,25 +223,27 @@ namespace Http.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SystemPermissionGroups",
+                name: "SystemPermissionGroupSystemRole",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    CreatedTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    UpdatedTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    Name = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
-                    Description = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
-                    SystemRoleId = table.Column<Guid>(type: "uuid", nullable: true)
+                    PermissionGroupsId = table.Column<Guid>(type: "uuid", nullable: false),
+                    RolesId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SystemPermissionGroups", x => x.Id);
+                    table.PrimaryKey("PK_SystemPermissionGroupSystemRole", x => new { x.PermissionGroupsId, x.RolesId });
                     table.ForeignKey(
-                        name: "FK_SystemPermissionGroups_SystemRoles_SystemRoleId",
-                        column: x => x.SystemRoleId,
+                        name: "FK_SystemPermissionGroupSystemRole_SystemPermissionGroups_Perm~",
+                        column: x => x.PermissionGroupsId,
+                        principalTable: "SystemPermissionGroups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SystemPermissionGroupSystemRole_SystemRoles_RolesId",
+                        column: x => x.RolesId,
                         principalTable: "SystemRoles",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -277,31 +320,6 @@ namespace Http.API.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "SystemPermissions",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    CreatedTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    UpdatedTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    Name = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
-                    Description = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
-                    Enable = table.Column<bool>(type: "boolean", nullable: false),
-                    PermissionType = table.Column<int>(type: "integer", nullable: false),
-                    GroupId = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SystemPermissions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SystemPermissions_SystemPermissionGroups_GroupId",
-                        column: x => x.GroupId,
-                        principalTable: "SystemPermissionGroups",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_SystemConfigs_Key",
                 table: "SystemConfigs",
@@ -333,9 +351,9 @@ namespace Http.API.Migrations
                 column: "UsersId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SystemPermissionGroups_SystemRoleId",
-                table: "SystemPermissionGroups",
-                column: "SystemRoleId");
+                name: "IX_SystemPermissionGroupSystemRole_RolesId",
+                table: "SystemPermissionGroupSystemRole",
+                column: "RolesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SystemPermissions_GroupId",
@@ -431,6 +449,9 @@ namespace Http.API.Migrations
                 name: "SystemOrganizationSystemUser");
 
             migrationBuilder.DropTable(
+                name: "SystemPermissionGroupSystemRole");
+
+            migrationBuilder.DropTable(
                 name: "SystemPermissions");
 
             migrationBuilder.DropTable(
@@ -449,10 +470,10 @@ namespace Http.API.Migrations
                 name: "SystemPermissionGroups");
 
             migrationBuilder.DropTable(
-                name: "SystemUsers");
+                name: "SystemRoles");
 
             migrationBuilder.DropTable(
-                name: "SystemRoles");
+                name: "SystemUsers");
         }
     }
 }

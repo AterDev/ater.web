@@ -14,4 +14,6 @@ public class SystemPermissionGroup : EntityBase
     public string? Description { get; set; }
 
     public ICollection<SystemPermission> Permissions { get; set; } = new List<SystemPermission>();
+
+    public ICollection<SystemRole> Roles{ get; set; } = new List<SystemRole>();
 }
