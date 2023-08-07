@@ -27,7 +27,8 @@ public class RegisterDto
     /// <summary>
     /// 密码
     /// </summary>
-    [MaxLength(60)]
+    [RegularExpression(Const.PasswordRegex, ErrorMessage = "密码不可以是纯数字")]
+    //[RegularExpression(Const.StrongPasswordRegex, ErrorMessage = "密码至少一个大写字母、一个小写字母、一个数字和一个特殊字符")]
     [Required(ErrorMessage = "密码必填")]
     public required string Password { get; set; }
 }
