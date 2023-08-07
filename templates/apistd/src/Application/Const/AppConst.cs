@@ -33,6 +33,4 @@ public static class AppConst
     /// </summary>
     public const string VerifyCodeCachePrefix = "VerifyCode_";
 
-    public const string PasswordRegex = @"^(?!\d+$).{6,60}$";
-    public const string StrongPasswordRegex = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$";
 }

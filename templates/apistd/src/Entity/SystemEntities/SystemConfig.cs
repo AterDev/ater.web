@@ -3,22 +3,19 @@
 /// 系统配置
 /// </summary>
 [Index(nameof(Key))]
+[Index(nameof(IsSystem))]
+[Index(nameof(Valid))]
+[Index(nameof(GroupName))]
 public class SystemConfig : EntityBase
 {
-    public SystemConfig(string key, string value = "")
-    {
-        Key = key;
-        Value = value;
-    }
-    public SystemConfig()
-    {
-    }
-
     [MaxLength(100)]
     public required string Key { get; set; }
-    [MaxLength(100)]
+    /// <summary>
+    /// 以json字符串形式存储
+    /// </summary>
+    [MaxLength(2000)]
     public string Value { get; set; } = string.Empty;
-    [MaxLength(300)]
+    [MaxLength(500)]
     public string? Description { get; set; }
     public bool Valid { get; set; } = true;
 
