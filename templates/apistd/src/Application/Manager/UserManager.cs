@@ -69,13 +69,27 @@ public class UserManager : DomainManagerBase<User, UserUpdateDto, UserFilterDto,
     /// <returns></returns>
     public async Task<User> CreateNewEntityAsync(UserAddDto dto)
     {
-        var entity = dto.MapTo<UserAddDto, User>();
-        // other required props
-        return await Task.FromResult(entity);
+        var user = new User
+        {
+            UserName = dto.UserName,
+            PasswordSalt = HashCrypto.BuildSalt()
+        };
+        user.PasswordHash = HashCrypto.GeneratePwd(dto.Password, user.PasswordSalt);
+        if (dto.Email != null)
+        {
+            user.Email = dto.Email;
+        }
+        await AddAsync(user);
+        return user;
     }
 
     public override async Task<User> UpdateAsync(User entity, UserUpdateDto dto)
     {
+        if (dto.Password != null && _userContext != null && _userContext.IsAdmin)
+        {
+            entity.PasswordSalt = HashCrypto.BuildSalt();
+            entity.PasswordHash = HashCrypto.GeneratePwd(dto.Password, entity.PasswordSalt);
+        }
         return await base.UpdateAsync(entity, dto);
     }
 
@@ -84,11 +98,11 @@ public class UserManager : DomainManagerBase<User, UserUpdateDto, UserFilterDto,
         Queryable = Queryable
             .WhereNotNull(filter.UserName, q => q.UserName == filter.UserName)
             .WhereNotNull(filter.UserType, q => q.UserType == filter.UserType)
+            .WhereNotNull(filter.Email, q => q.Email == filter.Email)
+            .WhereNotNull(filter.PhoneNumber, q => q.PhoneNumber == filter.PhoneNumber)
             .WhereNotNull(filter.EmailConfirmed, q => q.EmailConfirmed == filter.EmailConfirmed)
-            .WhereNotNull(filter.PhoneNumberConfirmed, q => q.PhoneNumberConfirmed == filter.PhoneNumberConfirmed)
-            .WhereNotNull(filter.TwoFactorEnabled, q => q.TwoFactorEnabled == filter.TwoFactorEnabled)
-            .WhereNotNull(filter.LockoutEnabled, q => q.LockoutEnabled == filter.LockoutEnabled);
-        // TODO: custom filter conditions
+            .WhereNotNull(filter.PhoneNumberConfirmed, q => q.PhoneNumberConfirmed == filter.PhoneNumberConfirmed);
+
         return await Query.FilterAsync<UserItemDto>(Queryable, filter.PageIndex, filter.PageSize, filter.OrderBy);
     }
 

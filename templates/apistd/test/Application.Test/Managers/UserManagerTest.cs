@@ -29,12 +29,7 @@ public class UserManagerTest : BaseTest
         {
             UserName = "UserName" + RandomString,
             UserType = 0,
-            EmailConfirmed = true,
-            PhoneNumberConfirmed = true,
-            TwoFactorEnabled = true,
-            LockoutEnabled = true,
-            AccessFailedCount = 0,
-            RetryCount = 0,
+
         };
         var entity = await manager.CreateNewEntityAsync(dto);
         var res = await manager.AddAsync(entity);

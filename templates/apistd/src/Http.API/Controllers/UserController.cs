@@ -38,7 +38,7 @@ public class UserController : ClientControllerBase<IUserManager>
         // 判断重复用户名
         if (manager.Query.Db.Any(q => q.UserName.Equals(dto.UserName)))
         {
-            return Conflict("用户名存在");
+            return Conflict(ErrorMsg.ExistUser);
         }
         // TODO:根据实际需求自定义验证码逻辑
         if (dto.VerifyCode != null)

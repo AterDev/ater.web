@@ -8,6 +8,7 @@ public static class ErrorMsg
     /// 未找到该用户
     /// </summary>
     public const string NotFoundUser = "未找到该用户!";
+    public const string ExistUser = "用户名已存在!";
     /// <summary>
     /// 未找到的资源
     /// </summary>

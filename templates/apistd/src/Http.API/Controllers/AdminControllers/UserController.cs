@@ -5,6 +5,7 @@ namespace Http.API.Controllers.AdminControllers;
 /// 用户账户
 /// </summary>
 /// <see cref="Application.Manager.UserManager"/>
+[Authorize(AppConst.AdminUser)]
 public class UserController : RestControllerBase<IUserManager>
 {
 
@@ -18,7 +19,7 @@ public class UserController : RestControllerBase<IUserManager>
     }
 
     /// <summary>
-    /// 筛选
+    /// 筛选 ✅
     /// </summary>
     /// <param name="filter"></param>
     /// <returns></returns>
@@ -29,19 +30,24 @@ public class UserController : RestControllerBase<IUserManager>
     }
 
     /// <summary>
-    /// 新增
+    /// 新增 ✅
     /// </summary>
     /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPost]
     public async Task<ActionResult<User>> AddAsync(UserAddDto dto)
     {
+        // 判断重复用户名
+        if (manager.Query.Db.Any(q => q.UserName.Equals(dto.UserName)))
+        {
+            return Conflict(ErrorMsg.ExistUser);
+        }
         var entity = await manager.CreateNewEntityAsync(dto);
         return await manager.AddAsync(entity);
     }
 
     /// <summary>
-    /// 更新
+    /// 更新 ✅
     /// </summary>
     /// <param name="id"></param>
     /// <param name="dto"></param>
@@ -55,7 +61,7 @@ public class UserController : RestControllerBase<IUserManager>
     }
 
     /// <summary>
-    /// 详情
+    /// 详情 ✅
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
@@ -67,18 +73,16 @@ public class UserController : RestControllerBase<IUserManager>
     }
 
     /// <summary>
-    /// ⚠删除
+    /// ⚠删除 ✅
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    // [ApiExplorerSettings(IgnoreApi = true)]
     [HttpDelete("{id}")]
     public async Task<ActionResult<User?>> DeleteAsync([FromRoute] Guid id)
     {
         // 注意删除权限
         var entity = await manager.GetCurrentAsync(id);
-        if (entity == null) { return NotFound(); };
-        // return Forbid();
+        if (entity == null) { return NotFound(ErrorMsg.NotFoundUser); };
         return await manager.DeleteAsync(entity);
     }
 }

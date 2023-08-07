@@ -1,4 +1,3 @@
-using Entity;
 namespace Share.Models.UserDtos;
 /// <summary>
 /// 用户账户更新时请求结构
@@ -6,10 +5,15 @@ namespace Share.Models.UserDtos;
 /// <inheritdoc cref="Entity.User"/>
 public class UserUpdateDto
 {
+    public UserType? UserType { get; set; }
+    [MaxLength(60)]
+    public string? Password { get; set; } = "123456";
+    [EmailAddress]
+    public string? Email { get; set; }
     /// <summary>
     /// 头像url
     /// </summary>
     [MaxLength(200)]
     public string? Avatar { get; set; }
-    
+
 }
