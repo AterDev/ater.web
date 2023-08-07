@@ -17,7 +17,7 @@ public partial class QueryStoreBase<TContext, TEntity> :
     /// <summary>
     /// 当前实体DbSet
     /// </summary>
-    protected readonly DbSet<TEntity> _db;
+    private readonly DbSet<TEntity> _db;
     public DbSet<TEntity> Db => _db;
 
     /// <summary>
@@ -26,7 +26,9 @@ public partial class QueryStoreBase<TContext, TEntity> :
     [Obsolete("use DataStoreContext.QueryContext")]
     public TContext? Context { get; }
     public DatabaseFacade Database { get; init; }
-    public IQueryable<TEntity> _query { get; set; }
+
+    private IQueryable<TEntity> _query;
+    public IQueryable<TEntity> Queryable => _query;
 
     /// <summary>
     ///  是否开户全局筛选

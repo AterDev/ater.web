@@ -128,7 +128,12 @@ public class SystemMenuManager : DomainManagerBase<SystemMenu, SystemMenuUpdateD
     public new async Task<PageList<SystemMenu>> FilterAsync(SystemMenuFilterDto filter)
     {
         List<SystemMenu>? menus;
-        if (filter.ParentId != null)
+        if (filter.RoleId != null)
+        {
+            menus = await Queryable.Where(q => q.Roles.Any(r => r.Id == filter.RoleId))
+                .ToListAsync();
+        }
+        else if (filter.ParentId != null)
         {
             menus = await Queryable.Where(q => q.Parent != null && q.ParentId == filter.ParentId)
                 .ToListAsync();

@@ -1,3 +1,4 @@
+using Share.Models.SystemMenuDtos;
 using Share.Models.SystemRoleDtos;
 
 namespace Application.Manager;
@@ -50,4 +51,37 @@ public class SystemRoleManager : DomainManagerBase<SystemRole, SystemRoleUpdateD
         return await query.FirstOrDefaultAsync();
     }
 
+    /// <summary>
+    /// 更新角色菜单
+    /// </summary>
+    /// <param name="current"></param>
+    /// <param name="dto"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public async Task<SystemRole?> UpdateMenusAsync(SystemRole current, SystemRoleUpdateMenusDto dto)
+    {
+        // 更新角色菜单
+        try
+        {
+            await Stores.CommandContext.Entry(current)
+                .Collection(r => r.Menus)
+                .LoadAsync();
+            current.Menus = new List<SystemMenu>();
+
+            var menus = await Stores.CommandContext.SystemMenus
+                .Where(m => dto.MenuIds.Contains(m.Id))
+                .ToListAsync();
+
+            current.Menus = menus;
+
+            await Command.SaveChangeAsync();
+            return current;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError($"update role menus failed:{0}", e.Message);
+            return default;
+        }
+
+    }
 }

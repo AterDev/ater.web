@@ -5,11 +5,7 @@ public partial class DomainManagerBase<TEntity, TUpdate, TFilter, TItem> : Manag
     where TFilter : FilterBase
 {
     protected IUserContext? _userContext;
-    protected readonly ILogger? _logger;
-
-    public DomainManagerBase(DataStoreContext storeContext) : base(storeContext)
-    {
-    }
+    protected readonly ILogger _logger;
 
     public DomainManagerBase(DataStoreContext storeContext, ILogger logger) : base(storeContext)
     {

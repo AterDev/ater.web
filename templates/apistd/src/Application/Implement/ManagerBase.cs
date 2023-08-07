@@ -37,7 +37,7 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem>
         Stores = storeContext;
         Query = Stores.QuerySet<TEntity>();
         Command = Stores.CommandSet<TEntity>();
-        Queryable = Query._query;
+        Queryable = Query.Queryable;
         Database = Command.Database;
     }
 
@@ -120,15 +120,6 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem>
     public async Task<List<TEntity>> ListAsync(Expression<Func<TEntity, bool>>? whereExp = null)
     {
         return await Query.ListAsync(whereExp);
-    }
-
-    /// <summary>
-    /// 获取当前查询构造对象
-    /// </summary>
-    /// <returns></returns>
-    public IQueryable<TEntity> GetQueryable()
-    {
-        return Query._query;
     }
 
     /// <summary>

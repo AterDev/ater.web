@@ -1,8 +1,10 @@
+using Share.Models.SystemMenuDtos;
 using Share.Models.SystemRoleDtos;
 namespace Http.API.Controllers.AdminControllers;
 
 /// <summary>
-/// 角色表
+/// 系统角色
+/// <see cref="Application.Manager.SystemRoleManager"/>
 /// </summary>
 [Authorize(AppConst.SuperAdmin)]
 public class SystemRoleController : RestControllerBase<ISystemRoleManager>
@@ -56,6 +58,23 @@ public class SystemRoleController : RestControllerBase<ISystemRoleManager>
         }
 
         return await manager.UpdateAsync(current, dto);
+    }
+
+    /// <summary>
+    /// 角色菜单 ✅
+    /// </summary>
+    /// <param name="dto"></param>
+    /// <returns></returns>
+    [HttpPut("menus")]
+    public async Task<ActionResult<SystemRole?>> UpdateMenusAsync([FromBody] SystemRoleUpdateMenusDto dto)
+    {
+        var current = await manager.GetCurrentAsync(dto.Id);
+        if (current == null)
+        {
+            return NotFound(ErrorMsg.NotFoundResource);
+        }
+        var res = await manager.UpdateMenusAsync(current, dto);
+        return Ok(res) ?? Problem("菜单更新失败");
     }
 
     /// <summary>

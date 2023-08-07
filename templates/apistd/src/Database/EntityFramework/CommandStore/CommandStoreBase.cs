@@ -187,6 +187,33 @@ public partial class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity
     {
         return await _db.Where(whereExp).ExecuteDeleteAsync();
     }
+
+    /// <summary>
+    /// 附加实体
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="entities"></param>
+    public virtual void AttachRange<T>(List<T> entities) where T : EntityBase
+    {
+        Context.AttachRange(entities);
+    }
+
+    public List<T> CreateAttachInstance<T>(List<Guid> ids) where T : EntityBase
+    {
+        List<T> res = new();
+        var type = typeof(T);
+        foreach (var id in ids)
+        {
+            var instance = Activator.CreateInstance(type);
+            if (instance != null)
+            {
+                var entity = instance as T;
+                entity!.Id = id;
+                res.Add(entity);
+            }
+        }
+        return res;
+    }
 }
 public class CommandSet<TEntity> : CommandStoreBase<CommandDbContext, TEntity>
     where TEntity : EntityBase

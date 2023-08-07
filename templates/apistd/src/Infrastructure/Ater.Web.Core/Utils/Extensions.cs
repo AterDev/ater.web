@@ -138,7 +138,7 @@ public static partial class Extensions
     }
 
     /// <summary>
-    /// 列表转成树型结构
+    /// 带有根节点的列表转成树型结构
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="nodes"></param>
@@ -157,11 +157,14 @@ public static partial class Extensions
             }
             else
             {
-                if (nodeDict[node.ParentId.Value].Children == null)
+                if (nodeDict.ContainsKey(node.ParentId.Value))
                 {
-                    nodeDict[node.ParentId.Value].Children = new List<T>();
+                    if (nodeDict[node.ParentId.Value].Children == null)
+                    {
+                        nodeDict[node.ParentId.Value].Children = new List<T>();
+                    }
+                    nodeDict[node.ParentId.Value].Children!.Add(node);
                 }
-                nodeDict[node.ParentId.Value].Children!.Add(node);
             }
         }
         return res;

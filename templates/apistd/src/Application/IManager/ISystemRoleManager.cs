@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Mvc;
+using Share.Models.SystemMenuDtos;
 using Share.Models.SystemRoleDtos;
 
 namespace Application.IManager;
@@ -28,4 +30,5 @@ public interface ISystemRoleManager : IDomainManager<SystemRole>
     Task<PageList<SystemRoleItemDto>> FilterAsync(SystemRoleFilterDto filter);
     Task<SystemRole?> DeleteAsync(SystemRole entity, bool softDelete = true);
     Task<bool> ExistAsync(Guid id);
+    Task<SystemRole?> UpdateMenusAsync(SystemRole current, SystemRoleUpdateMenusDto dto);
 }
