@@ -45,13 +45,14 @@ public class SystemConfigManager : DomainManagerBase<SystemConfig, SystemConfigU
     }
 
     /// <summary>
-    /// 获取枚举信息
+    /// 获取枚举信息 ✅
     /// </summary>
     /// <returns></returns>
     public async Task<Dictionary<string, List<EnumDictionary>>> GetEnumConfigsAsync()
     {
+        // TODO:程序启动时更新缓存
         var res = _cache.GetValue<Dictionary<string, List<EnumDictionary>>>("EnumConfigs");
-        if (res == null)
+        if (res == null || !res.Any())
         {
             var data = EnumHelper.GetAllEnumInfo();
             await _cache.SetValueAsync("EnumConfigs", data);
