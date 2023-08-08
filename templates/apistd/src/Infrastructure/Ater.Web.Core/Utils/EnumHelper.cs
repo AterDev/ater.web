@@ -55,15 +55,26 @@ public static class EnumHelper
     public static Dictionary<string, List<EnumDictionary>> GetAllEnumInfo()
     {
         Dictionary<string, List<EnumDictionary>> res = new();
-        Type[] types = Assembly.GetExecutingAssembly().GetEnumTypes();
-        foreach (Type type in types)
+        // TODO:自定义要查询的程序集
+        var myAssemblies = new List<string> { "Share.dll", "Entity.dll", "CMS.dll" };
+
+        List<Type> allTypes = new();
+        var assemblies = AppDomain.CurrentDomain.GetAssemblies()
+            .Where(a => myAssemblies.Contains(a.ManifestModule.Name))
+            .ToList();
+        assemblies.ToList().ForEach(assembly =>
+        {
+            var types = assembly.GetEnumTypes();
+            allTypes.AddRange(types);
+        });
+
+        foreach (Type type in allTypes)
         {
             List<EnumDictionary> infos = ToList(type);
             res.Add(type.Name, infos);
         }
         return res;
     }
-
 }
 
 public struct EnumDictionary

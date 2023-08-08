@@ -9,12 +9,16 @@ public static partial class ManagerServiceCollectionExtensions
         services.AddScoped(typeof(BlogQueryStore));
         services.AddScoped(typeof(SystemConfigQueryStore));
         services.AddScoped(typeof(SystemMenuQueryStore));
+        services.AddScoped(typeof(SystemPermissionGroupQueryStore));
+        services.AddScoped(typeof(SystemPermissionQueryStore));
         services.AddScoped(typeof(SystemRoleQueryStore));
         services.AddScoped(typeof(SystemUserQueryStore));
         services.AddScoped(typeof(UserQueryStore));
         services.AddScoped(typeof(BlogCommandStore));
         services.AddScoped(typeof(SystemConfigCommandStore));
         services.AddScoped(typeof(SystemMenuCommandStore));
+        services.AddScoped(typeof(SystemPermissionCommandStore));
+        services.AddScoped(typeof(SystemPermissionGroupCommandStore));
         services.AddScoped(typeof(SystemRoleCommandStore));
         services.AddScoped(typeof(SystemUserCommandStore));
         services.AddScoped(typeof(UserCommandStore));
@@ -25,6 +29,8 @@ public static partial class ManagerServiceCollectionExtensions
     {
         services.AddScoped<ISystemConfigManager, SystemConfigManager>();
         services.AddScoped<ISystemMenuManager, SystemMenuManager>();
+        services.AddScoped<ISystemPermissionGroupManager, SystemPermissionGroupManager>();
+        services.AddScoped<ISystemPermissionManager, SystemPermissionManager>();
         services.AddScoped<ISystemRoleManager, SystemRoleManager>();
         services.AddScoped<ISystemUserManager, SystemUserManager>();
         services.AddScoped<IUserManager, UserManager>();

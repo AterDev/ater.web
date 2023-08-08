@@ -10,7 +10,7 @@ public class SystemPermissionGroup : EntityBase
     /// <summary>
     /// 权限说明
     /// </summary>
-    [MaxLength(200)]
+    [MaxLength(1000)]
     public string? Description { get; set; }
 
     public ICollection<SystemPermission> Permissions { get; set; } = new List<SystemPermission>();

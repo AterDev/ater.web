@@ -7,8 +7,20 @@ namespace Ater.Web.Core.Models;
 public class FilterBase
 {
     private int _pageSize;
+    private int _pageIndex;
 
-    public int PageIndex { get; set; } = 1;
+    public int PageIndex
+    {
+        get => _pageIndex;
+        set
+        {
+            _pageIndex = value;
+            if (value < 1)
+            {
+                _pageSize = 1;
+            }
+        }
+    }
 
     /// <summary>
     /// 默认最大1000

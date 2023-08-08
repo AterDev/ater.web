@@ -18,12 +18,16 @@ public class DataStoreContext
         BlogQueryStore blogQuery,
         SystemConfigQueryStore systemConfigQuery,
         SystemMenuQueryStore systemMenuQuery,
+        SystemPermissionGroupQueryStore systemPermissionGroupQuery,
+        SystemPermissionQueryStore systemPermissionQuery,
         SystemRoleQueryStore systemRoleQuery,
         SystemUserQueryStore systemUserQuery,
         UserQueryStore userQuery,
         BlogCommandStore blogCommand,
         SystemConfigCommandStore systemConfigCommand,
         SystemMenuCommandStore systemMenuCommand,
+        SystemPermissionCommandStore systemPermissionCommand,
+        SystemPermissionGroupCommandStore systemPermissionGroupCommand,
         SystemRoleCommandStore systemRoleCommand,
         SystemUserCommandStore systemUserCommand,
         UserCommandStore userCommand,
@@ -37,12 +41,16 @@ public class DataStoreContext
         AddCache(blogQuery);
         AddCache(systemConfigQuery);
         AddCache(systemMenuQuery);
+        AddCache(systemPermissionGroupQuery);
+        AddCache(systemPermissionQuery);
         AddCache(systemRoleQuery);
         AddCache(systemUserQuery);
         AddCache(userQuery);
         AddCache(blogCommand);
         AddCache(systemConfigCommand);
         AddCache(systemMenuCommand);
+        AddCache(systemPermissionCommand);
+        AddCache(systemPermissionGroupCommand);
         AddCache(systemRoleCommand);
         AddCache(systemUserCommand);
         AddCache(userCommand);

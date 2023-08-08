@@ -32,5 +32,13 @@ public static class AppConst
     /// 验证码缓存前缀
     /// </summary>
     public const string VerifyCodeCachePrefix = "VerifyCode_";
+    /// <summary>
+    /// 枚举缓存
+    /// </summary>
+    public const string EnumCacheName = "EnumConfigs";
+    /// <summary>
+    /// 权限缓存前缀
+    /// </summary>
+    public const string PermissionCacheName = "Permissions";
 
 }

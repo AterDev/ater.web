@@ -1,49 +1,38 @@
-using Share.Models.SystemConfigDtos;
+using Share.Models.SystemPermissionGroupDtos;
 namespace Http.API.Controllers.AdminControllers;
 
-/// <summary>
-/// 系统配置
-/// </summary>
-/// <see cref="Application.Manager.SystemConfigManager"/>
-public class SystemConfigController : RestControllerBase<ISystemConfigManager>
+/// <see cref="Application.Manager.SystemPermissionGroupManager"/>
+[Authorize(AppConst.SuperAdmin)]
+public class SystemPermissionGroupController : RestControllerBase<ISystemPermissionGroupManager>
 {
 
-    public SystemConfigController(
+    public SystemPermissionGroupController(
         IUserContext user,
-        ILogger<SystemConfigController> logger,
-        ISystemConfigManager manager
+        ILogger<SystemPermissionGroupController> logger,
+        ISystemPermissionGroupManager manager
         ) : base(manager, user, logger)
     {
 
     }
 
     /// <summary>
-    /// 获取配置列表 ✅
+    /// 筛选 ✅
     /// </summary>
     /// <param name="filter"></param>
     /// <returns></returns>
     [HttpPost("filter")]
-    public async Task<ActionResult<PageList<SystemConfigItemDto>>> FilterAsync(SystemConfigFilterDto filter)
+    public async Task<ActionResult<PageList<SystemPermissionGroupItemDto>>> FilterAsync(SystemPermissionGroupFilterDto filter)
     {
         return await manager.FilterAsync(filter);
     }
 
-    /// <summary>
-    /// 获取枚举信息 ✅
-    /// </summary>
-    /// <returns></returns>
-    [HttpGet("enum")]
-    public async Task<ActionResult<Dictionary<string, List<EnumDictionary>>>> GetEnumConfigsAsync()
-    {
-        return await manager.GetEnumConfigsAsync();
-    }
     /// <summary>
     /// 新增 ✅
     /// </summary>
     /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<ActionResult<SystemConfig>> AddAsync(SystemConfigAddDto dto)
+    public async Task<ActionResult<SystemPermissionGroup>> AddAsync(SystemPermissionGroupAddDto dto)
     {
         var entity = await manager.CreateNewEntityAsync(dto);
         return await manager.AddAsync(entity);
@@ -56,7 +45,7 @@ public class SystemConfigController : RestControllerBase<ISystemConfigManager>
     /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPut("{id}")]
-    public async Task<ActionResult<SystemConfig?>> UpdateAsync([FromRoute] Guid id, SystemConfigUpdateDto dto)
+    public async Task<ActionResult<SystemPermissionGroup?>> UpdateAsync([FromRoute] Guid id, SystemPermissionGroupUpdateDto dto)
     {
         var current = await manager.GetCurrentAsync(id);
         if (current == null) { return NotFound(ErrorMsg.NotFoundResource); };
@@ -69,25 +58,24 @@ public class SystemConfigController : RestControllerBase<ISystemConfigManager>
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpGet("{id}")]
-    public async Task<ActionResult<SystemConfig?>> GetDetailAsync([FromRoute] Guid id)
+    public async Task<ActionResult<SystemPermissionGroup?>> GetDetailAsync([FromRoute] Guid id)
     {
         var res = await manager.FindAsync(id);
         return (res == null) ? NotFound() : res;
     }
 
     /// <summary>
-    /// ⚠删除 ✅
+    /// ⚠删除
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
-    public async Task<ActionResult<SystemConfig?>> DeleteAsync([FromRoute] Guid id)
+    public async Task<ActionResult<SystemPermissionGroup?>> DeleteAsync([FromRoute] Guid id)
     {
         // 注意删除权限
         var entity = await manager.GetCurrentAsync(id);
         if (entity == null) { return NotFound(); };
-        return entity.IsSystem
-            ? Problem("系统配置，无法删除!")
-            : await manager.DeleteAsync(entity);
+        // return Forbid();
+        return await manager.DeleteAsync(entity);
     }
 }

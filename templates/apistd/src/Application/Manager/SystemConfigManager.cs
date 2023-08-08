@@ -51,11 +51,11 @@ public class SystemConfigManager : DomainManagerBase<SystemConfig, SystemConfigU
     public async Task<Dictionary<string, List<EnumDictionary>>> GetEnumConfigsAsync()
     {
         // TODO:程序启动时更新缓存
-        var res = _cache.GetValue<Dictionary<string, List<EnumDictionary>>>("EnumConfigs");
+        var res = _cache.GetValue<Dictionary<string, List<EnumDictionary>>>(AppConst.EnumCacheName);
         if (res == null || !res.Any())
         {
             var data = EnumHelper.GetAllEnumInfo();
-            await _cache.SetValueAsync("EnumConfigs", data);
+            await _cache.SetValueAsync(AppConst.EnumCacheName, data);
             return data;
         }
         return res;
