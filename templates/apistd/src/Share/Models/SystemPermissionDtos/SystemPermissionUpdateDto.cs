@@ -24,6 +24,6 @@ public class SystemPermissionUpdateDto
     /// 权限类型
     /// </summary>
     public PermissionType? PermissionType { get; set; }
-    public Guid SystemPermissionGroupId { get; set; } = default!;
+    public Guid? SystemPermissionGroupId { get; set; }
     
 }

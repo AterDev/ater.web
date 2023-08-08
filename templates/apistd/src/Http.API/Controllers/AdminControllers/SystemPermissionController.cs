@@ -21,7 +21,7 @@ public class SystemPermissionController : RestControllerBase<ISystemPermissionMa
     }
 
     /// <summary>
-    /// 筛选
+    /// 筛选 ✅
     /// </summary>
     /// <param name="filter"></param>
     /// <returns></returns>
@@ -32,7 +32,7 @@ public class SystemPermissionController : RestControllerBase<ISystemPermissionMa
     }
 
     /// <summary>
-    /// 新增
+    /// 新增 ✅
     /// </summary>
     /// <param name="dto"></param>
     /// <returns></returns>
@@ -48,7 +48,7 @@ public class SystemPermissionController : RestControllerBase<ISystemPermissionMa
     }
 
     /// <summary>
-    /// 更新
+    /// 更新 ✅
     /// </summary>
     /// <param name="id"></param>
     /// <param name="dto"></param>
@@ -56,11 +56,11 @@ public class SystemPermissionController : RestControllerBase<ISystemPermissionMa
     [HttpPut("{id}")]
     public async Task<ActionResult<SystemPermission?>> UpdateAsync([FromRoute] Guid id, SystemPermissionUpdateDto dto)
     {
-        var current = await manager.GetCurrentAsync(id);
+        var current = await manager.GetCurrentAsync(id, "Group");
         if (current == null) { return NotFound(ErrorMsg.NotFoundResource); };
-        if (current.Group.Id != dto.SystemPermissionGroupId)
+        if (dto.SystemPermissionGroupId != null && current.Group.Id != dto.SystemPermissionGroupId)
         {
-            var systemPermissionGroup = await _systemPermissionGroupManager.GetCurrentAsync(dto.SystemPermissionGroupId);
+            var systemPermissionGroup = await _systemPermissionGroupManager.GetCurrentAsync(dto.SystemPermissionGroupId.Value);
             if (systemPermissionGroup == null) { return NotFound("不存在的权限组"); }
             current.Group = systemPermissionGroup;
         }

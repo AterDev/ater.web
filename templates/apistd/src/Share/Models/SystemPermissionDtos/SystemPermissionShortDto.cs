@@ -6,6 +6,7 @@ namespace Share.Models.SystemPermissionDtos;
 /// <see cref="Entity.SystemEntities.SystemPermission"/>
 public class SystemPermissionShortDto
 {
+    public Guid Id { get; set; }
     /// <summary>
     /// 权限名称标识
     /// </summary>
@@ -28,5 +29,5 @@ public class SystemPermissionShortDto
     /// 权限组
     /// </summary>
     public SystemPermissionGroup Group { get; set; } = default!;
-    
+
 }

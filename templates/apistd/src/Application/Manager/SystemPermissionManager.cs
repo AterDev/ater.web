@@ -1,5 +1,3 @@
-using Application.Implement;
-using Application.IManager;
 using Share.Models.SystemPermissionDtos;
 
 namespace Application.Manager;
@@ -10,11 +8,10 @@ public class SystemPermissionManager : DomainManagerBase<SystemPermission, Syste
 {
 
     public SystemPermissionManager(
-        DataStoreContext storeContext, 
+        DataStoreContext storeContext,
         ILogger<SystemPermissionManager> logger,
         IUserContext userContext) : base(storeContext, logger)
     {
-
         _userContext = userContext;
     }
 
@@ -27,9 +24,12 @@ public class SystemPermissionManager : DomainManagerBase<SystemPermission, Syste
     {
         var entity = dto.MapTo<SystemPermissionAddDto, SystemPermission>();
         Command.Db.Entry(entity).Property("GroupId").CurrentValue = dto.SystemPermissionGroupId;
-        // or entity.GroupId = dto.SystemPermissionGroupId;
-        // other required props
         return await Task.FromResult(entity);
+    }
+
+    public override Task<SystemPermission?> GetCurrentAsync(Guid id, params string[]? navigations)
+    {
+        return base.GetCurrentAsync(id, navigations);
     }
 
     public override async Task<SystemPermission> UpdateAsync(SystemPermission entity, SystemPermissionUpdateDto dto)
@@ -41,10 +41,9 @@ public class SystemPermissionManager : DomainManagerBase<SystemPermission, Syste
     {
         Queryable = Queryable
             .WhereNotNull(filter.Name, q => q.Name == filter.Name)
-            .WhereNotNull(filter.Enable, q => q.Enable == filter.Enable)
             .WhereNotNull(filter.PermissionType, q => q.PermissionType == filter.PermissionType)
             .WhereNotNull(filter.GroupId, q => q.Group.Id == filter.GroupId);
-        // TODO: custom filter conditions
+
         return await Query.FilterAsync<SystemPermissionItemDto>(Queryable, filter.PageIndex, filter.PageSize, filter.OrderBy);
     }
 
