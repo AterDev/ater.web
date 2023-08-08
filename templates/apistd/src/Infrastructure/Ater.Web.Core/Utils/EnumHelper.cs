@@ -55,8 +55,8 @@ public static class EnumHelper
     public static Dictionary<string, List<EnumDictionary>> GetAllEnumInfo()
     {
         Dictionary<string, List<EnumDictionary>> res = new();
-        Type[] tyeps = Assembly.GetExecutingAssembly().GetEnumTypes();
-        foreach (Type type in tyeps)
+        Type[] types = Assembly.GetExecutingAssembly().GetEnumTypes();
+        foreach (Type type in types)
         {
             List<EnumDictionary> infos = ToList(type);
             res.Add(type.Name, infos);

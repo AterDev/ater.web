@@ -6,11 +6,7 @@
   "DbContextPath": "src\\Database\\EntityFramework",
   "StorePath": null,
   "ApplicationPath": "src\\Application",
-  //#if (grpc)
-  "ApiPath": "src\\Grpc.API",
-  //#else
   "ApiPath": "src\\Http.API",
-  //#endif
   "IdStyle": "Id",
   "IdType": "Guid",
   "CreatedTimeName": "CreatedTime",

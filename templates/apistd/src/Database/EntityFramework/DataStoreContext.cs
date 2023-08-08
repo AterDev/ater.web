@@ -16,11 +16,13 @@ public class DataStoreContext
 
     public DataStoreContext(
         BlogQueryStore blogQuery,
+        SystemConfigQueryStore systemConfigQuery,
         SystemMenuQueryStore systemMenuQuery,
         SystemRoleQueryStore systemRoleQuery,
         SystemUserQueryStore systemUserQuery,
         UserQueryStore userQuery,
         BlogCommandStore blogCommand,
+        SystemConfigCommandStore systemConfigCommand,
         SystemMenuCommandStore systemMenuCommand,
         SystemRoleCommandStore systemRoleCommand,
         SystemUserCommandStore systemUserCommand,
@@ -33,11 +35,13 @@ public class DataStoreContext
         QueryContext = queryDbContext;
         CommandContext = commandDbContext;
         AddCache(blogQuery);
+        AddCache(systemConfigQuery);
         AddCache(systemMenuQuery);
         AddCache(systemRoleQuery);
         AddCache(systemUserQuery);
         AddCache(userQuery);
         AddCache(blogCommand);
+        AddCache(systemConfigCommand);
         AddCache(systemMenuCommand);
         AddCache(systemRoleCommand);
         AddCache(systemUserCommand);

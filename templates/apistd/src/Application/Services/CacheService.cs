@@ -19,7 +19,7 @@ public class CacheService
     /// <param name="data"></param>
     /// <param name="expiration">seconds</param>
     /// <returns></returns>
-    public async Task SetValueAsync(string key, object data, int? expiration)
+    public async Task SetValueAsync(string key, object data, int? expiration = null)
     {
         byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(data);
         var option = new DistributedCacheEntryOptions();
