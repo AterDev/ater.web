@@ -138,6 +138,139 @@ public static partial class Extensions
     }
 
     /// <summary>
+    /// 构建Between表达式
+    /// </summary>
+    /// <typeparam name="TSource"></typeparam>
+    /// <param name="source"></param>
+    /// <param name="propertyExpression"></param>
+    /// <param name="minVal"></param>
+    /// <param name="maxVal"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
+    private static IQueryable<TSource> Between<TSource, TValue>(
+        this IQueryable<TSource> source,
+        Expression<Func<TSource, TValue>> propertyExpression,
+        TValue minVal,
+        TValue maxVal)
+        where TValue : struct
+    {
+        var parameter = propertyExpression.Parameters[0];
+        var memberExpression = propertyExpression.Body as MemberExpression
+            ?? (propertyExpression.Body as UnaryExpression)?.Operand as MemberExpression;
+
+        if (memberExpression == null)
+        {
+            throw new ArgumentException("Invalid property expression", nameof(propertyExpression));
+        }
+        var propertyType = memberExpression.Type;
+
+        var minValObj = Convert.ChangeType(minVal, propertyType);
+        var maxValObj = Convert.ChangeType(maxVal, propertyType);
+
+        var minExpr = Expression.Constant(minValObj, propertyType);
+        var maxExpr = Expression.Constant(maxValObj, propertyType);
+
+        var propertyAccess = Expression.MakeMemberAccess(parameter, memberExpression.Member);
+        var leftExpr = Expression.GreaterThanOrEqual(propertyAccess, minExpr);
+        var rightExpr = Expression.LessThanOrEqual(propertyAccess, maxExpr);
+        var andExpr = Expression.AndAlso(leftExpr, rightExpr);
+        var lambdaExpr = Expression.Lambda<Func<TSource, bool>>(andExpr, parameter);
+
+        return source.Where(lambdaExpr);
+    }
+
+    /// <summary>
+    /// 范围查询:int
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="source"></param>
+    /// <param name="propertyExpression"></param>
+    /// <param name="minVal"></param>
+    /// <param name="maxVal"></param>
+    /// <returns></returns>
+    public static IQueryable<T> Between<T>(
+        this IQueryable<T> source,
+        Expression<Func<T, int>> propertyExpression,
+        int minVal,
+        int maxVal)
+    {
+        return source.Between<T, int>(propertyExpression, minVal, maxVal);
+    }
+    /// <summary>
+    /// 范围查询:long
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="source"></param>
+    /// <param name="propertyExpression"></param>
+    /// <param name="minVal"></param>
+    /// <param name="maxVal"></param>
+    /// <returns></returns>
+    public static IQueryable<T> Between<T>(
+        this IQueryable<T> source,
+        Expression<Func<T, long>> propertyExpression,
+        int minVal,
+        int maxVal)
+    {
+        return source.Between<T, long>(propertyExpression, minVal, maxVal);
+    }
+
+    /// <summary>
+    /// 范围查询:double
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="source"></param>
+    /// <param name="propertyExpression"></param>
+    /// <param name="minVal"></param>
+    /// <param name="maxVal"></param>
+    /// <returns></returns>
+    public static IQueryable<T> Between<T>(
+        this IQueryable<T> source,
+        Expression<Func<T, double>> propertyExpression,
+        int minVal,
+        int maxVal)
+    {
+        return source.Between<T, double>(propertyExpression, minVal, maxVal);
+    }
+
+    /// <summary>
+    /// 范围条件:DateOnly
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="source"></param>
+    /// <param name="propertyExpression"></param>
+    /// <param name="minVal"></param>
+    /// <param name="maxVal"></param>
+    /// <returns></returns>
+    public static IQueryable<T> Between<T>(
+        this IQueryable<T> source,
+        Expression<Func<T, DateTimeOffset>> propertyExpression,
+        DateOnly minVal,
+        DateOnly maxVal)
+    {
+        var minValObj = minVal.ToDateTimeOffset();
+        var maxValObj = maxVal.ToDateTimeOffset();
+        return source.Between<T, DateTimeOffset>(propertyExpression, minValObj, maxValObj);
+    }
+
+    /// <summary>
+    /// 范围查询:DateTimeOffset
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="source"></param>
+    /// <param name="propertyExpression"></param>
+    /// <param name="minVal"></param>
+    /// <param name="maxVal"></param>
+    /// <returns></returns>
+    public static IQueryable<T> Between<T>(
+        this IQueryable<T> source,
+        Expression<Func<T, DateTimeOffset>> propertyExpression,
+        DateTimeOffset minVal,
+        DateTimeOffset maxVal)
+    {
+        return source.Between<T, DateTimeOffset>(propertyExpression, minVal, maxVal);
+    }
+
+    /// <summary>
     /// 带有根节点的列表转成树型结构
     /// </summary>
     /// <typeparam name="T"></typeparam>
