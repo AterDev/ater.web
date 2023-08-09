@@ -34,7 +34,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Application\Application.csproj" />
 		<ProjectReference Include="..\Modules\CMS\CMS.csproj" />
-		<ProjectReference Include="..\Modules\AuditLogs\AuditLogs.csproj" />
+		<ProjectReference Include="..\Modules\FileManager\FileManager.csproj" />
 	</ItemGroup>
 
 	<Target Name="SwaggerPostBuildTarget" AfterTargets="Build" Condition="'$(Configuration)' == 'Debug'">
