@@ -6,13 +6,11 @@ namespace Application.Manager;
 /// </summary>
 public class SystemLogsManager : DomainManagerBase<SystemLogs, SystemLogsUpdateDto, SystemLogsFilterDto, SystemLogsItemDto>, ISystemLogsManager
 {
-
     public SystemLogsManager(
         DataStoreContext storeContext,
         ILogger<SystemLogsManager> logger,
         IUserContext userContext) : base(storeContext, logger)
     {
-
         _userContext = userContext;
     }
 
@@ -24,7 +22,7 @@ public class SystemLogsManager : DomainManagerBase<SystemLogs, SystemLogsUpdateD
     public async Task<SystemLogs> CreateNewEntityAsync(SystemLogsAddDto dto)
     {
         var entity = dto.MapTo<SystemLogsAddDto, SystemLogs>();
-        Command.Db.Entry(entity).Property("SystemUserId").CurrentValue = _userContext.UserId!.Value;
+        Command.Db.Entry(entity).Property("SystemUserId").CurrentValue = _userContext!.UserId!.Value;
         // or entity.SystemUserId = _userContext.UserId!.Value;
         // other required props
         return await Task.FromResult(entity);
@@ -45,7 +43,7 @@ public class SystemLogsManager : DomainManagerBase<SystemLogs, SystemLogsUpdateD
 
         if (filter.StartDate != null && filter.EndDate != null)
         {
-            Queryable = Queryable.Where()
+            Queryable = Queryable.Between(q => q.CreatedTime, filter.StartDate.Value, filter.EndDate.Value);
         }
         return await Query.FilterAsync<SystemLogsItemDto>(Queryable, filter.PageIndex, filter.PageSize, filter.OrderBy);
     }

@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Http;
 
 namespace Application.Implement;
@@ -76,5 +77,35 @@ public partial class UserContext : IUserContext
     public async Task<SystemUser?> GetSystemUserAsync()
     {
         return await _context.SystemUsers.FindAsync(UserId);
+    }
+
+    /// <summary>
+    /// ÐÐÎª¼ÇÂ¼
+    /// </summary>
+    /// <param name="targetName"></param>
+    /// <param name="actionType"></param>
+    /// <param name="description"></param>
+    /// <param name="caller"></param>
+    public async void RecordAction(string targetName, ActionType actionType, string description = "", [CallerMemberName] string caller = "")
+    {
+        var route = _httpContextAccessor.HttpContext?.Request?.Path.Value + $":[{caller}]";
+
+        if (UserId != null)
+        {
+            description = "";
+            var log = new SystemLogs
+            {
+                ActionUserName = Username ?? Email ?? UserId.ToString() ?? "",
+                TargetName = targetName,
+                Route = route,
+                ActionType = actionType,
+            };
+            // get enum description from actionType
+            var actionName = actionType.GetDescription();
+            log.Description = $"{log.ActionUserName} {actionName} {targetName} ;{description}";
+            _context.Entry(log).Property("SystemUserId").CurrentValue = UserId;
+            _context.Add(log);
+            await _context.SaveChangesAsync();
+        }
     }
 }

@@ -39,6 +39,24 @@ public static class EnumHelper
     }
 
     /// <summary>
+    /// 获取枚举描述
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public static string GetDescription(this Enum value)
+    {
+        FieldInfo? fi = value.GetType().GetField(value.ToString());
+        if (fi != null)
+        {
+            if (fi.GetCustomAttribute(typeof(DescriptionAttribute), true) is DescriptionAttribute attribute)
+            {
+                return attribute.Description;
+            }
+        }
+        return value.ToString();
+    }
+
+    /// <summary>
     /// 获取程序集中所有枚举类型
     /// </summary>
     /// <param name="assembly"></param>
@@ -75,6 +93,7 @@ public static class EnumHelper
         }
         return res;
     }
+
 }
 
 public struct EnumDictionary
