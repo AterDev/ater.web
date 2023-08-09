@@ -2,6 +2,9 @@
 /// <summary>
 /// 系统日志
 /// </summary>
+[Index(nameof(ActionType))]
+[Index(nameof(ActionUserName))]
+[Index(nameof(CreatedTime))]
 public class SystemLogs : EntityBase
 {
     /// <summary>
@@ -30,10 +33,10 @@ public class SystemLogs : EntityBase
     /// <summary>
     /// 描述
     /// </summary>
-    [MaxLength(200)]
+    [MaxLength(300)]
     public string? Description { get; set; }
 
-    public required SystemUser SystemUser { get; set; }
+    public SystemUser SystemUser { get; set; } = default!;
 }
 public enum ActionType
 {
