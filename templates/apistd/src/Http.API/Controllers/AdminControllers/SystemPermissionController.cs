@@ -68,7 +68,7 @@ public class SystemPermissionController : RestControllerBase<ISystemPermissionMa
     }
 
     /// <summary>
-    /// 详情
+    /// 详情 ✅
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
@@ -80,11 +80,10 @@ public class SystemPermissionController : RestControllerBase<ISystemPermissionMa
     }
 
     /// <summary>
-    /// ⚠删除
+    /// ⚠删除 ✅
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    // [ApiExplorerSettings(IgnoreApi = true)]
     [HttpDelete("{id}")]
     public async Task<ActionResult<SystemPermission?>> DeleteAsync([FromRoute] Guid id)
     {

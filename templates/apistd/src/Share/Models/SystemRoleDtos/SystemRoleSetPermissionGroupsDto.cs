@@ -1,10 +1,10 @@
-﻿namespace Share.Models.SystemMenuDtos;
+﻿namespace Share.Models.SystemRoleDtos;
 
 /// <summary>
 /// 菜单更新
 /// </summary>
 /// <see cref="Entity.SystemEntities.SystemRole"/>
-public class SystemRoleUpdateMenusDto
+public class SystemRoleSetPermissionGroupsDto
 {
     /// <summary>
     /// 角色Id
@@ -14,5 +14,5 @@ public class SystemRoleUpdateMenusDto
     /// <summary>
     /// 菜单Id集合
     /// </summary>
-    public List<Guid> MenuIds { get; set; } = new();
+    public List<Guid> PermissionGroupIds { get; set; } = new();
 }

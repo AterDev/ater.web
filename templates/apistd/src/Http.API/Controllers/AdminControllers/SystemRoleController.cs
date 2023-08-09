@@ -1,4 +1,3 @@
-using Share.Models.SystemMenuDtos;
 using Share.Models.SystemRoleDtos;
 namespace Http.API.Controllers.AdminControllers;
 
@@ -66,15 +65,32 @@ public class SystemRoleController : RestControllerBase<ISystemRoleManager>
     /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPut("menus")]
-    public async Task<ActionResult<SystemRole?>> UpdateMenusAsync([FromBody] SystemRoleUpdateMenusDto dto)
+    public async Task<ActionResult<SystemRole?>> UpdateMenusAsync([FromBody] SystemRoleSetMenusDto dto)
     {
         var current = await manager.GetCurrentAsync(dto.Id);
         if (current == null)
         {
             return NotFound(ErrorMsg.NotFoundResource);
         }
-        var res = await manager.UpdateMenusAsync(current, dto);
+        var res = await manager.SetMenusAsync(current, dto);
         return Ok(res) ?? Problem("菜单更新失败");
+    }
+
+    /// <summary>
+    /// Set Permission Group ✅
+    /// </summary>
+    /// <param name="dto"></param>
+    /// <returns></returns>
+    [HttpPut("permissionGroups")]
+    public async Task<ActionResult<SystemRole?>> UpdatePermissionGroupsAsync([FromBody] SystemRoleSetPermissionGroupsDto dto)
+    {
+        var current = await manager.GetCurrentAsync(dto.Id);
+        if (current == null)
+        {
+            return NotFound(ErrorMsg.NotFoundResource);
+        }
+        var res = await manager.SetPermissionGroupsAsync(current, dto);
+        return Ok(res) ?? Problem("权限组更新失败");
     }
 
     /// <summary>

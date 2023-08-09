@@ -1,4 +1,3 @@
-using Share.Models.SystemMenuDtos;
 using Share.Models.SystemRoleDtos;
 
 namespace Application.Manager;
@@ -52,6 +51,34 @@ public class SystemRoleManager : DomainManagerBase<SystemRole, SystemRoleUpdateD
     }
 
     /// <summary>
+    /// Set PermissionGroups
+    /// </summary>
+    /// <param name="current"></param>
+    /// <param name="dto"></param>
+    /// <returns></returns>
+    public async Task<SystemRole?> SetPermissionGroupsAsync(SystemRole current, SystemRoleSetPermissionGroupsDto dto)
+    {
+        try
+        {
+            await Stores.CommandContext.Entry(current)
+                .Collection(r => r.PermissionGroups)
+                .LoadAsync();
+
+            var groups = await Stores.CommandContext.SystemPermissionGroups
+                .Where(m => dto.PermissionGroupIds.Contains(m.Id))
+                .ToListAsync();
+            current.PermissionGroups = groups;
+            await Command.SaveChangeAsync();
+            return current;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError($"set role permission groups failed:{0}", e.Message);
+            return null;
+        }
+    }
+
+    /// <summary>
     /// 获取权限组
     /// </summary>
     /// <param name="systemRoles"></param>
@@ -84,7 +111,7 @@ public class SystemRoleManager : DomainManagerBase<SystemRole, SystemRoleUpdateD
     /// <param name="dto"></param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public async Task<SystemRole?> UpdateMenusAsync(SystemRole current, SystemRoleUpdateMenusDto dto)
+    public async Task<SystemRole?> SetMenusAsync(SystemRole current, SystemRoleSetMenusDto dto)
     {
         // 更新角色菜单
         try

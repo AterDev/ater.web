@@ -1,4 +1,3 @@
-using Share.Models.SystemMenuDtos;
 using Share.Models.SystemRoleDtos;
 
 namespace Application.IManager;
@@ -29,7 +28,8 @@ public interface ISystemRoleManager : IDomainManager<SystemRole>
     Task<PageList<SystemRoleItemDto>> FilterAsync(SystemRoleFilterDto filter);
     Task<SystemRole?> DeleteAsync(SystemRole entity, bool softDelete = true);
     Task<bool> ExistAsync(Guid id);
-    Task<SystemRole?> UpdateMenusAsync(SystemRole current, SystemRoleUpdateMenusDto dto);
+    Task<SystemRole?> SetMenusAsync(SystemRole current, SystemRoleSetMenusDto dto);
     Task<List<SystemMenu>> GetSystemMenusAsync(List<SystemRole> systemRoles);
     Task<List<SystemPermissionGroup>> GetPermissionGroupsAsync(List<SystemRole> systemRoles);
+    Task<SystemRole?> SetPermissionGroupsAsync(SystemRole current, SystemRoleSetPermissionGroupsDto dto);
 }
