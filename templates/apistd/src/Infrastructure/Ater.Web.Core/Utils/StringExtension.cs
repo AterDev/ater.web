@@ -211,4 +211,13 @@ public static class StringExtension
         return sameNum / shorterString.Length;
     }
 
+    /// <summary>
+    /// 字符串是否为 null/empty/whitespace
+    /// </summary>
+    /// <param name="str"></param>
+    /// <returns></returns>
+    public static bool IsEmpty(this string str)
+    {
+        return string.IsNullOrWhiteSpace(str);
+    }
 }

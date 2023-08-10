@@ -74,6 +74,12 @@ public class EmailService : IEmailService
         await SendAsync(email, "【MyProjectName】注册验证码", html);
     }
 
+    /// <summary>
+    /// 发送注册结果
+    /// </summary>
+    /// <param name="email"></param>
+    /// <param name="content"></param>
+    /// <returns></returns>
     public async Task SendRegResultAsync(string email, string content)
     {
         var html = @$"<p>感谢您注册成为MyProjectName网站的会员！</p>
@@ -86,6 +92,12 @@ public class EmailService : IEmailService
         await SendAsync(email, "【MyProjectName】注册结果", html);
     }
 
+    /// <summary>
+    /// 发送登录验证码
+    /// </summary>
+    /// <param name="email"></param>
+    /// <param name="verifyCode"></param>
+    /// <returns></returns>
     public async Task SendLoginVerifyAsync(string email, string verifyCode)
     {
         var html = @$"<p>您正在登录 MyProjectName网站!</p>

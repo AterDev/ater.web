@@ -285,13 +285,21 @@ public static partial class AppServiceCollectionExtensions
                         }
                         else
                         {
-                            if (request.Body.CanRead)
+                            try
                             {
                                 request.EnableBuffering();
-                                request.Body.Position = 0;
-                                StreamReader reader = new(request.Body);
-                                activity.SetTag("requestBody", await reader.ReadToEndAsync());
-                                request.Body.Position = 0;
+                                if (request.Body.CanRead)
+                                {
+                                    request.Body.Position = 0;
+                                    using var reader = new StreamReader(request.Body, leaveOpen: true);
+                                    activity.SetTag("requestBody", await reader.ReadToEndAsync());
+                                    request.Body.Position = 0;
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                await Console.Out.WriteLineAsync("记录asp.net core 请求内容错误:" + ex.Message);
+
                             }
                         }
                     };
