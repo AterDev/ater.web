@@ -272,7 +272,7 @@ public static partial class AppServiceCollectionExtensions
                 .AddAspNetCoreInstrumentation(options =>
                 {
                     options.RecordException = true;
-                    options.EnrichWithHttpRequest = (activity, request) =>
+                    options.EnrichWithHttpRequest = async (activity, request) =>
                     {
                         IHeaderDictionary headers = request.Headers;
                         // 过滤过长或文件类型
@@ -290,7 +290,7 @@ public static partial class AppServiceCollectionExtensions
                                 request.EnableBuffering();
                                 request.Body.Position = 0;
                                 StreamReader reader = new(request.Body);
-                                activity.SetTag("requestBody", reader.ReadToEnd());
+                                activity.SetTag("requestBody", await reader.ReadToEndAsync());
                                 request.Body.Position = 0;
                             }
                         }
