@@ -1,4 +1,5 @@
-﻿using Application;
+﻿using System.Buffers;
+using Application;
 using Ater.Web.Abstracture;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -287,13 +288,14 @@ public static partial class AppServiceCollectionExtensions
                         {
                             try
                             {
-                                request.EnableBuffering();
                                 if (request.Body.CanRead)
                                 {
-                                    request.Body.Position = 0;
-                                    using var reader = new StreamReader(request.Body, leaveOpen: true);
-                                    activity.SetTag("requestBody", await reader.ReadToEndAsync());
-                                    request.Body.Position = 0;
+                                    var reader = request.BodyReader;
+                                    var result = await reader.ReadAsync();
+                                    var buffer = result.Buffer;
+                                    var body = Encoding.UTF8.GetString(buffer.ToArray());
+                                    reader.AdvanceTo(buffer.End);
+                                    activity.SetTag("requestBody", body);
                                 }
                             }
                             catch (Exception ex)
