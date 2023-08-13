@@ -1,4 +1,4 @@
-﻿namespace Ater.Web.Abstracture;
+﻿namespace Ater.Web.Abstraction;
 /// <summary>
 /// 应用组件配置
 /// </summary>

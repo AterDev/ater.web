@@ -1,4 +1,4 @@
-namespace Ater.Web.Abstracture.Interface;
+namespace Ater.Web.Abstraction.Interface;
 public interface ICommandStoreExt<TId, TEntity>
     where TEntity : EntityBase
 {

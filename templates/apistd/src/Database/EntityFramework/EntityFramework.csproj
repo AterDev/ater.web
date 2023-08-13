@@ -12,7 +12,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\Entity\Entity.csproj" />
-	  <ProjectReference Include="..\..\Infrastructure\Ater.Web.Abstracture\Ater.Web.Abstracture.csproj" />
+	  <ProjectReference Include="..\..\Infrastructure\Ater.Web.Abstraction\Ater.Web.Abstraction.csproj" />
 	</ItemGroup>
 
 </Project>

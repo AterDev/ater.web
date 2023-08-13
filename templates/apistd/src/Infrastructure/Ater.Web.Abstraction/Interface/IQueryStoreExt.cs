@@ -1,4 +1,4 @@
-namespace Ater.Web.Abstracture.Interface;
+namespace Ater.Web.Abstraction.Interface;
 /// <summary>
 /// 高级查询接口
 /// </summary>
