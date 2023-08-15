@@ -1,6 +1,7 @@
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 
-namespace CMS.Infrastructure;
+namespace FileManagerMod.Infrastructure;
 
 /// <summary>
 /// 管理后台权限控制器

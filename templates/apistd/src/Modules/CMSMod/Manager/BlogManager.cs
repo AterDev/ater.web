@@ -1,11 +1,8 @@
-using Application.Implement;
-using Entity.CMSEntities;
-using Ater.Web.Core.Models;
-using CMS.IManager;
-using CMS.Models.BlogDtos;
+using CMSMod.IManager;
+using CMSMod.Models.BlogDtos;
 using EntityFramework;
 
-namespace CMS.Manager;
+namespace CMSMod.Manager;
 /// <summary>
 /// 博客
 /// </summary>

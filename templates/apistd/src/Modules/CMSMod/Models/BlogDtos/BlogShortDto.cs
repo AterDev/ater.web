@@ -1,7 +1,7 @@
 using Entity;
 using Entity.CMSEntities;
 
-namespace CMS.Models.BlogDtos;
+namespace CMSMod.Models.BlogDtos;
 /// <summary>
 /// 博客概要
 /// </summary>

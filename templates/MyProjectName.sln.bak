@@ -52,9 +52,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{A55B
 EndProject
 #endif
 #if (1==0)
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CMS", "src\Modules\CMS\CMS.csproj", "{44B8B14C-AB91-425A-A3E8-B4FEA58E7A47}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CMSMod", "src\Modules\CMSMod\CMSMod.csproj", "{44B8B14C-AB91-425A-A3E8-B4FEA58E7A47}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileManager", "src\Modules\FileManager\FileManager.csproj", "{2C6F1CB1-4304-4A18-915B-D96E4663DBCA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileManagerMod", "src\Modules\FileManagerMod\FileManagerMod.csproj", "{2C6F1CB1-4304-4A18-915B-D96E4663DBCA}"
 EndProject
 #endif
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{FF4255E1-DD92-4795-ADD0-A44872A1EDC2}"

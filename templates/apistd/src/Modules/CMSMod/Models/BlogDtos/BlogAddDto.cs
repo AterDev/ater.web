@@ -1,6 +1,6 @@
 using Entity.CMSEntities;
 
-namespace CMS.Models.BlogDtos;
+namespace CMSMod.Models.BlogDtos;
 /// <summary>
 /// 博客添加时请求结构
 /// </summary>

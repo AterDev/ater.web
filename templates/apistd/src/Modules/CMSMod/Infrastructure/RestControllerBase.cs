@@ -1,7 +1,6 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 
-namespace FileManager.Infrastructure;
+namespace CMSMod.Infrastructure;
 
 /// <summary>
 /// 管理后台权限控制器
@@ -106,7 +105,8 @@ public class RestControllerBase : ControllerBase
     [NonAction]
     public override NotFoundObjectResult NotFound([ActionResultObjectValue] object? value)
     {
-        var res = new {
+        var res = new
+        {
             Title = "访问的资源不存在",
             Detail = value?.ToString(),
             Status = 404,
@@ -125,7 +125,8 @@ public class RestControllerBase : ControllerBase
     [NonAction]
     public override ConflictObjectResult Conflict([ActionResultObjectValue] object? error)
     {
-        var res = new {
+        var res = new
+        {
             Title = "重复的资源",
             Detail = error?.ToString(),
             Status = 409,
@@ -144,7 +145,8 @@ public class RestControllerBase : ControllerBase
     [NonAction]
     public ObjectResult Problem(string? detail = null)
     {
-        var res = new {
+        var res = new
+        {
             Title = "业务错误",
             Detail = detail,
             Status = 500,

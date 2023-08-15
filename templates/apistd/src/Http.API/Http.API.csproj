@@ -33,8 +33,8 @@
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Application\Application.csproj" />
-		<ProjectReference Include="..\Modules\CMS\CMS.csproj" />
-		<ProjectReference Include="..\Modules\FileManager\FileManager.csproj" />
+		<ProjectReference Include="..\Modules\CMSMod\CMSMod.csproj" />
+		<ProjectReference Include="..\Modules\FileManagerMod\FileManagerMod.csproj" />
 	</ItemGroup>
 
 	<Target Name="SwaggerPostBuildTarget" AfterTargets="Build" Condition="'$(Configuration)' == 'Debug'">

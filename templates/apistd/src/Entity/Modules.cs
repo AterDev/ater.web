@@ -4,7 +4,16 @@
 /// </summary>
 internal class Modules
 {
-    public const string CMS = "CMS";
-    public const string Order = "Order";
-    public const string FileManager = "FileManager";
+    /// <summary>
+    /// 内容管理模块
+    /// </summary>
+    public const string CMS = "CMSMod";
+    /// <summary>
+    /// 商品订单模块
+    /// </summary>
+    public const string Order = "OrderMod";
+    /// <summary>
+    /// 文件管理
+    /// </summary>
+    public const string FileManager = "FileManagerMod";
 }

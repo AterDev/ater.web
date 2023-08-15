@@ -1,8 +1,8 @@
 using Ater.Web.Core.Models;
-using CMS.Models.BlogDtos;
+using CMSMod.Models.BlogDtos;
 using Entity.CMSEntities;
 
-namespace CMS.IManager;
+namespace CMSMod.IManager;
 /// <summary>
 /// 定义实体业务接口规范
 /// </summary>
