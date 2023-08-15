@@ -6,7 +6,7 @@ namespace Entity.CMSEntities;
 /// </summary>
 [Index(nameof(Name))]
 [Index(nameof(Level))]
-[Module("CMS")]
+[Module(Modules.CMS)]
 public class Catalog : EntityBase, ITreeNode<Catalog>
 {
     /// <summary>

@@ -7,6 +7,11 @@ public partial class DomainManagerBase<TEntity, TUpdate, TFilter, TItem> : Manag
     protected IUserContext? _userContext;
     protected readonly ILogger _logger;
 
+    /// <summary>
+    /// ¥ÌŒÛ–≈œ¢
+    /// </summary>
+    protected string ErrorMsg { get; set; } = string.Empty;
+
     public DomainManagerBase(DataStoreContext storeContext, ILogger logger) : base(storeContext)
     {
         _logger = logger;

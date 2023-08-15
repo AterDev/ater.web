@@ -4,7 +4,7 @@ namespace Entity.CMSEntities;
 /// <summary>
 /// 博客
 /// </summary>
-[Module("CMS")]
+[Module(Modules.CMS)]
 public class Blog : EntityBase
 {
     /// <summary>
