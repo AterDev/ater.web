@@ -216,7 +216,7 @@ public static class StringExtension
     /// </summary>
     /// <param name="str"></param>
     /// <returns></returns>
-    public static bool IsEmpty(this string str)
+    public static bool IsEmpty(this string? str)
     {
         return string.IsNullOrWhiteSpace(str);
     }
