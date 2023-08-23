@@ -107,6 +107,7 @@ public class InitDataTask
                 IsSystem = true,
                 Valid = true,
                 Key = AppConst.Version,
+                GroupName = SystemConfig.System,
                 // 版本格式:yyMMdd.编号
                 Value = DateTime.UtcNow.ToString("yyMMdd") + ".01"
             };

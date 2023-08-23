@@ -8,6 +8,10 @@
 [Index(nameof(GroupName))]
 public class SystemConfig : EntityBase
 {
+    #region const 
+    public const string System = "System";
+    #endregion
+
     [MaxLength(100)]
     public required string Key { get; set; }
     /// <summary>

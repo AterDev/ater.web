@@ -10,7 +10,7 @@ public abstract class EntityBase
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; set; } = Guid.NewGuid();
     public DateTimeOffset CreatedTime { get; set; } = DateTimeOffset.UtcNow;
-    public DateTimeOffset UpdatedTime { get; set; } = DateTimeOffset.UtcNow;
+    public DateTimeOffset? UpdatedTime { get; set; }
     /// <summary>
     /// 软删除
     /// </summary>
