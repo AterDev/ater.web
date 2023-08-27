@@ -9,7 +9,13 @@ public abstract class EntityBase
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; set; } = Guid.NewGuid();
+    /// <summary>
+    /// 创建时间
+    /// </summary>
     public DateTimeOffset CreatedTime { get; set; } = DateTimeOffset.UtcNow;
+    /// <summary>
+    /// 更新时间
+    /// </summary>
     public DateTimeOffset? UpdatedTime { get; set; }
     /// <summary>
     /// 软删除
