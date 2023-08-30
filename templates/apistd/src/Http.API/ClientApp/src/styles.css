@@ -35,10 +35,11 @@ img {
     min-height: 500px;
 }
 
-.mat-icon {
+.mat-mdc-list-item .mat-icon {
   margin-right: 4px;
   vertical-align: middle;
 }
+
 .gap-1 {
   gap: 8px;
 }
