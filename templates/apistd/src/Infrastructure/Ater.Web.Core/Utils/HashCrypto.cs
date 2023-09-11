@@ -142,7 +142,7 @@ public class HashCrypto
     /// <param name="cipherText"></param>
     /// <param name="key"></param>
     /// <returns></returns>
-    public static string AesDescrypt(string cipherText, string key)
+    public static string AesDecrypt(string cipherText, string key)
     {
         if (string.IsNullOrWhiteSpace(cipherText))
         {
