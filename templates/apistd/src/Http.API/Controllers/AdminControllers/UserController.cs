@@ -6,13 +6,13 @@ namespace Http.API.Controllers.AdminControllers;
 /// </summary>
 /// <see cref="Application.Manager.UserManager"/>
 [Authorize(AppConst.AdminUser)]
-public class UserController : RestControllerBase<IUserManager>
+public class UserController : RestControllerBase<UserManager>
 {
 
     public UserController(
         IUserContext user,
         ILogger<UserController> logger,
-        IUserManager manager
+        UserManager manager
         ) : base(manager, user, logger)
     {
 

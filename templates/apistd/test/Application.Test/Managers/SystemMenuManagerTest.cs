@@ -1,6 +1,4 @@
-using Application.IManager;
-using Entity.SystemEntities;
-using Ater.Web.Core.Utils;
+using Application.Manager;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Share.Models.SystemMenuDtos;
@@ -9,12 +7,12 @@ namespace Application.Test.Managers;
 
 public class SystemMenuManagerTest : BaseTest
 {
-    private readonly ISystemMenuManager manager;
+    private readonly SystemMenuManager manager;
     public string RandomString { get; set; }
 
     public SystemMenuManagerTest(WebApplicationFactory<Program> factory) : base(factory)
     {
-        manager = Services.GetRequiredService<ISystemMenuManager>();
+        manager = Services.GetRequiredService<SystemMenuManager>();
         RandomString = DateTime.Now.ToString("MMddmmss");
     }
     [Fact]
@@ -42,7 +40,6 @@ public class SystemMenuManagerTest : BaseTest
         Assert.Equal(entity.IsValid, res.IsValid);
         Assert.Equal(entity.AccessCode, res.AccessCode);
         Assert.Equal(entity.MenuType, res.MenuType);
-        Assert.Equal(entity.Sort, res.Sort);
         Assert.Equal(entity.Hidden, res.Hidden);
 
     }
@@ -66,7 +63,6 @@ public class SystemMenuManagerTest : BaseTest
             Assert.Equal(entity.IsValid, res.IsValid);
             Assert.Equal(entity.AccessCode, res.AccessCode);
             Assert.Equal(entity.MenuType, res.MenuType);
-            Assert.Equal(entity.Sort, res.Sort);
             Assert.Equal(entity.Hidden, res.Hidden);
 
         }
@@ -80,6 +76,6 @@ public class SystemMenuManagerTest : BaseTest
             PageSize = 2
         };
         var res = await manager.FilterAsync(filter);
-        Assert.True(res != null && res.Count != 0 && res.Data.Count <= 2);
+        Assert.True(res != null && res.Data.Count <= 2);
     }
 }

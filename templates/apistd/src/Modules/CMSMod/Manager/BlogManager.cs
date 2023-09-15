@@ -1,4 +1,3 @@
-using CMSMod.IManager;
 using CMSMod.Models.BlogDtos;
 using EntityFramework;
 
@@ -6,7 +5,7 @@ namespace CMSMod.Manager;
 /// <summary>
 /// 博客
 /// </summary>
-public class BlogManager : DomainManagerBase<Blog, BlogUpdateDto, BlogFilterDto, BlogItemDto>, IBlogManager
+public class BlogManager : DomainManagerBase<Blog, BlogUpdateDto, BlogFilterDto, BlogItemDto>, IDomainManager<Blog>
 {
 
     public BlogManager(

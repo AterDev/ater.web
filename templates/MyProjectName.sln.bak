@@ -45,8 +45,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Microservice", "Microservic
 	EndProjectSection
 EndProject
 #endif
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.Test", "test\Application.Test\Application.Test.csproj", "{811203A3-75FE-4AC8-AB45-6789357BE55D}"
-EndProject
 #if (!grpc)
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{A55B3441-BB43-4DB8-84C7-1E7368189451}"
 EndProject

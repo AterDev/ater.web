@@ -1,6 +1,4 @@
-﻿using Entity.SystemEntities;
-
-namespace Http.API.Worker;
+﻿namespace Http.API.Worker;
 /// <summary>
 /// 后台计时器示例
 /// </summary>
@@ -32,7 +30,6 @@ public class TimedHostedService : IHostedService, IDisposable
         }
     }
 
-
     /// <summary>
     /// 控制所有计时任务
     /// </summary>
@@ -55,7 +52,7 @@ public class TimedHostedService : IHostedService, IDisposable
     public async Task OperateDataBaseAsync(object? state)
     {
         using IServiceScope scope = Services.CreateScope();
-        ISystemUserManager userManager = scope.ServiceProvider.GetRequiredService<ISystemUserManager>();
+        SystemUserManager userManager = scope.ServiceProvider.GetRequiredService<SystemUserManager>();
         List<SystemUser> recentPost = await userManager.Query.Db.OrderByDescending(x => x.CreatedTime)
             .Take(20)
             .ToListAsync();

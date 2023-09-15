@@ -6,21 +6,21 @@ namespace Http.API.Controllers.AdminControllers;
 /// <summary>
 /// 系统用户
 /// </summary>
-public class SystemUserController : RestControllerBase<ISystemUserManager>
+public class SystemUserController : RestControllerBase<SystemUserManager>
 {
     private readonly CacheService _cache;
     private readonly IConfiguration _config;
     private readonly IEmailService _emailService;
-    private readonly ISystemRoleManager _roleManager;
+    private readonly SystemRoleManager _roleManager;
 
     public SystemUserController(
         IUserContext user,
         ILogger<SystemUserController> logger,
-        ISystemUserManager manager,
+        SystemUserManager manager,
         CacheService cache,
         IConfiguration config,
         IEmailService emailService,
-        ISystemRoleManager roleManager) : base(manager, user, logger)
+        SystemRoleManager roleManager) : base(manager, user, logger)
     {
         _cache = cache;
         _config = config;

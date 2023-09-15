@@ -5,15 +5,15 @@ namespace Http.API.Controllers.AdminControllers;
 /// 权限
 /// </summary>
 /// <see cref="Application.Manager.SystemPermissionManager"/>
-public class SystemPermissionController : RestControllerBase<ISystemPermissionManager>
+public class SystemPermissionController : RestControllerBase<SystemPermissionManager>
 {
-    private readonly ISystemPermissionGroupManager _systemPermissionGroupManager;
+    private readonly SystemPermissionGroupManager _systemPermissionGroupManager;
 
     public SystemPermissionController(
         IUserContext user,
         ILogger<SystemPermissionController> logger,
-        ISystemPermissionManager manager,
-        ISystemPermissionGroupManager systemPermissionGroupManager
+        SystemPermissionManager manager,
+        SystemPermissionGroupManager systemPermissionGroupManager
         ) : base(manager, user, logger)
     {
         _systemPermissionGroupManager = systemPermissionGroupManager;

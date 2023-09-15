@@ -5,13 +5,13 @@ namespace Http.API.Controllers.AdminControllers;
 /// 系统配置
 /// </summary>
 /// <see cref="Application.Manager.SystemConfigManager"/>
-public class SystemConfigController : RestControllerBase<ISystemConfigManager>
+public class SystemConfigController : RestControllerBase<SystemConfigManager>
 {
 
     public SystemConfigController(
         IUserContext user,
         ILogger<SystemConfigController> logger,
-        ISystemConfigManager manager
+        SystemConfigManager manager
         ) : base(manager, user, logger)
     {
 

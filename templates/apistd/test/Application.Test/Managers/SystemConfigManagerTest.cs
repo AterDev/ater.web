@@ -1,4 +1,4 @@
-using Application.IManager;
+using Application.Manager;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Share.Models.SystemConfigDtos;
@@ -7,12 +7,12 @@ namespace Application.Test.Managers;
 
 public class SystemConfigManagerTest : BaseTest
 {
-    private readonly ISystemConfigManager manager;
+    private readonly SystemConfigManager manager;
     public string RandomString { get; set; }
 
     public SystemConfigManagerTest(WebApplicationFactory<Program> factory) : base(factory)
     {
-        manager = Services.GetRequiredService<ISystemConfigManager>();
+        manager = Services.GetRequiredService<SystemConfigManager>();
         RandomString = DateTime.Now.ToString("MMddmmss");
     }
     [Fact]

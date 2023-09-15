@@ -7,7 +7,7 @@ namespace Http.API.Controllers;
 /// 用户账户
 /// </summary>
 /// <see cref="Application.Manager.UserManager"/>
-public class UserController : ClientControllerBase<IUserManager>
+public class UserController : ClientControllerBase<UserManager>
 {
     private readonly CacheService _cache;
     private readonly IConfiguration _config;
@@ -16,7 +16,7 @@ public class UserController : ClientControllerBase<IUserManager>
     public UserController(
         IUserContext user,
         ILogger<UserController> logger,
-        IUserManager manager,
+        UserManager manager,
         CacheService cache,
         IEmailService emailService,
         IConfiguration config) : base(manager, user, logger)

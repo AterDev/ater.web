@@ -6,13 +6,13 @@ namespace Http.API.Controllers.AdminControllers;
 /// <see cref="Application.Manager.SystemRoleManager"/>
 /// </summary>
 [Authorize(AppConst.SuperAdmin)]
-public class SystemRoleController : RestControllerBase<ISystemRoleManager>
+public class SystemRoleController : RestControllerBase<SystemRoleManager>
 {
 
     public SystemRoleController(
         IUserContext user,
         ILogger<SystemRoleController> logger,
-        ISystemRoleManager manager
+        SystemRoleManager manager
         ) : base(manager, user, logger)
     {
 

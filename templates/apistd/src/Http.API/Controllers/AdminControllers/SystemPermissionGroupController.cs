@@ -3,13 +3,13 @@ namespace Http.API.Controllers.AdminControllers;
 
 /// <see cref="Application.Manager.SystemPermissionGroupManager"/>
 [Authorize(AppConst.SuperAdmin)]
-public class SystemPermissionGroupController : RestControllerBase<ISystemPermissionGroupManager>
+public class SystemPermissionGroupController : RestControllerBase<SystemPermissionGroupManager>
 {
 
     public SystemPermissionGroupController(
         IUserContext user,
         ILogger<SystemPermissionGroupController> logger,
-        ISystemPermissionGroupManager manager
+        SystemPermissionGroupManager manager
         ) : base(manager, user, logger)
     {
 
