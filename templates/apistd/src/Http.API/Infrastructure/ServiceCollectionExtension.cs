@@ -1,5 +1,4 @@
-﻿using Ater.Web.Abstraction;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -105,13 +104,13 @@ public static class ServiceCollectionExtension
             c.SwaggerDoc("admin", new OpenApiInfo
             {
                 Title = "MyProjectName",
-                Description = "Admin API 文档",
+                Description = "Admin API 文档. 更新时间:" + DateTime.Now.ToString("yyyy-MM-dd H:mm:ss"),
                 Version = "v1"
             });
             c.SwaggerDoc("client", new OpenApiInfo
             {
                 Title = "MyProjectName client",
-                Description = "Client API 文档",
+                Description = "Client API 文档. 更新时间:" + DateTime.Now.ToString("yyyy-MM-dd H:mm:ss"),
                 Version = "v1"
             });
             var xmlFiles = Directory.GetFiles(AppContext.BaseDirectory, "*.xml", SearchOption.TopDirectoryOnly);
