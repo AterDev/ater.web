@@ -59,7 +59,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ater.Web.Core", "src\Infrastructure\Ater.Web.Core\Ater.Web.Core.csproj", "{679DCD9B-68AD-4274-A7F3-2511993BF86B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ater.Web.Abstracture", "src\Infrastructure\Ater.Web.Abstracture\Ater.Web.Abstracture.csproj", "{F2DACAE1-B157-4E25-A753-E7F051AE7C7E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ater.Web.Abstraction", "src\Infrastructure\Ater.Web.Abstraction\Ater.Web.Abstraction.csproj", "{F2DACAE1-B157-4E25-A753-E7F051AE7C7E}"
 EndProject
 
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entity", "src\Entity\Entity.csproj", "{058C1FD4-C4B6-4694-9AEF-1E19B059A70F}"
