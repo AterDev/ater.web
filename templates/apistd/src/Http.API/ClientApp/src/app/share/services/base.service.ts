@@ -8,8 +8,8 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class BaseService {
-  private isMobile = false;
-  private baseUrl: string;
+  public isMobile = false;
+  public baseUrl: string;
   constructor(
     private http: HttpClient,
     @Inject('BASE_URL') baseUrl: string
@@ -42,6 +42,13 @@ export class BaseService {
     return this.http.request(method, url, options);
   }
 
+  openFile(blob: Blob, filename: string) {
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    link.click();
+    URL.revokeObjectURL(link.href);
+  }
   getHeaders(): HttpHeaders {
     return new HttpHeaders({
       Accept: 'application/json',
