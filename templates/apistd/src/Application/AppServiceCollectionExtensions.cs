@@ -123,30 +123,6 @@ public static partial class AppServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddMySQLDbContext(this IServiceCollection services, IConfiguration configuration)
-    {
-        var commandString = configuration.GetConnectionString(AppSetting.CommandDB);
-        var queryString = configuration.GetConnectionString(AppSetting.QueryDB);
-
-        services.AddDbContextPool<QueryDbContext>(option =>
-        {
-            option.UseMySql(queryString, ServerVersion.AutoDetect(queryString), sql =>
-            {
-                sql.MigrationsAssembly("Http.API");
-                sql.CommandTimeout(10);
-            });
-        });
-        services.AddDbContextPool<CommandDbContext>(option =>
-        {
-            option.UseMySql(commandString, ServerVersion.AutoDetect(commandString), sql =>
-            {
-                sql.MigrationsAssembly("Http.API");
-                sql.CommandTimeout(10);
-            });
-        });
-        return services;
-    }
-
     /// <summary>
     /// add sql server config
     /// </summary>
