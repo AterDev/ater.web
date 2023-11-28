@@ -1,11 +1,12 @@
-﻿namespace Entity.SystemEntities;
+﻿
+namespace Entity.SystemEntities;
 /// <summary>
 /// 系统日志
 /// </summary>
 [Index(nameof(ActionType))]
 [Index(nameof(ActionUserName))]
 [Index(nameof(CreatedTime))]
-public class SystemLogs : EntityBase
+public class SystemLogs : IEntityBase
 {
     /// <summary>
     /// 操作人名称
@@ -37,6 +38,10 @@ public class SystemLogs : EntityBase
     public string? Description { get; set; }
 
     public SystemUser SystemUser { get; set; } = default!;
+    public Guid Id { get; set; }
+    public DateTimeOffset CreatedTime { get; set; }
+    public DateTimeOffset UpdatedTime { get; set; }
+    public bool IsDeleted { get; set; }
 }
 public enum ActionType
 {

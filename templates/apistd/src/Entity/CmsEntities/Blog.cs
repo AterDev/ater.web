@@ -5,7 +5,7 @@ namespace Entity.CMSEntities;
 /// 博客
 /// </summary>
 [Module(Modules.CMS)]
-public class Blog : EntityBase
+public class Blog : IEntityBase
 {
     /// <summary>
     /// 标题
@@ -73,6 +73,10 @@ public class Blog : EntityBase
     /// 浏览量
     /// </summary>
     public int ViewCount { get; set; }
+    public Guid Id { get; set; }
+    public DateTimeOffset CreatedTime { get; set; }
+    public DateTimeOffset UpdatedTime { get; set; }
+    public bool IsDeleted { get; set; }
 }
 
 public enum BlogType

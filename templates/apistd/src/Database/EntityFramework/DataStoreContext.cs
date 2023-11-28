@@ -1,6 +1,3 @@
-using Entity;
-using Entity.CMSEntities;
-using Entity.SystemEntities;
 namespace EntityFramework;
 public class DataStoreContext
 {
@@ -66,20 +63,20 @@ public class DataStoreContext
         return await CommandContext.SaveChangesAsync();
     }
 
-    public QuerySet<TEntity> QuerySet<TEntity>() where TEntity : EntityBase
+    public QuerySet<TEntity> QuerySet<TEntity>() where TEntity : class, IEntityBase
     {
         var typename = typeof(TEntity).Name + "QueryStore";
         var set = GetSet(typename);
-        return set == null 
-            ? throw new ArgumentNullException($"{typename} class object not found") 
+        return set == null
+            ? throw new ArgumentNullException($"{typename} class object not found")
             : (QuerySet<TEntity>)set;
     }
-    public CommandSet<TEntity> CommandSet<TEntity>() where TEntity : EntityBase
+    public CommandSet<TEntity> CommandSet<TEntity>() where TEntity : class, IEntityBase
     {
         var typename = typeof(TEntity).Name + "CommandStore";
         var set = GetSet(typename);
-        return set == null 
-            ? throw new ArgumentNullException($"{typename} class object not found") 
+        return set == null
+            ? throw new ArgumentNullException($"{typename} class object not found")
             : (CommandSet<TEntity>)set;
     }
 

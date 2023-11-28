@@ -1,4 +1,5 @@
-﻿namespace Entity.SystemEntities;
+﻿
+namespace Entity.SystemEntities;
 /// <summary>
 /// 系统配置
 /// </summary>
@@ -6,7 +7,7 @@
 [Index(nameof(IsSystem))]
 [Index(nameof(Valid))]
 [Index(nameof(GroupName))]
-public class SystemConfig : EntityBase
+public class SystemConfig : IEntityBase
 {
     #region const 
     public const string System = "System";
@@ -32,4 +33,8 @@ public class SystemConfig : EntityBase
     /// 组
     /// </summary>
     public string? GroupName { get; set; }
+    public Guid Id { get; set; }
+    public DateTimeOffset CreatedTime { get; set; }
+    public DateTimeOffset UpdatedTime { get; set; }
+    public bool IsDeleted { get; set; }
 }

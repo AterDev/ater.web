@@ -4,7 +4,7 @@ namespace Entity.SystemEntities;
 /// <summary>
 /// 组织结构
 /// </summary>
-public class SystemOrganization : EntityBase, ITreeNode<SystemOrganization>
+public class SystemOrganization : IEntityBase, ITreeNode<SystemOrganization>
 {
     /// <summary>
     /// 名称
@@ -24,4 +24,8 @@ public class SystemOrganization : EntityBase, ITreeNode<SystemOrganization>
     public SystemOrganization? Parent { get; set; }
     public Guid? ParentId { get; set; }
     public ICollection<SystemUser> Users { get; set; } = new List<SystemUser>();
+    public Guid Id { get; set; }
+    public DateTimeOffset CreatedTime { get; set; }
+    public DateTimeOffset UpdatedTime { get; set; }
+    public bool IsDeleted { get; set; }
 }

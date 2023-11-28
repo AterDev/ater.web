@@ -4,7 +4,7 @@ namespace Entity.SystemEntities;
 /// <summary>
 /// 系统菜单
 /// </summary>
-public class SystemMenu : EntityBase, ITreeNode<SystemMenu>
+public class SystemMenu : IEntityBase, ITreeNode<SystemMenu>
 {
     /// <summary>
     /// 菜单名称
@@ -60,7 +60,10 @@ public class SystemMenu : EntityBase, ITreeNode<SystemMenu>
     /// 是否显示
     /// </summary>
     public bool Hidden { get; set; } = true;
-
+    public Guid Id { get; set; }
+    public DateTimeOffset CreatedTime { get; set; }
+    public DateTimeOffset UpdatedTime { get; set; }
+    public bool IsDeleted { get; set; }
 }
 
 public enum MenuType

@@ -9,7 +9,7 @@ namespace Entity.SystemEntities;
 [Index(nameof(PhoneNumber), IsUnique = true)]
 [Index(nameof(CreatedTime))]
 [Index(nameof(IsDeleted))]
-public class SystemUser : EntityBase
+public class SystemUser : IEntityBase
 {
     /// <summary>
     /// 用户名
@@ -57,6 +57,10 @@ public class SystemUser : EntityBase
     /// 性别
     /// </summary>
     public Sex Sex { get; set; } = Sex.Male;
+    public Guid Id { get; set; }
+    public DateTimeOffset CreatedTime { get; set; }
+    public DateTimeOffset UpdatedTime { get; set; }
+    public bool IsDeleted { get; set; }
 }
 
 /// <summary>

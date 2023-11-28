@@ -8,7 +8,7 @@ namespace EntityFramework.CommandStore;
 /// <typeparam name="TEntity"></typeparam>
 public partial class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity>, ICommandStoreExt<TEntity>
     where TContext : DbContext
-    where TEntity : EntityBase
+    where TEntity : class, IEntityBase
 {
     protected readonly ILogger _logger;
     /// <summary>
@@ -193,12 +193,12 @@ public partial class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="entities"></param>
-    public virtual void AttachRange<T>(List<T> entities) where T : EntityBase
+    public virtual void AttachRange<T>(List<T> entities) where T : IEntityBase
     {
         Context.AttachRange(entities);
     }
 
-    public List<T> CreateAttachInstance<T>(List<Guid> ids) where T : EntityBase
+    public List<T> CreateAttachInstance<T>(List<Guid> ids) where T : class, IEntityBase
     {
         List<T> res = new();
         var type = typeof(T);
@@ -216,7 +216,7 @@ public partial class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity
     }
 }
 public class CommandSet<TEntity> : CommandStoreBase<CommandDbContext, TEntity>
-    where TEntity : EntityBase
+    where TEntity : class, IEntityBase
 {
     public CommandSet(CommandDbContext context, ILogger logger) : base(context, logger)
     {

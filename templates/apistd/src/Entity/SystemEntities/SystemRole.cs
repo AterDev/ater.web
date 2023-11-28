@@ -1,10 +1,11 @@
-﻿namespace Entity.SystemEntities;
+﻿
+namespace Entity.SystemEntities;
 /// <summary>
 /// 系统角色
 /// </summary>
 [Index(nameof(Name))]
 [Index(nameof(NameValue), IsUnique = true)]
-public class SystemRole : EntityBase
+public class SystemRole : IEntityBase
 {
     /// <summary>
     /// 角色显示名称
@@ -35,5 +36,8 @@ public class SystemRole : EntityBase
     /// 菜单权限
     /// </summary>
     public ICollection<SystemMenu> Menus { get; set; } = new List<SystemMenu>();
-
+    public Guid Id { get; set; }
+    public DateTimeOffset CreatedTime { get; set; }
+    public DateTimeOffset UpdatedTime { get; set; }
+    public bool IsDeleted { get; set; }
 }

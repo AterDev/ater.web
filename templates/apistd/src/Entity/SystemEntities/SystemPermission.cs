@@ -1,10 +1,11 @@
-﻿namespace Entity.SystemEntities;
+﻿
+namespace Entity.SystemEntities;
 /// <summary>
 /// 权限
 /// </summary>
 [Index(nameof(Name))]
 [Index(nameof(PermissionType))]
-public class SystemPermission : EntityBase
+public class SystemPermission : IEntityBase
 {
     /// <summary>
     /// 权限名称标识
@@ -31,6 +32,10 @@ public class SystemPermission : EntityBase
     /// 权限组
     /// </summary>
     public required SystemPermissionGroup Group { get; set; }
+    public Guid Id { get; set; }
+    public DateTimeOffset CreatedTime { get; set; }
+    public DateTimeOffset UpdatedTime { get; set; }
+    public bool IsDeleted { get; set; }
 }
 
 /// <summary>

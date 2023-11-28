@@ -7,7 +7,7 @@ namespace Entity.CMSEntities;
 [Index(nameof(Name))]
 [Index(nameof(Level))]
 [Module(Modules.CMS)]
-public class Catalog : EntityBase, ITreeNode<Catalog>
+public class Catalog : IEntityBase, ITreeNode<Catalog>
 {
     /// <summary>
     /// 目录名称
@@ -32,4 +32,8 @@ public class Catalog : EntityBase, ITreeNode<Catalog>
     public Guid? ParentId { get; set; }
     public ICollection<Blog> Blogs { get; set; } = new List<Blog>();
     public required User User { get; set; }
+    public Guid Id { get; set; }
+    public DateTimeOffset CreatedTime { get; set; }
+    public DateTimeOffset UpdatedTime { get; set; }
+    public bool IsDeleted { get; set; }
 }

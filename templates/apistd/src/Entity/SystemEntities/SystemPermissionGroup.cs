@@ -1,6 +1,7 @@
-﻿namespace Entity.SystemEntities;
+﻿
+namespace Entity.SystemEntities;
 
-public class SystemPermissionGroup : EntityBase
+public class SystemPermissionGroup : IEntityBase
 {
     /// <summary>
     /// 权限名称标识
@@ -16,4 +17,8 @@ public class SystemPermissionGroup : EntityBase
     public ICollection<SystemPermission> Permissions { get; set; } = new List<SystemPermission>();
 
     public ICollection<SystemRole> Roles{ get; set; } = new List<SystemRole>();
+    public Guid Id { get; set; }
+    public DateTimeOffset CreatedTime { get; set; }
+    public DateTimeOffset UpdatedTime { get; set; }
+    public bool IsDeleted { get; set; }
 }
