@@ -49,11 +49,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ater.Web.Abstraction", "src
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Defination", "Defination", "{E38B3A3A-73DC-43D7-91CD-076D88D89B0D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entity", "src\Definiation\Entity\Entity.csproj", "{08B60176-8E39-41D3-9176-4960F4D592ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entity", "src\Defination\Entity\Entity.csproj", "{08B60176-8E39-41D3-9176-4960F4D592ED}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EntityFramework", "src\Definiation\EntityFramework\EntityFramework.csproj", "{08784BC9-C5C8-49E9-9968-8501C347F522}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EntityFramework", "src\Defination\EntityFramework\EntityFramework.csproj", "{08784BC9-C5C8-49E9-9968-8501C347F522}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Share", "src\Definiation\Share\Share.csproj", "{54FBA007-BD91-434C-A53F-5CC477B64FB4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Share", "src\Defination\Share\Share.csproj", "{54FBA007-BD91-434C-A53F-5CC477B64FB4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,5 +1,5 @@
-﻿using Azure.Storage.Blobs;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
+
 using Share.Options;
 
 namespace Application.Services;
@@ -30,38 +30,8 @@ public class StorageService
     /// <param name="stream"></param>
     /// <param name="fileName"></param>
     /// <returns></returns>
-    public async Task<string> UploadAsync(Stream stream, string fileName)
+    public string Upload(Stream stream, string fileName)
     {
-        if (option.BlobConnectionString == null)
-        {
-            _logger.LogError("BlobConnectionString is null");
-            return string.Empty;
-        }
-
-        BlobContainerClient container = new(option.BlobConnectionString, BlobName);
-        BlobClient blob = container.GetBlobClient(fileName);
-        try
-        {
-
-            Azure.Response<Azure.Storage.Blobs.Models.BlobContentInfo> res = await blob.UploadAsync(stream, false);
-            return blob.Uri.AbsoluteUri;
-        }
-        catch (Exception ex)
-        {
-            if (ex is Azure.RequestFailedException exception)
-            {
-                if (exception.Status == 409)
-                {
-                    _logger.LogInformation(exception.ErrorCode);
-                    return blob.Uri.AbsoluteUri;
-                }
-                return string.Empty;
-            }
-            else
-            {
-                _logger.LogError("up to blob error:{message},{starckTrace}", ex.Message, ex.StackTrace);
-                return string.Empty;
-            }
-        }
+        throw new NotImplementedException();
     }
 }

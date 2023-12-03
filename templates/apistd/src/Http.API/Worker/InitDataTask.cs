@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using EntityFramework;
 
-namespace Application.Services;
+namespace Http.API.Worker;
 public class InitDataTask
 {
     public static async Task InitDataAsync(IServiceProvider provider)
@@ -10,7 +10,7 @@ public class InitDataTask
         ILogger<InitDataTask> logger = loggerFactory.CreateLogger<InitDataTask>();
         IConfiguration configuration = provider.GetRequiredService<IConfiguration>();
 
-        string? connectionString = context.Database.GetConnectionString();
+        var connectionString = context.Database.GetConnectionString();
         try
         {
             // 执行迁移,如果手动执行,请删除该代码
@@ -59,7 +59,7 @@ public class InitDataTask
             Name = AppConst.AdminUser,
             NameValue = AppConst.AdminUser,
         };
-        string salt = HashCrypto.BuildSalt();
+        var salt = HashCrypto.BuildSalt();
         SystemUser systemUser = new()
         {
             UserName = "admin",
@@ -116,10 +116,10 @@ public class InitDataTask
             version = config;
         }
         // 比对新版本
-        string? newVersion = configuration.GetValue<string>(AppConst.Version);
+        var newVersion = configuration.GetValue<string>(AppConst.Version);
 
-        if (double.TryParse(newVersion, out double newVersionValue)
-            && double.TryParse(version.Value, out double versionValue))
+        if (double.TryParse(newVersion, out var newVersionValue)
+            && double.TryParse(version.Value, out var versionValue))
         {
             if (newVersionValue > versionValue)
             {
