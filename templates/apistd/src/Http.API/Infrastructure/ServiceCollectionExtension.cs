@@ -17,20 +17,9 @@ public static class ServiceCollectionExtension
     /// <returns></returns>
     public static IServiceCollection AddWebComponents(this IServiceCollection services, IConfiguration configuration)
     {
-        var components = configuration.GetSection("Components").Get<AppComponentConfig>();
-        if (components != null)
-        {
-            if (components.Swagger)
-            {
-                services.AddSwagger();
-            }
-            if (components.Jwt)
-            {
-                services.AddJwtAuthentication(configuration);
-            }
-        }
+        services.AddSwagger();
+        services.AddJwtAuthentication(configuration);
         services.AddCors();
-        services.AddHealthChecks();
         return services;
     }
 

@@ -7,7 +7,6 @@ public class CommandDbContext : ContextBase
     }
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        _ = builder.Entity<IEntityBase>().HasQueryFilter(e => !e.IsDeleted);
         base.OnModelCreating(builder);
     }
 

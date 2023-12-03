@@ -25,7 +25,6 @@ public partial class ContextBase : DbContext
     }
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        _ = builder.Entity<IEntityBase>().UseTpcMappingStrategy();
         base.OnModelCreating(builder);
         OnModelFilterCreating(builder);
     }

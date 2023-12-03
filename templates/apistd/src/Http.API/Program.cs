@@ -4,6 +4,8 @@ using System.Text.Unicode;
 using Http.API.Worker;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+builder.AddServiceDefaults();
 IServiceCollection services = builder.Services;
 ConfigurationManager configuration = builder.Configuration;
 
@@ -50,6 +52,8 @@ services.AddControllersWithViews()
     });
 
 WebApplication app = builder.Build();
+
+app.MapDefaultEndpoints();
 if (app.Environment.IsDevelopment())
 {
     app.UseCors("default");
