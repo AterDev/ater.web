@@ -11,7 +11,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\Entity\Entity.csproj" />
+	  <ProjectReference Include="..\Entity\Entity.csproj" />
 	  <ProjectReference Include="..\..\Infrastructure\Ater.Web.Abstraction\Ater.Web.Abstraction.csproj" />
 	</ItemGroup>
 

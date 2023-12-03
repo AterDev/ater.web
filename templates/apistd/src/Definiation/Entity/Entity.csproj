@@ -20,6 +20,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Infrastructure\Ater.Web.Core\Ater.Web.Core.csproj" />
+		<ProjectReference Include="..\..\Infrastructure\Ater.Web.Core\Ater.Web.Core.csproj" />
 	</ItemGroup>
 </Project>
