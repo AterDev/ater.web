@@ -1,3 +1,4 @@
+
 namespace EntityFramework.QueryStore;
 public class SystemLogsQueryStore : QuerySet<SystemLogs>
 {
@@ -5,5 +6,3 @@ public class SystemLogsQueryStore : QuerySet<SystemLogs>
     {
     }
 }
-
-

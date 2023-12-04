@@ -12,8 +12,8 @@
 		<NoWarn>1701;1702;1591</NoWarn>
 	</PropertyGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\Defination\EntityFramework\EntityFramework.csproj" />
-		<ProjectReference Include="..\Defination\Share\Share.csproj" />
+		<ProjectReference Include="..\Definition\EntityFramework\EntityFramework.csproj" />
+		<ProjectReference Include="..\Definition\Share\Share.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -6,7 +6,6 @@ namespace Ater.Web.Core.Models;
 /// <inheritdoc/>
 public interface IEntityBase
 {
-    [Key]
     public Guid Id { get; set; }
     /// <summary>
     /// 创建时间

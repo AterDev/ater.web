@@ -1,8 +1,8 @@
 {
   "RootPath": "./",
   "ProjectId": "60ec520e-259e-41f4-89c0-ecb74cafbe90",
-  "DtoPath": "src\\Share",
-  "EntityPath": "src\\Entity",
+  "DtoPath": "src\\Definition\\Share",
+  "EntityPath": "src\\Definition\\Entity",
   "DbContextPath": "src\\Database\\EntityFramework",
   "StorePath": null,
   "ApplicationPath": "src\\Application",
@@ -13,7 +13,6 @@
   "UpdatedTimeName": "UpdatedTime",
   "IsSplitController": true,
   "Version": "8.0.0",
-  "SwaggerPath": null,
   "WebAppPath": null,
   "SolutionType": 0
 }
