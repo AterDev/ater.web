@@ -25,8 +25,10 @@ public partial class ContextBase : DbContext
     }
     protected override void OnModelCreating(ModelBuilder builder)
     {
+
+
         base.OnModelCreating(builder);
-        OnModelFilterCreating(builder);
+        OnModelExtendCreating(builder);
     }
     public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
     {
@@ -52,12 +54,15 @@ public partial class ContextBase : DbContext
         return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
     }
 
-    private void OnModelFilterCreating(ModelBuilder modelBuilder)
+    private void OnModelExtendCreating(ModelBuilder modelBuilder)
     {
-        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        var entityTypes = modelBuilder.Model.GetEntityTypes();
+        foreach (var entityType in entityTypes)
         {
             if (typeof(IEntityBase).IsAssignableFrom(entityType.ClrType))
             {
+                modelBuilder.Entity(entityType.Name)
+                    .HasKey("Id");
                 modelBuilder.Entity(entityType.ClrType).HasQueryFilter(ConvertFilterExpression<IEntityBase>(e => !e.IsDeleted, entityType.ClrType));
             }
         }
