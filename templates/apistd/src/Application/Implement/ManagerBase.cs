@@ -13,10 +13,7 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem>
     where TEntity : class, IEntityBase
     where TFilter : FilterBase
 {
-    /// <summary>
-    /// 仓储上下文，可通过Store访问到其他实体的上下文
-    /// </summary>
-    public DataStoreContext Stores { get; init; }
+    protected readonly ILogger _logger;
     /// <summary>
     /// 实体的只读仓储实现
     /// </summary>
@@ -26,24 +23,36 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem>
     /// </summary>
     public CommandSet<TEntity> Command { get; init; }
     public IQueryable<TEntity> Queryable { get; set; }
+
+
+    public CommandDbContext CommandContext { get; init; }
+
+    public QueryDbContext QueryCommand { get; init; }
     /// <summary>
     /// 是否自动保存(调用SaveChanges)
     /// </summary>
     public bool AutoSave { get; set; } = true;
+    /// <summary>
+    /// 错误信息
+    /// </summary>
+    protected string ErrorMsg { get; set; } = string.Empty;
+
     public DatabaseFacade Database { get; init; }
 
-    public ManagerBase(DataStoreContext storeContext)
+    public ManagerBase(DataAccessContext<TEntity> dataAccessContext, ILogger logger)
     {
-        Stores = storeContext;
-        Query = Stores.QuerySet<TEntity>();
-        Command = Stores.CommandSet<TEntity>();
+        Query = dataAccessContext.QuerySet();
+        Command = dataAccessContext.CommandSet();
         Queryable = Query.Queryable;
         Database = Command.Database;
+        this._logger = logger;
+        CommandContext = dataAccessContext.CommandContext;
+        QueryCommand = dataAccessContext.QueryContext;
     }
 
     public async Task<int> SaveChangesAsync()
     {
-        return await Stores.SaveChangesAsync();
+        return await Command.SaveChangesAsync();
     }
 
     private async Task AutoSaveAsync()

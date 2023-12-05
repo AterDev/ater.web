@@ -7,10 +7,10 @@ namespace CMSMod.Manager;
 /// <summary>
 /// 目录管理
 /// </summary>
-public class CatalogManager : DomainManagerBase<Catalog, CatalogUpdateDto, CatalogFilterDto, CatalogItemDto>, IDomainManager<Catalog>
+public class CatalogManager : ManagerBase<Catalog, CatalogUpdateDto, CatalogFilterDto, CatalogItemDto>, IDomainManager<Catalog>
 {
-    private new readonly IUserContext _userContext;
-    public CatalogManager(DataStoreContext storeContext, IUserContext userContext, ILogger<BlogManager> logger) : base(storeContext, logger)
+    private readonly IUserContext _userContext;
+    public CatalogManager(DataAccessContext<Catalog> dataContext, IUserContext userContext, ILogger<BlogManager> logger) : base(dataContext, logger)
     {
         _userContext = userContext;
     }

@@ -4,14 +4,15 @@ namespace OrderMod.Manager;
 /// <summary>
 /// 产品
 /// </summary>
-public class ProductManager : DomainManagerBase<Product, ProductUpdateDto, ProductFilterDto, ProductItemDto>, IDomainManager<Product>
+public class ProductManager : ManagerBase<Product, ProductUpdateDto, ProductFilterDto, ProductItemDto>, IDomainManager<Product>
 {
     private readonly UserManager _userManager;
+    private readonly IUserContext _userContext;
     public ProductManager(
-        DataStoreContext storeContext,
+        DataAccessContext<Product> dataContext,
         ILogger<ProductManager> logger,
         IUserContext userContext,
-        UserManager userManager) : base(storeContext, logger)
+        UserManager userManager) : base(dataContext, logger)
     {
         _userContext = userContext;
         _userManager = userManager;

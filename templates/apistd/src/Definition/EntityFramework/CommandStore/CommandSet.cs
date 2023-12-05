@@ -6,38 +6,29 @@ namespace EntityFramework.CommandStore;
 /// </summary>
 /// <typeparam name="TContext"></typeparam>
 /// <typeparam name="TEntity"></typeparam>
-public partial class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity>, ICommandStoreExt<TEntity>
-    where TContext : DbContext
+public partial class CommandSet<TEntity> : ICommandStore<TEntity>, ICommandStoreExt<TEntity>
     where TEntity : class, IEntityBase
 {
-    protected readonly ILogger _logger;
+    private readonly CommandDbContext _commandDbContext;
     /// <summary>
     /// 当前实体DbSet
     /// </summary>
     protected readonly DbSet<TEntity> _db;
     public DbSet<TEntity> Db => _db;
 
-    /// <summary>
-    /// use DataStoreContext.CommandContext to access writable DbContext
-    /// this will be not avaliable in the future
-    /// </summary>
-    protected TContext Context { get; }
     public DatabaseFacade Database { get; init; }
     public bool EnableSoftDelete { get; set; } = true;
 
-    //public TEntity CurrentEntity { get; }
-
-    public CommandStoreBase(TContext context, ILogger logger)
+    public CommandSet(CommandDbContext commandDbContext)
     {
-        Context = context;
-        _logger = logger;
-        _db = context.Set<TEntity>();
-        Database = context.Database;
+        _commandDbContext = commandDbContext;
+        _db = commandDbContext.Set<TEntity>();
+        Database = commandDbContext.Database;
     }
 
     public virtual async Task<int> SaveChangesAsync()
     {
-        return await Context.SaveChangesAsync();
+        return await _commandDbContext.SaveChangesAsync();
     }
 
     public virtual async Task<TEntity?> FindAsync(Expression<Func<TEntity, bool>>? whereExp, string[]? navigations = null)
@@ -143,7 +134,7 @@ public partial class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity
                 .ForEach(block =>
                 {
                     _db.AddRange(block);
-                    _ = Context.SaveChanges();
+                    _ = _commandDbContext.SaveChanges();
                 });
         }
         else
@@ -195,7 +186,7 @@ public partial class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity
     /// <param name="entities"></param>
     public virtual void AttachRange<T>(List<T> entities) where T : IEntityBase
     {
-        Context.AttachRange(entities);
+        _commandDbContext.AttachRange(entities);
     }
 
     public List<T> CreateAttachInstance<T>(List<Guid> ids) where T : class, IEntityBase
@@ -213,12 +204,5 @@ public partial class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity
             }
         }
         return res;
-    }
-}
-public class CommandSet<TEntity> : CommandStoreBase<CommandDbContext, TEntity>
-    where TEntity : class, IEntityBase
-{
-    public CommandSet(CommandDbContext context, ILogger logger) : base(context, logger)
-    {
     }
 }

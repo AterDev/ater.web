@@ -6,23 +6,21 @@ namespace OrderMod.Manager;
 /// <summary>
 /// 订单
 /// </summary>
-public class OrderManager : DomainManagerBase<Order, OrderUpdateDto, OrderFilterDto, OrderItemDto>, IDomainManager<Order>
+public class OrderManager : ManagerBase<Order, OrderUpdateDto, OrderFilterDto, OrderItemDto>, IDomainManager<Order>
 {
-    private readonly UserManager _userManager;
     private readonly ProductManager _productManager;
+    private readonly IUserContext _userContext;
     private readonly IEmailService _email;
     public OrderManager(
-        DataStoreContext storeContext,
+        DataAccessContext<Order> dataContext,
         ILogger<OrderManager> logger,
         IUserContext userContext,
-        UserManager userManager,
         IEmailService email,
-        ProductManager productManager) : base(storeContext, logger)
+        ProductManager productManager) : base(dataContext, logger)
     {
-        _userContext = userContext;
-        _userManager = userManager;
         _email = email;
         _productManager = productManager;
+        _userContext = userContext;
     }
 
     /// <summary>

@@ -5,12 +5,13 @@ namespace CMSMod.Manager;
 /// <summary>
 /// 博客
 /// </summary>
-public class BlogManager : DomainManagerBase<Blog, BlogUpdateDto, BlogFilterDto, BlogItemDto>, IDomainManager<Blog>
+public class BlogManager : ManagerBase<Blog, BlogUpdateDto, BlogFilterDto, BlogItemDto>, IDomainManager<Blog>
 {
+    private readonly IUserContext _userContext;
     public BlogManager(
-        DataStoreContext storeContext,
+        DataAccessContext<Blog> dataContext,
         ILogger<BlogManager> logger,
-        IUserContext userContext) : base(storeContext, logger)
+        IUserContext userContext) : base(dataContext, logger)
     {
         _userContext = userContext;
     }
@@ -23,7 +24,7 @@ public class BlogManager : DomainManagerBase<Blog, BlogUpdateDto, BlogFilterDto,
     public async Task<Blog> CreateNewEntityAsync(BlogAddDto dto)
     {
         var entity = dto.MapTo<BlogAddDto, Blog>();
-        entity.UserId = _userContext!.UserId!.Value;
+        entity.UserId = _userContext.UserId!.Value;
         Command.Db.Entry(entity).Property("CatalogId").CurrentValue = dto.CatalogId;
         // or entity.CatalogId = dto.CatalogId;
         // other required props

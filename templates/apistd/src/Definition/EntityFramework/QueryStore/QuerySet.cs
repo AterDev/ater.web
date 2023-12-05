@@ -8,53 +8,43 @@ namespace EntityFramework.QueryStore;
 /// </summary>
 /// <typeparam name="TContext"></typeparam>
 /// <typeparam name="TEntity"></typeparam>
-public partial class QueryStoreBase<TContext, TEntity> :
+public partial class QuerySet<TEntity> :
     IQueryStore<TEntity>, IQueryStoreExt<TEntity>
-    where TContext : DbContext
     where TEntity : class, IEntityBase
 {
-    protected readonly ILogger _logger;
-    /// <summary>
-    /// 当前实体DbSet
-    /// </summary>
-    private readonly DbSet<TEntity> _db;
-    public DbSet<TEntity> Db => _db;
 
-    /// <summary>
-    /// Obsolete: use DataStoreContext.QueryContext to access readonly DbContext
-    /// </summary>
-    [Obsolete("use DataStoreContext.QueryContext")]
-    public TContext? Context { get; }
+    private readonly QueryDbContext _queryDbContext;
+
+    public DbSet<TEntity> Db { get; }
     public DatabaseFacade Database { get; init; }
-
-    private IQueryable<TEntity> _query;
-    public IQueryable<TEntity> Queryable => _query;
+    public IQueryable<TEntity> Queryable { get; private set; }
 
     /// <summary>
     ///  是否开户全局筛选
     /// </summary>
     public bool EnableGlobalQuery { get; set; } = true;
 
-    public QueryStoreBase(TContext context, ILogger logger)
+    public QuerySet(QueryDbContext queryDbContext)
     {
-        _logger = logger;
-        _db = context.Set<TEntity>();
-        _query = EnableGlobalQuery
-            ? _db.AsQueryable()
-            : _db.IgnoreQueryFilters().AsQueryable();
-        Database = context.Database;
+        _queryDbContext = queryDbContext;
+        Db = queryDbContext.Set<TEntity>();
+        Queryable = EnableGlobalQuery
+            ? Db.AsQueryable()
+            : Db.IgnoreQueryFilters().AsQueryable();
+        Database = queryDbContext.Database;
+
     }
 
     private void ResetQuery()
     {
-        _query = EnableGlobalQuery
-            ? _db.AsQueryable()
-            : _db.IgnoreQueryFilters().AsQueryable();
+        Queryable = EnableGlobalQuery
+            ? Db.AsQueryable()
+            : Db.IgnoreQueryFilters().AsQueryable();
     }
 
     public virtual async Task<TEntity?> FindAsync(Guid id)
     {
-        TEntity? res = await _query.Where(d => d.Id == id)
+        TEntity? res = await Queryable.Where(d => d.Id == id)
             .AsNoTracking()
             .FirstOrDefaultAsync();
         ResetQuery();
@@ -64,7 +54,7 @@ public partial class QueryStoreBase<TContext, TEntity> :
     public virtual async Task<TDto?> FindAsync<TDto>(Guid id)
         where TDto : class
     {
-        TDto? res = await _query.Where(d => d.Id == id)
+        TDto? res = await Queryable.Where(d => d.Id == id)
             .AsNoTracking()
             .ProjectTo<TDto>()
             .FirstOrDefaultAsync();
@@ -76,7 +66,7 @@ public partial class QueryStoreBase<TContext, TEntity> :
     {
         Expression<Func<TEntity, bool>> exp = e => true;
         whereExp ??= exp;
-        TEntity? res = await _query.Where(whereExp)
+        TEntity? res = await Queryable.Where(whereExp)
             .AsNoTracking()
             .FirstOrDefaultAsync();
         ResetQuery();
@@ -94,7 +84,7 @@ public partial class QueryStoreBase<TContext, TEntity> :
     {
         Expression<Func<TEntity, bool>> exp = e => true;
         whereExp ??= exp;
-        TDto? res = await _query.Where(whereExp)
+        TDto? res = await Queryable.Where(whereExp)
             .AsNoTracking()
             .ProjectTo<TDto>()
             .FirstOrDefaultAsync();
@@ -106,7 +96,7 @@ public partial class QueryStoreBase<TContext, TEntity> :
     {
         Expression<Func<TEntity, bool>> exp = e => true;
         whereExp ??= exp;
-        List<TEntity> res = await _query.Where(whereExp)
+        List<TEntity> res = await Queryable.Where(whereExp)
             .AsNoTracking()
             .ToListAsync();
         ResetQuery();
@@ -123,7 +113,7 @@ public partial class QueryStoreBase<TContext, TEntity> :
     {
         Expression<Func<TEntity, bool>> exp = e => true;
         whereExp ??= exp;
-        List<TItem> res = await _query.Where(whereExp)
+        List<TItem> res = await Queryable.Where(whereExp)
             .AsNoTracking()
             .ProjectTo<TItem>()
             .ToListAsync();
@@ -151,10 +141,10 @@ public partial class QueryStoreBase<TContext, TEntity> :
             pageSize = 12;
         }
 
-        _query = query;
+        Queryable = query;
 
-        var count = _query.Count();
-        List<TItem> data = await _query
+        var count = Queryable.Count();
+        List<TItem> data = await Queryable
             .OrderByDescending(t => t.CreatedTime)
             .Skip((pageIndex - 1) * pageSize)
             .Take(pageSize)
@@ -188,19 +178,12 @@ public partial class QueryStoreBase<TContext, TEntity> :
 
         if (query != null)
         {
-            _query = query;
+            Queryable = query;
         }
 
-        if (order != null)
-        {
-            _query = _query.OrderBy(order);
-        }
-        else
-        {
-            _query = _query.OrderByDescending(t => t.CreatedTime);
-        }
-        var count = _query.Count();
-        List<TItem> data = await _query
+        Queryable = order != null ? Queryable.OrderBy(order) : (IQueryable<TEntity>)Queryable.OrderByDescending(t => t.CreatedTime);
+        var count = Queryable.Count();
+        List<TItem> data = await Queryable
             .AsNoTracking()
             .OrderByDescending(t => t.CreatedTime)
             .Skip((pageIndex - 1) * pageSize)
@@ -216,12 +199,3 @@ public partial class QueryStoreBase<TContext, TEntity> :
         };
     }
 }
-
-public class QuerySet<TEntity> : QueryStoreBase<QueryDbContext, TEntity>
-    where TEntity : class, IEntityBase
-{
-    public QuerySet(QueryDbContext context, ILogger logger) : base(context, logger)
-    {
-    }
-}
-

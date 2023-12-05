@@ -7,7 +7,6 @@ namespace Application.IManager;
 public interface IDomainManager<TEntity>
     where TEntity : class, IEntityBase
 {
-    DataStoreContext Stores { get; init; }
     QuerySet<TEntity> Query { get; init; }
     CommandSet<TEntity> Command { get; init; }
     public IQueryable<TEntity> Queryable { get; set; }

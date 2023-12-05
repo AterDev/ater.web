@@ -6,15 +6,15 @@ namespace FileManagerMod.Manager;
 /// <summary>
 /// 文件数据
 /// </summary>
-public class FileDataManager : DomainManagerBase<FileData, FileDataUpdateDto, FileDataFilterDto, FileDataItemDto>, IDomainManager<FileData>
+public class FileDataManager : ManagerBase<FileData, FileDataUpdateDto, FileDataFilterDto, FileDataItemDto>, IDomainManager<FileData>
 {
     public FileDataManager(
-        DataStoreContext storeContext,
+        DataAccessContext<FileData> dataContext,
         ILogger<FileDataManager> logger,
-        IUserContext userContext) : base(storeContext, logger)
+        IUserContext userContext) : base(dataContext, logger)
     {
 
-        _userContext = userContext;
+
     }
 
     /// <summary>
@@ -90,7 +90,7 @@ public class FileDataManager : DomainManagerBase<FileData, FileDataUpdateDto, Fi
             Md5 = md5,
             Content = fileBytes
         };
-        Folder? folderData = await Stores.CommandContext.Folders
+        Folder? folderData = await CommandContext.Folders
             .Where(q => q.Name == folder)
             .FirstOrDefaultAsync();
 

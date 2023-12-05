@@ -1,16 +1,17 @@
-using Entity.System;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Share.Models.SystemLogsDtos;
 
 namespace Application.Manager;
 /// <summary>
 /// 系统日志
 /// </summary>
-public class SystemLogsManager : DomainManagerBase<SystemLogs, SystemLogsUpdateDto, SystemLogsFilterDto, SystemLogsItemDto>, IDomainManager<SystemLogs>
+public class SystemLogsManager : ManagerBase<SystemLogs, SystemLogsUpdateDto, SystemLogsFilterDto, SystemLogsItemDto>
 {
+    private readonly IUserContext _userContext;
     public SystemLogsManager(
-        DataStoreContext storeContext,
+        DataAccessContext<SystemLogs> dataContext,
         ILogger<SystemLogsManager> logger,
-        IUserContext userContext) : base(storeContext, logger)
+        IUserContext userContext) : base(dataContext, logger)
     {
         _userContext = userContext;
     }
@@ -62,4 +63,9 @@ public class SystemLogsManager : DomainManagerBase<SystemLogs, SystemLogsUpdateD
         return await query.FirstOrDefaultAsync();
     }
 
+    public new QuerySet<SystemLogs> Query { get; init; }
+    public new CommandSet<SystemLogs> Command { get; init; }
+    public new IQueryable<SystemLogs> Queryable { get; set; }
+    public new bool AutoSave { get; set; }
+    public new DatabaseFacade Database { get; init; }
 }
