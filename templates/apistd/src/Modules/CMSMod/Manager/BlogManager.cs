@@ -7,13 +7,11 @@ namespace CMSMod.Manager;
 /// </summary>
 public class BlogManager : DomainManagerBase<Blog, BlogUpdateDto, BlogFilterDto, BlogItemDto>, IDomainManager<Blog>
 {
-
     public BlogManager(
         DataStoreContext storeContext,
         ILogger<BlogManager> logger,
         IUserContext userContext) : base(storeContext, logger)
     {
-
         _userContext = userContext;
     }
 

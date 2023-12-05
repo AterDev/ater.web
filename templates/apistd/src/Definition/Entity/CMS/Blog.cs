@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Entity.CMS;
+﻿namespace Entity.CMS;
 /// <summary>
 /// 博客
 /// </summary>
@@ -67,7 +65,7 @@ public class Blog : IEntityBase
     /// 所属目录
     /// </summary>
     [ForeignKey(nameof(CatalogId))]
-    public required Catalog Catalog { get; set; }
+    public Catalog Catalog { get; set; } = null!;
     public Guid CatalogId { get; set; }
     /// <summary>
     /// 浏览量
@@ -86,26 +84,6 @@ public enum BlogType
     /// </summary>
     [Description("资讯")]
     News,
-    /// <summary>
-    /// 开源
-    /// </summary>
-    [Description("开源和工具")]
-    OpenSource,
-    /// <summary>
-    /// 语言及框架
-    /// </summary>
-    [Description("语言及框架")]
-    LanguageAndFramework,
-    /// <summary>
-    /// 数据和AI
-    /// </summary>
-    [Description("AI和数据")]
-    DataAndAI,
-    /// <summary>
-    /// DevOps
-    /// </summary>
-    [Description("云与DevOps")]
-    CloudAndDevOps,
     /// <summary>
     /// 见解与分析
     /// </summary>

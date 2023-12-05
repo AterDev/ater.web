@@ -8,12 +8,12 @@ public partial class ContextBase : DbContext
     public DbSet<SystemRole> SystemRoles { get; set; }
     public DbSet<SystemConfig> SystemConfigs { get; set; }
     /// <summary>
-    /// ²Ëµ¥
+    /// èœå•
     /// </summary>
     public DbSet<SystemMenu> SystemMenus { get; set; }
     public DbSet<SystemPermission> SystemPermissions { get; set; }
     /// <summary>
-    /// È¨ÏŞ×é
+    /// æƒé™ç»„
     /// </summary>
     public DbSet<SystemPermissionGroup> SystemPermissionGroups { get; set; }
     public DbSet<SystemLogs> SystemLogs { get; set; }

@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Entity.CMS;
+﻿namespace Entity.CMS;
 /// <summary>
 /// 目录
 /// </summary>
@@ -30,8 +28,11 @@ public class Catalog : IEntityBase, ITreeNode<Catalog>
     [ForeignKey(nameof(ParentId))]
     public Catalog? Parent { get; set; }
     public Guid? ParentId { get; set; }
-    public ICollection<Blog> Blogs { get; set; } = new List<Blog>();
-    public required User User { get; set; }
+    public ICollection<Blog> Blogs { get; set; } = [];
+
+    [ForeignKey(nameof(UserId))]
+    public User User { get; set; } = null!;
+    public Guid UserId { get; set; }
     public Guid Id { get; set; }
     public DateTimeOffset CreatedTime { get; set; }
     public DateTimeOffset UpdatedTime { get; set; }
