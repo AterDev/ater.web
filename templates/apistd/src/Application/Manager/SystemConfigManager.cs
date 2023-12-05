@@ -1,4 +1,5 @@
 using Application.Services;
+using Entity.System;
 using Share.Models.SystemConfigDtos;
 
 namespace Application.Manager;

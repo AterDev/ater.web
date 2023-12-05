@@ -1,11 +1,11 @@
-using Entity.SystemEntities;
+using Entity.System;
 
 namespace Share.Models.SystemUserDtos;
 /// <summary>
 /// 系统用户概要
 /// </summary>
 //[NgPage("system", "sysuser")]
-/// <inheritdoc cref="Entity.SystemEntities.SystemUser"/>
+/// <inheritdoc cref="Entity.System.SystemUser"/>
 public class SystemUserShortDto
 {
     /// <summary>

@@ -35,7 +35,7 @@ public partial class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity
         Database = context.Database;
     }
 
-    public virtual async Task<int> SaveChangeAsync()
+    public virtual async Task<int> SaveChangesAsync()
     {
         return await Context.SaveChangesAsync();
     }
@@ -139,7 +139,7 @@ public partial class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity
         if (chunk != null && entities.Count > chunk)
         {
 
-            entities.Chunk(entities.Count / chunk.Value + 1).ToList()
+            entities.Chunk((entities.Count / chunk.Value) + 1).ToList()
                 .ForEach(block =>
                 {
                     _db.AddRange(block);
@@ -149,7 +149,7 @@ public partial class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity
         else
         {
             await _db.AddRangeAsync(entities);
-            _ = await SaveChangeAsync();
+            _ = await SaveChangesAsync();
         }
         return entities;
     }
@@ -200,7 +200,7 @@ public partial class CommandStoreBase<TContext, TEntity> : ICommandStore<TEntity
 
     public List<T> CreateAttachInstance<T>(List<Guid> ids) where T : class, IEntityBase
     {
-        List<T> res = new();
+        List<T> res = [];
         var type = typeof(T);
         foreach (var id in ids)
         {

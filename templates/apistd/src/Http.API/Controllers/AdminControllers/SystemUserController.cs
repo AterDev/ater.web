@@ -1,3 +1,4 @@
+using Entity.System;
 using Share.Models.AuthDtos;
 using Share.Models.SystemUserDtos;
 
@@ -131,7 +132,7 @@ public class SystemUserController : RestControllerBase<SystemUserManager>
 
                 // 记录登录时间
                 user.LastLoginTime = DateTimeOffset.UtcNow;
-                await manager.Command.SaveChangeAsync();
+                await manager.Command.SaveChangesAsync();
 
                 return new AuthResult
                 {

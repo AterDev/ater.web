@@ -1,4 +1,4 @@
-using Entity.CMSEntities;
+using Entity.CMS;
 
 namespace EntityFramework.QueryStore;
 public class BlogQueryStore : QuerySet<Blog>

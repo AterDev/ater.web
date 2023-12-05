@@ -2,7 +2,7 @@ namespace Share.Models.SystemMenuDtos;
 /// <summary>
 /// 系统菜单查询筛选，参数为空时，返回所有菜单树型结构
 /// </summary>
-/// <inheritdoc cref="Entity.SystemEntities.SystemMenu"/>
+/// <inheritdoc cref="Entity.System.SystemMenu"/>
 public class SystemMenuFilterDto : FilterBase
 {
     /// <summary>

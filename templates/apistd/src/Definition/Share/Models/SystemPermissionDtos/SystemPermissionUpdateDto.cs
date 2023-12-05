@@ -1,9 +1,10 @@
-using Entity.SystemEntities;
+using Entity.System;
+
 namespace Share.Models.SystemPermissionDtos;
 /// <summary>
 /// 权限更新时请求结构
 /// </summary>
-/// <see cref="Entity.SystemEntities.SystemPermission"/>
+/// <see cref="Entity.System.SystemPermission"/>
 public class SystemPermissionUpdateDto
 {
     /// <summary>

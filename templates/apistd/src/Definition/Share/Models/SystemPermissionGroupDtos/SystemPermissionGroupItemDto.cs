@@ -1,7 +1,8 @@
-using Entity.SystemEntities;
+using Entity.System;
+
 namespace Share.Models.SystemPermissionGroupDtos;
 
-/// <see cref="Entity.SystemEntities.SystemPermissionGroup"/>
+/// <see cref="Entity.System.SystemPermissionGroup"/>
 public class SystemPermissionGroupItemDto
 {
     public Guid Id { get; set; }

@@ -16,4 +16,9 @@ internal class Modules
     /// 文件管理
     /// </summary>
     public const string FileManager = "FileManagerMod";
+
+    /// <summary>
+    /// 消息通知
+    /// </summary>
+    public const string Notification = "NotificationMod";
 }

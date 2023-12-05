@@ -38,7 +38,7 @@ public class UserManager : DomainManagerBase<User, UserUpdateDto, UserFilterDto,
 		user.PasswordSalt = HashCrypto.BuildSalt();
 		user.PasswordHash = HashCrypto.GeneratePwd(newPassword, user.PasswordSalt);
 		Command.Update(user);
-		return await Command.SaveChangeAsync() > 0;
+		return await Command.SaveChangesAsync() > 0;
 	}
 
 	/// <summary>

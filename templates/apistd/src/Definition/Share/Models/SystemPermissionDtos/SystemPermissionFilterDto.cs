@@ -1,9 +1,10 @@
-using Entity.SystemEntities;
+using Entity.System;
+
 namespace Share.Models.SystemPermissionDtos;
 /// <summary>
 /// 权限查询筛选
 /// </summary>
-/// <see cref="Entity.SystemEntities.SystemPermission"/>
+/// <see cref="Entity.System.SystemPermission"/>
 public class SystemPermissionFilterDto : FilterBase
 {
     /// <summary>

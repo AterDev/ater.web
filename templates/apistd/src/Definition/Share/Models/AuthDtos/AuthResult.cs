@@ -1,4 +1,4 @@
-﻿using Entity.SystemEntities;
+﻿using Entity.System;
 
 namespace Share.Models.AuthDtos;
 

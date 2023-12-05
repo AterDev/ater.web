@@ -1,9 +1,10 @@
-using Entity.SystemEntities;
+using Entity.System;
+
 namespace Share.Models.SystemLogsDtos;
 /// <summary>
 /// 系统日志查询筛选
 /// </summary>
-/// <see cref="Entity.SystemEntities.SystemLogs"/>
+/// <see cref="Entity.System.SystemLogs"/>
 public class SystemLogsFilterDto : FilterBase
 {
     /// <summary>

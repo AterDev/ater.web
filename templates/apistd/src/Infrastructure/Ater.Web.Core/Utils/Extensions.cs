@@ -68,7 +68,7 @@ public static partial class Extensions
         MemberInitExpression body = Expression.MemberInit(Expression.New(resultType), bindings);
         LambdaExpression selector = Expression.Lambda(body, parameter);
         return source.Provider.CreateQuery<TResult>(
-            Expression.Call(typeof(Queryable), "Select", new Type[] { sourceType, resultType },
+            Expression.Call(typeof(Queryable), "Select", [sourceType, resultType],
                 source.Expression, Expression.Quote(selector)));
     }
 
@@ -111,23 +111,23 @@ public static partial class Extensions
                 ? item.Value
                     ? Expression.Call(typeof(Queryable),
                                               "ThenBy",
-                                              new Type[] { typeof(T), body.Type },
+                                              [typeof(T), body.Type],
                                               query.Expression,
                                               Expression.Quote(selector))
                     : Expression.Call(typeof(Queryable),
                                               "ThenByDescending",
-                                              new Type[] { typeof(T), body.Type },
+                                              [typeof(T), body.Type],
                                               query.Expression,
                                               Expression.Quote(selector))
                 : item.Value
                     ? Expression.Call(typeof(Queryable),
                                               "OrderBy",
-                                              new Type[] { typeof(T), body.Type },
+                                              [typeof(T), body.Type],
                                               query.Expression,
                                               Expression.Quote(selector))
                     : Expression.Call(typeof(Queryable),
                                               "OrderByDescending",
-                                              new Type[] { typeof(T), body.Type },
+                                              [typeof(T), body.Type],
                                               query.Expression,
                                               Expression.Quote(selector));
             orderQuery = (IOrderedQueryable<T>)query.Provider.CreateQuery<T>(expression);

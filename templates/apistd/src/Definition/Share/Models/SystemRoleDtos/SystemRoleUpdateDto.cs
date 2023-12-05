@@ -2,7 +2,7 @@ namespace Share.Models.SystemRoleDtos;
 /// <summary>
 /// 角色更新时请求结构
 /// </summary>
-/// <inheritdoc cref="Entity.SystemEntities.SystemRole"/>
+/// <inheritdoc cref="Entity.System.SystemRole"/>
 public class SystemRoleUpdateDto
 {
     /// <summary>

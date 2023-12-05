@@ -9,7 +9,7 @@ global using Application.Manager;
 global using Ater.Web.Core.Models;
 global using Ater.Web.Core.Utils;
 global using Entity;
-global using Entity.SystemEntities;
+global using Entity.System;
 global using EntityFramework;
 global using EntityFramework.CommandStore;
 global using EntityFramework.QueryStore;

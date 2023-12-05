@@ -1,4 +1,6 @@
-﻿namespace Http.API.Worker;
+﻿using Entity.System;
+
+namespace Http.API.Worker;
 /// <summary>
 /// 后台计时器示例
 /// </summary>

@@ -1,9 +1,10 @@
-using Entity.SystemEntities;
+using Entity.System;
+
 namespace Share.Models.SystemLogsDtos;
 /// <summary>
 /// 系统日志更新时请求结构
 /// </summary>
-/// <see cref="Entity.SystemEntities.SystemLogs"/>
+/// <see cref="Entity.System.SystemLogs"/>
 public class SystemLogsUpdateDto
 {
     /// <summary>

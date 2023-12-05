@@ -1,11 +1,11 @@
-using Entity.SystemEntities;
+using Entity.System;
 
 namespace Share.Models.SystemUserDtos;
 /// <summary>
 /// 系统用户查询筛选
 /// </summary>
 //[NgPage("system", "sysuser")]
-/// <inheritdoc cref="Entity.SystemEntities.SystemUser"/>
+/// <inheritdoc cref="Entity.System.SystemUser"/>
 public class SystemUserFilterDto : FilterBase
 {
     /// <summary>

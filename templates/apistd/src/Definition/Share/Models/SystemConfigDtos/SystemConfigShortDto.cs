@@ -1,9 +1,8 @@
-using Entity.SystemEntities;
 namespace Share.Models.SystemConfigDtos;
 /// <summary>
 /// 系统配置概要
 /// </summary>
-/// <see cref="Entity.SystemEntities.SystemConfig"/>
+/// <see cref="Entity.System.SystemConfig"/>
 public class SystemConfigShortDto
 {
     [MaxLength(100)]

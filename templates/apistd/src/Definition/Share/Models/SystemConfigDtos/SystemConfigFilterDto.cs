@@ -1,9 +1,8 @@
-using Entity.SystemEntities;
 namespace Share.Models.SystemConfigDtos;
 /// <summary>
 /// 系统配置查询筛选
 /// </summary>
-/// <see cref="Entity.SystemEntities.SystemConfig"/>
+/// <see cref="Entity.System.SystemConfig"/>
 public class SystemConfigFilterDto : FilterBase
 {
     [MaxLength(100)]

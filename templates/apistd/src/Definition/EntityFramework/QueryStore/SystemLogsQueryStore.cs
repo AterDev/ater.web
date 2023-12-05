@@ -1,4 +1,6 @@
 
+using Entity.System;
+
 namespace EntityFramework.QueryStore;
 public class SystemLogsQueryStore : QuerySet<SystemLogs>
 {

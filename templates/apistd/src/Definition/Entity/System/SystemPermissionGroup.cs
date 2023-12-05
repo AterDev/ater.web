@@ -1,5 +1,4 @@
-﻿
-namespace Entity.SystemEntities;
+﻿namespace Entity.System;
 
 public class SystemPermissionGroup : IEntityBase
 {
@@ -16,7 +15,7 @@ public class SystemPermissionGroup : IEntityBase
 
     public ICollection<SystemPermission> Permissions { get; set; } = new List<SystemPermission>();
 
-    public ICollection<SystemRole> Roles{ get; set; } = new List<SystemRole>();
+    public ICollection<SystemRole> Roles { get; set; } = new List<SystemRole>();
     public Guid Id { get; set; }
     public DateTimeOffset CreatedTime { get; set; }
     public DateTimeOffset UpdatedTime { get; set; }

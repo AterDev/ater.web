@@ -1,9 +1,8 @@
-using Entity.SystemEntities;
 namespace Share.Models.SystemConfigDtos;
 /// <summary>
 /// 系统配置添加时请求结构
 /// </summary>
-/// <see cref="Entity.SystemEntities.SystemConfig"/>
+/// <see cref="Entity.System.SystemConfig"/>
 public class SystemConfigAddDto
 {
     [MaxLength(100)]

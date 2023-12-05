@@ -1,3 +1,4 @@
+using Entity.System;
 using Share.Models.SystemUserDtos;
 
 namespace Application.Manager;
@@ -37,7 +38,7 @@ public class SystemUserManager : DomainManagerBase<SystemUser, SystemUserUpdateD
 		user.PasswordSalt = HashCrypto.BuildSalt();
 		user.PasswordHash = HashCrypto.GeneratePwd(newPassword, user.PasswordSalt);
 		Command.Update(user);
-		return await Command.SaveChangeAsync() > 0;
+		return await Command.SaveChangesAsync() > 0;
 	}
 
 	/// <summary>

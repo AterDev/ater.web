@@ -20,6 +20,7 @@ public partial class ContextBase : DbContext
     public DbSet<SystemOrganization> SystemOrganizations { get; set; }
     public DbSet<User> Users { get; set; }
 
+
     public ContextBase(DbContextOptions options) : base(options)
     {
     }

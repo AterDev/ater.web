@@ -1,3 +1,4 @@
+using Entity.System;
 using Share.Models.SystemMenuDtos;
 
 namespace Application.Manager;
@@ -78,7 +79,7 @@ public class SystemMenuManager : DomainManagerBase<SystemMenu, SystemMenuUpdateD
 				await Command.CreateAsync(menu);
 			}
 		}
-		return await Command.SaveChangeAsync() > 0;
+		return await Command.SaveChangesAsync() > 0;
 	}
 
 	/// <summary>

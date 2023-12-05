@@ -1,5 +1,4 @@
-﻿
-namespace Entity.SystemEntities;
+﻿namespace Entity.System;
 /// <summary>
 /// 系统配置
 /// </summary>

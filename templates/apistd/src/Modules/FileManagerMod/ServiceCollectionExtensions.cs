@@ -1,5 +1,5 @@
 // 本文件由 ater.dry工具自动生成.
-using Microsoft.Extensions.DependencyInjection;
+using FileManagerMod.Manager;
 
 namespace FileManagerMod;
 /// <summary>
@@ -13,6 +13,8 @@ public static class ServiceCollectionExtensions
     /// <param name="services"></param>
     public static void AddFileManagerModManagers(this IServiceCollection services)
     {
+        services.AddScoped(typeof(FileDataManager));
+        services.AddScoped(typeof(FolderManager));
 
     }
 }

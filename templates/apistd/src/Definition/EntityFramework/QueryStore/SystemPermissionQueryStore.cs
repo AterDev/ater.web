@@ -1,3 +1,5 @@
+using Entity.System;
+
 namespace EntityFramework.QueryStore;
 public class SystemPermissionQueryStore : QuerySet<SystemPermission>
 {

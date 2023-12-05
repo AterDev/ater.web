@@ -1,3 +1,5 @@
+using Entity.CMS;
+
 namespace CMSMod.Models.BlogDtos;
 /// <summary>
 /// 博客列表元素

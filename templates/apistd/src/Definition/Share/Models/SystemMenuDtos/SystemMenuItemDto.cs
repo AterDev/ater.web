@@ -1,9 +1,10 @@
-using Entity.SystemEntities;
+using Entity.System;
+
 namespace Share.Models.SystemMenuDtos;
 /// <summary>
 /// 系统菜单列表元素
 /// </summary>
-/// <inheritdoc cref="Entity.SystemEntities.SystemMenu"/>
+/// <inheritdoc cref="Entity.System.SystemMenu"/>
 public class SystemMenuItemDto : ITreeNode<SystemMenuItemDto>
 {
     public Guid Id { get; set; }

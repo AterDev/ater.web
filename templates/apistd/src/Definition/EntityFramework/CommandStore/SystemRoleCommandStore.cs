@@ -1,4 +1,4 @@
-using Entity.SystemEntities;
+using Entity.System;
 
 namespace EntityFramework.CommandStore;
 public class SystemRoleCommandStore : CommandSet<SystemRole>

@@ -1,3 +1,5 @@
+using Entity.System;
+
 namespace EntityFramework.CommandStore;
 public class SystemMenuCommandStore : CommandSet<SystemMenu>
 {

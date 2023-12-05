@@ -25,8 +25,7 @@ public class BlogManager : DomainManagerBase<Blog, BlogUpdateDto, BlogFilterDto,
     public async Task<Blog> CreateNewEntityAsync(BlogAddDto dto)
     {
         var entity = dto.MapTo<BlogAddDto, Blog>();
-        Command.Db.Entry(entity).Property("UserId").CurrentValue = _userContext.UserId!.Value;
-        // or entity.UserId = _userContext.UserId!.Value;
+        entity.UserId = _userContext!.UserId!.Value;
         Command.Db.Entry(entity).Property("CatalogId").CurrentValue = dto.CatalogId;
         // or entity.CatalogId = dto.CatalogId;
         // other required props

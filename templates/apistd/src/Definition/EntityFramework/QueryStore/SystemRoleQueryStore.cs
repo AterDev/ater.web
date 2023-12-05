@@ -1,4 +1,4 @@
-using Entity.SystemEntities;
+using Entity.System;
 
 namespace EntityFramework.QueryStore;
 public class SystemRoleQueryStore : QuerySet<SystemRole>

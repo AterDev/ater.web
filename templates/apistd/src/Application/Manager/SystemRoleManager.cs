@@ -1,3 +1,4 @@
+using Entity.System;
 using Share.Models.SystemRoleDtos;
 
 namespace Application.Manager;
@@ -68,7 +69,7 @@ public class SystemRoleManager : DomainManagerBase<SystemRole, SystemRoleUpdateD
 				.Where(m => dto.PermissionGroupIds.Contains(m.Id))
 				.ToListAsync();
 			current.PermissionGroups = groups;
-			await Command.SaveChangeAsync();
+			await Command.SaveChangesAsync();
 			return current;
 		}
 		catch (Exception e)
@@ -126,7 +127,7 @@ public class SystemRoleManager : DomainManagerBase<SystemRole, SystemRoleUpdateD
 				.Where(m => dto.MenuIds.Contains(m.Id))
 				.ToListAsync();
 			current.Menus = menus;
-			await Command.SaveChangeAsync();
+			await Command.SaveChangesAsync();
 			return current;
 		}
 		catch (Exception e)

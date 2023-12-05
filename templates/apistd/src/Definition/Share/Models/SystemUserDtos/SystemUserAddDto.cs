@@ -1,10 +1,10 @@
-using Entity.SystemEntities;
+using Entity.System;
 
 namespace Share.Models.SystemUserDtos;
 /// <summary>
 /// 系统用户添加时请求结构
 /// </summary>
-/// <inheritdoc cref="Entity.SystemEntities.SystemUser"/>
+/// <inheritdoc cref="Entity.System.SystemUser"/>
 public class SystemUserAddDto
 {
     /// <summary>

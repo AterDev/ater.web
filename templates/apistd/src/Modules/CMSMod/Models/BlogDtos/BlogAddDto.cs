@@ -1,4 +1,4 @@
-using Entity.CMSEntities;
+using Entity.CMS;
 
 namespace CMSMod.Models.BlogDtos;
 /// <summary>

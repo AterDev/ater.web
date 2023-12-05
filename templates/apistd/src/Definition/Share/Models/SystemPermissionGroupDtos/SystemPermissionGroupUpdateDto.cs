@@ -1,7 +1,6 @@
-using Entity.SystemEntities;
 namespace Share.Models.SystemPermissionGroupDtos;
 
-/// <see cref="Entity.SystemEntities.SystemPermissionGroup"/>
+/// <see cref="Entity.System.SystemPermissionGroup"/>
 public class SystemPermissionGroupUpdateDto
 {
     /// <summary>
