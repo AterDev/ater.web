@@ -15,7 +15,7 @@ public static class ZipHelper
         var isFile = File.Exists(inputPath);
 
         // 创建输出文件
-        using var outputFile = File.Create(outputPath);
+        using FileStream outputFile = File.Create(outputPath);
         // 创建一个 ZipArchive
         using var zip = new ZipArchive(outputFile, ZipArchiveMode.Create);
         if (isFile)
@@ -56,11 +56,11 @@ public static class ZipHelper
     public static void Decompress(string inputPath, string outputPath)
     {
         // 打开输入文件
-        using var inputFile = File.OpenRead(inputPath);
+        using FileStream inputFile = File.OpenRead(inputPath);
         // 创建一个 ZipArchive
         using var zip = new ZipArchive(inputFile, ZipArchiveMode.Read);
         // 遍历所有 ZipArchiveEntry
-        foreach (var entry in zip.Entries)
+        foreach (ZipArchiveEntry entry in zip.Entries)
         {
             // 获取输出路径
             var entryOutputPath = Path.Combine(outputPath, entry.FullName);
@@ -139,7 +139,7 @@ public static class ZipHelper
         // 创建一个 ZipArchive
         using var zip = new ZipArchive(input, ZipArchiveMode.Read);
         // 遍历所有 ZipArchiveEntry
-        foreach (var entry in zip.Entries)
+        foreach (ZipArchiveEntry entry in zip.Entries)
         {
             // 获取输出路径
             string entryOutputPath = Path.Combine(outputPath, entry.FullName);

@@ -13,7 +13,7 @@ public class CatalogShortDto
     /// <summary>
     /// 层级
     /// </summary>
-    public short Level { get; set; } = 0;
+    public short Level { get; set; }
     /// <summary>
     /// 父目录
     /// </summary>

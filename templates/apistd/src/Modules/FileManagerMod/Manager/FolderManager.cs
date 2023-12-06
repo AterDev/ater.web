@@ -8,8 +8,8 @@ public class FolderManager : ManagerBase<Folder, FolderUpdateDto, FolderFilterDt
 {
     public FolderManager(
         DataAccessContext<Folder> dataContext,
-        ILogger<FolderManager> logger,
-        IUserContext userContext) : base(dataContext, logger)
+        ILogger<FolderManager> logger
+        ) : base(dataContext, logger)
     {
 
     }
@@ -21,10 +21,10 @@ public class FolderManager : ManagerBase<Folder, FolderUpdateDto, FolderFilterDt
     /// <returns></returns>
     public async Task<Folder> CreateNewEntityAsync(FolderAddDto dto)
     {
-        var entity = dto.MapTo<FolderAddDto, Folder>();
+        Folder entity = dto.MapTo<FolderAddDto, Folder>();
         if (dto.ParentId != null)
         {
-            var parent = await FindAsync(dto.ParentId.Value);
+            Folder? parent = await FindAsync(dto.ParentId.Value);
             entity.Parent = parent;
             entity.Path = $"{parent!.Path}.{entity.Name}";
         }
@@ -56,7 +56,7 @@ public class FolderManager : ManagerBase<Folder, FolderUpdateDto, FolderFilterDt
     /// <returns></returns>
     public async Task<Folder?> GetOwnedAsync(Guid id)
     {
-        var query = Command.Db.Where(q => q.Id == id);
+        IQueryable<Folder> query = Command.Db.Where(q => q.Id == id);
         // 获取用户所属的对象
         // query = query.Where(q => q.User.Id == _userContext.UserId);
         return await query.FirstOrDefaultAsync();

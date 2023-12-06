@@ -1,6 +1,4 @@
-﻿using Entity.System;
-
-namespace Http.API.Worker;
+﻿namespace Http.API.Worker;
 /// <summary>
 /// 后台计时器示例
 /// </summary>
@@ -8,7 +6,7 @@ public class TimedHostedService : IHostedService, IDisposable
 {
     private readonly ILogger<TimedHostedService> _logger;
     public IServiceProvider Services { get; }
-    private Timer? _timer = null;
+    private Timer? _timer;
     public TimedHostedService(
         IServiceProvider services,
         ILogger<TimedHostedService> logger

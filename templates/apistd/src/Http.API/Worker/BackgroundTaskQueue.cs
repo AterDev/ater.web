@@ -2,7 +2,6 @@
 
 namespace Http.API.Worker;
 
-
 public interface IBackgroundTaskQueue
 {
     ValueTask QueueBackgroundWorkItemAsync(Func<object, ValueTask> workItem);
@@ -28,11 +27,7 @@ public class BackgroundTaskQueue : IBackgroundTaskQueue
 
     public async ValueTask QueueBackgroundWorkItemAsync(Func<object, ValueTask> workItem)
     {
-        if (workItem == null)
-        {
-            throw new ArgumentNullException(nameof(workItem));
-        }
-
+        ArgumentNullException.ThrowIfNull(workItem);
         await _queue.Writer.WriteAsync(workItem);
     }
 

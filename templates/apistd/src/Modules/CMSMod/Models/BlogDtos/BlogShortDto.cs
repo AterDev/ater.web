@@ -39,7 +39,7 @@ public class BlogShortDto
     /// <summary>
     /// 是否审核
     /// </summary>
-    public bool IsAudit { get; set; } = false;
+    public bool IsAudit { get; set; }
     /// <summary>
     /// 是否公开
     /// </summary>

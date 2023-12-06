@@ -14,5 +14,5 @@ public class SystemRoleSetPermissionGroupsDto
     /// <summary>
     /// 菜单Id集合
     /// </summary>
-    public List<Guid> PermissionGroupIds { get; set; } = new();
+    public List<Guid> PermissionGroupIds { get; set; } = [];
 }

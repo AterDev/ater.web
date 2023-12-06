@@ -46,7 +46,7 @@ public class SystemMenuController : RestControllerBase<SystemMenuManager>
             return Forbid();
         }
 
-        if (menus != null && menus.Any())
+        if (menus != null && menus.Count != 0)
         {
             return await manager.SyncSystemMenusAsync(menus);
         }
@@ -68,7 +68,7 @@ public class SystemMenuController : RestControllerBase<SystemMenuManager>
                 return NotFound(ErrorMsg.NotFoundResource);
             }
         }
-        var entity = await manager.CreateNewEntityAsync(dto);
+        SystemMenu entity = await manager.CreateNewEntityAsync(dto);
         return await manager.AddAsync(entity);
     }
 
@@ -81,7 +81,7 @@ public class SystemMenuController : RestControllerBase<SystemMenuManager>
     [HttpPut("{id}")]
     public async Task<ActionResult<SystemMenu?>> UpdateAsync([FromRoute] Guid id, SystemMenuUpdateDto dto)
     {
-        var current = await manager.GetCurrentAsync(id);
+        SystemMenu? current = await manager.GetCurrentAsync(id);
         if (current == null) { return NotFound(ErrorMsg.NotFoundResource); };
         return await manager.UpdateAsync(current, dto);
     }
@@ -96,7 +96,7 @@ public class SystemMenuController : RestControllerBase<SystemMenuManager>
     public async Task<ActionResult<SystemMenu?>> DeleteAsync([FromRoute] Guid id)
     {
         // 注意删除权限
-        var entity = await manager.GetCurrentAsync(id);
+        SystemMenu? entity = await manager.GetCurrentAsync(id);
         if (entity == null) { return NotFound(); };
         return await manager.DeleteAsync(entity);
     }

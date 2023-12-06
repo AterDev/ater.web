@@ -9,8 +9,8 @@ public class SystemPermissionManager : ManagerBase<SystemPermission, SystemPermi
 
     public SystemPermissionManager(
         DataAccessContext<SystemPermission> dataContext,
-        ILogger<SystemPermissionManager> logger,
-        IUserContext userContext) : base(dataContext, logger)
+        ILogger<SystemPermissionManager> logger
+        ) : base(dataContext, logger)
     {
 
     }
@@ -22,7 +22,7 @@ public class SystemPermissionManager : ManagerBase<SystemPermission, SystemPermi
     /// <returns></returns>
     public async Task<SystemPermission> CreateNewEntityAsync(SystemPermissionAddDto dto)
     {
-        var entity = dto.MapTo<SystemPermissionAddDto, SystemPermission>();
+        SystemPermission entity = dto.MapTo<SystemPermissionAddDto, SystemPermission>();
         Command.Db.Entry(entity).Property("GroupId").CurrentValue = dto.SystemPermissionGroupId;
         return await Task.FromResult(entity);
     }
@@ -54,7 +54,7 @@ public class SystemPermissionManager : ManagerBase<SystemPermission, SystemPermi
     /// <returns></returns>
     public async Task<SystemPermission?> GetOwnedAsync(Guid id)
     {
-        var query = Command.Db.Where(q => q.Id == id);
+        IQueryable<SystemPermission> query = Command.Db.Where(q => q.Id == id);
         // 获取用户所属的对象
         // query = query.Where(q => q.User.Id == _userContext.UserId);
         return await query.FirstOrDefaultAsync();

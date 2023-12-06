@@ -43,7 +43,7 @@ public class FileDataController : RestControllerBase<FileDataManager>
             folder = await _folderManager.GetCurrentAsync(folderId.Value);
             if (folder == null) { return NotFound("错误的目录"); }
         }
-        var data = await manager.CreateNewEntityAsync(files, folder);
+        List<FileData> data = await manager.CreateNewEntityAsync(files, folder);
         return await manager.AddFilesAsync(data);
     }
 
@@ -58,12 +58,8 @@ public class FileDataController : RestControllerBase<FileDataManager>
     public async Task<ActionResult<string>> UploadAsync(string path, IFormFile file)
     {
         var extension = Path.GetExtension(file.FileName);
-        var fileData = await manager.AddFileAsync(file.OpenReadStream(), path, file.FileName);
-        if (fileData != null)
-        {
-            return fileData.Md5;
-        }
-        return Problem("上传失败");
+        FileData fileData = await manager.AddFileAsync(file.OpenReadStream(), path, file.FileName);
+        return fileData != null ? fileData.Md5 : Problem("上传失败");
     }
 
     /// <summary>
@@ -74,7 +70,7 @@ public class FileDataController : RestControllerBase<FileDataManager>
     [HttpGet("{id}")]
     public async Task<ActionResult<FileData?>> GetDetailAsync([FromRoute] Guid id)
     {
-        var res = await manager.FindAsync(id);
+        FileData? res = await manager.FindAsync(id);
         return (res == null) ? NotFound() : res;
     }
 
@@ -88,7 +84,7 @@ public class FileDataController : RestControllerBase<FileDataManager>
     public async Task<ActionResult<FileData?>> DeleteAsync([FromRoute] Guid id)
     {
         // 注意删除权限
-        var entity = await manager.GetCurrentAsync(id);
+        FileData? entity = await manager.GetCurrentAsync(id);
         if (entity == null) { return NotFound(); };
         return await manager.DeleteAsync(entity, false);
     }

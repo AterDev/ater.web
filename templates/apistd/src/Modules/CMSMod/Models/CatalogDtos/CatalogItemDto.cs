@@ -16,7 +16,7 @@ public class CatalogItemDto
     /// <summary>
     /// 层级
     /// </summary>
-    public short Level { get; set; } = 0;
+    public short Level { get; set; }
     public Guid? ParentId { get; set; }
     public Guid Id { get; set; } = Guid.NewGuid();
     public DateTimeOffset CreatedTime { get; set; } = DateTimeOffset.UtcNow;

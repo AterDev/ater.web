@@ -4,13 +4,9 @@ namespace Application.Manager;
 
 public class SystemUserManager : ManagerBase<SystemUser, SystemUserUpdateDto, SystemUserFilterDto, SystemUserItemDto>
 {
-
-    private string? ErrorMessage { get; }
-
     public SystemUserManager(
         DataAccessContext<SystemUser> dataContext,
-        ILogger<SystemUserManager> logger,
-        IUserContext userContext) : base(dataContext, logger)
+        ILogger<SystemUserManager> logger) : base(dataContext, logger)
     {
 
     }
@@ -52,9 +48,9 @@ public class SystemUserManager : ManagerBase<SystemUser, SystemUserUpdateDto, Sy
         entity.PasswordSalt = HashCrypto.BuildSalt();
         entity.PasswordHash = HashCrypto.GeneratePwd(dto.Password, entity.PasswordSalt);
         // 角色处理
-        if (dto.RoleIds != null && dto.RoleIds.Any())
+        if (dto.RoleIds != null && dto.RoleIds.Count != 0)
         {
-            var roles = CommandContext.SystemRoles.Where(r => dto.RoleIds.Contains(r.Id));
+            IQueryable<SystemRole> roles = CommandContext.SystemRoles.Where(r => dto.RoleIds.Contains(r.Id));
             entity.SystemRoles = roles.ToList();
         }
         return Task.FromResult(entity);

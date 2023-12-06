@@ -46,7 +46,7 @@ public class SystemConfigController : RestControllerBase<SystemConfigManager>
     [HttpPost]
     public async Task<ActionResult<SystemConfig>> AddAsync(SystemConfigAddDto dto)
     {
-        var entity = await manager.CreateNewEntityAsync(dto);
+        SystemConfig entity = await manager.CreateNewEntityAsync(dto);
         return await manager.AddAsync(entity);
     }
 
@@ -59,7 +59,7 @@ public class SystemConfigController : RestControllerBase<SystemConfigManager>
     [HttpPut("{id}")]
     public async Task<ActionResult<SystemConfig?>> UpdateAsync([FromRoute] Guid id, SystemConfigUpdateDto dto)
     {
-        var current = await manager.GetCurrentAsync(id);
+        SystemConfig? current = await manager.GetCurrentAsync(id);
         if (current == null) { return NotFound(ErrorMsg.NotFoundResource); };
         return await manager.UpdateAsync(current, dto);
     }
@@ -72,7 +72,7 @@ public class SystemConfigController : RestControllerBase<SystemConfigManager>
     [HttpGet("{id}")]
     public async Task<ActionResult<SystemConfig?>> GetDetailAsync([FromRoute] Guid id)
     {
-        var res = await manager.FindAsync(id);
+        SystemConfig? res = await manager.FindAsync(id);
         return (res == null) ? NotFound() : res;
     }
 
@@ -85,7 +85,7 @@ public class SystemConfigController : RestControllerBase<SystemConfigManager>
     public async Task<ActionResult<SystemConfig?>> DeleteAsync([FromRoute] Guid id)
     {
         // 注意删除权限
-        var entity = await manager.GetCurrentAsync(id);
+        SystemConfig? entity = await manager.GetCurrentAsync(id);
         if (entity == null) { return NotFound(); };
         return entity.IsSystem
             ? Problem("系统配置，无法删除!")

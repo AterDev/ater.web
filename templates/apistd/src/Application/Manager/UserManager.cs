@@ -16,17 +16,6 @@ public class UserManager : ManagerBase<User, UserUpdateDto, UserFilterDto, UserI
     }
 
     /// <summary>
-    /// 获取验证码
-    /// 也可自己实现图片验证码
-    /// </summary>
-    /// <param name="length">验证码长度</param>
-    /// <returns></returns>
-    public string GetCaptcha(int length = 6)
-    {
-        return HashCrypto.GetRnd(length);
-    }
-
-    /// <summary>
     /// 更新密码
     /// </summary>
     /// <param name="user"></param>
@@ -112,7 +101,7 @@ public class UserManager : ManagerBase<User, UserUpdateDto, UserFilterDto, UserI
     /// <returns></returns>
     public async Task<User?> GetOwnedAsync(Guid id)
     {
-        var query = Command.Db.Where(q => q.Id == id);
+        IQueryable<User> query = Command.Db.Where(q => q.Id == id);
         // 获取用户所属的对象
         return await query.FirstOrDefaultAsync();
     }

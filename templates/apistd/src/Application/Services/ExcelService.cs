@@ -27,7 +27,7 @@ public class ExcelService
         var stream = new MemoryStream();
         using (var package = new ExcelPackage(stream))
         {
-            var sheet = package.Workbook.Worksheets.Add(sheetName);
+            ExcelWorksheet sheet = package.Workbook.Worksheets.Add(sheetName);
             var list = data.ToList();
             sheet.Cells[1, 1].LoadFromCollection(list, hasTitle);
             await package.SaveAsync();
@@ -48,7 +48,7 @@ public class ExcelService
     {
         var data = new List<T>();
         using var package = new ExcelPackage(stream);
-        var sheet = sheetName == null ? package.Workbook.Worksheets[0] : package.Workbook.Worksheets[sheetName];
+        ExcelWorksheet sheet = sheetName == null ? package.Workbook.Worksheets[0] : package.Workbook.Worksheets[sheetName];
 
         int rows = sheet.Dimension.Rows;
         int columns = sheet.Dimension.Columns;

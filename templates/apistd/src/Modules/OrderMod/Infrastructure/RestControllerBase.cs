@@ -113,7 +113,7 @@ public class RestControllerBase : ControllerBase
             Status = 404,
             TraceId = HttpContext.TraceIdentifier
         };
-        var at = Activity.Current;
+        Activity? at = Activity.Current;
         at?.SetTag("responseBody", value);
         return base.NotFound(res);
     }
@@ -133,7 +133,7 @@ public class RestControllerBase : ControllerBase
             Status = 409,
             TraceId = HttpContext.TraceIdentifier
         };
-        var at = Activity.Current;
+        Activity? at = Activity.Current;
         at?.SetTag("responseBody", error);
         return base.Conflict(res);
     }
@@ -153,7 +153,7 @@ public class RestControllerBase : ControllerBase
             Status = 500,
             TraceId = HttpContext.TraceIdentifier
         };
-        var at = Activity.Current;
+        Activity? at = Activity.Current;
         at?.SetTag("responseBody", detail);
         return new ObjectResult(res)
         {

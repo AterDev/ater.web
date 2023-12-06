@@ -34,7 +34,7 @@ public class SystemMenu : IEntityBase, ITreeNode<SystemMenu>
     /// <summary>
     /// 子菜单
     /// </summary>
-    public List<SystemMenu> Children { get; set; } = new List<SystemMenu>();
+    public List<SystemMenu> Children { get; set; } = [];
     /// <summary>
     /// 所属角色
     /// </summary>

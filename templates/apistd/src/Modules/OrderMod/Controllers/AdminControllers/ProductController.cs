@@ -36,7 +36,7 @@ public class ProductController : RestControllerBase<ProductManager>
     [HttpPost]
     public async Task<ActionResult<Product>> AddAsync(ProductAddDto dto)
     {
-        var entity = await manager.CreateNewEntityAsync(dto);
+        Product entity = await manager.CreateNewEntityAsync(dto);
         return await manager.AddAsync(entity);
     }
 
@@ -49,7 +49,7 @@ public class ProductController : RestControllerBase<ProductManager>
     [HttpPut("{id}")]
     public async Task<ActionResult<Product?>> UpdateAsync([FromRoute] Guid id, ProductUpdateDto dto)
     {
-        var current = await manager.GetCurrentAsync(id);
+        Product? current = await manager.GetCurrentAsync(id);
         if (current == null) { return NotFound(ErrorMsg.NotFoundResource); };
         return await manager.UpdateAsync(current, dto);
     }
@@ -62,7 +62,7 @@ public class ProductController : RestControllerBase<ProductManager>
     [HttpGet("{id}")]
     public async Task<ActionResult<Product?>> GetDetailAsync([FromRoute] Guid id)
     {
-        var res = await manager.FindAsync(id);
+        Product? res = await manager.FindAsync(id);
         return (res == null) ? NotFound() : res;
     }
 
@@ -76,7 +76,7 @@ public class ProductController : RestControllerBase<ProductManager>
     public async Task<ActionResult<Product?>> DeleteAsync([FromRoute] Guid id)
     {
         // 注意删除权限
-        var entity = await manager.GetCurrentAsync(id);
+        Product? entity = await manager.GetCurrentAsync(id);
         if (entity == null) { return NotFound(); };
         // return Forbid();
         return await manager.DeleteAsync(entity);

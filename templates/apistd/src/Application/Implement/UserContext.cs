@@ -109,6 +109,4 @@ public partial class UserContext : IUserContext
             await _context.SaveChangesAsync();
         }
     }
-
-    public Guid? TenantId { get; set; }
 }

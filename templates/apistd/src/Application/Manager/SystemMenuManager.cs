@@ -6,11 +6,9 @@ namespace Application.Manager;
 /// </summary>
 public class SystemMenuManager : ManagerBase<SystemMenu, SystemMenuUpdateDto, SystemMenuFilterDto, SystemMenuItemDto>
 {
-
     public SystemMenuManager(
         DataAccessContext<SystemMenu> dataContext,
-        ILogger<SystemMenuManager> logger,
-        IUserContext userContext) : base(dataContext, logger)
+        ILogger<SystemMenuManager> logger) : base(dataContext, logger)
     {
 
     }
@@ -22,7 +20,7 @@ public class SystemMenuManager : ManagerBase<SystemMenu, SystemMenuUpdateDto, Sy
     /// <returns></returns>
     public async Task<SystemMenu> CreateNewEntityAsync(SystemMenuAddDto dto)
     {
-        var entity = dto.MapTo<SystemMenuAddDto, SystemMenu>();
+        SystemMenu entity = dto.MapTo<SystemMenuAddDto, SystemMenu>();
         if (dto.ParentId != null)
         {
             entity.ParentId = dto.ParentId.Value;
@@ -39,20 +37,20 @@ public class SystemMenuManager : ManagerBase<SystemMenu, SystemMenuUpdateDto, Sy
     public async Task<bool> SyncSystemMenusAsync(List<SystemMenuSyncDto> menus)
     {
         // 查询当前菜单内容
-        var currentMenus = await Command.ListAsync();
-        var flatMenus = FlatTree(menus);
+        List<SystemMenu> currentMenus = await Command.ListAsync();
+        List<SystemMenu> flatMenus = FlatTree(menus);
 
         var accessCodes = flatMenus.Select(m => m.AccessCode).ToList();
         // 获取需要被删除的
         var needDeleteMenus = currentMenus.Where(m => !accessCodes.Contains(m.AccessCode)).ToList();
-        if (needDeleteMenus.Any())
+        if (needDeleteMenus.Count != 0)
         {
             Command.RemoveRange(needDeleteMenus);
             currentMenus = currentMenus.Except(needDeleteMenus).ToList();
         }
 
         // 菜单新增与更新
-        foreach (var menu in flatMenus)
+        foreach (SystemMenu menu in flatMenus)
         {
 
             if (currentMenus.Any(c => c.AccessCode == menu.AccessCode))
@@ -68,7 +66,7 @@ public class SystemMenuManager : ManagerBase<SystemMenu, SystemMenuUpdateDto, Sy
             {
                 if (menu.Parent != null)
                 {
-                    var parent = currentMenus.Where(c => c.AccessCode == menu.Parent.AccessCode).FirstOrDefault();
+                    SystemMenu? parent = currentMenus.Where(c => c.AccessCode == menu.Parent.AccessCode).FirstOrDefault();
                     if (parent != null)
                     {
                         menu.Parent = parent;
@@ -89,9 +87,9 @@ public class SystemMenuManager : ManagerBase<SystemMenu, SystemMenuUpdateDto, Sy
     private List<SystemMenu> FlatTree(List<SystemMenuSyncDto> list, SystemMenu? parent = null)
     {
         var res = new List<SystemMenu>();
-        foreach (var item in list)
+        foreach (SystemMenuSyncDto item in list)
         {
-            if (item.Children.Any())
+            if (item.Children.Count != 0)
             {
                 var menu = new SystemMenu
                 {
@@ -101,7 +99,7 @@ public class SystemMenuManager : ManagerBase<SystemMenu, SystemMenuUpdateDto, Sy
                     Parent = parent,
                 };
                 res.Add(menu);
-                var children = FlatTree(item.Children, menu);
+                List<SystemMenu> children = FlatTree(item.Children, menu);
                 res.AddRange(children);
             }
             else
@@ -162,7 +160,7 @@ public class SystemMenuManager : ManagerBase<SystemMenu, SystemMenuUpdateDto, Sy
     /// <returns></returns>
     public async Task<SystemMenu?> GetOwnedAsync(Guid id)
     {
-        var query = Command.Db.Where(q => q.Id == id);
+        IQueryable<SystemMenu> query = Command.Db.Where(q => q.Id == id);
         // 获取用户所属的对象
         // query = query.Where(q => q.User.Id == _userContext.UserId);
         return await query.FirstOrDefaultAsync();

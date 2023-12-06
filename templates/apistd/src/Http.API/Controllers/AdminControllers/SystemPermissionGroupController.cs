@@ -35,7 +35,7 @@ public class SystemPermissionGroupController : RestControllerBase<SystemPermissi
     [HttpPost]
     public async Task<ActionResult<SystemPermissionGroup>> AddAsync(SystemPermissionGroupAddDto dto)
     {
-        var entity = await manager.CreateNewEntityAsync(dto);
+        SystemPermissionGroup entity = await manager.CreateNewEntityAsync(dto);
         return await manager.AddAsync(entity);
     }
 
@@ -48,7 +48,7 @@ public class SystemPermissionGroupController : RestControllerBase<SystemPermissi
     [HttpPut("{id}")]
     public async Task<ActionResult<SystemPermissionGroup?>> UpdateAsync([FromRoute] Guid id, SystemPermissionGroupUpdateDto dto)
     {
-        var current = await manager.GetCurrentAsync(id);
+        SystemPermissionGroup? current = await manager.GetCurrentAsync(id);
         if (current == null) { return NotFound(ErrorMsg.NotFoundResource); };
         return await manager.UpdateAsync(current, dto);
     }
@@ -61,7 +61,7 @@ public class SystemPermissionGroupController : RestControllerBase<SystemPermissi
     [HttpGet("{id}")]
     public async Task<ActionResult<SystemPermissionGroup?>> GetDetailAsync([FromRoute] Guid id)
     {
-        var res = await manager.FindAsync(id);
+        SystemPermissionGroup? res = await manager.FindAsync(id);
         return (res == null) ? NotFound() : res;
     }
 
@@ -74,7 +74,7 @@ public class SystemPermissionGroupController : RestControllerBase<SystemPermissi
     public async Task<ActionResult<SystemPermissionGroup?>> DeleteAsync([FromRoute] Guid id)
     {
         // 注意删除权限
-        var entity = await manager.GetCurrentAsync(id);
+        SystemPermissionGroup? entity = await manager.GetCurrentAsync(id);
         if (entity == null) { return NotFound(); };
         // return Forbid();
         return await manager.DeleteAsync(entity);

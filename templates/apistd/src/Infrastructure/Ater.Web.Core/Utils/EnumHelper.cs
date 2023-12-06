@@ -12,7 +12,7 @@ public static class EnumHelper
     /// <returns></returns>
     public static List<EnumDictionary> ToList(Type type)
     {
-        List<EnumDictionary> result = new();
+        List<EnumDictionary> result = [];
         var enumNames = Enum.GetNames(type);
         Array values = Enum.GetValues(type);
 
@@ -72,17 +72,17 @@ public static class EnumHelper
     /// <returns></returns>
     public static Dictionary<string, List<EnumDictionary>> GetAllEnumInfo()
     {
-        Dictionary<string, List<EnumDictionary>> res = new();
+        Dictionary<string, List<EnumDictionary>> res = [];
         // TODO:自定义要查询的程序集
         var myAssemblies = new List<string> { "Share.dll", "Entity.dll", "CMS.dll" };
 
-        List<Type> allTypes = new();
+        List<Type> allTypes = [];
         var assemblies = AppDomain.CurrentDomain.GetAssemblies()
             .Where(a => myAssemblies.Contains(a.ManifestModule.Name))
             .ToList();
         assemblies.ToList().ForEach(assembly =>
         {
-            var types = assembly.GetEnumTypes();
+            Type[] types = assembly.GetEnumTypes();
             allTypes.AddRange(types);
         });
 

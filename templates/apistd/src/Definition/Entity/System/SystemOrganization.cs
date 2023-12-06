@@ -15,7 +15,7 @@ public class SystemOrganization : IEntityBase, ITreeNode<SystemOrganization>
     /// <summary>
     /// 子目录
     /// </summary>
-    public List<SystemOrganization> Children { get; set; } = new List<SystemOrganization>();
+    public List<SystemOrganization> Children { get; set; } = [];
 
     /// <summary>
     /// 父目录

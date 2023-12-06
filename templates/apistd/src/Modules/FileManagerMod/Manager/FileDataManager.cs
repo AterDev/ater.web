@@ -10,10 +10,8 @@ public class FileDataManager : ManagerBase<FileData, FileDataUpdateDto, FileData
 {
     public FileDataManager(
         DataAccessContext<FileData> dataContext,
-        ILogger<FileDataManager> logger,
-        IUserContext userContext) : base(dataContext, logger)
+        ILogger<FileDataManager> logger) : base(dataContext, logger)
     {
-
 
     }
 
@@ -28,7 +26,7 @@ public class FileDataManager : ManagerBase<FileData, FileDataUpdateDto, FileData
         var res = new List<FileData>();
         if (files.Count != 0)
         {
-            foreach (var file in files)
+            foreach (IFormFile file in files)
             {
                 // read file stream to bytes
                 using var ms = new MemoryStream();
@@ -78,7 +76,7 @@ public class FileDataManager : ManagerBase<FileData, FileDataUpdateDto, FileData
         await stream.CopyToAsync(ms);
         var fileBytes = ms.ToArray();
 
-        var file = await Query.Db.Where(q => q.Md5 == md5).FirstOrDefaultAsync();
+        FileData? file = await Query.Db.Where(q => q.Md5 == md5).FirstOrDefaultAsync();
         if (file != null)
         {
             return file;
@@ -113,7 +111,7 @@ public class FileDataManager : ManagerBase<FileData, FileDataUpdateDto, FileData
     /// <returns></returns>
     public async Task<FileData?> GetByMd5Async(string path, string md5)
     {
-        var fileContent = await Query.Db.Where(q => q.Md5 == md5)
+        FileData? fileContent = await Query.Db.Where(q => q.Md5 == md5)
             .Where(q => q.Folder!.Name == path)
             .SingleOrDefaultAsync();
         return fileContent;
@@ -170,7 +168,7 @@ public class FileDataManager : ManagerBase<FileData, FileDataUpdateDto, FileData
     /// <returns></returns>
     public async Task<FileData?> GetOwnedAsync(Guid id)
     {
-        var query = Command.Db.Where(q => q.Id == id);
+        IQueryable<FileData> query = Command.Db.Where(q => q.Id == id);
         // 获取用户所属的对象
         // query = query.Where(q => q.User.Id == _userContext.UserId);
         return await query.FirstOrDefaultAsync();

@@ -65,7 +65,7 @@ public class SystemUserController : RestControllerBase<SystemUserManager>
     public async Task<ActionResult<AuthResult>> LoginAsync(LoginDto dto)
     {
         // 查询用户
-        var user = await manager.Command.Db.Where(u => u.UserName.Equals(dto.UserName))
+        SystemUser? user = await manager.Command.Db.Where(u => u.UserName.Equals(dto.UserName))
             .AsNoTracking()
             .Include(u => u.SystemRoles)
             .SingleOrDefaultAsync();
@@ -91,7 +91,7 @@ public class SystemUserController : RestControllerBase<SystemUserManager>
         if (HashCrypto.Validate(dto.Password, user.PasswordSalt, user.PasswordHash))
         {
             // 获取Jwt配置
-            var jwtOption = _config.GetSection("Authentication:Jwt").Get<JwtOption>()
+            JwtOption jwtOption = _config.GetSection("Authentication:Jwt").Get<JwtOption>()
                 ?? throw new ArgumentNullException("未找到Jwt选项!");
             var sign = jwtOption.Sign;
             var issuer = jwtOption.ValidIssuer;
@@ -104,7 +104,7 @@ public class SystemUserController : RestControllerBase<SystemUserManager>
             {
                 // 加载关联数据
 
-                var roles = user.SystemRoles?.Select(r => r.NameValue)?.ToList()
+                List<string> roles = user.SystemRoles?.Select(r => r.NameValue)?.ToList()
                     ?? [AppConst.AdminUser];
                 // 过期时间:minutes
                 var expired = 60 * 24;
@@ -117,7 +117,7 @@ public class SystemUserController : RestControllerBase<SystemUserManager>
                 {
                     roles.Add(AppConst.AdminUser);
                 }
-                var token = jwt.GetToken(user.Id.ToString(), roles.ToArray());
+                var token = jwt.GetToken(user.Id.ToString(), [.. roles]);
                 // 缓存登录状态
                 await _cache.SetValueAsync(AppConst.LoginCachePrefix + user.Id.ToString(), true, expired * 60);
 
@@ -125,8 +125,8 @@ public class SystemUserController : RestControllerBase<SystemUserManager>
                 var permissionGroups = new List<SystemPermissionGroup>();
                 if (user.SystemRoles != null)
                 {
-                    menus = await _roleManager.GetSystemMenusAsync(user.SystemRoles.ToList());
-                    permissionGroups = await _roleManager.GetPermissionGroupsAsync(user.SystemRoles.ToList());
+                    menus = await _roleManager.GetSystemMenusAsync([.. user.SystemRoles]);
+                    permissionGroups = await _roleManager.GetPermissionGroupsAsync([.. user.SystemRoles]);
                 }
 
                 // 记录登录时间
@@ -136,7 +136,7 @@ public class SystemUserController : RestControllerBase<SystemUserManager>
                 return new AuthResult
                 {
                     Id = user.Id,
-                    Roles = roles.ToArray(),
+                    Roles = [.. roles],
                     Token = token,
                     Menus = menus,
                     PermissionGroups = permissionGroups,
@@ -191,7 +191,7 @@ public class SystemUserController : RestControllerBase<SystemUserManager>
     [Authorize(AppConst.SuperAdmin)]
     public async Task<ActionResult<SystemUser>> AddAsync(SystemUserAddDto dto)
     {
-        var entity = await manager.CreateNewEntityAsync(dto);
+        SystemUser entity = await manager.CreateNewEntityAsync(dto);
         return await manager.AddAsync(entity);
     }
 
@@ -205,7 +205,7 @@ public class SystemUserController : RestControllerBase<SystemUserManager>
     [Authorize(AppConst.SuperAdmin)]
     public async Task<ActionResult<SystemUser?>> UpdateAsync([FromRoute] Guid id, SystemUserUpdateDto dto)
     {
-        var current = await manager.GetCurrentAsync(id);
+        SystemUser? current = await manager.GetCurrentAsync(id);
         return current == null ? (ActionResult<SystemUser?>)NotFound(ErrorMsg.NotFoundResource) : (ActionResult<SystemUser?>)await manager.UpdateAsync(current, dto);
     }
 
@@ -220,7 +220,7 @@ public class SystemUserController : RestControllerBase<SystemUserManager>
         {
             return NotFound("");
         }
-        var user = await manager.GetCurrentAsync(_user.UserId);
+        SystemUser? user = await manager.GetCurrentAsync(_user.UserId);
         return !HashCrypto.Validate(password, user!.PasswordSalt, user.PasswordHash)
             ? (ActionResult<bool>)Problem("当前密码不正确")
             : (ActionResult<bool>)await manager.ChangePasswordAsync(user, newPassword);
@@ -234,7 +234,7 @@ public class SystemUserController : RestControllerBase<SystemUserManager>
     [HttpGet("{id}")]
     public async Task<ActionResult<SystemUser?>> GetDetailAsync([FromRoute] Guid id)
     {
-        var res = _user.IsRole(AppConst.SuperAdmin)
+        SystemUser? res = _user.IsRole(AppConst.SuperAdmin)
             ? await manager.FindAsync(id)
             : await manager.FindAsync(_user.UserId);
         return (res == null) ? NotFound() : res;
@@ -250,7 +250,7 @@ public class SystemUserController : RestControllerBase<SystemUserManager>
     public async Task<ActionResult<SystemUser?>> DeleteAsync([FromRoute] Guid id)
     {
         // 注意删除权限
-        var entity = await manager.GetCurrentAsync(id);
+        SystemUser? entity = await manager.GetCurrentAsync(id);
         return entity == null ? (ActionResult<SystemUser?>)NotFound() : (ActionResult<SystemUser?>)await manager.DeleteAsync(entity);
     }
 }

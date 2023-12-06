@@ -45,5 +45,5 @@ public class SystemMenuItemDto : ITreeNode<SystemMenuItemDto>
     /// 是否显示
     /// </summary>
     public bool Hidden { get; set; } = true;
-    public List<SystemMenuItemDto> Children { get; set; } = new List<SystemMenuItemDto>();
+    public List<SystemMenuItemDto> Children { get; set; } = [];
 }

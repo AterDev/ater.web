@@ -109,7 +109,7 @@ public partial class CommandSet<TEntity> : ICommandStore<TEntity>, ICommandStore
     {
         if (EnableSoftDelete)
         {
-            foreach (var entity in entities)
+            foreach (TEntity entity in entities)
             {
                 entity.IsDeleted = true;
             }
@@ -193,8 +193,8 @@ public partial class CommandSet<TEntity> : ICommandStore<TEntity>, ICommandStore
     public List<T> CreateAttachInstance<T>(List<Guid> ids) where T : class, IEntityBase
     {
         List<T> res = [];
-        var type = typeof(T);
-        foreach (var id in ids)
+        Type type = typeof(T);
+        foreach (Guid id in ids)
         {
             var instance = Activator.CreateInstance(type);
             if (instance != null)

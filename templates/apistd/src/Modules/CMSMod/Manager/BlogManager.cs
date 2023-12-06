@@ -23,7 +23,7 @@ public class BlogManager : ManagerBase<Blog, BlogUpdateDto, BlogFilterDto, BlogI
     /// <returns></returns>
     public async Task<Blog> CreateNewEntityAsync(BlogAddDto dto)
     {
-        var entity = dto.MapTo<BlogAddDto, Blog>();
+        Blog entity = dto.MapTo<BlogAddDto, Blog>();
         entity.UserId = _userContext.UserId;
         Command.Db.Entry(entity).Property("CatalogId").CurrentValue = dto.CatalogId;
         // or entity.CatalogId = dto.CatalogId;
@@ -58,7 +58,7 @@ public class BlogManager : ManagerBase<Blog, BlogUpdateDto, BlogFilterDto, BlogI
     /// <returns></returns>
     public async Task<Blog?> GetOwnedAsync(Guid id)
     {
-        var query = Command.Db.Where(q => q.Id == id);
+        IQueryable<Blog> query = Command.Db.Where(q => q.Id == id);
         // 获取用户所属的对象
         // query = query.Where(q => q.User.Id == _userContext.UserId);
         return await query.FirstOrDefaultAsync();

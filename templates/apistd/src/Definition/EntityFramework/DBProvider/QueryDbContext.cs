@@ -12,7 +12,6 @@ public class QueryDbContext : ContextBase
         ChangeTracker.AutoDetectChangesEnabled = false;
     }
 
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
 

@@ -6,16 +6,14 @@ namespace OrderMod.Manager;
 /// </summary>
 public class ProductManager : ManagerBase<Product, ProductUpdateDto, ProductFilterDto, ProductItemDto>
 {
-    private readonly UserManager _userManager;
     private readonly IUserContext _userContext;
     public ProductManager(
         DataAccessContext<Product> dataContext,
         ILogger<ProductManager> logger,
-        IUserContext userContext,
-        UserManager userManager) : base(dataContext, logger)
+        IUserContext userContext
+        ) : base(dataContext, logger)
     {
         _userContext = userContext;
-        _userManager = userManager;
     }
 
     /// <summary>
@@ -25,7 +23,7 @@ public class ProductManager : ManagerBase<Product, ProductUpdateDto, ProductFilt
     /// <returns></returns>
     public async Task<Product> CreateNewEntityAsync(ProductAddDto dto)
     {
-        var entity = dto.MapTo<ProductAddDto, Product>();
+        Product entity = dto.MapTo<ProductAddDto, Product>();
         return await Task.FromResult(entity);
     }
 
@@ -85,7 +83,7 @@ public class ProductManager : ManagerBase<Product, ProductUpdateDto, ProductFilt
     /// <returns></returns>
     public async Task<Product?> GetOwnedAsync(Guid id)
     {
-        var query = Command.Db.Where(q => q.Id == id);
+        IQueryable<Product> query = Command.Db.Where(q => q.Id == id);
         // 获取用户所属的对象
         // query = query.Where(q => q.User.Id == _userContext.UserId);
         return await query.FirstOrDefaultAsync();

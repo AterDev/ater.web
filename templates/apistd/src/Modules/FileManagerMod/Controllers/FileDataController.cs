@@ -36,7 +36,7 @@ public class FileDataController : ClientControllerBase<FileDataManager>
     [HttpPut("{id}")]
     public async Task<ActionResult<FileData?>> UpdateAsync([FromRoute] Guid id, FileDataUpdateDto dto)
     {
-        var current = await manager.GetCurrentAsync(id);
+        FileData? current = await manager.GetCurrentAsync(id);
         if (current == null) { return NotFound(ErrorMsg.NotFoundResource); };
         return await manager.UpdateAsync(current, dto);
     }
@@ -49,7 +49,7 @@ public class FileDataController : ClientControllerBase<FileDataManager>
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<FileData?>> GetDetailAsync([FromRoute] Guid id)
     {
-        var res = await manager.FindAsync(id);
+        FileData? res = await manager.FindAsync(id);
         return (res == null) ? NotFound() : res;
     }
 
@@ -63,7 +63,7 @@ public class FileDataController : ClientControllerBase<FileDataManager>
     [AllowAnonymous]
     public async Task<ActionResult<string>> GetContentAsync(string path, string md5)
     {
-        var res = await manager.GetByMd5Async(path, md5);
+        FileData? res = await manager.GetByMd5Async(path, md5);
         if (res == null)
         {
             return NoContent();
@@ -85,7 +85,7 @@ public class FileDataController : ClientControllerBase<FileDataManager>
     public async Task<ActionResult<FileData?>> DeleteAsync([FromRoute] Guid id)
     {
         // 注意删除权限
-        var entity = await manager.GetCurrentAsync(id);
+        FileData? entity = await manager.GetCurrentAsync(id);
         if (entity == null) { return NotFound(); };
         // return Forbid();
         return await manager.DeleteAsync(entity);

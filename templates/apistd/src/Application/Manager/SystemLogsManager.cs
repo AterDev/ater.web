@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Share.Models.SystemLogsDtos;
 
 namespace Application.Manager;
@@ -23,7 +22,7 @@ public class SystemLogsManager : ManagerBase<SystemLogs, SystemLogsUpdateDto, Sy
     /// <returns></returns>
     public async Task<SystemLogs> CreateNewEntityAsync(SystemLogsAddDto dto)
     {
-        var entity = dto.MapTo<SystemLogsAddDto, SystemLogs>();
+        SystemLogs entity = dto.MapTo<SystemLogsAddDto, SystemLogs>();
         Command.Db.Entry(entity).Property("SystemUserId").CurrentValue = _userContext.UserId;
         // or entity.SystemUserId = _userContext.UserId;
         // other required props
@@ -57,15 +56,9 @@ public class SystemLogsManager : ManagerBase<SystemLogs, SystemLogsUpdateDto, Sy
     /// <returns></returns>
     public async Task<SystemLogs?> GetOwnedAsync(Guid id)
     {
-        var query = Command.Db.Where(q => q.Id == id);
+        IQueryable<SystemLogs> query = Command.Db.Where(q => q.Id == id);
         // 获取用户所属的对象
         // query = query.Where(q => q.User.Id == _userContext.UserId);
         return await query.FirstOrDefaultAsync();
     }
-
-    public new QuerySet<SystemLogs> Query { get; init; }
-    public new CommandSet<SystemLogs> Command { get; init; }
-    public new IQueryable<SystemLogs> Queryable { get; set; }
-    public new bool AutoSave { get; set; }
-    public new DatabaseFacade Database { get; init; }
 }

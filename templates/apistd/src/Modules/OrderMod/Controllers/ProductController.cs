@@ -35,10 +35,9 @@ public class ProductController : ClientControllerBase<ProductManager>
     [HttpPost("buy/{id}")]
     public async Task<ActionResult<Order>> BuyProductAsync([FromRoute] Guid id)
     {
-        var res = await manager.BuyProductAsync(id);
+        Order? res = await manager.BuyProductAsync(id);
         return res == null ? Problem(manager.ErrorMsg) : (ActionResult<Order>)res;
     }
-
 
     /// <summary>
     /// 详情 ✅
@@ -48,7 +47,7 @@ public class ProductController : ClientControllerBase<ProductManager>
     [HttpGet("{id}")]
     public async Task<ActionResult<Product?>> GetDetailAsync([FromRoute] Guid id)
     {
-        var res = await manager.FindAsync(id);
+        Product? res = await manager.FindAsync(id);
         return (res == null) ? NotFound() : res;
     }
 }

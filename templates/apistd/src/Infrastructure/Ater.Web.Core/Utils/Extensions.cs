@@ -12,7 +12,7 @@ public static partial class Extensions
     /// <typeparam name="TMerge">被合并对象</typeparam>
     /// <param name="source"></param>
     /// <param name="merge"></param>
-    /// <param name="ignoreNull">是否忽略null</param>
+    /// <param name="ignoreNull">是否忽略 null</param>
     /// <returns></returns>
     public static TSource Merge<TSource, TMerge>(this TSource source, TMerge merge, bool ignoreNull = true)
     {
@@ -154,26 +154,22 @@ public static partial class Extensions
         TValue maxVal)
         where TValue : struct
     {
-        var parameter = propertyExpression.Parameters[0];
-        var memberExpression = propertyExpression.Body as MemberExpression
-            ?? (propertyExpression.Body as UnaryExpression)?.Operand as MemberExpression;
-
-        if (memberExpression == null)
-        {
-            throw new ArgumentException("Invalid property expression", nameof(propertyExpression));
-        }
-        var propertyType = memberExpression.Type;
+        ParameterExpression parameter = propertyExpression.Parameters[0];
+        MemberExpression? memberExpression = (propertyExpression.Body as MemberExpression
+            ?? (propertyExpression.Body as UnaryExpression)?.Operand as MemberExpression)
+            ?? throw new ArgumentException("Invalid property expression", nameof(propertyExpression));
+        Type propertyType = memberExpression.Type;
 
         var minValObj = Convert.ChangeType(minVal, propertyType);
         var maxValObj = Convert.ChangeType(maxVal, propertyType);
 
-        var minExpr = Expression.Constant(minValObj, propertyType);
-        var maxExpr = Expression.Constant(maxValObj, propertyType);
+        ConstantExpression minExpr = Expression.Constant(minValObj, propertyType);
+        ConstantExpression maxExpr = Expression.Constant(maxValObj, propertyType);
 
-        var propertyAccess = Expression.MakeMemberAccess(parameter, memberExpression.Member);
-        var leftExpr = Expression.GreaterThanOrEqual(propertyAccess, minExpr);
-        var rightExpr = Expression.LessThanOrEqual(propertyAccess, maxExpr);
-        var andExpr = Expression.AndAlso(leftExpr, rightExpr);
+        MemberExpression propertyAccess = Expression.MakeMemberAccess(parameter, memberExpression.Member);
+        BinaryExpression leftExpr = Expression.GreaterThanOrEqual(propertyAccess, minExpr);
+        BinaryExpression rightExpr = Expression.LessThanOrEqual(propertyAccess, maxExpr);
+        BinaryExpression andExpr = Expression.AndAlso(leftExpr, rightExpr);
         var lambdaExpr = Expression.Lambda<Func<TSource, bool>>(andExpr, parameter);
 
         return source.Where(lambdaExpr);
@@ -278,9 +274,9 @@ public static partial class Extensions
     /// <returns></returns>
     public static List<T> BuildTree<T>(this List<T> nodes) where T : ITreeNode<T>
     {
-        nodes.ForEach(n => { n.Children = new List<T>(); });
+        nodes.ForEach(n => { n.Children = []; });
         var nodeDict = nodes.ToDictionary(n => n.Id);
-        List<T> res = new();
+        List<T> res = [];
 
         foreach (T node in nodes)
         {
@@ -290,13 +286,10 @@ public static partial class Extensions
             }
             else
             {
-                if (nodeDict.ContainsKey(node.ParentId.Value))
+                if (nodeDict.TryGetValue(node.ParentId.Value, out T? value))
                 {
-                    if (nodeDict[node.ParentId.Value].Children == null)
-                    {
-                        nodeDict[node.ParentId.Value].Children = new List<T>();
-                    }
-                    nodeDict[node.ParentId.Value].Children!.Add(node);
+                    value.Children ??= [];
+                    value.Children!.Add(node);
                 }
             }
         }

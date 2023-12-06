@@ -23,7 +23,7 @@ public class SystemConfigManager : ManagerBase<SystemConfig, SystemConfigUpdateD
     /// <returns></returns>
     public async Task<SystemConfig> CreateNewEntityAsync(SystemConfigAddDto dto)
     {
-        var entity = dto.MapTo<SystemConfigAddDto, SystemConfig>();
+        SystemConfig entity = dto.MapTo<SystemConfigAddDto, SystemConfig>();
         // other required props
         return await Task.FromResult(entity);
     }
@@ -49,10 +49,10 @@ public class SystemConfigManager : ManagerBase<SystemConfig, SystemConfigUpdateD
     public async Task<Dictionary<string, List<EnumDictionary>>> GetEnumConfigsAsync()
     {
         // TODO:程序启动时更新缓存
-        var res = _cache.GetValue<Dictionary<string, List<EnumDictionary>>>(AppConst.EnumCacheName);
-        if (res == null || !res.Any())
+        Dictionary<string, List<EnumDictionary>>? res = _cache.GetValue<Dictionary<string, List<EnumDictionary>>>(AppConst.EnumCacheName);
+        if (res == null || res.Count == 0)
         {
-            var data = EnumHelper.GetAllEnumInfo();
+            Dictionary<string, List<EnumDictionary>> data = EnumHelper.GetAllEnumInfo();
             await _cache.SetValueAsync(AppConst.EnumCacheName, data);
             return data;
         }
@@ -66,7 +66,7 @@ public class SystemConfigManager : ManagerBase<SystemConfig, SystemConfigUpdateD
     /// <returns></returns>
     public async Task<SystemConfig?> GetOwnedAsync(Guid id)
     {
-        var query = Command.Db.Where(q => q.Id == id);
+        IQueryable<SystemConfig> query = Command.Db.Where(q => q.Id == id);
         // 获取用户所属的对象
         // query = query.Where(q => q.User.Id == _userContext.UserId);
         return await query.FirstOrDefaultAsync();

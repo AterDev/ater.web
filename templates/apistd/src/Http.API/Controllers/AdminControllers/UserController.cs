@@ -42,7 +42,7 @@ public class UserController : RestControllerBase<UserManager>
         {
             return Conflict(ErrorMsg.ExistUser);
         }
-        var entity = await manager.CreateNewEntityAsync(dto);
+        User entity = await manager.CreateNewEntityAsync(dto);
         return await manager.AddAsync(entity);
     }
 
@@ -55,7 +55,7 @@ public class UserController : RestControllerBase<UserManager>
     [HttpPut("{id}")]
     public async Task<ActionResult<User?>> UpdateAsync([FromRoute] Guid id, UserUpdateDto dto)
     {
-        var current = await manager.GetCurrentAsync(id);
+        User? current = await manager.GetCurrentAsync(id);
         if (current == null) { return NotFound(ErrorMsg.NotFoundResource); };
         return await manager.UpdateAsync(current, dto);
     }
@@ -68,7 +68,7 @@ public class UserController : RestControllerBase<UserManager>
     [HttpGet("{id}")]
     public async Task<ActionResult<User?>> GetDetailAsync([FromRoute] Guid id)
     {
-        var res = await manager.FindAsync(id);
+        User? res = await manager.FindAsync(id);
         return (res == null) ? NotFound() : res;
     }
 
@@ -81,7 +81,7 @@ public class UserController : RestControllerBase<UserManager>
     public async Task<ActionResult<User?>> DeleteAsync([FromRoute] Guid id)
     {
         // 注意删除权限
-        var entity = await manager.GetCurrentAsync(id);
+        User? entity = await manager.GetCurrentAsync(id);
         if (entity == null) { return NotFound(ErrorMsg.NotFoundUser); };
         return await manager.DeleteAsync(entity);
     }

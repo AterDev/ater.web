@@ -40,7 +40,6 @@ public static partial class AppServiceCollectionExtensions
         return services;
     }
 
-
     /// <summary>
     /// 添加数据工厂
     /// </summary>
@@ -98,7 +97,6 @@ public static partial class AppServiceCollectionExtensions
                 options.InstanceName = configuration.GetConnectionString(AppSetting.CacheInstanceName);
             })
             : services.AddMemoryCache();
-
 
     }
 }

@@ -14,5 +14,5 @@ public class SystemRoleSetMenusDto
     /// <summary>
     /// 菜单Id集合
     /// </summary>
-    public List<Guid> MenuIds { get; set; } = new();
+    public List<Guid> MenuIds { get; set; } = [];
 }

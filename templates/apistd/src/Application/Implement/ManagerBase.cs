@@ -25,7 +25,6 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem>
     public CommandSet<TEntity> Command { get; init; }
     public IQueryable<TEntity> Queryable { get; set; }
 
-
     public CommandDbContext CommandContext { get; init; }
 
     public QueryDbContext QueryCommand { get; init; }

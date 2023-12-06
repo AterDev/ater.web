@@ -1,19 +1,15 @@
-using Application.Services;
 using Share.Models.SystemPermissionGroupDtos;
 
 namespace Application.Manager;
 
 public class SystemPermissionGroupManager : ManagerBase<SystemPermissionGroup, SystemPermissionGroupUpdateDto, SystemPermissionGroupFilterDto, SystemPermissionGroupItemDto>
 {
-    private readonly CacheService _cache;
 
     public SystemPermissionGroupManager(
         DataAccessContext<SystemPermissionGroup> dataContext,
-        ILogger<SystemPermissionGroupManager> logger,
-        IUserContext userContext,
-        CacheService cache) : base(dataContext, logger)
+        ILogger<SystemPermissionGroupManager> logger
+        ) : base(dataContext, logger)
     {
-        _cache = cache;
     }
 
     /// <summary>
@@ -23,7 +19,7 @@ public class SystemPermissionGroupManager : ManagerBase<SystemPermissionGroup, S
     /// <returns></returns>
     public async Task<SystemPermissionGroup> CreateNewEntityAsync(SystemPermissionGroupAddDto dto)
     {
-        var entity = dto.MapTo<SystemPermissionGroupAddDto, SystemPermissionGroup>();
+        SystemPermissionGroup entity = dto.MapTo<SystemPermissionGroupAddDto, SystemPermissionGroup>();
         return await Task.FromResult(entity);
     }
 
@@ -59,7 +55,7 @@ public class SystemPermissionGroupManager : ManagerBase<SystemPermissionGroup, S
     /// <returns></returns>
     public async Task<SystemPermissionGroup?> GetOwnedAsync(Guid id)
     {
-        var query = Command.Db.Where(q => q.Id == id);
+        IQueryable<SystemPermissionGroup> query = Command.Db.Where(q => q.Id == id);
         // 获取用户所属的对象
         // query = query.Where(q => q.User.Id == _userContext.UserId);
         return await query.FirstOrDefaultAsync();

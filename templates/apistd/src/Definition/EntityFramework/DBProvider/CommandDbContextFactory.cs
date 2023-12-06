@@ -16,7 +16,7 @@ public class CommandDbContextFactory : IDesignTimeDbContextFactory<CommandDbCont
     public CommandDbContext CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<CommandDbContext>();
-        var tenantId = _tenantProvider.TenantId;
+        Guid tenantId = _tenantProvider.TenantId;
 
         // 从缓存或配置中查询连接字符串
         var connectionStrings = _cache.GetString($"{tenantId}_CommandConnectionString");

@@ -42,7 +42,7 @@ public class FolderController : RestControllerBase<FolderManager>
             var exist = await manager.ExistAsync(dto.ParentId.Value);
             if (!exist) { return NotFound(ErrorMsg.NotFoundResource); };
         }
-        var entity = await manager.CreateNewEntityAsync(dto);
+        Folder entity = await manager.CreateNewEntityAsync(dto);
         return await manager.AddAsync(entity);
     }
 
@@ -54,7 +54,7 @@ public class FolderController : RestControllerBase<FolderManager>
     [HttpGet("{id}")]
     public async Task<ActionResult<Folder?>> GetDetailAsync([FromRoute] Guid id)
     {
-        var res = await manager.FindAsync(id);
+        Folder? res = await manager.FindAsync(id);
         return (res == null) ? NotFound() : res;
     }
 
@@ -68,7 +68,7 @@ public class FolderController : RestControllerBase<FolderManager>
     public async Task<ActionResult<Folder?>> DeleteAsync([FromRoute] Guid id)
     {
         // 注意删除权限
-        var entity = await manager.GetCurrentAsync(id);
+        Folder? entity = await manager.GetCurrentAsync(id);
         if (entity == null) { return NotFound(); };
         // return Forbid();
         return await manager.DeleteAsync(entity, false);

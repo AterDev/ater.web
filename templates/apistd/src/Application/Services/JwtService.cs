@@ -33,19 +33,19 @@ public class JwtService
     {
         SymmetricSecurityKey signingKey = new(Encoding.UTF8.GetBytes(Sign));
         SigningCredentials signingCredentials = new(signingKey, SecurityAlgorithms.HmacSha256);
-        List<Claim> claims = new()
-        {
+        List<Claim> claims =
+        [
                 // 此处自定义claims
                 new Claim(ClaimTypes.NameIdentifier, id),
-        };
-        if (roles.Any())
+        ];
+        if (roles.Length != 0)
         {
             foreach (string role in roles)
             {
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
         }
-        if (Claims != null && Claims.Any())
+        if (Claims != null && Claims.Count != 0)
         {
             claims.AddRange(Claims);
         }

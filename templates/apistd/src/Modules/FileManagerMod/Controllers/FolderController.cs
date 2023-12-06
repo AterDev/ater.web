@@ -36,7 +36,7 @@ public class FolderController : ClientControllerBase<FolderManager>
     [HttpPost]
     public async Task<ActionResult<Folder>> AddAsync(FolderAddDto dto)
     {
-        var entity = await manager.CreateNewEntityAsync(dto);
+        Folder entity = await manager.CreateNewEntityAsync(dto);
         return await manager.AddAsync(entity);
     }
 
@@ -49,7 +49,7 @@ public class FolderController : ClientControllerBase<FolderManager>
     [HttpPut("{id}")]
     public async Task<ActionResult<Folder?>> UpdateAsync([FromRoute] Guid id, FolderUpdateDto dto)
     {
-        var current = await manager.GetCurrentAsync(id);
+        Folder? current = await manager.GetCurrentAsync(id);
         if (current == null) { return NotFound(ErrorMsg.NotFoundResource); };
         return await manager.UpdateAsync(current, dto);
     }
@@ -62,7 +62,7 @@ public class FolderController : ClientControllerBase<FolderManager>
     [HttpGet("{id}")]
     public async Task<ActionResult<Folder?>> GetDetailAsync([FromRoute] Guid id)
     {
-        var res = await manager.FindAsync(id);
+        Folder? res = await manager.FindAsync(id);
         return (res == null) ? NotFound() : res;
     }
 
@@ -76,7 +76,7 @@ public class FolderController : ClientControllerBase<FolderManager>
     public async Task<ActionResult<Folder?>> DeleteAsync([FromRoute] Guid id)
     {
         // 注意删除权限
-        var entity = await manager.GetCurrentAsync(id);
+        Folder? entity = await manager.GetCurrentAsync(id);
         if (entity == null) { return NotFound(); };
         // return Forbid();
         return await manager.DeleteAsync(entity);

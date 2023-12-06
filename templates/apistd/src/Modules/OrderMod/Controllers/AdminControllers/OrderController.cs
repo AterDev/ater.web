@@ -7,19 +7,12 @@ namespace OrderMod.Controllers.AdminControllers;
 /// <see cref="OrderMod.Manager.OrderManager"/>
 public class OrderController : RestControllerBase<OrderManager>
 {
-    private readonly ProductManager _productManager;
-    private readonly UserManager _userManager;
-
     public OrderController(
         IUserContext user,
         ILogger<OrderController> logger,
-        OrderManager manager,
-        ProductManager productManager,
-        UserManager userManager
+        OrderManager manager
         ) : base(manager, user, logger)
     {
-        _productManager = productManager;
-        _userManager = userManager;
 
     }
 
@@ -43,7 +36,7 @@ public class OrderController : RestControllerBase<OrderManager>
     [HttpPut("{id}")]
     public async Task<ActionResult<Order?>> UpdateAsync([FromRoute] Guid id, OrderUpdateDto dto)
     {
-        var current = await manager.GetCurrentAsync(id);
+        Order? current = await manager.GetCurrentAsync(id);
         if (current == null) { return NotFound(ErrorMsg.NotFoundResource); };
         return await manager.UpdateAsync(current, dto);
     }
@@ -56,7 +49,7 @@ public class OrderController : RestControllerBase<OrderManager>
     [HttpGet("{id}")]
     public async Task<ActionResult<Order?>> GetDetailAsync([FromRoute] Guid id)
     {
-        var res = await manager.FindAsync(id);
+        Order? res = await manager.FindAsync(id);
         return (res == null) ? NotFound() : res;
     }
 

@@ -17,7 +17,7 @@ public class Folder : IEntityBase, ITreeNode<Folder>
 
     public Folder? Parent { get; set; }
     public Guid? ParentId { get; set; }
-    public List<Folder> Children { get; set; } = new List<Folder>();
+    public List<Folder> Children { get; set; } = [];
 
     /// <summary>
     /// 路径

@@ -20,6 +20,4 @@ public interface IEntityBase
     /// </summary>
     public bool IsDeleted { get; set; }
 
-
 }
-

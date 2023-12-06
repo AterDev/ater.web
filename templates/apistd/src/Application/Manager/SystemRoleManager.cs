@@ -6,8 +6,7 @@ public class SystemRoleManager : ManagerBase<SystemRole, SystemRoleUpdateDto, Sy
 {
     public SystemRoleManager(
         DataAccessContext<SystemRole> dataContext,
-        ILogger<SystemRoleManager> logger,
-        IUserContext userContext) : base(dataContext, logger)
+        ILogger<SystemRoleManager> logger) : base(dataContext, logger)
     {
 
     }
@@ -44,7 +43,7 @@ public class SystemRoleManager : ManagerBase<SystemRole, SystemRoleUpdateDto, Sy
     /// <returns></returns>
     public async Task<List<SystemMenu>> GetSystemMenusAsync(List<SystemRole> systemRoles)
     {
-        var ids = systemRoles.Select(r => r.Id);
+        IEnumerable<Guid> ids = systemRoles.Select(r => r.Id);
         return await CommandContext.SystemMenus
             .Where(m => m.Roles.Any(r => ids.Contains(r.Id)))
         .ToListAsync();
@@ -64,7 +63,7 @@ public class SystemRoleManager : ManagerBase<SystemRole, SystemRoleUpdateDto, Sy
                 .Collection(r => r.PermissionGroups)
                 .LoadAsync();
 
-            var groups = await CommandContext.SystemPermissionGroups
+            List<SystemPermissionGroup> groups = await CommandContext.SystemPermissionGroups
                 .Where(m => dto.PermissionGroupIds.Contains(m.Id))
                 .ToListAsync();
             current.PermissionGroups = groups;
@@ -73,7 +72,7 @@ public class SystemRoleManager : ManagerBase<SystemRole, SystemRoleUpdateDto, Sy
         }
         catch (Exception e)
         {
-            _logger.LogError($"set role permission groups failed:{0}", e.Message);
+            _logger.LogError("set role permission groups failed:{message}", e.Message);
             return null;
         }
     }
@@ -85,7 +84,7 @@ public class SystemRoleManager : ManagerBase<SystemRole, SystemRoleUpdateDto, Sy
     /// <returns></returns>
     public async Task<List<SystemPermissionGroup>> GetPermissionGroupsAsync(List<SystemRole> systemRoles)
     {
-        var ids = systemRoles.Select(r => r.Id);
+        IEnumerable<Guid> ids = systemRoles.Select(r => r.Id);
         return await CommandContext.SystemPermissionGroups
             .Where(m => m.Roles.Any(r => ids.Contains(r.Id)))
             .ToListAsync();
@@ -122,7 +121,7 @@ public class SystemRoleManager : ManagerBase<SystemRole, SystemRoleUpdateDto, Sy
 
             current.Menus = new List<SystemMenu>();
 
-            var menus = await CommandContext.SystemMenus
+            List<SystemMenu> menus = await CommandContext.SystemMenus
                 .Where(m => dto.MenuIds.Contains(m.Id))
                 .ToListAsync();
             current.Menus = menus;
@@ -131,7 +130,7 @@ public class SystemRoleManager : ManagerBase<SystemRole, SystemRoleUpdateDto, Sy
         }
         catch (Exception e)
         {
-            _logger.LogError($"update role menus failed:{0}", e.Message);
+            _logger.LogError("update role menus failed:{message}", e.Message);
             return default;
         }
 

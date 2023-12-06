@@ -12,5 +12,5 @@ public class SystemMenuSyncDto
     [JsonPropertyName("parentId")]
     public Guid? ParentId { get; set; }
     [JsonPropertyName("children")]
-    public List<SystemMenuSyncDto> Children { get; set; } = new List<SystemMenuSyncDto>();
+    public List<SystemMenuSyncDto> Children { get; set; } = [];
 }

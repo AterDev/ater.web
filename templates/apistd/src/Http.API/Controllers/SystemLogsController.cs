@@ -7,16 +7,13 @@ namespace Http.API.Controllers;
 /// <see cref="Application.Manager.SystemLogsManager"/>
 public class SystemLogsController : ClientControllerBase<SystemLogsManager>
 {
-    private readonly SystemUserManager _systemUserManager;
 
     public SystemLogsController(
         IUserContext user,
         ILogger<SystemLogsController> logger,
-        SystemLogsManager manager,
-        SystemUserManager systemUserManager
+        SystemLogsManager manager
         ) : base(manager, user, logger)
     {
-        _systemUserManager = systemUserManager;
 
     }
 

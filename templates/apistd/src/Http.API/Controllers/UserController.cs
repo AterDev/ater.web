@@ -70,7 +70,7 @@ public class UserController : ClientControllerBase<UserManager>
     [AllowAnonymous]
     public async Task<ActionResult> SendRegVerifyCodeAsync(string email)
     {
-        var captcha = manager.GetCaptcha();
+        var captcha = HashCrypto.GetRnd(6);
         var key = AppConst.VerifyCodeCachePrefix + email;
         if (_cache.GetValue<string>(key) != null)
         {
@@ -96,7 +96,7 @@ public class UserController : ClientControllerBase<UserManager>
         {
             return NotFound("不存在的邮箱账号");
         }
-        var captcha = manager.GetCaptcha();
+        var captcha = HashCrypto.GetRnd(6);
         var key = AppConst.VerifyCodeCachePrefix + email;
         if (_cache.GetValue<string>(key) != null)
         {
@@ -120,7 +120,7 @@ public class UserController : ClientControllerBase<UserManager>
     public async Task<ActionResult<AuthResult>> LoginAsync(LoginDto dto)
     {
         // 查询用户
-        var user = await manager.Query.Db.Where(u => u.UserName.Equals(dto.UserName))
+        User? user = await manager.Query.Db.Where(u => u.UserName.Equals(dto.UserName))
             .FirstOrDefaultAsync();
         if (user == null)
         {
@@ -144,7 +144,7 @@ public class UserController : ClientControllerBase<UserManager>
         if (HashCrypto.Validate(dto.Password, user.PasswordSalt, user.PasswordHash))
         {
             // 获取Jwt配置
-            var jwtOption = _config.GetSection("Authentication:Jwt").Get<JwtOption>()
+            JwtOption jwtOption = _config.GetSection("Authentication:Jwt").Get<JwtOption>()
                 ?? throw new ArgumentNullException("未找到Jwt选项!");
             var sign = jwtOption.Sign;
             var issuer = jwtOption.ValidIssuer;
@@ -168,14 +168,14 @@ public class UserController : ClientControllerBase<UserManager>
                 {
                     roles.Add(AppConst.User);
                 }
-                var token = jwt.GetToken(user.Id.ToString(), roles.ToArray());
+                var token = jwt.GetToken(user.Id.ToString(), [.. roles]);
                 // 缓存登录状态
                 await _cache.SetValueAsync(AppConst.LoginCachePrefix + user.Id.ToString(), true, expired * 60);
 
                 return new AuthResult
                 {
                     Id = user.Id,
-                    Roles = roles.ToArray(),
+                    Roles = [.. roles],
                     Token = token,
                     Username = user.UserName
                 };
@@ -218,7 +218,7 @@ public class UserController : ClientControllerBase<UserManager>
         {
             return NotFound("");
         }
-        var user = await manager.GetCurrentAsync(_user.UserId);
+        User? user = await manager.GetCurrentAsync(_user.UserId);
         return !HashCrypto.Validate(password, user!.PasswordSalt, user.PasswordHash)
             ? (ActionResult<bool>)Problem("当前密码不正确")
             : await manager.ChangePasswordAsync(user, newPassword);
@@ -232,7 +232,7 @@ public class UserController : ClientControllerBase<UserManager>
     [HttpPut]
     public async Task<ActionResult<User?>> UpdateAsync(UserUpdateDto dto)
     {
-        var current = await manager.GetCurrentAsync(_user.UserId);
+        User? current = await manager.GetCurrentAsync(_user.UserId);
         if (current == null) { return NotFound(ErrorMsg.NotFoundResource); };
         return await manager.UpdateAsync(current, dto);
     }
@@ -244,7 +244,7 @@ public class UserController : ClientControllerBase<UserManager>
     [HttpGet]
     public async Task<ActionResult<User?>> GetDetailAsync()
     {
-        var res = await manager.FindAsync(_user.UserId);
+        User? res = await manager.FindAsync(_user.UserId);
         return (res == null) ? NotFound(ErrorMsg.NotFoundResource) : res;
     }
 }
