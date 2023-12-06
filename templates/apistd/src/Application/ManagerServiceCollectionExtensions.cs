@@ -3,13 +3,9 @@ namespace Application;
 
 public static partial class ManagerServiceCollectionExtensions
 {
-    public static void AddDataStore(this IServiceCollection services)
-    {
-        services.AddScoped(typeof(DataAccessContext<>));
-    }
-
     public static void AddManager(this IServiceCollection services)
     {
+        services.AddScoped(typeof(DataAccessContext<>));
         services.AddScoped(typeof(SystemConfigManager));
         services.AddScoped(typeof(SystemLogsManager));
         services.AddScoped(typeof(SystemMenuManager));

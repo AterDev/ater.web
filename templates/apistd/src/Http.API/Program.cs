@@ -19,13 +19,12 @@ services.AddAuthorizationBuilder()
     .AddPolicy(AppConst.AdminUser, policy => policy.RequireRole(AppConst.SuperAdmin, AppConst.AdminUser))
     .AddPolicy(AppConst.SuperAdmin, policy => policy.RequireRole(AppConst.SuperAdmin));
 
-// 3 数据及业务接口注入
 services.AddHttpContextAccessor();
 services.AddTransient<IUserContext, UserContext>();
 services.AddTransient<ITenantProvider, TenantProvider>();
-
-services.AddDataStore();
+// 3 数据及业务接口注入
 services.AddManager();
+// 其他模块Manager
 
 // 4 其他自定义选项及服务
 services.AddSingleton(typeof(CacheService));
@@ -65,17 +64,12 @@ else
 }
 
 app.UseStaticFiles();
-
 // 异常统一处理
 app.UseExceptionHandler(ExceptionHandler.Handler());
-
-app.UseHealthChecks("/health");
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapDefaultControllerRoute();
-
 app.MapFallbackToFile("index.html");
 
 using (app)

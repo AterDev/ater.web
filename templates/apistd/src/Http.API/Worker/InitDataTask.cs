@@ -1,5 +1,4 @@
-﻿using Entity.System;
-using EntityFramework.DBProvider;
+﻿using EntityFramework.DBProvider;
 
 namespace Http.API.Worker;
 public class InitDataTask
@@ -34,9 +33,9 @@ public class InitDataTask
                 await UpdateAsync(context, configuration);
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            logger.LogError("初始化异常,请检查数据库配置：{message}", connectionString + ex.Message);
+            logger.LogError("初始化异常,请检查数据库配置：{message}", connectionString);
         }
     }
 
@@ -96,7 +95,7 @@ public class InitDataTask
     /// </summary>
     /// <param name="context"></param>
     /// <param name="configuration"></param>
-    /// <returns></returns>
+    /// <returns></returns> 
     public static async Task UpdateAsync(CommandDbContext context, IConfiguration configuration)
     {
         // 查询库中版本

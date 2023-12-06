@@ -1,4 +1,3 @@
-using Application.Services;
 using OrderMod.Models.OrderDtos;
 
 namespace OrderMod.Manager;
@@ -9,15 +8,12 @@ public class OrderManager : ManagerBase<Order, OrderUpdateDto, OrderFilterDto, O
 {
     private readonly ProductManager _productManager;
     private readonly IUserContext _userContext;
-    private readonly IEmailService _email;
     public OrderManager(
         DataAccessContext<Order> dataContext,
         ILogger<OrderManager> logger,
         IUserContext userContext,
-        IEmailService email,
         ProductManager productManager) : base(dataContext, logger)
     {
-        _email = email;
         _productManager = productManager;
         _userContext = userContext;
     }

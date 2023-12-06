@@ -9,8 +9,6 @@ namespace Application.Services;
 public class StorageService
 {
     private readonly AzureOption option;
-    private static readonly string BlobName = "public";
-
     private readonly ILogger<StorageService> _logger;
 
     public StorageService(IOptions<AzureOption> option, ILogger<StorageService> logger)

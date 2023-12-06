@@ -10,7 +10,7 @@ namespace Http.API.Infrastructure;
 public static class ServiceCollectionExtension
 {
     /// <summary>
-    /// 添加web服务组件，如身份认证/swagger/cors/健康检查内容
+    /// 添加web服务组件，如身份认证/swagger/cors
     /// </summary>
     /// <param name="services"></param>
     /// <param name="configuration"></param>
