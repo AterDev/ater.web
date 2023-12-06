@@ -26,20 +26,11 @@ public class RestControllerBase<TManager> : RestControllerBase
         _logger = logger;
     }
 
-    /*
-    protected async Task<SystemUser?> GetUserAsync()
-    {
-        return await _user.GetSystemUserAsync();
-    }
-    */
-
-    // TODO:角色权限
     [NonAction]
     public virtual bool HasPermission()
     {
         return true;
     }
-
 }
 
 /// <summary>
@@ -65,6 +56,7 @@ public class ClientControllerBase<TManager> : RestControllerBase
         _user = user;
         _logger = logger;
     }
+
     /*
     protected async Task<User?> GetUserAsync()
     {

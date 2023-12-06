@@ -1,6 +1,4 @@
-﻿using Ater.Web.Abstraction;
-
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -24,7 +22,7 @@ public static class ServiceCollectionExtension
     }
 
     /// <summary>
-    /// 添加jwt 验证
+    /// 添加 jwt 验证
     /// </summary>
     /// <param name="services"></param>
     /// <param name="configuration"></param>
