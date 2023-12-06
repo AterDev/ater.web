@@ -1,5 +1,5 @@
 ﻿using Entity.System;
-using EntityFramework;
+using EntityFramework.DBProvider;
 
 namespace Http.API.Worker;
 public class InitDataTask

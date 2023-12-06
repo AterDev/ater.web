@@ -1,20 +1,18 @@
+// 对常见查询方法的实现
 
+using EntityFramework.DBProvider;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
-namespace EntityFramework.QueryStore;
+namespace EntityFramework;
 
 /// <summary>
-/// 只读仓储基类,请勿直接修改基类内容
+/// 只读仓储基类
 /// </summary>
-/// <typeparam name="TContext"></typeparam>
 /// <typeparam name="TEntity"></typeparam>
 public partial class QuerySet<TEntity> :
     IQueryStore<TEntity>, IQueryStoreExt<TEntity>
     where TEntity : class, IEntityBase
 {
-
-    private readonly QueryDbContext _queryDbContext;
-
     public DbSet<TEntity> Db { get; }
     public DatabaseFacade Database { get; init; }
     public IQueryable<TEntity> Queryable { get; private set; }
@@ -26,13 +24,11 @@ public partial class QuerySet<TEntity> :
 
     public QuerySet(QueryDbContext queryDbContext)
     {
-        _queryDbContext = queryDbContext;
         Db = queryDbContext.Set<TEntity>();
         Queryable = EnableGlobalQuery
             ? Db.AsQueryable()
             : Db.IgnoreQueryFilters().AsQueryable();
         Database = queryDbContext.Database;
-
     }
 
     private void ResetQuery()

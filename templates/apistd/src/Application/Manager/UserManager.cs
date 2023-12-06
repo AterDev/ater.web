@@ -4,7 +4,7 @@ namespace Application.Manager;
 /// <summary>
 /// 用户账户
 /// </summary>
-public class UserManager : ManagerBase<User, UserUpdateDto, UserFilterDto, UserItemDto>, IDomainManager<User>
+public class UserManager : ManagerBase<User, UserUpdateDto, UserFilterDto, UserItemDto>
 {
     private readonly IUserContext _userContext;
     public UserManager(

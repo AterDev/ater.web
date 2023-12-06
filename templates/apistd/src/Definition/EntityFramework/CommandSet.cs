@@ -1,6 +1,7 @@
+using EntityFramework.DBProvider;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
-namespace EntityFramework.CommandStore;
+namespace EntityFramework;
 /// <summary>
 /// 读写仓储基类,请勿直接修改基类内容 
 /// </summary>
@@ -130,7 +131,7 @@ public partial class CommandSet<TEntity> : ICommandStore<TEntity>, ICommandStore
         if (chunk != null && entities.Count > chunk)
         {
 
-            entities.Chunk((entities.Count / chunk.Value) + 1).ToList()
+            entities.Chunk(entities.Count / chunk.Value + 1).ToList()
                 .ForEach(block =>
                 {
                     _db.AddRange(block);

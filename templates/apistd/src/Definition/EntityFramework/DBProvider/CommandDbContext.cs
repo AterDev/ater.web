@@ -1,4 +1,4 @@
-﻿namespace EntityFramework;
+﻿namespace EntityFramework.DBProvider;
 public class CommandDbContext : ContextBase
 {
     public CommandDbContext(DbContextOptions<CommandDbContext> options) : base(options)

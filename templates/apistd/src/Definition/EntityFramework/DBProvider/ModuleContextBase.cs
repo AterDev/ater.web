@@ -2,7 +2,7 @@
 using Entity.FileManager;
 using Entity.Order;
 
-namespace EntityFramework;
+namespace EntityFramework.DBProvider;
 public partial class ContextBase
 {
     public DbSet<FileData> FileDatas { get; set; }

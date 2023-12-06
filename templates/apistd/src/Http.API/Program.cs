@@ -1,6 +1,5 @@
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
-
 using Http.API.Worker;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);

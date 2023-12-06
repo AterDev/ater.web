@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore.Query;
 
-namespace EntityFramework;
+namespace EntityFramework.DBProvider;
 
 public partial class ContextBase : DbContext
 {

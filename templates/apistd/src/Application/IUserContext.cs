@@ -1,5 +1,3 @@
-using Entity.System;
-
 namespace Application;
 
 /// <summary>
@@ -7,13 +5,15 @@ namespace Application;
 /// </summary>
 public interface IUserContext
 {
-    public Guid? UserId { get; init; }
-    public Guid? SessionId { get; init; }
+    public Guid UserId { get; init; }
     public string? Username { get; init; }
     public string? Email { get; set; }
     public bool IsAdmin { get; init; }
     public string? CurrentRole { get; set; }
     public List<string>? Roles { get; set; }
+    /// <summary>
+    /// 组织id
+    /// </summary>
     public Guid? GroupId { get; init; }
 
     Task<bool> ExistAsync();

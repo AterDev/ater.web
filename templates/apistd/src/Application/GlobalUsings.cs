@@ -11,8 +11,6 @@ global using Ater.Web.Core.Utils;
 global using Entity;
 global using Entity.System;
 global using EntityFramework;
-global using EntityFramework.CommandStore;
-global using EntityFramework.QueryStore;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Logging;

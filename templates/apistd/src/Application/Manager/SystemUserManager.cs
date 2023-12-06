@@ -2,7 +2,7 @@ using Share.Models.SystemUserDtos;
 
 namespace Application.Manager;
 
-public class SystemUserManager : ManagerBase<SystemUser, SystemUserUpdateDto, SystemUserFilterDto, SystemUserItemDto>, IDomainManager<SystemUser>
+public class SystemUserManager : ManagerBase<SystemUser, SystemUserUpdateDto, SystemUserFilterDto, SystemUserItemDto>
 {
 
     private string? ErrorMessage { get; }

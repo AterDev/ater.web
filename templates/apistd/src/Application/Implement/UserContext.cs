@@ -1,13 +1,12 @@
 using System.Runtime.CompilerServices;
-using Entity.System;
+using EntityFramework.DBProvider;
 using Microsoft.AspNetCore.Http;
 
 namespace Application.Implement;
 
 public partial class UserContext : IUserContext
 {
-    public Guid? UserId { get; init; }
-    public Guid? SessionId { get; init; }
+    public Guid UserId { get; init; }
     public string? Username { get; init; }
     public string? Email { get; set; }
     /// <summary>
@@ -17,6 +16,7 @@ public partial class UserContext : IUserContext
     public string? CurrentRole { get; set; }
     public List<string>? Roles { get; set; }
     public Guid? GroupId { get; init; }
+
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly CommandDbContext _context;
     public UserContext(IHttpContextAccessor httpContextAccessor, CommandDbContext context)
@@ -91,7 +91,7 @@ public partial class UserContext : IUserContext
     {
         var route = _httpContextAccessor.HttpContext?.Request?.Path.Value + $":[{caller}]";
 
-        if (UserId != null)
+        if (UserId != Guid.Empty)
         {
             description = "";
             var log = new SystemLogs
@@ -109,4 +109,6 @@ public partial class UserContext : IUserContext
             await _context.SaveChangesAsync();
         }
     }
+
+    public Guid? TenantId { get; set; }
 }

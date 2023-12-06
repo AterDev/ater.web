@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using EntityFramework.DBProvider;
+using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
 
 namespace Application;
 
@@ -27,11 +29,29 @@ public static class AppSetting
 /// </summary>
 public static partial class AppServiceCollectionExtensions
 {
+    /// <summary>
+    /// 添加应用组件
+    /// </summary>
+    /// <param name="services"></param>
+    /// <param name="configuration"></param>
     /// <returns></returns>
     public static IServiceCollection AddAppComponents(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddPgsqlDbContext(configuration);
         services.AddRedisCache(configuration);
+        return services;
+    }
+
+
+    /// <summary>
+    /// 添加数据工厂
+    /// </summary>
+    /// <param name="services"></param>
+    /// <returns></returns>
+    public static IServiceCollection AddDbFactory(this IServiceCollection services)
+    {
+        services.AddSingleton<IDesignTimeDbContextFactory<QueryDbContext>, QueryDbContextFactory>();
+        services.AddSingleton<IDesignTimeDbContextFactory<CommandDbContext>, CommandDbContextFactory>();
         return services;
     }
 

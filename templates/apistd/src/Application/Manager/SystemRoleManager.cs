@@ -2,7 +2,7 @@ using Share.Models.SystemRoleDtos;
 
 namespace Application.Manager;
 
-public class SystemRoleManager : ManagerBase<SystemRole, SystemRoleUpdateDto, SystemRoleFilterDto, SystemRoleItemDto>, IDomainManager<SystemRole>
+public class SystemRoleManager : ManagerBase<SystemRole, SystemRoleUpdateDto, SystemRoleFilterDto, SystemRoleItemDto>
 {
     public SystemRoleManager(
         DataAccessContext<SystemRole> dataContext,

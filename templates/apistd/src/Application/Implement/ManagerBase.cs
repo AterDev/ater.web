@@ -1,3 +1,4 @@
+using EntityFramework.DBProvider;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Application.Implement;
