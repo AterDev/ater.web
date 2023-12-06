@@ -214,16 +214,14 @@ public class UserController : ClientControllerBase<UserManager>
     [HttpPut("changePassword")]
     public async Task<ActionResult<bool>> ChangePassword(string password, string newPassword)
     {
-        if (!await manager.ExistAsync(_user.UserId!.Value))
+        if (!await manager.ExistAsync(_user.UserId))
         {
             return NotFound("");
         }
-        var user = await manager.GetCurrentAsync(_user.UserId!.Value);
-        if (!HashCrypto.Validate(password, user!.PasswordSalt, user.PasswordHash))
-        {
-            return Problem("当前密码不正确");
-        }
-        return await manager.ChangePasswordAsync(user, newPassword);
+        var user = await manager.GetCurrentAsync(_user.UserId);
+        return !HashCrypto.Validate(password, user!.PasswordSalt, user.PasswordHash)
+            ? (ActionResult<bool>)Problem("当前密码不正确")
+            : await manager.ChangePasswordAsync(user, newPassword);
     }
 
     /// <summary>
@@ -234,7 +232,7 @@ public class UserController : ClientControllerBase<UserManager>
     [HttpPut]
     public async Task<ActionResult<User?>> UpdateAsync(UserUpdateDto dto)
     {
-        var current = await manager.GetCurrentAsync(_user.UserId!.Value);
+        var current = await manager.GetCurrentAsync(_user.UserId);
         if (current == null) { return NotFound(ErrorMsg.NotFoundResource); };
         return await manager.UpdateAsync(current, dto);
     }
@@ -246,7 +244,7 @@ public class UserController : ClientControllerBase<UserManager>
     [HttpGet]
     public async Task<ActionResult<User?>> GetDetailAsync()
     {
-        var res = await manager.FindAsync(_user.UserId!.Value);
+        var res = await manager.FindAsync(_user.UserId);
         return (res == null) ? NotFound(ErrorMsg.NotFoundResource) : res;
     }
 }

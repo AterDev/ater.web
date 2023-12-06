@@ -4,7 +4,7 @@ namespace FileManagerMod.Manager;
 /// <summary>
 /// 文件夹
 /// </summary>
-public class FolderManager : ManagerBase<Folder, FolderUpdateDto, FolderFilterDto, FolderItemDto>, IDomainManager<Folder>
+public class FolderManager : ManagerBase<Folder, FolderUpdateDto, FolderFilterDto, FolderItemDto>
 {
     public FolderManager(
         DataAccessContext<Folder> dataContext,

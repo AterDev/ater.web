@@ -36,7 +36,7 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem>
     /// <summary>
     /// 错误信息
     /// </summary>
-    protected string ErrorMsg { get; set; } = string.Empty;
+    public string ErrorMsg { get; set; } = string.Empty;
 
     public DatabaseFacade Database { get; init; }
 

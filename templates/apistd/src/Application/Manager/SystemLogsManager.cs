@@ -25,7 +25,7 @@ public class SystemLogsManager : ManagerBase<SystemLogs, SystemLogsUpdateDto, Sy
     {
         var entity = dto.MapTo<SystemLogsAddDto, SystemLogs>();
         Command.Db.Entry(entity).Property("SystemUserId").CurrentValue = _userContext.UserId;
-        // or entity.SystemUserId = _userContext.UserId!.Value;
+        // or entity.SystemUserId = _userContext.UserId;
         // other required props
         return await Task.FromResult(entity);
     }

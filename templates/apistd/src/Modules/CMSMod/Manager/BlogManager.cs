@@ -5,7 +5,7 @@ namespace CMSMod.Manager;
 /// <summary>
 /// 博客
 /// </summary>
-public class BlogManager : ManagerBase<Blog, BlogUpdateDto, BlogFilterDto, BlogItemDto>, IDomainManager<Blog>
+public class BlogManager : ManagerBase<Blog, BlogUpdateDto, BlogFilterDto, BlogItemDto>
 {
     private readonly IUserContext _userContext;
     public BlogManager(
@@ -24,7 +24,7 @@ public class BlogManager : ManagerBase<Blog, BlogUpdateDto, BlogFilterDto, BlogI
     public async Task<Blog> CreateNewEntityAsync(BlogAddDto dto)
     {
         var entity = dto.MapTo<BlogAddDto, Blog>();
-        entity.UserId = _userContext.UserId!.Value;
+        entity.UserId = _userContext.UserId;
         Command.Db.Entry(entity).Property("CatalogId").CurrentValue = dto.CatalogId;
         // or entity.CatalogId = dto.CatalogId;
         // other required props

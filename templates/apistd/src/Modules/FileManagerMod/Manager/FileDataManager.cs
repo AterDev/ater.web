@@ -6,7 +6,7 @@ namespace FileManagerMod.Manager;
 /// <summary>
 /// 文件数据
 /// </summary>
-public class FileDataManager : ManagerBase<FileData, FileDataUpdateDto, FileDataFilterDto, FileDataItemDto>, IDomainManager<FileData>
+public class FileDataManager : ManagerBase<FileData, FileDataUpdateDto, FileDataFilterDto, FileDataItemDto>
 {
     public FileDataManager(
         DataAccessContext<FileData> dataContext,

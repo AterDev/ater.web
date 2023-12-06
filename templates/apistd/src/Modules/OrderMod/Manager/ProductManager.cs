@@ -4,7 +4,7 @@ namespace OrderMod.Manager;
 /// <summary>
 /// 产品
 /// </summary>
-public class ProductManager : ManagerBase<Product, ProductUpdateDto, ProductFilterDto, ProductItemDto>, IDomainManager<Product>
+public class ProductManager : ManagerBase<Product, ProductUpdateDto, ProductFilterDto, ProductItemDto>
 {
     private readonly UserManager _userManager;
     private readonly IUserContext _userContext;
@@ -68,7 +68,7 @@ public class ProductManager : ManagerBase<Product, ProductUpdateDto, ProductFilt
         {
             ProductName = product.Name,
             ProductId = product.Id,
-            UserId = _userContext!.UserId!.Value,
+            UserId = _userContext.UserId,
             OriginPrice = product.OriginPrice,
             TotalPrice = product.Price,
             Status = OrderStatus.Paid,

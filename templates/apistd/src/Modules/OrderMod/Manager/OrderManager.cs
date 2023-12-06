@@ -5,7 +5,7 @@ namespace OrderMod.Manager;
 /// <summary>
 /// 订单
 /// </summary>
-public class OrderManager : ManagerBase<Order, OrderUpdateDto, OrderFilterDto, OrderItemDto>, IDomainManager<Order>
+public class OrderManager : ManagerBase<Order, OrderUpdateDto, OrderFilterDto, OrderItemDto>
 {
     private readonly ProductManager _productManager;
     private readonly IUserContext _userContext;

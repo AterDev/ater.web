@@ -36,23 +36,9 @@ public class ProductController : ClientControllerBase<ProductManager>
     public async Task<ActionResult<Order>> BuyProductAsync([FromRoute] Guid id)
     {
         var res = await manager.BuyProductAsync(id);
-        if (res == null)
-        {
-            return Problem(manager.ErrorMsg);
-        }
-        return res;
+        return res == null ? Problem(manager.ErrorMsg) : (ActionResult<Order>)res;
     }
 
-    /// <summary>
-    /// 获取用户贡献值 ✅
-    /// </summary>
-    /// <returns></returns>
-    [HttpGet("getContribution")]
-    public async Task<int> GetContributionAsync()
-    {
-        var res = await manager.GetContributionAsync(_user.UserId!.Value);
-        return (int)res;
-    }
 
     /// <summary>
     /// 详情 ✅

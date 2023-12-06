@@ -34,16 +34,6 @@ public class OrderController : ClientControllerBase<OrderManager>
         return await manager.FilterAsync(filter);
     }
 
-    /// <summary>
-    /// 充值 ✅
-    /// </summary>
-    /// <returns></returns>
-    [HttpGet("recharge")]
-    public async Task<ActionResult> RechargeAsync(decimal price)
-    {
-        var res = await manager.RechargeAsync(price);
-        return res == null ? Problem("请求充值失败！") : Content(res, "text/html");
-    }
 
     /// <summary>
     /// 接收异步通知 ✅

@@ -1,4 +1,3 @@
-using Entity.System;
 using Share.Models.AuthDtos;
 using Share.Models.SystemUserDtos;
 
@@ -106,7 +105,7 @@ public class SystemUserController : RestControllerBase<SystemUserManager>
                 // 加载关联数据
 
                 var roles = user.SystemRoles?.Select(r => r.NameValue)?.ToList()
-                    ?? new List<string> { AppConst.AdminUser };
+                    ?? [AppConst.AdminUser];
                 // 过期时间:minutes
                 var expired = 60 * 24;
                 JwtService jwt = new(sign, audience, issuer)
@@ -207,12 +206,7 @@ public class SystemUserController : RestControllerBase<SystemUserManager>
     public async Task<ActionResult<SystemUser?>> UpdateAsync([FromRoute] Guid id, SystemUserUpdateDto dto)
     {
         var current = await manager.GetCurrentAsync(id);
-        if (current == null)
-        {
-            return NotFound(ErrorMsg.NotFoundResource);
-        }
-
-        return await manager.UpdateAsync(current, dto);
+        return current == null ? (ActionResult<SystemUser?>)NotFound(ErrorMsg.NotFoundResource) : (ActionResult<SystemUser?>)await manager.UpdateAsync(current, dto);
     }
 
     /// <summary>
@@ -222,16 +216,14 @@ public class SystemUserController : RestControllerBase<SystemUserManager>
     [HttpPut("changePassword")]
     public async Task<ActionResult<bool>> ChangePassword(string password, string newPassword)
     {
-        if (!await manager.ExistAsync(_user.UserId!.Value))
+        if (!await manager.ExistAsync(_user.UserId))
         {
             return NotFound("");
         }
-        var user = await manager.GetCurrentAsync(_user.UserId!.Value);
-        if (!HashCrypto.Validate(password, user!.PasswordSalt, user.PasswordHash))
-        {
-            return Problem("当前密码不正确");
-        }
-        return await manager.ChangePasswordAsync(user, newPassword);
+        var user = await manager.GetCurrentAsync(_user.UserId);
+        return !HashCrypto.Validate(password, user!.PasswordSalt, user.PasswordHash)
+            ? (ActionResult<bool>)Problem("当前密码不正确")
+            : (ActionResult<bool>)await manager.ChangePasswordAsync(user, newPassword);
     }
 
     /// <summary>
@@ -244,7 +236,7 @@ public class SystemUserController : RestControllerBase<SystemUserManager>
     {
         var res = _user.IsRole(AppConst.SuperAdmin)
             ? await manager.FindAsync(id)
-            : await manager.FindAsync(_user.UserId!.Value);
+            : await manager.FindAsync(_user.UserId);
         return (res == null) ? NotFound() : res;
     }
 
@@ -259,10 +251,6 @@ public class SystemUserController : RestControllerBase<SystemUserManager>
     {
         // 注意删除权限
         var entity = await manager.GetCurrentAsync(id);
-        if (entity == null)
-        {
-            return NotFound();
-        }
-        return await manager.DeleteAsync(entity);
+        return entity == null ? (ActionResult<SystemUser?>)NotFound() : (ActionResult<SystemUser?>)await manager.DeleteAsync(entity);
     }
 }
