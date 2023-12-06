@@ -9,12 +9,10 @@ namespace Application;
 /// </summary>
 public static class AppSetting
 {
-    public const string None = "none";
-    public const string PostgreSQL = "postgresql";
-    public const string SQLServer = "sqlserver";
-    public const string MySQL = "mysql";
-    public const string Redis = "redis";
-    public const string Memory = "memory";
+    public const string Components = "Components";
+    public const string None = "None";
+    public const string Redis = "Redis";
+    public const string Memory = "Memory";
     public const string Otlp = "otlp";
 
     public const string CommandDB = "CommandDb";
@@ -92,10 +90,15 @@ public static partial class AppServiceCollectionExtensions
     /// <returns></returns>
     public static IServiceCollection AddRedisCache(this IServiceCollection services, IConfiguration configuration)
     {
-        return services.AddStackExchangeRedisCache(options =>
-        {
-            options.Configuration = configuration.GetConnectionString(AppSetting.Cache);
-            options.InstanceName = configuration.GetConnectionString(AppSetting.CacheInstanceName);
-        });
+        var cache = configuration.GetSection(AppSetting.Components).GetValue<string>(AppSetting.Cache);
+        return cache == AppSetting.Redis
+            ? services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = configuration.GetConnectionString(AppSetting.Cache);
+                options.InstanceName = configuration.GetConnectionString(AppSetting.CacheInstanceName);
+            })
+            : services.AddMemoryCache();
+
+
     }
 }

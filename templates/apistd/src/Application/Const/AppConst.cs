@@ -7,6 +7,8 @@ public static class AppConst
     public const string DefaultStateName = "statestore";
     public const string DefaultPubSubName = "pubsub";
 
+    public const string TenantId = "TenantId";
+
     /// <summary>
     /// 超级管理员
     /// </summary>
