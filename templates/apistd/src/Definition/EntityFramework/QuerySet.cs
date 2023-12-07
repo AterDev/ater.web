@@ -141,7 +141,6 @@ public partial class QuerySet<TEntity> :
 
         var count = Queryable.Count();
         List<TItem> data = await Queryable
-            .OrderByDescending(t => t.CreatedTime)
             .Skip((pageIndex - 1) * pageSize)
             .Take(pageSize)
             .ProjectTo<TItem>()
@@ -181,7 +180,6 @@ public partial class QuerySet<TEntity> :
         var count = Queryable.Count();
         List<TItem> data = await Queryable
             .AsNoTracking()
-            .OrderByDescending(t => t.CreatedTime)
             .Skip((pageIndex - 1) * pageSize)
             .Take(pageSize)
             .ProjectTo<TItem>()

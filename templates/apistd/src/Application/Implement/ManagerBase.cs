@@ -27,7 +27,7 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem>
 
     public CommandDbContext CommandContext { get; init; }
 
-    public QueryDbContext QueryCommand { get; init; }
+    public QueryDbContext QueryContext { get; init; }
     /// <summary>
     /// 是否自动保存(调用SaveChanges)
     /// </summary>
@@ -47,7 +47,7 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem>
         Database = Command.Database;
         this._logger = logger;
         CommandContext = dataAccessContext.CommandContext;
-        QueryCommand = dataAccessContext.QueryContext;
+        QueryContext = dataAccessContext.QueryContext;
     }
 
     public async Task<int> SaveChangesAsync()
