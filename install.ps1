@@ -3,7 +3,7 @@
 function TempModule([string]$solutionPath, [string]$moduleName) {
     Write-Host "move module:"$moduleName
     $tmp = Join-Path $solutionPath "./.tmp"
-    $entityPath = Join-Path $solutionPath "./src/Entity" $moduleName
+    $entityPath = Join-Path $solutionPath "./src/Definition/Entity" $moduleName
 
     $destDir = Join-Path $tmp $moduleName
 
@@ -16,7 +16,8 @@ function TempModule([string]$solutionPath, [string]$moduleName) {
     Move-Item -Path $entityPath\* -Destination $entityDestDir -Force
 
     # remove module reference project
-    $moduleProjectFile = Join-Path $solutionPath "src/Modules/$moduleNameMod" "$moduleNameMod.csproj"
+    $moduleNameMod = $moduleName + "Mod"
+    $moduleProjectFile = Join-Path $solutionPath "src/Modules/"$moduleNameMod "$moduleNameMod.csproj"
     $apiProjectFile = Join-Path $solutionPath "src/Http.API/Http.API.csproj"
     dotnet remove $apiProjectFile reference $moduleProjectFile
 }
@@ -29,7 +30,7 @@ function RestoreModule ([string]$solutionPath, [string]$moduleName) {
         # restore module  entity and application from tmp
         $destDir = Join-Path $tmp $moduleName
         $entityDestDir = Join-Path $destDir "Entities"
-        $entityPath = Join-Path $solutionPath "./src/Entity" $moduleName"Entities"
+        $entityPath = Join-Path $solutionPath "./src/Definition/Entity" $moduleName
 
         Move-Item -Path $entityDestDir\* -Destination $entityPath -Force
     }
@@ -47,10 +48,6 @@ if (Test-Path ./templates/apistd/src/Http.API/Migrations) {
 }
 $location = Get-Location
 $entityPath = Join-Path $location "./templates/apistd/src/Entity"
-# 获取模块
-$entityFiles = Get-ChildItem -Path $entityPath -Filter "*.cs" -Recurse |`
-    Select-String -Pattern "\[Module" -List |`
-    Select-Object -ExpandProperty Path
 
 # 模块名称
 $modulesNames = @("CMS", "FileManager", "Order")
@@ -62,9 +59,12 @@ if (!(Test-Path $tmp)) {
 }
 
 try {
-    # backup sln file
+    # backup files
     $apiProjectFile = Join-Path $solutionPath "src/Http.API/Http.API.csproj"
     Copy-Item -Path $apiProjectFile -Destination $tmp -Force
+
+    $moduleContextBaseFile = Join-Path $solutionPath "src/Definition/EntityFramework/DBProvider/ModuleContextBase.cs"
+    Move-Item -Path $moduleContextBaseFile -Destination $tmp -Force
 
     Write-Host "find modules:"$modulesNames;
 
@@ -79,8 +79,9 @@ try {
         RestoreModule $solutionPath $moduleName
     }
 
-    # restore sln file
+    # restore  files
     Copy-Item -Path $tmp\Http.API.csproj -Destination $solutionPath\src\Http.API -Force
+    Copy-Item -Path $tmp\ModuleContextBase.cs -Destination $solutionPath\src\Definition\EntityFramework\DBProvider -Force
 
     # delete tmp directory
     Remove-Item $tmp -Force -Recurse

@@ -11,7 +11,6 @@ public class BaseTest : IClassFixture<WebApplicationFactory<Program>>
           {
               builder.ConfigureServices(services =>
               {
-                  services.AddTransient<IUserContext, TestUserContext>();
                   // your test database
                   //var connectionString = "";
                   //services.AddDbContextPool<QueryDbContext>(option => option.UseNpgsql(connectionString));

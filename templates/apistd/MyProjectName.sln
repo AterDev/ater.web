@@ -63,6 +63,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyProjectName.ServiceDefaul
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderMod", "src\Modules\OrderMod\OrderMod.csproj", "{A9670A23-624D-47EF-B222-E1DB534FFFFB}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.Test", "test\Application.Test\Application.Test.csproj", "{DA3EA84C-F0A4-4B15-9B70-812C3201B200}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -117,6 +119,10 @@ Global
 		{A9670A23-624D-47EF-B222-E1DB534FFFFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9670A23-624D-47EF-B222-E1DB534FFFFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A9670A23-624D-47EF-B222-E1DB534FFFFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA3EA84C-F0A4-4B15-9B70-812C3201B200}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA3EA84C-F0A4-4B15-9B70-812C3201B200}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA3EA84C-F0A4-4B15-9B70-812C3201B200}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA3EA84C-F0A4-4B15-9B70-812C3201B200}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -138,6 +144,7 @@ Global
 		{F4723267-96C3-4F68-BB2E-0545938FDA10} = {D509B8F8-C6F1-41EA-B32C-6ADAA6F65DE0}
 		{739D4BE7-BA1A-4F1D-BE4B-190E2E18B034} = {D509B8F8-C6F1-41EA-B32C-6ADAA6F65DE0}
 		{A9670A23-624D-47EF-B222-E1DB534FFFFB} = {A55B3441-BB43-4DB8-84C7-1E7368189451}
+		{DA3EA84C-F0A4-4B15-9B70-812C3201B200} = {7FEE554D-ABB8-40A3-8F56-DB0F7D47CBFD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E9C122E1-F965-4DE0-BA4B-CFC5D269C768}
