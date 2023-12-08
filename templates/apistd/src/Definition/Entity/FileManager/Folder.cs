@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Entity.FileManager;
+﻿namespace Entity.FileManager;
 
 /// <summary>
 /// 文件夹

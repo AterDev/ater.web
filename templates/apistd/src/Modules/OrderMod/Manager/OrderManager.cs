@@ -1,3 +1,4 @@
+using Application;
 using OrderMod.Models.OrderDtos;
 
 namespace OrderMod.Manager;
@@ -25,12 +26,11 @@ public class OrderManager : ManagerBase<Order, OrderUpdateDto, OrderFilterDto, O
     public async Task<Order?> CreateNewEntityAsync(OrderAddDto dto)
     {
         Product? product = await _productManager.GetCurrentAsync(dto.ProductId);
-        User? user = await _userContext!.GetUserAsync();
-        return product != null && user != null
+        return product != null
             ? new Order
             {
                 Product = product,
-                User = user,
+                UserId = _userContext.UserId,
                 ProductName = product.Name,
                 DiscountCode = dto.DiscountCode,
                 OriginPrice = product.OriginPrice,

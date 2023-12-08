@@ -1,4 +1,3 @@
-using Entity.System;
 using Share.Models.SystemConfigDtos;
 namespace Http.API.Controllers.AdminControllers;
 

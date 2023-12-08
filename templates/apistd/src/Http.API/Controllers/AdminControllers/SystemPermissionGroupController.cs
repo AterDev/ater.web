@@ -1,4 +1,3 @@
-using Entity.System;
 using Share.Models.SystemPermissionGroupDtos;
 namespace Http.API.Controllers.AdminControllers;
 

@@ -1,5 +1,5 @@
+using Application;
 using CMSMod.Models.CatalogDtos;
-using Entity;
 using EntityFramework;
 
 namespace CMSMod.Manager;
@@ -23,8 +23,7 @@ public class CatalogManager : ManagerBase<Catalog, CatalogUpdateDto, CatalogFilt
     public async Task<Catalog> CreateNewEntityAsync(CatalogAddDto dto)
     {
         Catalog entity = dto.MapTo<CatalogAddDto, Catalog>();
-        User? user = await _userContext.GetUserAsync();
-        entity.User = user!;
+        entity.UserId = _userContext.UserId;
         if (dto.ParentId != null)
         {
             Catalog? parent = await GetCurrentAsync(dto.ParentId.Value);

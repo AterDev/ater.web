@@ -1,3 +1,4 @@
+using Application;
 using OrderMod.Models.OrderDtos;
 namespace OrderMod.Controllers;
 
@@ -23,7 +24,6 @@ public class OrderController : ClientControllerBase<OrderManager>
     [HttpPost("filter")]
     public async Task<ActionResult<PageList<OrderItemDto>>> FilterAsync(OrderFilterDto filter)
     {
-        if (!await _user.ExistAsync()) { return NotFound(ErrorMsg.NotFoundUser); }
         filter.UserId = _user.UserId;
         return await manager.FilterAsync(filter);
     }

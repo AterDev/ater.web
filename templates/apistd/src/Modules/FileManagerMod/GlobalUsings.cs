@@ -1,6 +1,5 @@
 global using System.ComponentModel.DataAnnotations;
 global using System.Diagnostics;
-global using Application;
 global using Application.Const;
 global using Application.Implement;
 global using Ater.Web.Core.Models;

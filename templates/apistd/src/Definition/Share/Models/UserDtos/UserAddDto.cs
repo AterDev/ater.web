@@ -1,4 +1,3 @@
-using Entity;
 namespace Share.Models.UserDtos;
 /// <summary>
 /// 用户账户添加时请求结构

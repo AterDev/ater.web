@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Entity.System;
+﻿namespace Entity.System;
 /// <summary>
 /// 组织结构
 /// </summary>

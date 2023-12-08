@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-
-namespace Ater.Web.Core.Models;
+﻿namespace Ater.Web.Core.Models;
 /// <summary>
 /// 过滤
 /// </summary>

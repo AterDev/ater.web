@@ -1,6 +1,4 @@
 // 本文件由 ater.dry工具自动生成.
-using OrderMod.Manager;
-
 namespace OrderMod;
 /// <summary>
 /// 服务注入扩展

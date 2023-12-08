@@ -1,4 +1,3 @@
-using Entity.Order;
 namespace OrderMod.Models.ProductDtos;
 /// <summary>
 /// 产品更新时请求结构
