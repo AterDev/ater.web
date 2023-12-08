@@ -36,5 +36,6 @@
 		<ProjectReference Include="..\Application\Application.csproj" />
 		<ProjectReference Include="..\Modules\CMSMod\CMSMod.csproj" />
 		<ProjectReference Include="..\Modules\FileManagerMod\FileManagerMod.csproj" />
+		<ProjectReference Include="..\Modules\OrderMod\OrderMod.csproj" />
 	</ItemGroup>
 </Project>

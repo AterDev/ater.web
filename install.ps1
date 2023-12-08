@@ -3,9 +3,7 @@
 function TempModule([string]$solutionPath, [string]$moduleName) {
     Write-Host "move module:"$moduleName
     $tmp = Join-Path $solutionPath "./.tmp"
-    $entityPath = Join-Path $solutionPath "./src/Entity" $moduleName"Entities"
-    $applicationPath = Join-Path $solutionPath "./src/Application"
-    $entityFrameworkPath = Join-Path $solutionPath "./src/Database/EntityFramework"
+    $entityPath = Join-Path $solutionPath "./src/Entity" $moduleName
 
     $destDir = Join-Path $tmp $moduleName
 
@@ -15,57 +13,10 @@ function TempModule([string]$solutionPath, [string]$moduleName) {
         New-Item -Path $entityDestDir -ItemType Directory -Force | Out-Null
     }
     # get entity names by cs file name without extension
-    $entityNames = Get-ChildItem -Path $entityPath -Filter "*.cs" | ForEach-Object { $_.BaseName }
     Move-Item -Path $entityPath\* -Destination $entityDestDir -Force
 
-    # move store to tmp
-    $applicationDestDir = Join-Path $destDir "Application"
-
-    if (!(Test-Path $applicationDestDir)) {
-        New-Item -Path $applicationDestDir -ItemType Directory -Force | Out-Null
-    }
-
-    foreach ($entityName in $entityNames) {
-        $queryStorePath = Join-Path $entityFrameworkPath "QueryStore" $entityName"QueryStore.cs"
-        $commandStorePath = Join-Path $entityFrameworkPath "CommandStore" $entityName"CommandStore.cs"
-
-        if ((Test-Path $queryStorePath)) {
-            Move-Item -Path $queryStorePath -Destination $applicationDestDir -Force
-        }
-        if ((Test-Path $commandStorePath)) {
-            Move-Item -Path $commandStorePath -Destination $applicationDestDir -Force
-        }
-    }
-
-    Write-Host "Update DataStoreContext"
-    # DatastoreContext.cs
-    $contextPath = Join-Path $entityFrameworkPath "DataStoreContext.cs"
-    # 保存原文件
-    if (!(Test-Path (Join-Path $applicationDestDir "DataStoreContext.cs"))) {
-        Copy-Item -Path $contextPath -Destination $applicationDestDir
-    }
-    $contextContent = Get-Content $contextPath
-
-    foreach ($entityName in $entityNames) {
-        $name = $entityName.Substring(0, 1).ToLower() + $entityName.Substring(1)
-        $contextContent = $contextContent | Where-Object { $_ -notmatch $name + "Query" -and $_ -notmatch $name + "Command" } 
-    }
-    Set-Content $contextPath $contextContent -Force
-
-    # ManagerServiceCollectionExtensions.cs
-    $servicesExtensionsPath = Join-Path $applicationPath "ManagerServiceCollectionExtensions.cs"
-    if (!(Test-Path (Join-Path $applicationDestDir "ManagerServiceCollectionExtensions.cs"))) {
-        Copy-Item -Path $servicesExtensionsPath -Destination $applicationDestDir
-    }
-    $content = Get-Content $servicesExtensionsPath
-    foreach ($entityName in $entityNames) {
-        $name = $entityName
-        $content = $content | Where-Object { $_ -notmatch $name + "QueryStore" -and $_ -notmatch $name + "CommandStore" -and $_ -notmatch $name + "Manager" } 
-    }
-    Set-Content $servicesExtensionsPath $content -Force
-
     # remove module reference project
-    $moduleProjectFile = Join-Path $solutionPath "src/Modules" $moduleName "$moduleName.csproj"
+    $moduleProjectFile = Join-Path $solutionPath "src/Modules/$moduleNameMod" "$moduleNameMod.csproj"
     $apiProjectFile = Join-Path $solutionPath "src/Http.API/Http.API.csproj"
     dotnet remove $apiProjectFile reference $moduleProjectFile
 }
@@ -78,45 +29,9 @@ function RestoreModule ([string]$solutionPath, [string]$moduleName) {
         # restore module  entity and application from tmp
         $destDir = Join-Path $tmp $moduleName
         $entityDestDir = Join-Path $destDir "Entities"
-        $applicationDestDir = Join-Path $destDir "Application"
-        
         $entityPath = Join-Path $solutionPath "./src/Entity" $moduleName"Entities"
-        $applicationPath = Join-Path $solutionPath "./src/Application"
-        $entityFrameworkPath = Join-Path $solutionPath "./src/Database/EntityFramework"
-        $entityNames = Get-ChildItem -Path $entityDestDir -Filter "*.cs" | ForEach-Object { $_.BaseName }
 
         Move-Item -Path $entityDestDir\* -Destination $entityPath -Force
-
-        # stores
-        foreach ($entityName in $entityNames) {
-            $queryStorePath = Join-Path $entityFrameworkPath "QueryStore" $entityName"QueryStore.cs"
-            $queryStoreDestPath = Join-Path $applicationDestDir $entityName"QueryStore.cs"
-
-            if ((Test-Path $queryStoreDestPath)) {
-                Move-Item -Path $queryStoreDestPath -Destination $queryStorePath -Force
-            }
-
-            $commandStorePath = Join-Path $entityFrameworkPath "CommandStore" $entityName"CommandStore.cs"
-            $commandStoreDestPath = Join-Path $applicationDestDir $entityName"CommandStore.cs"
-            if (Test-Path $commandStoreDestPath) {
-                Move-Item -Path $commandStoreDestPath -Destination $commandStorePath -Force
-            }
-        }
-
-        # DataStoreContext.cs
-        $contextPath = Join-Path $entityFrameworkPath "DataStoreContext.cs"
-        $contextDestPath = Join-Path $applicationDestDir "DataStoreContext.cs"
-
-        if (Test-Path $contextDestPath) {
-            Move-Item -Path $contextDestPath -Destination $contextPath -Force
-        }
-        # ManagerServiceCollectionExtensions.cs
-        $servicesExtensionsPath = Join-Path $applicationPath "ManagerServiceCollectionExtensions.cs"
-        $servicesExtensionsDestPath = Join-Path $applicationDestDir "ManagerServiceCollectionExtensions.cs"
-
-        if (Test-Path $servicesExtensionsDestPath) {
-            Move-Item -Path $servicesExtensionsDestPath -Destination $servicesExtensionsPath -Force
-        }
     }
 }
 
@@ -138,7 +53,7 @@ $entityFiles = Get-ChildItem -Path $entityPath -Filter "*.cs" -Recurse |`
     Select-Object -ExpandProperty Path
 
 # 模块名称
-$modulesNames = @()
+$modulesNames = @("CMS", "FileManager", "Order")
 
 $solutionPath = Join-Path $location "./templates/apistd"
 $tmp = Join-Path $solutionPath "./.tmp"
@@ -147,17 +62,6 @@ if (!(Test-Path $tmp)) {
 }
 
 try {
-    # 获取模块名称
-    $regex = '\[Module\("(.+?)"\)\]';
-    foreach ($file in $entityFiles) {
-        $content = Get-Content $file
-        $match = $content | Select-String -Pattern $regex -AllMatches | Select-Object -ExpandProperty Matches
-        $moduleName = $match.Groups[1].Value
-        # add modulename  to modulesNames if not exist 
-        if ($modulesNames -notcontains $moduleName) {
-            $modulesNames += $moduleName
-        }
-    }
     # backup sln file
     $apiProjectFile = Join-Path $solutionPath "src/Http.API/Http.API.csproj"
     Copy-Item -Path $apiProjectFile -Destination $tmp -Force
