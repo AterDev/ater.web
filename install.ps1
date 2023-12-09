@@ -20,6 +20,9 @@ function TempModule([string]$solutionPath, [string]$moduleName) {
     $moduleProjectFile = Join-Path $solutionPath "src/Modules/"$moduleNameMod "$moduleNameMod.csproj"
     $apiProjectFile = Join-Path $solutionPath "src/Http.API/Http.API.csproj"
     dotnet remove $apiProjectFile reference $moduleProjectFile
+
+    dotnet sln $solutionPath/MyProjectName.sln remove moduleProjectFile
+
 }
 
 # 复原模块内容
