@@ -19,10 +19,9 @@ function TempModule([string]$solutionPath, [string]$moduleName) {
     $moduleNameMod = $moduleName + "Mod"
     $moduleProjectFile = Join-Path $solutionPath "src/Modules/"$moduleNameMod "$moduleNameMod.csproj"
     $apiProjectFile = Join-Path $solutionPath "src/Http.API/Http.API.csproj"
+
     dotnet remove $apiProjectFile reference $moduleProjectFile
-
-    dotnet sln $solutionPath/MyProjectName.sln remove moduleProjectFile
-
+    dotnet sln $solutionPath/MyProjectName.sln remove $moduleProjectFile
 }
 
 # 复原模块内容
@@ -37,6 +36,10 @@ function RestoreModule ([string]$solutionPath, [string]$moduleName) {
 
         Move-Item -Path $entityDestDir\* -Destination $entityPath -Force
     }
+    # recover module reference project
+    $moduleNameMod = $moduleName + "Mod"
+    $moduleProjectFile = Join-Path $solutionPath "src/Modules/"$moduleNameMod "$moduleNameMod.csproj"
+    dotnet sln $solutionPath/MyProjectName.sln add $moduleProjectFile
 }
 
 #endregion
