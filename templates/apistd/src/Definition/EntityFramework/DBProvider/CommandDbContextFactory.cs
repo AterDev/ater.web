@@ -1,13 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.Extensions.Caching.Distributed;
+﻿using Microsoft.Extensions.Caching.Distributed;
 
 namespace EntityFramework.DBProvider;
-public class CommandDbContextFactory(ITenantProvider tenantProvider, IDistributedCache cache) : IDesignTimeDbContextFactory<CommandDbContext>
+public class CommandDbContextFactory(ITenantProvider tenantProvider, IDistributedCache cache) : IDbContextFactory<CommandDbContext>
 {
     private readonly ITenantProvider _tenantProvider = tenantProvider;
     private readonly IDistributedCache _cache = cache;
 
-    public CommandDbContext CreateDbContext(string[] args)
+    public CommandDbContext CreateDbContext()
     {
         var optionsBuilder = new DbContextOptionsBuilder<CommandDbContext>();
         Guid tenantId = _tenantProvider.TenantId;

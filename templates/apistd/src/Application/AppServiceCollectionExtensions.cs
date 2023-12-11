@@ -1,5 +1,4 @@
 ﻿using EntityFramework.DBProvider;
-using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
 namespace Application;
@@ -47,8 +46,8 @@ public static partial class AppServiceCollectionExtensions
     /// <returns></returns>
     public static IServiceCollection AddDbFactory(this IServiceCollection services)
     {
-        services.AddSingleton<IDesignTimeDbContextFactory<QueryDbContext>, QueryDbContextFactory>();
-        services.AddSingleton<IDesignTimeDbContextFactory<CommandDbContext>, CommandDbContextFactory>();
+        services.AddSingleton<IDbContextFactory<QueryDbContext>, QueryDbContextFactory>();
+        services.AddSingleton<IDbContextFactory<CommandDbContext>, CommandDbContextFactory>();
         return services;
     }
 
@@ -62,7 +61,7 @@ public static partial class AppServiceCollectionExtensions
     {
         var commandString = configuration.GetConnectionString(AppSetting.CommandDB);
         var queryString = configuration.GetConnectionString(AppSetting.QueryDB);
-        services.AddDbContextPool<QueryDbContext>(option =>
+        services.AddDbContext<QueryDbContext>(option =>
         {
             option.UseNpgsql(queryString, sql =>
             {
@@ -70,7 +69,7 @@ public static partial class AppServiceCollectionExtensions
                 sql.CommandTimeout(10);
             });
         });
-        services.AddDbContextPool<CommandDbContext>(option =>
+        services.AddDbContext<CommandDbContext>(option =>
         {
             option.UseNpgsql(commandString, sql =>
             {

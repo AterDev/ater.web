@@ -25,16 +25,16 @@ public class SystemRole : IEntityBase
     /// </summary>
     [MaxLength(30)]
     public string? Icon { get; set; }
-    public ICollection<SystemUser> Users { get; set; } = new List<SystemUser>();
+    public ICollection<SystemUser> Users { get; set; } = [];
     /// <summary>
     /// 中间表
     /// </summary>
-    public ICollection<SystemPermissionGroup> PermissionGroups { get; set; } = new List<SystemPermissionGroup>();
+    public ICollection<SystemPermissionGroup> PermissionGroups { get; set; } = [];
 
     /// <summary>
     /// 菜单权限
     /// </summary>
-    public ICollection<SystemMenu> Menus { get; set; } = new List<SystemMenu>();
+    public ICollection<SystemMenu> Menus { get; set; } = [];
     public Guid Id { get; set; }
     public DateTimeOffset CreatedTime { get; set; }
     public DateTimeOffset UpdatedTime { get; set; }

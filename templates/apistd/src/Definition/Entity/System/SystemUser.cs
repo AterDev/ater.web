@@ -52,9 +52,9 @@ public class SystemUser : IEntityBase
     /// </summary>
     [MaxLength(200)]
     public string? Avatar { get; set; }
-    public ICollection<SystemRole> SystemRoles { get; set; } = new List<SystemRole>();
-    public ICollection<SystemLogs> SystemLogs { get; set; } = new List<SystemLogs>();
-    public ICollection<SystemOrganization> SystemOrganizations { get; set; } = new List<SystemOrganization>();
+    public ICollection<SystemRole> SystemRoles { get; set; } = [];
+    public ICollection<SystemLogs> SystemLogs { get; set; } = [];
+    public ICollection<SystemOrganization> SystemOrganizations { get; set; } = [];
     /// <summary>
     /// 性别
     /// </summary>
