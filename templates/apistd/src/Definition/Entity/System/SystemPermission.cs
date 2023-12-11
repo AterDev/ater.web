@@ -4,6 +4,7 @@
 /// </summary>
 [Index(nameof(Name))]
 [Index(nameof(PermissionType))]
+[Module(Modules.System)]
 public class SystemPermission : IEntityBase
 {
     /// <summary>

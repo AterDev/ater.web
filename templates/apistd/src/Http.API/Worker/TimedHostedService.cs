@@ -44,13 +44,11 @@ public class TimedHostedService(
     /// <summary>
     /// 数据库操作示例
     /// </summary>
-    public async Task OperateDataBaseAsync(object? state)
+    public Task OperateDataBaseAsync(object? state)
     {
         using IServiceScope scope = Services.CreateScope();
-        SystemUserManager userManager = scope.ServiceProvider.GetRequiredService<SystemUserManager>();
-        List<SystemUser> recentPost = await userManager.Query.Db.OrderByDescending(x => x.CreatedTime)
-            .Take(20)
-            .ToListAsync();
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager>();
+        return Task.CompletedTask;
     }
 
     public Task StopAsync(CancellationToken cancellationToken)

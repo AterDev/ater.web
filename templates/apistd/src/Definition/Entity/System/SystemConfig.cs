@@ -6,6 +6,7 @@
 [Index(nameof(IsSystem))]
 [Index(nameof(Valid))]
 [Index(nameof(GroupName))]
+[Module(Modules.System)]
 public class SystemConfig : IEntityBase
 {
     #region const 

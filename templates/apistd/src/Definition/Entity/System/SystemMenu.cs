@@ -2,6 +2,9 @@
 /// <summary>
 /// 系统菜单
 /// </summary>
+[Module(Modules.System)]
+[Index(nameof(AccessCode))]
+[Index(nameof(Name))]
 public class SystemMenu : IEntityBase, ITreeNode<SystemMenu>
 {
     /// <summary>

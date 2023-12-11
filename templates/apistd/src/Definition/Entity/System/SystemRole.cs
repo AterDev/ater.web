@@ -4,6 +4,7 @@
 /// </summary>
 [Index(nameof(Name))]
 [Index(nameof(NameValue), IsUnique = true)]
+[Module(Modules.System)]
 public class SystemRole : IEntityBase
 {
     /// <summary>

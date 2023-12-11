@@ -9,6 +9,7 @@ namespace Entity.System;
 [Index(nameof(PhoneNumber), IsUnique = true)]
 [Index(nameof(CreatedTime))]
 [Index(nameof(IsDeleted))]
+[Module(Modules.System)]
 public class SystemUser : IEntityBase
 {
     /// <summary>

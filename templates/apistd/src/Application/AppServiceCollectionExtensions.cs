@@ -61,7 +61,7 @@ public static partial class AppServiceCollectionExtensions
     {
         var commandString = configuration.GetConnectionString(AppSetting.CommandDB);
         var queryString = configuration.GetConnectionString(AppSetting.QueryDB);
-        services.AddDbContext<QueryDbContext>(option =>
+        services.AddDbContextPool<QueryDbContext>(option =>
         {
             option.UseNpgsql(queryString, sql =>
             {
@@ -69,7 +69,7 @@ public static partial class AppServiceCollectionExtensions
                 sql.CommandTimeout(10);
             });
         });
-        services.AddDbContext<CommandDbContext>(option =>
+        services.AddDbContextPool<CommandDbContext>(option =>
         {
             option.UseNpgsql(commandString, sql =>
             {

@@ -5,6 +5,7 @@
 [Index(nameof(ActionType))]
 [Index(nameof(ActionUserName))]
 [Index(nameof(CreatedTime))]
+[Module(Modules.System)]
 public class SystemLogs : IEntityBase
 {
     /// <summary>

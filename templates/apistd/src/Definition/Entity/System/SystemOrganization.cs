@@ -2,6 +2,8 @@
 /// <summary>
 /// 组织结构
 /// </summary>
+[Module(Modules.System)]
+[Index(nameof(Name))]
 public class SystemOrganization : IEntityBase, ITreeNode<SystemOrganization>
 {
     /// <summary>

@@ -21,4 +21,10 @@ internal class Modules
     /// 消息通知
     /// </summary>
     public const string Notification = "NotificationMod";
+
+    /// <summary>
+    /// 系统管理
+    /// </summary>
+    public const string System = "SystemMod";
+
 }

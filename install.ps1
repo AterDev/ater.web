@@ -56,7 +56,7 @@ $location = Get-Location
 $entityPath = Join-Path $location "./templates/apistd/src/Entity"
 
 # 模块名称
-$modulesNames = @("CMS", "FileManager", "Order")
+$modulesNames = @("CMS", "FileManager", "Order", "System")
 
 $solutionPath = Join-Path $location "./templates/apistd"
 $tmp = Join-Path $solutionPath "./.tmp"

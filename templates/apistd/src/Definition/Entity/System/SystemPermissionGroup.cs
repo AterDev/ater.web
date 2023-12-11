@@ -1,5 +1,7 @@
 ﻿namespace Entity.System;
 
+[Module(Modules.System)]
+[Index(nameof(Name))]
 public class SystemPermissionGroup : IEntityBase
 {
     /// <summary>
