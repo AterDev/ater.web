@@ -1,4 +1,3 @@
-using Share.Models.AuthDtos;
 using Share.Models.UserDtos;
 
 namespace Http.API.Controllers;
@@ -110,7 +109,7 @@ public class UserController(
     /// <returns></returns>
     [HttpPut("login")]
     [AllowAnonymous]
-    public async Task<ActionResult<AuthResult>> LoginAsync(LoginDto dto)
+    public async Task<ActionResult<LoginResult>> LoginAsync(LoginDto dto)
     {
         // 查询用户
         User? user = await manager.Query.Db.Where(u => u.UserName.Equals(dto.UserName))
@@ -165,7 +164,7 @@ public class UserController(
                 // 缓存登录状态
                 await _cache.SetValueAsync(AppConst.LoginCachePrefix + user.Id.ToString(), true, expired * 60);
 
-                return new AuthResult
+                return new LoginResult
                 {
                     Id = user.Id,
                     Roles = [.. roles],

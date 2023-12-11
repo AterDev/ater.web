@@ -2,7 +2,6 @@ namespace SystemMod.Models.SystemRoleDtos;
 /// <summary>
 /// 角色添加时请求结构
 /// </summary>
-//[NgPage("system", "sysrole")]
 /// <inheritdoc cref="Entity.System.SystemRole"/>
 public class SystemRoleAddDto
 {

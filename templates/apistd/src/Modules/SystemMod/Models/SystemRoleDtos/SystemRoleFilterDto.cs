@@ -2,7 +2,6 @@ namespace SystemMod.Models.SystemRoleDtos;
 /// <summary>
 /// 角色查询筛选
 /// </summary>
-//[NgPage("system", "sysrole")]
 /// <inheritdoc cref="Entity.System.SystemRole"/>
 public class SystemRoleFilterDto : FilterBase
 {

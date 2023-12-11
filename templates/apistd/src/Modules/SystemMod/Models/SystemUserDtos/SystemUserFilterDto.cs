@@ -1,10 +1,7 @@
-using Entity.System;
-
 namespace SystemMod.Models.SystemUserDtos;
 /// <summary>
 /// 系统用户查询筛选
 /// </summary>
-//[NgPage("system", "sysuser")]
 /// <inheritdoc cref="SystemUser"/>
 public class SystemUserFilterDto : FilterBase
 {

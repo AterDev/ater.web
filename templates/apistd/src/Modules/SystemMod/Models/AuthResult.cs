@@ -1,6 +1,4 @@
-﻿using Entity.System;
-
-namespace Share.Models.AuthDtos;
+﻿namespace SystemMod.Models;
 
 public class AuthResult
 {

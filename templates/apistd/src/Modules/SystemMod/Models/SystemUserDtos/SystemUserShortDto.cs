@@ -1,10 +1,7 @@
-using Entity.System;
-
 namespace SystemMod.Models.SystemUserDtos;
 /// <summary>
 /// 系统用户概要
 /// </summary>
-//[NgPage("system", "sysuser")]
 /// <inheritdoc cref="SystemUser"/>
 public class SystemUserShortDto
 {

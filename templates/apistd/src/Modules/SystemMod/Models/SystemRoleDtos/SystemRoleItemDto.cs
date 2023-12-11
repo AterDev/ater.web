@@ -2,7 +2,6 @@ namespace SystemMod.Models.SystemRoleDtos;
 /// <summary>
 /// 角色列表元素
 /// </summary>
-//[NgPage("system", "sysrole")]
 /// <inheritdoc cref="Entity.System.SystemRole"/>
 public class SystemRoleItemDto
 {

@@ -1,5 +1,6 @@
 using Share.Models.AuthDtos;
 using Share.Options;
+using SystemMod.Models;
 using SystemMod.Models.SystemUserDtos;
 
 namespace SystemMod.Controllers.AdminControllers;

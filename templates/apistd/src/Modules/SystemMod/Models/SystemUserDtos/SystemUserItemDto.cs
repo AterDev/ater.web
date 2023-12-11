@@ -1,10 +1,7 @@
-using Entity.System;
-
 namespace SystemMod.Models.SystemUserDtos;
 /// <summary>
 /// 系统用户列表元素
 /// </summary>
-//[NgPage("system", "sysuser")]
 /// <inheritdoc cref="SystemUser"/>
 public class SystemUserItemDto
 {
@@ -21,10 +18,6 @@ public class SystemUserItemDto
     [MaxLength(100)]
     public string? Email { get; set; }
     public bool EmailConfirmed { get; set; }
-    // [MaxLength(100)]
-    // public string PasswordHash { get; set; } = default!;
-    // [MaxLength(60)]
-    // public string PasswordSalt { get; set; } = default!;
     [MaxLength(20)]
     public string? PhoneNumber { get; set; }
     public bool PhoneNumberConfirmed { get; set; }
