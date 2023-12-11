@@ -4,15 +4,11 @@ namespace FileManagerMod.Manager;
 /// <summary>
 /// 文件夹
 /// </summary>
-public class FolderManager : ManagerBase<Folder, FolderUpdateDto, FolderFilterDto, FolderItemDto>
+public class FolderManager(
+    DataAccessContext<Folder> dataContext,
+    ILogger<FolderManager> logger
+        ) : ManagerBase<Folder, FolderUpdateDto, FolderFilterDto, FolderItemDto>(dataContext, logger)
 {
-    public FolderManager(
-        DataAccessContext<Folder> dataContext,
-        ILogger<FolderManager> logger
-        ) : base(dataContext, logger)
-    {
-
-    }
 
     /// <summary>
     /// 创建待添加实体

@@ -2,16 +2,10 @@
 using Microsoft.Extensions.Caching.Distributed;
 
 namespace EntityFramework.DBProvider;
-public class QueryDbContextFactory : IDesignTimeDbContextFactory<QueryDbContext>
+public class QueryDbContextFactory(ITenantProvider tenantProvider, IDistributedCache cache) : IDesignTimeDbContextFactory<QueryDbContext>
 {
-    private readonly ITenantProvider _tenantProvider;
-    private readonly IDistributedCache _cache;
-
-    public QueryDbContextFactory(ITenantProvider tenantProvider, IDistributedCache cache)
-    {
-        _tenantProvider = tenantProvider;
-        _cache = cache;
-    }
+    private readonly ITenantProvider _tenantProvider = tenantProvider;
+    private readonly IDistributedCache _cache = cache;
 
     public QueryDbContext CreateDbContext(string[] args)
     {

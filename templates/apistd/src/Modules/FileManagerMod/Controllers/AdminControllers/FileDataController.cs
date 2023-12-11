@@ -8,17 +8,13 @@ namespace FileManagerMod.Controllers.AdminControllers;
 /// 文件数据
 /// </summary>
 /// <see cref="FileManagerMod.Manager.FileDataManager"/>
-public class FileDataController : RestControllerBase<FileDataManager>
+public class FileDataController(
+    IUserContext user,
+    ILogger<FileDataController> logger,
+    FileDataManager manager,
+    FolderManager folderManager) : RestControllerBase<FileDataManager>(manager, user, logger)
 {
-    private readonly FolderManager _folderManager;
-    public FileDataController(
-        IUserContext user,
-        ILogger<FileDataController> logger,
-        FileDataManager manager,
-        FolderManager folderManager) : base(manager, user, logger)
-    {
-        _folderManager = folderManager;
-    }
+    private readonly FolderManager _folderManager = folderManager;
 
     /// <summary>
     /// 筛选 ✅

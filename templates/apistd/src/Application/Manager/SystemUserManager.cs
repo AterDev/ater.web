@@ -2,14 +2,10 @@ using Share.Models.SystemUserDtos;
 
 namespace Application.Manager;
 
-public class SystemUserManager : ManagerBase<SystemUser, SystemUserUpdateDto, SystemUserFilterDto, SystemUserItemDto>
+public class SystemUserManager(
+    DataAccessContext<SystemUser> dataContext,
+    ILogger<SystemUserManager> logger) : ManagerBase<SystemUser, SystemUserUpdateDto, SystemUserFilterDto, SystemUserItemDto>(dataContext, logger)
 {
-    public SystemUserManager(
-        DataAccessContext<SystemUser> dataContext,
-        ILogger<SystemUserManager> logger) : base(dataContext, logger)
-    {
-
-    }
 
     /// <summary>
     /// 获取验证码

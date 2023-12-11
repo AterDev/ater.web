@@ -6,16 +6,12 @@ namespace Http.API.Controllers.AdminControllers;
 /// </summary>
 /// <see cref="Application.Manager.SystemMenuManager"/>
 [Authorize(AppConst.SuperAdmin)]
-public class SystemMenuController : RestControllerBase<SystemMenuManager>
+public class SystemMenuController(
+    IUserContext user,
+    ILogger<SystemMenuController> logger,
+    SystemMenuManager manager
+        ) : RestControllerBase<SystemMenuManager>(manager, user, logger)
 {
-    public SystemMenuController(
-        IUserContext user,
-        ILogger<SystemMenuController> logger,
-        SystemMenuManager manager
-        ) : base(manager, user, logger)
-    {
-
-    }
 
     /// <summary>
     /// 筛选 ✅

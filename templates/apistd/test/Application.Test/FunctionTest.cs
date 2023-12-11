@@ -9,6 +9,6 @@ public class FunctionTest : BaseTest
     private readonly IConfiguration configuration;
     public FunctionTest(WebApplicationFactory<Program> factory) : base(factory)
     {
-        this.configuration = Services.GetRequiredService<IConfiguration>();
+        configuration = Services.GetRequiredService<IConfiguration>();
     }
 }

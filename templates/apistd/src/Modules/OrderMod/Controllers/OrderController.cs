@@ -6,15 +6,11 @@ namespace OrderMod.Controllers;
 /// 订单
 /// </summary>
 /// <see cref="OrderMod.Manager.OrderManager"/>
-public class OrderController : ClientControllerBase<OrderManager>
+public class OrderController(
+    IUserContext user,
+    ILogger<OrderController> logger,
+    OrderManager manager) : ClientControllerBase<OrderManager>(manager, user, logger)
 {
-    public OrderController(
-        IUserContext user,
-        ILogger<OrderController> logger,
-        OrderManager manager) : base(manager, user, logger)
-    {
-
-    }
 
     /// <summary>
     /// 订单列表 ✅

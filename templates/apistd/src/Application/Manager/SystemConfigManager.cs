@@ -5,16 +5,12 @@ namespace Application.Manager;
 /// <summary>
 /// 系统配置
 /// </summary>
-public class SystemConfigManager : ManagerBase<SystemConfig, SystemConfigUpdateDto, SystemConfigFilterDto, SystemConfigItemDto>
+public class SystemConfigManager(
+    DataAccessContext<SystemConfig> dataContext,
+    ILogger<SystemConfigManager> logger,
+    CacheService cache) : ManagerBase<SystemConfig, SystemConfigUpdateDto, SystemConfigFilterDto, SystemConfigItemDto>(dataContext, logger)
 {
-    private readonly CacheService _cache;
-    public SystemConfigManager(
-        DataAccessContext<SystemConfig> dataContext,
-        ILogger<SystemConfigManager> logger,
-        CacheService cache) : base(dataContext, logger)
-    {
-        _cache = cache;
-    }
+    private readonly CacheService _cache = cache;
 
     /// <summary>
     /// 创建待添加实体

@@ -45,7 +45,7 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem>
         Command = dataAccessContext.CommandSet();
         Queryable = Query.Queryable;
         Database = Command.Database;
-        this._logger = logger;
+        _logger = logger;
         CommandContext = dataAccessContext.CommandContext;
         QueryContext = dataAccessContext.QueryContext;
     }

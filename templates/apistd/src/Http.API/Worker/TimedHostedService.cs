@@ -2,19 +2,14 @@
 /// <summary>
 /// 后台计时器示例
 /// </summary>
-public class TimedHostedService : IHostedService, IDisposable
+public class TimedHostedService(
+    IServiceProvider services,
+    ILogger<TimedHostedService> logger
+        ) : IHostedService, IDisposable
 {
-    private readonly ILogger<TimedHostedService> _logger;
-    public IServiceProvider Services { get; }
+    private readonly ILogger<TimedHostedService> _logger = logger;
+    public IServiceProvider Services { get; } = services;
     private Timer? _timer;
-    public TimedHostedService(
-        IServiceProvider services,
-        ILogger<TimedHostedService> logger
-        )
-    {
-        Services = services;
-        _logger = logger;
-    }
 
     public Task StartAsync(CancellationToken cancellationToken)
     {

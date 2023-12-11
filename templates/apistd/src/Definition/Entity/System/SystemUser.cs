@@ -14,14 +14,15 @@ public class SystemUser : IEntityBase
     /// <summary>
     /// 用户名
     /// </summary>
-    [MaxLength(30)]
+    [Length(3, 30)]
     public required string UserName { get; set; }
     /// <summary>
     /// 真实姓名
     /// </summary>
-    [MaxLength(30)]
+    [Length(2, 30)]
     public string? RealName { get; set; }
     [MaxLength(100)]
+    [EmailAddress]
     public string? Email { get; set; }
     public bool EmailConfirmed { get; set; }
     [JsonIgnore]
@@ -30,6 +31,7 @@ public class SystemUser : IEntityBase
     [JsonIgnore]
     [MaxLength(60)]
     public string PasswordSalt { get; set; } = default!;
+    [Phone]
     [MaxLength(20)]
     public string? PhoneNumber { get; set; }
     public bool PhoneNumberConfirmed { get; set; }

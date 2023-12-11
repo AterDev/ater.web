@@ -2,14 +2,10 @@ using Share.Models.SystemRoleDtos;
 
 namespace Application.Manager;
 
-public class SystemRoleManager : ManagerBase<SystemRole, SystemRoleUpdateDto, SystemRoleFilterDto, SystemRoleItemDto>
+public class SystemRoleManager(
+    DataAccessContext<SystemRole> dataContext,
+    ILogger<SystemRoleManager> logger) : ManagerBase<SystemRole, SystemRoleUpdateDto, SystemRoleFilterDto, SystemRoleItemDto>(dataContext, logger)
 {
-    public SystemRoleManager(
-        DataAccessContext<SystemRole> dataContext,
-        ILogger<SystemRoleManager> logger) : base(dataContext, logger)
-    {
-
-    }
 
     /// <summary>
     /// 创建待添加实体

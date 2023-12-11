@@ -5,17 +5,13 @@ namespace OrderMod.Manager;
 /// <summary>
 /// 产品
 /// </summary>
-public class ProductManager : ManagerBase<Product, ProductUpdateDto, ProductFilterDto, ProductItemDto>
+public class ProductManager(
+    DataAccessContext<Product> dataContext,
+    ILogger<ProductManager> logger,
+    IUserContext userContext
+        ) : ManagerBase<Product, ProductUpdateDto, ProductFilterDto, ProductItemDto>(dataContext, logger)
 {
-    private readonly IUserContext _userContext;
-    public ProductManager(
-        DataAccessContext<Product> dataContext,
-        ILogger<ProductManager> logger,
-        IUserContext userContext
-        ) : base(dataContext, logger)
-    {
-        _userContext = userContext;
-    }
+    private readonly IUserContext _userContext = userContext;
 
     /// <summary>
     /// 创建待添加实体

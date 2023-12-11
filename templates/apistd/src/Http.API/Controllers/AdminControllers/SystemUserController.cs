@@ -6,27 +6,19 @@ namespace Http.API.Controllers.AdminControllers;
 /// <summary>
 /// 系统用户
 /// </summary>
-public class SystemUserController : RestControllerBase<SystemUserManager>
+public class SystemUserController(
+    IUserContext user,
+    ILogger<SystemUserController> logger,
+    SystemUserManager manager,
+    CacheService cache,
+    IConfiguration config,
+    IEmailService emailService,
+    SystemRoleManager roleManager) : RestControllerBase<SystemUserManager>(manager, user, logger)
 {
-    private readonly CacheService _cache;
-    private readonly IConfiguration _config;
-    private readonly IEmailService _emailService;
-    private readonly SystemRoleManager _roleManager;
-
-    public SystemUserController(
-        IUserContext user,
-        ILogger<SystemUserController> logger,
-        SystemUserManager manager,
-        CacheService cache,
-        IConfiguration config,
-        IEmailService emailService,
-        SystemRoleManager roleManager) : base(manager, user, logger)
-    {
-        _cache = cache;
-        _config = config;
-        _emailService = emailService;
-        _roleManager = roleManager;
-    }
+    private readonly CacheService _cache = cache;
+    private readonly IConfiguration _config = config;
+    private readonly IEmailService _emailService = emailService;
+    private readonly SystemRoleManager _roleManager = roleManager;
 
     /// <summary>
     /// 登录时，发送邮箱验证码 ✅

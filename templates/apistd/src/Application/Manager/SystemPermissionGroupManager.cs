@@ -2,15 +2,11 @@ using Share.Models.SystemPermissionGroupDtos;
 
 namespace Application.Manager;
 
-public class SystemPermissionGroupManager : ManagerBase<SystemPermissionGroup, SystemPermissionGroupUpdateDto, SystemPermissionGroupFilterDto, SystemPermissionGroupItemDto>
+public class SystemPermissionGroupManager(
+    DataAccessContext<SystemPermissionGroup> dataContext,
+    ILogger<SystemPermissionGroupManager> logger
+        ) : ManagerBase<SystemPermissionGroup, SystemPermissionGroupUpdateDto, SystemPermissionGroupFilterDto, SystemPermissionGroupItemDto>(dataContext, logger)
 {
-
-    public SystemPermissionGroupManager(
-        DataAccessContext<SystemPermissionGroup> dataContext,
-        ILogger<SystemPermissionGroupManager> logger
-        ) : base(dataContext, logger)
-    {
-    }
 
     /// <summary>
     /// 创建待添加实体

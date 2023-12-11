@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore.Query;
 
 namespace EntityFramework.DBProvider;
 
-public partial class ContextBase : DbContext
+public partial class ContextBase(DbContextOptions options) : DbContext(options)
 {
     public DbSet<SystemUser> SystemUsers { get; set; }
     public DbSet<SystemRole> SystemRoles { get; set; }
@@ -20,9 +20,6 @@ public partial class ContextBase : DbContext
     public DbSet<SystemOrganization> SystemOrganizations { get; set; }
     public DbSet<User> Users { get; set; }
 
-    public ContextBase(DbContextOptions options) : base(options)
-    {
-    }
     protected override void OnModelCreating(ModelBuilder builder)
     {
 

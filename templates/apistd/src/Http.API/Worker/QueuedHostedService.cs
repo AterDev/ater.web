@@ -2,18 +2,12 @@
 /// <summary>
 /// 后台队列任务服务示例
 /// </summary>
-public class QueuedHostedService : BackgroundService
+public class QueuedHostedService(IBackgroundTaskQueue taskQueue,
+    ILogger<QueuedHostedService> logger) : BackgroundService
 {
-    private readonly ILogger<QueuedHostedService> _logger;
+    private readonly ILogger<QueuedHostedService> _logger = logger;
 
-    public QueuedHostedService(IBackgroundTaskQueue taskQueue,
-        ILogger<QueuedHostedService> logger)
-    {
-        TaskQueue = taskQueue;
-        _logger = logger;
-    }
-
-    public IBackgroundTaskQueue TaskQueue { get; }
+    public IBackgroundTaskQueue TaskQueue { get; } = taskQueue;
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {

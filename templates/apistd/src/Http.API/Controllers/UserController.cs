@@ -7,24 +7,17 @@ namespace Http.API.Controllers;
 /// 用户账户
 /// </summary>
 /// <see cref="Application.Manager.UserManager"/>
-public class UserController : ClientControllerBase<UserManager>
+public class UserController(
+    IUserContext user,
+    ILogger<UserController> logger,
+    UserManager manager,
+    CacheService cache,
+    IEmailService emailService,
+    IConfiguration config) : ClientControllerBase<UserManager>(manager, user, logger)
 {
-    private readonly CacheService _cache;
-    private readonly IConfiguration _config;
-    private readonly IEmailService _emailService;
-
-    public UserController(
-        IUserContext user,
-        ILogger<UserController> logger,
-        UserManager manager,
-        CacheService cache,
-        IEmailService emailService,
-        IConfiguration config) : base(manager, user, logger)
-    {
-        _cache = cache;
-        _emailService = emailService;
-        _config = config;
-    }
+    private readonly CacheService _cache = cache;
+    private readonly IConfiguration _config = config;
+    private readonly IEmailService _emailService = emailService;
 
     /// <summary>
     /// 用户注册 ✅

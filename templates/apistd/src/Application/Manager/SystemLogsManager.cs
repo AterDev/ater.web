@@ -4,16 +4,12 @@ namespace Application.Manager;
 /// <summary>
 /// 系统日志
 /// </summary>
-public class SystemLogsManager : ManagerBase<SystemLogs, SystemLogsUpdateDto, SystemLogsFilterDto, SystemLogsItemDto>
+public class SystemLogsManager(
+    DataAccessContext<SystemLogs> dataContext,
+    ILogger<SystemLogsManager> logger,
+    IUserContext userContext) : ManagerBase<SystemLogs, SystemLogsUpdateDto, SystemLogsFilterDto, SystemLogsItemDto>(dataContext, logger)
 {
-    private readonly IUserContext _userContext;
-    public SystemLogsManager(
-        DataAccessContext<SystemLogs> dataContext,
-        ILogger<SystemLogsManager> logger,
-        IUserContext userContext) : base(dataContext, logger)
-    {
-        _userContext = userContext;
-    }
+    private readonly IUserContext _userContext = userContext;
 
     /// <summary>
     /// 创建待添加实体

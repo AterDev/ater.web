@@ -6,16 +6,12 @@ namespace CMSMod.Manager;
 /// <summary>
 /// 博客
 /// </summary>
-public class BlogManager : ManagerBase<Blog, BlogUpdateDto, BlogFilterDto, BlogItemDto>
+public class BlogManager(
+    DataAccessContext<Blog> dataContext,
+    ILogger<BlogManager> logger,
+    IUserContext userContext) : ManagerBase<Blog, BlogUpdateDto, BlogFilterDto, BlogItemDto>(dataContext, logger)
 {
-    private readonly IUserContext _userContext;
-    public BlogManager(
-        DataAccessContext<Blog> dataContext,
-        ILogger<BlogManager> logger,
-        IUserContext userContext) : base(dataContext, logger)
-    {
-        _userContext = userContext;
-    }
+    private readonly IUserContext _userContext = userContext;
 
     /// <summary>
     /// 创建待添加实体

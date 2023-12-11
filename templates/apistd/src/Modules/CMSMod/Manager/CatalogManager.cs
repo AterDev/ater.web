@@ -7,13 +7,9 @@ namespace CMSMod.Manager;
 /// <summary>
 /// 目录管理
 /// </summary>
-public class CatalogManager : ManagerBase<Catalog, CatalogUpdateDto, CatalogFilterDto, CatalogItemDto>
+public class CatalogManager(DataAccessContext<Catalog> dataContext, IUserContext userContext, ILogger<BlogManager> logger) : ManagerBase<Catalog, CatalogUpdateDto, CatalogFilterDto, CatalogItemDto>(dataContext, logger)
 {
-    private readonly IUserContext _userContext;
-    public CatalogManager(DataAccessContext<Catalog> dataContext, IUserContext userContext, ILogger<BlogManager> logger) : base(dataContext, logger)
-    {
-        _userContext = userContext;
-    }
+    private readonly IUserContext _userContext = userContext;
 
     /// <summary>
     /// 创建待添加实体

@@ -4,13 +4,9 @@ namespace Application.Services;
 /// <summary>
 /// 简单封装对象的存储和获取
 /// </summary>
-public class CacheService
+public class CacheService(IDistributedCache cache)
 {
-    private readonly IDistributedCache _cache;
-    public CacheService(IDistributedCache cache)
-    {
-        _cache = cache;
-    }
+    private readonly IDistributedCache _cache = cache;
 
     /// <summary>
     /// 缓存存储

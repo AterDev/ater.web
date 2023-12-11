@@ -6,17 +6,12 @@ namespace OrderMod.Controllers.AdminControllers;
 /// 产品
 /// </summary>
 /// <see cref="OrderMod.Manager.ProductManager"/>
-public class ProductController : RestControllerBase<ProductManager>
+public class ProductController(
+    IUserContext user,
+    ILogger<ProductController> logger,
+    ProductManager manager
+        ) : RestControllerBase<ProductManager>(manager, user, logger)
 {
-
-    public ProductController(
-        IUserContext user,
-        ILogger<ProductController> logger,
-        ProductManager manager
-        ) : base(manager, user, logger)
-    {
-
-    }
 
     /// <summary>
     /// 筛选 ✅

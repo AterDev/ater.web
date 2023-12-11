@@ -5,19 +5,14 @@ namespace Http.API.Controllers.AdminControllers;
 /// 权限
 /// </summary>
 /// <see cref="Application.Manager.SystemPermissionManager"/>
-public class SystemPermissionController : RestControllerBase<SystemPermissionManager>
+public class SystemPermissionController(
+    IUserContext user,
+    ILogger<SystemPermissionController> logger,
+    SystemPermissionManager manager,
+    SystemPermissionGroupManager systemPermissionGroupManager
+        ) : RestControllerBase<SystemPermissionManager>(manager, user, logger)
 {
-    private readonly SystemPermissionGroupManager _systemPermissionGroupManager;
-    public SystemPermissionController(
-        IUserContext user,
-        ILogger<SystemPermissionController> logger,
-        SystemPermissionManager manager,
-        SystemPermissionGroupManager systemPermissionGroupManager
-        ) : base(manager, user, logger)
-    {
-        _systemPermissionGroupManager = systemPermissionGroupManager;
-
-    }
+    private readonly SystemPermissionGroupManager _systemPermissionGroupManager = systemPermissionGroupManager;
 
     /// <summary>
     /// 筛选 ✅

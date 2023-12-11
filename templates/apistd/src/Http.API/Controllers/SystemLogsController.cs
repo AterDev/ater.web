@@ -5,17 +5,12 @@ namespace Http.API.Controllers;
 /// 系统日志
 /// </summary>
 /// <see cref="Application.Manager.SystemLogsManager"/>
-public class SystemLogsController : ClientControllerBase<SystemLogsManager>
+public class SystemLogsController(
+    IUserContext user,
+    ILogger<SystemLogsController> logger,
+    SystemLogsManager manager
+        ) : ClientControllerBase<SystemLogsManager>(manager, user, logger)
 {
-
-    public SystemLogsController(
-        IUserContext user,
-        ILogger<SystemLogsController> logger,
-        SystemLogsManager manager
-        ) : base(manager, user, logger)
-    {
-
-    }
 
     /// <summary>
     /// Operation Log Query

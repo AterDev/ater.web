@@ -7,25 +7,18 @@ namespace EntityFramework;
 /// </summary>
 /// <typeparam name="TContext"></typeparam>
 /// <typeparam name="TEntity"></typeparam>
-public partial class CommandSet<TEntity> : ICommandStore<TEntity>, ICommandStoreExt<TEntity>
+public partial class CommandSet<TEntity>(CommandDbContext commandDbContext) : ICommandStore<TEntity>, ICommandStoreExt<TEntity>
     where TEntity : class, IEntityBase
 {
-    private readonly CommandDbContext _commandDbContext;
+    private readonly CommandDbContext _commandDbContext = commandDbContext;
     /// <summary>
     /// 当前实体DbSet
     /// </summary>
-    protected readonly DbSet<TEntity> _db;
+    protected readonly DbSet<TEntity> _db = commandDbContext.Set<TEntity>();
     public DbSet<TEntity> Db => _db;
 
-    public DatabaseFacade Database { get; init; }
+    public DatabaseFacade Database { get; init; } = commandDbContext.Database;
     public bool EnableSoftDelete { get; set; } = true;
-
-    public CommandSet(CommandDbContext commandDbContext)
-    {
-        _commandDbContext = commandDbContext;
-        _db = commandDbContext.Set<TEntity>();
-        Database = commandDbContext.Database;
-    }
 
     public virtual async Task<int> SaveChangesAsync()
     {

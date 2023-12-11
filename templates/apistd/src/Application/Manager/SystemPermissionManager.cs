@@ -4,16 +4,11 @@ namespace Application.Manager;
 /// <summary>
 /// 权限
 /// </summary>
-public class SystemPermissionManager : ManagerBase<SystemPermission, SystemPermissionUpdateDto, SystemPermissionFilterDto, SystemPermissionItemDto>
+public class SystemPermissionManager(
+    DataAccessContext<SystemPermission> dataContext,
+    ILogger<SystemPermissionManager> logger
+        ) : ManagerBase<SystemPermission, SystemPermissionUpdateDto, SystemPermissionFilterDto, SystemPermissionItemDto>(dataContext, logger)
 {
-
-    public SystemPermissionManager(
-        DataAccessContext<SystemPermission> dataContext,
-        ILogger<SystemPermissionManager> logger
-        ) : base(dataContext, logger)
-    {
-
-    }
 
     /// <summary>
     /// 创建待添加实体

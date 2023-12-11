@@ -1,4 +1,6 @@
-﻿namespace Entity;
+﻿using System.Text.Json.Serialization;
+
+namespace Entity;
 /// <summary>
 /// 用户账户
 /// </summary>
@@ -14,7 +16,7 @@ public class User : IEntityBase
     /// <summary>
     /// 用户名
     /// </summary>
-    [MaxLength(40)]
+    [Length(2, 40)]
     public required string UserName { get; set; }
 
     /// <summary>
@@ -25,13 +27,17 @@ public class User : IEntityBase
     /// <summary>
     /// 邮箱
     /// </summary>
-    [MaxLength(100)]
+    [Length(5, 100)]
+    [EmailAddress]
     public string? Email { get; set; } = null!;
     public bool EmailConfirmed { get; set; }
+    [JsonIgnore]
     [MaxLength(100)]
     public string PasswordHash { get; set; } = default!;
+    [JsonIgnore]
     [MaxLength(60)]
     public string PasswordSalt { get; set; } = default!;
+    [Phone]
     public string? PhoneNumber { get; set; }
     public bool PhoneNumberConfirmed { get; set; }
     public bool TwoFactorEnabled { get; set; }
@@ -57,9 +63,7 @@ public class User : IEntityBase
     public bool IsDeleted { get; set; }
 
     #region 用户关联内容
-    //public List<Blog>? Blogs { get; set; }
-    //public List<Catalog>? Catalogs { get; set; }
-    //public List<Tags>? Tags { get; set; }
+
     #endregion
 }
 public enum UserType

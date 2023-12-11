@@ -6,14 +6,10 @@ namespace FileManagerMod.Manager;
 /// <summary>
 /// 文件数据
 /// </summary>
-public class FileDataManager : ManagerBase<FileData, FileDataUpdateDto, FileDataFilterDto, FileDataItemDto>
+public class FileDataManager(
+    DataAccessContext<FileData> dataContext,
+    ILogger<FileDataManager> logger) : ManagerBase<FileData, FileDataUpdateDto, FileDataFilterDto, FileDataItemDto>(dataContext, logger)
 {
-    public FileDataManager(
-        DataAccessContext<FileData> dataContext,
-        ILogger<FileDataManager> logger) : base(dataContext, logger)
-    {
-
-    }
 
     /// <summary>
     /// 添加新文件

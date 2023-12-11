@@ -9,23 +9,16 @@ namespace FileManagerMod.Infrastructure;
 [Route("api/admin/[controller]")]
 [Authorize(AppConst.AdminUser)]
 [ApiExplorerSettings(GroupName = "admin")]
-public class RestControllerBase<TManager> : RestControllerBase
+public class RestControllerBase<TManager>(
+    TManager manager,
+    IUserContext user,
+    ILogger logger
+        ) : RestControllerBase
      where TManager : class
 {
-    protected readonly TManager manager;
-    protected readonly ILogger _logger;
-    protected readonly IUserContext _user;
-
-    public RestControllerBase(
-        TManager manager,
-        IUserContext user,
-        ILogger logger
-        )
-    {
-        this.manager = manager;
-        _user = user;
-        _logger = logger;
-    }
+    protected readonly TManager manager = manager;
+    protected readonly ILogger _logger = logger;
+    protected readonly IUserContext _user = user;
 
     /*
     protected async Task<SystemUser?> GetUserAsync()
@@ -42,23 +35,16 @@ public class RestControllerBase<TManager> : RestControllerBase
 /// <typeparam name="TManager"></typeparam>
 [Authorize(AppConst.User)]
 [ApiExplorerSettings(GroupName = "client")]
-public class ClientControllerBase<TManager> : RestControllerBase
+public class ClientControllerBase<TManager>(
+    TManager manager,
+    IUserContext user,
+    ILogger logger
+        ) : RestControllerBase
      where TManager : class
 {
-    protected readonly TManager manager;
-    protected readonly ILogger _logger;
-    protected readonly IUserContext _user;
-
-    public ClientControllerBase(
-        TManager manager,
-        IUserContext user,
-        ILogger logger
-        )
-    {
-        this.manager = manager;
-        _user = user;
-        _logger = logger;
-    }
+    protected readonly TManager manager = manager;
+    protected readonly ILogger _logger = logger;
+    protected readonly IUserContext _user = user;
     /*
     protected async Task<User?> GetUserAsync()
     {

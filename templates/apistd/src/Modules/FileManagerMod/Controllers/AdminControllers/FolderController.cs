@@ -7,17 +7,12 @@ namespace FileManagerMod.Controllers.AdminControllers;
 /// 文件夹
 /// </summary>
 /// <see cref="FileManagerMod.Manager.FolderManager"/>
-public class FolderController : RestControllerBase<FolderManager>
+public class FolderController(
+    IUserContext user,
+    ILogger<FolderController> logger,
+    FolderManager manager
+        ) : RestControllerBase<FolderManager>(manager, user, logger)
 {
-
-    public FolderController(
-        IUserContext user,
-        ILogger<FolderController> logger,
-        FolderManager manager
-        ) : base(manager, user, logger)
-    {
-
-    }
 
     /// <summary>
     /// 筛选 ✅

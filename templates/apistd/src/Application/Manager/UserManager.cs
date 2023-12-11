@@ -4,16 +4,12 @@ namespace Application.Manager;
 /// <summary>
 /// 用户账户
 /// </summary>
-public class UserManager : ManagerBase<User, UserUpdateDto, UserFilterDto, UserItemDto>
+public class UserManager(
+    DataAccessContext<User> dataContext,
+    ILogger<UserManager> logger,
+    IUserContext userContext) : ManagerBase<User, UserUpdateDto, UserFilterDto, UserItemDto>(dataContext, logger)
 {
-    private readonly IUserContext _userContext;
-    public UserManager(
-        DataAccessContext<User> dataContext,
-        ILogger<UserManager> logger,
-        IUserContext userContext) : base(dataContext, logger)
-    {
-        _userContext = userContext;
-    }
+    private readonly IUserContext _userContext = userContext;
 
     /// <summary>
     /// 更新密码

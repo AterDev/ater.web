@@ -32,14 +32,10 @@ public interface IEmailService
     Task SendLoginVerifyAsync(string email, string verifyCode);
 }
 
-public class EmailService : IEmailService
+public class EmailService(IConfiguration configuration) : IEmailService
 {
 
-    private readonly IConfiguration _config;
-    public EmailService(IConfiguration configuration)
-    {
-        _config = configuration;
-    }
+    private readonly IConfiguration _config = configuration;
 
     public async Task SendAsync(string email, string subject, string html)
     {

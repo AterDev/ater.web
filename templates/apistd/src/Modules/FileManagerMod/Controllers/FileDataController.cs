@@ -6,16 +6,12 @@ namespace FileManagerMod.Controllers;
 /// 文件数据
 /// </summary>
 /// <see cref="FileManagerMod.Manager.FileDataManager"/>
-public class FileDataController : ClientControllerBase<FileDataManager>
+public class FileDataController(
+    IUserContext user,
+    ILogger<FileDataController> logger,
+    FileDataManager manager
+        ) : ClientControllerBase<FileDataManager>(manager, user, logger)
 {
-    public FileDataController(
-        IUserContext user,
-        ILogger<FileDataController> logger,
-        FileDataManager manager
-        ) : base(manager, user, logger)
-    {
-
-    }
 
     /// <summary>
     /// 筛选 ✅

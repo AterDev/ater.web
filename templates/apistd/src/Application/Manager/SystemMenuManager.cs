@@ -4,14 +4,10 @@ namespace Application.Manager;
 /// <summary>
 /// 系统菜单
 /// </summary>
-public class SystemMenuManager : ManagerBase<SystemMenu, SystemMenuUpdateDto, SystemMenuFilterDto, SystemMenuItemDto>
+public class SystemMenuManager(
+    DataAccessContext<SystemMenu> dataContext,
+    ILogger<SystemMenuManager> logger) : ManagerBase<SystemMenu, SystemMenuUpdateDto, SystemMenuFilterDto, SystemMenuItemDto>(dataContext, logger)
 {
-    public SystemMenuManager(
-        DataAccessContext<SystemMenu> dataContext,
-        ILogger<SystemMenuManager> logger) : base(dataContext, logger)
-    {
-
-    }
 
     /// <summary>
     /// 创建待添加实体

@@ -4,24 +4,17 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Application.Services;
 
-public class JwtService
+public class JwtService(string sign, string audience, string issuer)
 {
     /// <summary>
     /// 过期时间，分
     /// </summary>
     public int TokenExpires { get; set; }
     public int RefreshTokenExpires { get; set; }
-    public string Sign { get; set; }
-    public string Audience { get; set; }
-    public string Issuer { get; set; }
+    public string Sign { get; set; } = sign;
+    public string Audience { get; set; } = audience;
+    public string Issuer { get; set; } = issuer;
     public List<Claim>? Claims { get; set; }
-
-    public JwtService(string sign, string audience, string issuer)
-    {
-        Sign = sign;
-        Audience = audience;
-        Issuer = issuer;
-    }
 
     /// <summary>
     /// 生成jwt token
