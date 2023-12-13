@@ -1,6 +1,7 @@
 ﻿using Entity.CMS;
 using Entity.FileManager;
 using Entity.Order;
+using Entity.System;
 
 namespace EntityFramework.DBProvider;
 public partial class ContextBase

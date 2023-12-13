@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using EntityFramework.DBProvider;
 using Microsoft.AspNetCore.Http;
 
@@ -65,49 +64,14 @@ public partial class UserContext : IUserContext
     /// <returns></returns>
     public async Task<bool> ExistAsync()
     {
-        return IsAdmin ?
-            await _context.SystemUsers.AnyAsync(u => u.Id == UserId) :
-            await _context.Users.AnyAsync(u => u.Id == UserId);
+        //return IsAdmin ?
+        //    await _context.SystemUsers.AnyAsync(u => u.Id == UserId) :
+        //    await _context.Users.AnyAsync(u => u.Id == UserId);
+        return await _context.Users.AnyAsync(u => u.Id == UserId);
     }
 
     public async Task<User?> GetUserAsync()
     {
         return await _context.Users.FindAsync(UserId);
     }
-
-    public async Task<SystemUser?> GetSystemUserAsync()
-    {
-        return await _context.SystemUsers.FindAsync(UserId);
-    }
-
-    /// <summary>
-    /// ÐÐÎª¼ÇÂ¼
-    /// </summary>
-    /// <param name="targetName"></param>
-    /// <param name="actionType"></param>
-    /// <param name="description"></param>
-    /// <param name="caller"></param>
-    public async void RecordAction(string targetName, ActionType actionType, string description = "", [CallerMemberName] string caller = "")
-    {
-        var route = _httpContextAccessor.HttpContext?.Request?.Path.Value + $":[{caller}]";
-
-        if (UserId != Guid.Empty)
-        {
-            description = "";
-            var log = new SystemLogs
-            {
-                ActionUserName = Username ?? Email ?? UserId.ToString() ?? "",
-                TargetName = targetName,
-                Route = route,
-                ActionType = actionType,
-            };
-            // get enum description from actionType
-            var actionName = actionType.GetDescription();
-            log.Description = $"{log.ActionUserName} {actionName} {targetName} ;{description}";
-            _context.Entry(log).Property("SystemUserId").CurrentValue = UserId;
-            _context.Add(log);
-            await _context.SaveChangesAsync();
-        }
-    }
-
 }
