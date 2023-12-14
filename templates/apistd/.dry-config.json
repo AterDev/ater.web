@@ -3,7 +3,7 @@
   "ProjectId": "60ec520e-259e-41f4-89c0-ecb74cafbe90",
   "DtoPath": "src\\Definition\\Share",
   "EntityPath": "src\\Definition\\Entity",
-  "DbContextPath": "src\\Database\\EntityFramework",
+  "DbContextPath": "src\\Definition\\EntityFramework",
   "StorePath": null,
   "ApplicationPath": "src\\Application",
   "ApiPath": "src\\Http.API",
