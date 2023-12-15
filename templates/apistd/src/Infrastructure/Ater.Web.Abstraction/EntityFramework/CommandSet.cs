@@ -1,16 +1,18 @@
-using EntityFramework.DBProvider;
+using Ater.Web.Abstraction.Interface;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
-namespace EntityFramework;
+namespace Ater.Web.Abstraction.EntityFramework;
 /// <summary>
 /// 读写仓储基类,请勿直接修改基类内容 
 /// </summary>
 /// <typeparam name="TContext"></typeparam>
 /// <typeparam name="TEntity"></typeparam>
-public partial class CommandSet<TEntity>(CommandDbContext commandDbContext) : ICommandStore<TEntity>, ICommandStoreExt<TEntity>
+public class CommandSet<TContent, TEntity>(TContent commandDbContext) : ICommandStore<TEntity>, ICommandStoreExt<TEntity>
+    where TContent : DbContext
     where TEntity : class, IEntityBase
 {
-    private readonly CommandDbContext _commandDbContext = commandDbContext;
+    private readonly TContent _commandDbContext = commandDbContext;
     /// <summary>
     /// 当前实体DbSet
     /// </summary>
@@ -124,7 +126,7 @@ public partial class CommandSet<TEntity>(CommandDbContext commandDbContext) : IC
         if (chunk != null && entities.Count > chunk)
         {
 
-            entities.Chunk(entities.Count / chunk.Value + 1).ToList()
+            entities.Chunk((entities.Count / chunk.Value) + 1).ToList()
                 .ForEach(block =>
                 {
                     _db.AddRange(block);

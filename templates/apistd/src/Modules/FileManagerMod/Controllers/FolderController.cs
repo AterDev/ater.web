@@ -42,7 +42,7 @@ public class FolderController(
     /// <param name="id"></param>
     /// <param name="dto"></param>
     /// <returns></returns>
-    [HttpPut("{id}")]
+    [HttpPatch("{id}")]
     public async Task<ActionResult<Folder?>> UpdateAsync([FromRoute] Guid id, FolderUpdateDto dto)
     {
         Folder? current = await manager.GetCurrentAsync(id);

@@ -43,7 +43,7 @@ public class SystemRoleController(
     /// <param name="id"></param>
     /// <param name="dto"></param>
     /// <returns></returns>
-    [HttpPut("{id}")]
+    [HttpPatch("{id}")]
     public async Task<ActionResult<SystemRole?>> UpdateAsync([FromRoute] Guid id, SystemRoleUpdateDto dto)
     {
         SystemRole? current = await manager.GetOwnedAsync(id);

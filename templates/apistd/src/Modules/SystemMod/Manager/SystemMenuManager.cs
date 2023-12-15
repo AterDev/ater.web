@@ -1,3 +1,4 @@
+using Ater.Web.Abstraction.EntityFramework;
 using SystemMod.Models.SystemMenuDtos;
 
 namespace SystemMod.Manager;

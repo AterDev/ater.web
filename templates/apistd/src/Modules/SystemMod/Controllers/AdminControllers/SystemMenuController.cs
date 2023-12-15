@@ -73,7 +73,7 @@ public class SystemMenuController(
     /// <param name="id"></param>
     /// <param name="dto"></param>
     /// <returns></returns>
-    [HttpPut("{id}")]
+    [HttpPatch("{id}")]
     public async Task<ActionResult<SystemMenu?>> UpdateAsync([FromRoute] Guid id, SystemMenuUpdateDto dto)
     {
         SystemMenu? current = await manager.GetCurrentAsync(id);

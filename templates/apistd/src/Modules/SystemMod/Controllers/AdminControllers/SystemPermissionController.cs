@@ -48,7 +48,7 @@ public class SystemPermissionController(
     /// <param name="id"></param>
     /// <param name="dto"></param>
     /// <returns></returns>
-    [HttpPut("{id}")]
+    [HttpPatch("{id}")]
     public async Task<ActionResult<SystemPermission?>> UpdateAsync([FromRoute] Guid id, SystemPermissionUpdateDto dto)
     {
         SystemPermission? current = await manager.GetCurrentAsync(id, "Group");

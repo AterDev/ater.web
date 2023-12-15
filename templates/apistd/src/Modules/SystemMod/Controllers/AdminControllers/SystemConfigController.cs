@@ -51,7 +51,7 @@ public class SystemConfigController(
     /// <param name="id"></param>
     /// <param name="dto"></param>
     /// <returns></returns>
-    [HttpPut("{id}")]
+    [HttpPatch("{id}")]
     public async Task<ActionResult<SystemConfig?>> UpdateAsync([FromRoute] Guid id, SystemConfigUpdateDto dto)
     {
         SystemConfig? current = await manager.GetCurrentAsync(id);

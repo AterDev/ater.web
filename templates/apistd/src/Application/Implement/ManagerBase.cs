@@ -1,10 +1,11 @@
+using Ater.Web.Abstraction.EntityFramework;
 using EntityFramework.DBProvider;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Application.Implement;
 
 /// <summary>
-/// 基类，请勿直接修改，自定义可修改 DomainManagerBase
+/// Manager base class
 /// </summary>
 /// <typeparam name="TEntity"></typeparam>
 /// <typeparam name="TUpdate"></typeparam>
@@ -18,11 +19,11 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem>
     /// <summary>
     /// 实体的只读仓储实现
     /// </summary>
-    public QuerySet<TEntity> Query { get; init; }
+    public QuerySet<QueryDbContext, TEntity> Query { get; init; }
     /// <summary>
     /// 实体的可写仓储实现
     /// </summary>
-    public CommandSet<TEntity> Command { get; init; }
+    public CommandSet<CommandDbContext, TEntity> Command { get; init; }
     public IQueryable<TEntity> Queryable { get; set; }
 
     public CommandDbContext CommandContext { get; init; }

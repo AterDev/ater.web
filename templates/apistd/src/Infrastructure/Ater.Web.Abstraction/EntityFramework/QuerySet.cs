@@ -1,16 +1,18 @@
 // 对常见查询方法的实现
 
-using EntityFramework.DBProvider;
+using Ater.Web.Abstraction.Interface;
+using Ater.Web.Core.Utils;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-
-namespace EntityFramework;
+namespace Ater.Web.Abstraction.EntityFramework;
 
 /// <summary>
 /// 只读仓储基类
 /// </summary>
 /// <typeparam name="TEntity"></typeparam>
-public partial class QuerySet<TEntity> :
+public class QuerySet<TContent, TEntity> :
     IQueryStore<TEntity>, IQueryStoreExt<TEntity>
+    where TContent : DbContext
     where TEntity : class, IEntityBase
 {
     public DbSet<TEntity> Db { get; }
@@ -22,7 +24,7 @@ public partial class QuerySet<TEntity> :
     /// </summary>
     public bool EnableGlobalQuery { get; set; } = true;
 
-    public QuerySet(QueryDbContext queryDbContext)
+    public QuerySet(TContent queryDbContext)
     {
         Db = queryDbContext.Set<TEntity>();
         Queryable = EnableGlobalQuery

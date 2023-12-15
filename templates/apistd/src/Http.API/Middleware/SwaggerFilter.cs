@@ -4,10 +4,6 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Http.API.Middleware;
 
-public class SwaggerFilter
-{
-}
-
 public class EnumSchemaFilter : ISchemaFilter
 {
     public void Apply(OpenApiSchema model, SchemaFilterContext context)

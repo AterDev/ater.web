@@ -42,7 +42,7 @@ public class ProductController(
     /// <param name="id"></param>
     /// <param name="dto"></param>
     /// <returns></returns>
-    [HttpPut("{id}")]
+    [HttpPatch("{id}")]
     public async Task<ActionResult<Product?>> UpdateAsync([FromRoute] Guid id, ProductUpdateDto dto)
     {
         Product? current = await manager.GetCurrentAsync(id);
