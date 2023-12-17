@@ -1,7 +1,4 @@
-﻿using EntityFramework.DBProvider;
-using Microsoft.Extensions.Configuration;
-
-namespace Application;
+﻿namespace StandaloneService.Application;
 
 /// <summary>
 /// 应用配置常量

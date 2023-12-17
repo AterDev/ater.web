@@ -2,6 +2,7 @@ using System.Text.Encodings.Web;
 using System.Text.Unicode;
 
 using Ater.Web.Abstraction;
+
 using Http.API;
 using Http.API.Worker;
 
@@ -72,7 +73,7 @@ app.UseExceptionHandler(ExceptionHandler.Handler());
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapDefaultControllerRoute();
+app.MapControllers();
 app.MapFallbackToFile("index.html");
 
 using (app)
@@ -85,6 +86,3 @@ using (app)
     }
     app.Run();
 }
-
-// for test project
-public partial class Program { }

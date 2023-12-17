@@ -93,16 +93,10 @@ public static class ServiceCollectionExtension
                     Array.Empty<string>()
                 }
             });
-            c.SwaggerDoc("admin", new OpenApiInfo
+            c.SwaggerDoc("service", new OpenApiInfo
             {
-                Title = "MyProjectName",
-                Description = "Admin API 文档. 更新时间:" + DateTime.Now.ToString("yyyy-MM-dd H:mm:ss"),
-                Version = "v1"
-            });
-            c.SwaggerDoc("client", new OpenApiInfo
-            {
-                Title = "MyProjectName client",
-                Description = "Client API 文档. 更新时间:" + DateTime.Now.ToString("yyyy-MM-dd H:mm:ss"),
+                Title = "MyProjectName Service",
+                Description = "Service API 文档. 更新时间:" + DateTime.Now.ToString("yyyy-MM-dd H:mm:ss"),
                 Version = "v1"
             });
             var xmlFiles = Directory.GetFiles(AppContext.BaseDirectory, "*.xml", SearchOption.TopDirectoryOnly);
