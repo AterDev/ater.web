@@ -1,5 +1,3 @@
-using Application;
-using Ater.Web.Abstraction.EntityFramework;
 using SystemMod.Models.SystemLogsDtos;
 
 namespace SystemMod.Manager;

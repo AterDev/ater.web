@@ -24,5 +24,5 @@ public class ProductShortDto
     /// </summary>
     public decimal OriginPrice { get; set; }
     public Guid Id { get; set; }
-    
+
 }

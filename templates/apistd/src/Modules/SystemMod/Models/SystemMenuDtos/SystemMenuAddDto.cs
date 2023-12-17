@@ -1,5 +1,3 @@
-using Entity.System;
-
 namespace SystemMod.Models.SystemMenuDtos;
 /// <summary>
 /// 系统菜单添加时请求结构

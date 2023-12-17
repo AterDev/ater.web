@@ -1,5 +1,3 @@
-using Entity.System;
-
 namespace SystemMod.Models.SystemPermissionGroupDtos;
 
 /// <see cref="SystemPermissionGroup"/>

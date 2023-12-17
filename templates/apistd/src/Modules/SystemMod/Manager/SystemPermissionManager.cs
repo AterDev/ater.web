@@ -1,4 +1,3 @@
-using Ater.Web.Abstraction.EntityFramework;
 using SystemMod.Models.SystemPermissionDtos;
 
 namespace SystemMod.Manager;

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
-using StandaloneService;
 using StandaloneService.Middleware;
 
 namespace StandaloneService;

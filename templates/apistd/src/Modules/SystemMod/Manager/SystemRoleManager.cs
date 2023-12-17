@@ -1,4 +1,3 @@
-using Ater.Web.Abstraction.EntityFramework;
 using SystemMod.Models.SystemRoleDtos;
 
 namespace SystemMod.Manager;

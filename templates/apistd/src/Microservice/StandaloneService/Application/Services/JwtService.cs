@@ -1,4 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
+
 using Microsoft.IdentityModel.Tokens;
 
 namespace StandaloneService.Application.Services;

@@ -1,4 +1,3 @@
-using Ater.Web.Abstraction.EntityFramework;
 using FileManagerMod.Models.FileDataDtos;
 
 using Microsoft.AspNetCore.Http;

@@ -45,5 +45,5 @@ public class ProductItemDto
 
     public Guid Id { get; set; }
     public DateTimeOffset CreatedTime { get; set; } = DateTimeOffset.UtcNow;
-    
+
 }

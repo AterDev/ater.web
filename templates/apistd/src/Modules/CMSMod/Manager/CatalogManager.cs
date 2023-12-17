@@ -1,6 +1,7 @@
 using Application;
-using Ater.Web.Abstraction.EntityFramework;
+
 using CMSMod.Models.CatalogDtos;
+
 using EntityFramework;
 
 namespace CMSMod.Manager;
