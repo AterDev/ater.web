@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Http.API;
+
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using StandaloneService.Infrastructure;
-using StandaloneService.Middleware;
 
-namespace StandaloneService.Infrastructure;
+namespace Http.API;
 
 public static class ServiceCollectionExtension
 {

@@ -36,4 +36,8 @@
 		<ProjectReference Include="..\Modules\OrderMod\OrderMod.csproj" />
 		<ProjectReference Include="..\Modules\SystemMod\SystemMod.csproj" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Infrastructure\" />
+	</ItemGroup>
 </Project>

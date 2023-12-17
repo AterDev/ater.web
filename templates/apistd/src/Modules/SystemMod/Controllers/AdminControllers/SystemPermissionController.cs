@@ -1,4 +1,3 @@
-using SystemMod.Manager;
 using SystemMod.Models.SystemPermissionDtos;
 namespace SystemMod.Controllers.AdminControllers;
 

@@ -3,7 +3,10 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
-namespace Http.API.Infrastructure;
+using StandaloneService;
+using StandaloneService.Middleware;
+
+namespace StandaloneService;
 
 public static class ServiceCollectionExtension
 {

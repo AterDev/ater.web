@@ -26,11 +26,7 @@ public class JwtService(string sign, string audience, string issuer)
     {
         SymmetricSecurityKey signingKey = new(Encoding.UTF8.GetBytes(Sign));
         SigningCredentials signingCredentials = new(signingKey, SecurityAlgorithms.HmacSha256);
-        List<Claim> claims =
-        [
-                // 此处自定义claims
-                new Claim(ClaimTypes.NameIdentifier, id),
-        ];
+        List<Claim> claims = [new Claim(ClaimTypes.NameIdentifier, id)];
         if (roles.Length != 0)
         {
             foreach (string role in roles)

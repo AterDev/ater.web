@@ -1,11 +1,14 @@
-﻿namespace Http.API.Middleware;
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace Ater.Web.Abstraction;
 
 public class CustomBadRequest : ObjectResult
 {
     public CustomBadRequest(ActionContext context, object? value) : base(value)
     {
         StatusCode = 400;
-        Value = new {
+        Value = new
+        {
             Title = "请求参数错误",
             Detail = GetErrorMessage(context),
             Status = 400,

@@ -34,12 +34,12 @@ public interface IEmailService
 
 public class EmailService(IConfiguration configuration) : IEmailService
 {
-
     private readonly IConfiguration _config = configuration;
 
     public async Task SendAsync(string email, string subject, string html)
     {
-        SmtpOption option = _config.GetSection("Smtp").Get<SmtpOption>() ?? throw new ArgumentNullException("未找到Smtp选项!");
+        SmtpOption option = _config.GetSection("Smtp").Get<SmtpOption>()
+                            ?? throw new ArgumentNullException("未找到Smtp选项!");
         // create message 
         var message = new MimeMessage();
         message.From.Add(MailboxAddress.Parse(option.From));

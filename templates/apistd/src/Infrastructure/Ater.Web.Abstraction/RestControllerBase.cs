@@ -1,7 +1,13 @@
-using Application;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
+﻿using System.Diagnostics;
 
-namespace CMSMod.Infrastructure;
+using Ater.Web.Abstraction.Interface;
+
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.Extensions.Logging;
+
+namespace Ater.Web.Abstraction;
 
 /// <summary>
 /// 管理后台权限控制器
@@ -11,20 +17,14 @@ namespace CMSMod.Infrastructure;
 [ApiExplorerSettings(GroupName = "admin")]
 public class RestControllerBase<TManager>(
     TManager manager,
-    IUserContext user,
+    IUserContextBase user,
     ILogger logger
         ) : RestControllerBase
      where TManager : class
 {
     protected readonly TManager manager = manager;
     protected readonly ILogger _logger = logger;
-    protected readonly IUserContext _user = user;
-
-    [NonAction]
-    public virtual bool HasPermission()
-    {
-        return true;
-    }
+    protected readonly IUserContextBase _user = user;
 }
 
 /// <summary>
@@ -35,21 +35,14 @@ public class RestControllerBase<TManager>(
 [ApiExplorerSettings(GroupName = "client")]
 public class ClientControllerBase<TManager>(
     TManager manager,
-    IUserContext user,
+    IUserContextBase user,
     ILogger logger
         ) : RestControllerBase
      where TManager : class
 {
     protected readonly TManager manager = manager;
     protected readonly ILogger _logger = logger;
-    protected readonly IUserContext _user = user;
-
-    /*
-    protected async Task<User?> GetUserAsync()
-    {
-        return await _user.GetUserAsync();
-    }
-    */
+    protected readonly IUserContextBase _user = user;
 }
 
 /// <summary>
@@ -60,23 +53,7 @@ public class ClientControllerBase<TManager>(
 [Produces("application/json")]
 public class RestControllerBase : ControllerBase
 {
-    /// <summary>
-    /// 400返回格式处理
-    /// </summary>
-    /// <param name="error"></param>
-    /// <returns></returns>
-    [NonAction]
-    public override BadRequestObjectResult BadRequest([ActionResultObjectValue] object? error)
-    {
-        var res = new
-        {
-            Title = "请求错误",
-            Detail = error?.ToString(),
-            Status = 400,
-            TraceId = HttpContext.TraceIdentifier
-        };
-        return base.BadRequest(res);
-    }
+
     /// <summary>
     /// 404返回格式处理
     /// </summary>
@@ -93,7 +70,7 @@ public class RestControllerBase : ControllerBase
             TraceId = HttpContext.TraceIdentifier
         };
         Activity? at = Activity.Current;
-        at?.SetTag("responseBody", value);
+        _ = (at?.SetTag("responseBody", value));
         return base.NotFound(res);
     }
 
@@ -113,7 +90,7 @@ public class RestControllerBase : ControllerBase
             TraceId = HttpContext.TraceIdentifier
         };
         Activity? at = Activity.Current;
-        at?.SetTag("responseBody", error);
+        _ = (at?.SetTag("responseBody", error));
         return base.Conflict(res);
     }
 
@@ -133,11 +110,28 @@ public class RestControllerBase : ControllerBase
             TraceId = HttpContext.TraceIdentifier
         };
         Activity? at = Activity.Current;
-        at?.SetTag("responseBody", detail);
+        _ = (at?.SetTag("responseBody", detail));
         return new ObjectResult(res)
         {
             StatusCode = 500,
 
         };
+    }
+    /// <summary>
+    /// 400返回格式处理
+    /// </summary>
+    /// <param name="error"></param>
+    /// <returns></returns>
+    [NonAction]
+    public override BadRequestObjectResult BadRequest([ActionResultObjectValue] object? error)
+    {
+        var res = new
+        {
+            Title = "请求错误",
+            Detail = error?.ToString(),
+            Status = 400,
+            TraceId = HttpContext.TraceIdentifier
+        };
+        return base.BadRequest(res);
     }
 }

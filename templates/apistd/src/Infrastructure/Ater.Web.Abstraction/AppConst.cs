@@ -1,4 +1,4 @@
-﻿namespace Application.Const;
+﻿namespace Ater.Web.Abstraction;
 /// <summary>
 /// 应用程序常量
 /// </summary>

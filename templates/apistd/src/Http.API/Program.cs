@@ -1,5 +1,8 @@
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
+
+using Ater.Web.Abstraction;
+using Http.API;
 using Http.API.Worker;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -30,7 +33,7 @@ services.AddManager();
 services.AddSingleton(typeof(CacheService));
 services.AddSingleton<IEmailService, EmailService>();
 
-services.AddControllersWithViews()
+services.AddControllers()
     .ConfigureApiBehaviorOptions(o =>
     {
         o.InvalidModelStateResponseFactory = context =>
