@@ -1,6 +1,8 @@
 var builder = WebApplication.CreateBuilder(args);
 
-builder.AddServiceDefaults();
+// if use AppHost then use this
+// builder.AddServiceDefaults();
+
 IServiceCollection services = builder.Services;
 ConfigurationManager configuration = builder.Configuration;
 
@@ -37,7 +39,8 @@ services.AddControllers()
 
 var app = builder.Build();
 
-app.MapDefaultEndpoints();
+// if use AppHost then use this
+// app.MapDefaultEndpoints();
 
 if (app.Environment.IsDevelopment())
 {

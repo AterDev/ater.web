@@ -20,7 +20,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\runtime\MyProjectName.ServiceDefaults\MyProjectName.ServiceDefaults.csproj" />
 		<ProjectReference Include="..\..\Infrastructure\Ater.Web.Abstraction\Ater.Web.Abstraction.csproj" />
 	</ItemGroup>
 

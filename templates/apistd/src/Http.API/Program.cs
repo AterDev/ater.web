@@ -5,6 +5,7 @@ using Ater.Web.Abstraction;
 
 using Http.API;
 using Http.API.Worker;
+using MyProjectName.ServiceDefaults;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
