@@ -220,4 +220,8 @@ public static class StringExtension
     {
         return string.IsNullOrWhiteSpace(str);
     }
+    public static bool NotEmpty(this string? str)
+    {
+        return !string.IsNullOrWhiteSpace(str);
+    }
 }

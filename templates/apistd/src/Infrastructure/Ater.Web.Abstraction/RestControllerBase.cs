@@ -25,6 +25,7 @@ public class RestControllerBase<TManager>(
     protected readonly TManager manager = manager;
     protected readonly ILogger _logger = logger;
     protected readonly IUserContextBase _user = user;
+
 }
 
 /// <summary>

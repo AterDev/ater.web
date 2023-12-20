@@ -9,4 +9,10 @@ public interface IUserContextBase
     public List<string>? Roles { get; set; }
     public Guid? GroupId { get; init; }
     bool IsRole(string roleName);
+
+    /// <summary>
+    /// 用户是否存在
+    /// </summary>
+    /// <returns></returns>
+    Task<bool> ExistAsync();
 }
