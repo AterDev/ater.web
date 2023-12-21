@@ -2,6 +2,6 @@ IDistributedApplicationBuilder builder = DistributedApplication.CreateBuilder(ar
 
 builder.AddProject<Projects.Http_API>("http.api");
 
-builder.AddProject<Projects.StandaloneService>("standaloneservice");
+// add other services
 
 builder.Build().Run();

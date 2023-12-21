@@ -1,3 +1,4 @@
+
 namespace StandaloneService.Application.Implement;
 
 public partial class UserContext : IUserContext
@@ -53,5 +54,10 @@ public partial class UserContext : IUserContext
     public bool IsRole(string roleName)
     {
         return Roles != null && Roles.Any(r => r == roleName);
+    }
+
+    public Task<bool> ExistAsync()
+    {
+        throw new NotImplementedException();
     }
 }
