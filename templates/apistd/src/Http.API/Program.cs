@@ -13,6 +13,18 @@ builder.AddServiceDefaults();
 IServiceCollection services = builder.Services;
 ConfigurationManager configuration = builder.Configuration;
 
+//AppDomain.CurrentDomain.FirstChanceException += (sender, eventArgs) =>
+//{
+//    if (eventArgs.Exception is OutOfMemoryException)
+//    {
+//        Console.WriteLine($"=== OutOfMemory: {eventArgs.Exception.Message}, {eventArgs.Exception.StackTrace}");
+//    }
+//    else
+//    {
+//        Console.WriteLine($"Caught exception: {eventArgs.Exception.Message}");
+//    }
+//};
+
 // 1 基础组件
 services.AddAppComponents(configuration);
 services.AddWebComponents(configuration);

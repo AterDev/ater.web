@@ -4,7 +4,6 @@
 		<AssemblyName>Http.API</AssemblyName>
 		<RootNamespace>Http.API</RootNamespace>
 		<Nullable>enable</Nullable>
-		<SpaRoot>ClientApp\</SpaRoot>
 		<SpaProxyServerUrl>http://localhost:14200</SpaProxyServerUrl>
 	</PropertyGroup>
 
