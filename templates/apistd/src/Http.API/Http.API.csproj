@@ -18,13 +18,20 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0">
+	  <Compile Remove="Infrastructure\**" />
+	  <Content Remove="Infrastructure\**" />
+	  <EmbeddedResource Remove="Infrastructure\**" />
+	  <None Remove="Infrastructure\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.1">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-		<PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="8.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="8.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -34,9 +41,5 @@
 		<ProjectReference Include="..\Modules\FileManagerMod\FileManagerMod.csproj" />
 		<ProjectReference Include="..\Modules\OrderMod\OrderMod.csproj" />
 		<ProjectReference Include="..\Modules\SystemMod\SystemMod.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Infrastructure\" />
 	</ItemGroup>
 </Project>

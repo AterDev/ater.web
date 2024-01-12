@@ -1,5 +1,8 @@
 ﻿namespace Entity.System;
 
+/// <summary>
+/// 系统权限组
+/// </summary>
 [Module(Modules.System)]
 [Index(nameof(Name))]
 public class SystemPermissionGroup : IEntityBase
