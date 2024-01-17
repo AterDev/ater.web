@@ -11,7 +11,15 @@ The web framework with best practices base on ASP.NET Core.
 |版本|.NET版本|支持
 |-|-|-|
 |6.x|.NET6|不再维护
-|7.x|.NET7|当前版本
+|7.x|.NET7|仅修复Bug
+|8.x|.NET8|当前版本
+
+## 文档
+
+请查阅[使用文档](https://docs.dusi.dev/)！
+
+> [!TIP]
+> 如有问题，可在GitHub上提交问题，或者加入QQ群:149272857.
 
 ## 安装
 
@@ -25,7 +33,7 @@ The web framework with best practices base on ASP.NET Core.
 模板已经发布到[`nuget`](https://www.nuget.org/packages/ater.web.templates)上，请根据你的项目版本下载对应的模板。
 
 ```pwsh
-dotnet new --install ater.web.templates::7.1.0-rc1
+dotnet new --install ater.web.templates::8.0.0-rc1
 ```
 
 ## 创建项目
@@ -62,6 +70,7 @@ cd src\Database\EntityFramework.Migrator
 ### 7.0及之后
 
 移除了`EntityFramework.Migrator`，迁移代码将直接生成在`Http.API`项目中。
+
 可直接运行`scripts\EFMigrations.ps1`脚本生成迁移内容，程序在启动时会执行迁移。
 
 ```pwsh
@@ -84,18 +93,4 @@ cd src\Http.API
 dotnet watch run 
 ```
 
-### 运行前端项目
-
-项目模板自带了基于angular 的前端项目，根据实际需要使用。
-
-```pwsh
-cd  src\Http.API\ClientApp
-npm install
-npm start
-```  
-
 使用`admin/Hello.Net`初始管理账号登录。
-
-## 文档
-
-请查阅[使用文档](https://docs.dusi.dev/)！

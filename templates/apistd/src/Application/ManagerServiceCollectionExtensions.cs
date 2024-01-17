@@ -7,6 +7,5 @@ public static partial class ManagerServiceCollectionExtensions
     {
         services.AddScoped(typeof(DataAccessContext<>));
         services.AddScoped(typeof(UserManager));
-
     }
 }
