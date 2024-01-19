@@ -1,4 +1,6 @@
-﻿using Microsoft.OpenApi.Any;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Reflection;
+using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -13,17 +15,17 @@ public class EnumSchemaFilter : ISchemaFilter
         {
             var name = new OpenApiArray();
             var enumData = new OpenApiArray();
-            System.Reflection.FieldInfo[] fields = context.Type.GetFields();
-            foreach (System.Reflection.FieldInfo f in fields)
+            FieldInfo[] fields = context.Type.GetFields();
+            foreach (FieldInfo f in fields)
             {
                 if (f.Name != "value__")
                 {
                     name.Add(new OpenApiString(f.Name));
-                    System.Reflection.CustomAttributeData? desAttr = f.CustomAttributes.Where(a => a.AttributeType.Name == "DescriptionAttribute").FirstOrDefault();
+                    CustomAttributeData? desAttr = f.CustomAttributes.Where(a => a.AttributeType.Name == "DescriptionAttribute").FirstOrDefault();
 
                     if (desAttr != null)
                     {
-                        System.Reflection.CustomAttributeTypedArgument des = desAttr.ConstructorArguments.FirstOrDefault();
+                        CustomAttributeTypedArgument des = desAttr.ConstructorArguments.FirstOrDefault();
                         if (des.Value != null)
                         {
                             enumData.Add(new OpenApiObject()
@@ -38,6 +40,24 @@ public class EnumSchemaFilter : ISchemaFilter
             }
             model.Extensions.Add("x-enumNames", name);
             model.Extensions.Add("x-enumData", enumData);
+        }
+        else
+        {
+            PropertyInfo[] properties = context.Type.GetProperties();
+
+            foreach (KeyValuePair<string, OpenApiSchema> property in model.Properties)
+            {
+                PropertyInfo? prop = properties.FirstOrDefault(x => x.Name.ToCamelCase() == property.Key);
+                if (prop != null)
+                {
+                    var isRequired = Attribute.IsDefined(prop, typeof(RequiredAttribute));
+                    if (isRequired)
+                    {
+                        property.Value.Nullable = false;
+                        _ = model.Required.Add(property.Key);
+                    }
+                }
+            }
         }
     }
 }
