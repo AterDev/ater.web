@@ -5,11 +5,9 @@ using Ater.Web.Abstraction;
 
 using Http.API;
 using Http.API.Worker;
-using MyProjectName.ServiceDefaults;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-builder.AddServiceDefaults();
 IServiceCollection services = builder.Services;
 ConfigurationManager configuration = builder.Configuration;
 
@@ -62,7 +60,6 @@ services.AddControllers()
 
 WebApplication app = builder.Build();
 
-app.MapDefaultEndpoints();
 if (app.Environment.IsDevelopment())
 {
     app.UseCors("default");

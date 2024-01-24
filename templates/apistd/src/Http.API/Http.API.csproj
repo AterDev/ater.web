@@ -35,7 +35,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\runtime\MyProjectName.ServiceDefaults\MyProjectName.ServiceDefaults.csproj" />
 		<ProjectReference Include="..\Application\Application.csproj" />
 		<ProjectReference Include="..\Modules\CMSMod\CMSMod.csproj" />
 		<ProjectReference Include="..\Modules\FileManagerMod\FileManagerMod.csproj" />
