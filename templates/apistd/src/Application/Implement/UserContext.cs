@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Application.Implement;
 
-public partial class UserContext : IUserContext
+public class UserContext : IUserContext
 {
     public Guid UserId { get; init; }
     public string? Username { get; init; }
