@@ -1,4 +1,5 @@
-﻿using Http.API;
+﻿using Ater.Web.Abstraction;
+using Http.API;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.Controllers;
@@ -10,15 +11,16 @@ namespace Http.API;
 public static class ServiceCollectionExtension
 {
     /// <summary>
-    /// 添加web服务组件，如身份认证/swagger/cors
+    /// 添加web服务组件，如身份认证/授权/swagger/cors
     /// </summary>
     /// <param name="services"></param>
     /// <param name="configuration"></param>
     /// <returns></returns>
-    public static IServiceCollection AddWebComponents(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection ConfigWebComponents(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddSwagger();
         services.AddJwtAuthentication(configuration);
+        services.AddAuthorize();
         services.AddCors();
         return services;
     }
@@ -139,6 +141,15 @@ public static class ServiceCollectionExtension
                 builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
             });
         });
+        return services;
+    }
+
+    public static IServiceCollection AddAuthorize(this IServiceCollection services)
+    {
+        services.AddAuthorizationBuilder()
+            .AddPolicy(AppConst.User, policy => policy.RequireRole(AppConst.User))
+            .AddPolicy(AppConst.AdminUser, policy => policy.RequireRole(AppConst.SuperAdmin, AppConst.AdminUser))
+            .AddPolicy(AppConst.SuperAdmin, policy => policy.RequireRole(AppConst.SuperAdmin));
         return services;
     }
 }

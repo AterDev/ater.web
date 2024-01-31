@@ -23,15 +23,10 @@ ConfigurationManager configuration = builder.Configuration;
 //    }
 //};
 
-// 1 基础组件
-services.AddAppComponents(configuration);
-services.AddWebComponents(configuration);
-
-// 2 授权配置
-services.AddAuthorizationBuilder()
-    .AddPolicy(AppConst.User, policy => policy.RequireRole(AppConst.User))
-    .AddPolicy(AppConst.AdminUser, policy => policy.RequireRole(AppConst.SuperAdmin, AppConst.AdminUser))
-    .AddPolicy(AppConst.SuperAdmin, policy => policy.RequireRole(AppConst.SuperAdmin));
+// 1 添加默认组件
+builder.AddDefaultComponents();
+// 2 配置
+services.ConfigWebComponents(configuration);
 
 services.AddHttpContextAccessor();
 services.AddTransient<IUserContext, UserContext>();
