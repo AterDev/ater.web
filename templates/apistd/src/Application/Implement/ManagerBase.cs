@@ -109,8 +109,9 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem>
     {
         return await Query.FindAsync<TDto>(whereExp);
     }
+
     /// <summary>
-    /// 是否存在
+    /// id是否存在
     /// </summary>
     /// <param name="id">主键id</param>
     /// <returns></returns>
