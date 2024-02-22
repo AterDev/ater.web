@@ -15,8 +15,6 @@ public class DataAccessContextBase<TCommandContext, TQueryContext, TEntity>(TCom
     public TQueryContext QueryContext { get; init; } = queryDbContext;
     public TCommandContext CommandContext { get; init; } = commandDbContext;
 
-    public int MyProperty { get; set; }
-
     public QuerySet<TQueryContext, TEntity> QuerySet() => new(_queryDbContext);
     public CommandSet<TCommandContext, TEntity> CommandSet() => new(_commandDbContext);
 }
