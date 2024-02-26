@@ -133,7 +133,7 @@ public class SystemUserManager(
             UserName = "admin",
             PasswordSalt = salt,
             PasswordHash = HashCrypto.GeneratePwd(defaultPassword, salt),
-            SystemRoles = new List<SystemRole>() { superRole, adminRole },
+            SystemRoles = [superRole, adminRole],
         };
         CommandContext.SystemRoles.Add(adminRole);
         CommandContext.SystemRoles.Add(superRole);

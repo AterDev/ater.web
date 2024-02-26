@@ -24,7 +24,7 @@ public class Folder : IEntityBase, ITreeNode<Folder>
     [MaxLength(500)]
     public string? Path { get; set; }
 
-    public ICollection<FileData> Files { get; set; } = new List<FileData>();
+    public ICollection<FileData> Files { get; set; } = [];
     public Guid Id { get; set; }
     public DateTimeOffset CreatedTime { get; set; }
     public DateTimeOffset UpdatedTime { get; set; }

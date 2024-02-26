@@ -18,9 +18,9 @@ public class SystemPermissionGroup : IEntityBase
     [MaxLength(1000)]
     public string? Description { get; set; }
 
-    public ICollection<SystemPermission> Permissions { get; set; } = new List<SystemPermission>();
+    public ICollection<SystemPermission> Permissions { get; set; } = [];
 
-    public ICollection<SystemRole> Roles { get; set; } = new List<SystemRole>();
+    public ICollection<SystemRole> Roles { get; set; } = [];
     public Guid Id { get; set; }
     public DateTimeOffset CreatedTime { get; set; }
     public DateTimeOffset UpdatedTime { get; set; }

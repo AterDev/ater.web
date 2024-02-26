@@ -115,7 +115,7 @@ public class SystemRoleManager(
                 .Collection(r => r.Menus)
                 .LoadAsync();
 
-            current.Menus = new List<SystemMenu>();
+            current.Menus = [];
 
             List<SystemMenu> menus = await CommandContext.SystemMenus
                 .Where(m => dto.MenuIds.Contains(m.Id))

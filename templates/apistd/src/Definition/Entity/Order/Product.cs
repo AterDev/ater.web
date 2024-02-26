@@ -49,7 +49,7 @@ public class Product : IEntityBase
     /// 原价
     /// </summary>
     public decimal OriginPrice { get; set; }
-    public ICollection<Order> Orders { get; set; } = new List<Order>();
+    public ICollection<Order> Orders { get; set; } = [];
     public Guid Id { get; set; }
     public DateTimeOffset CreatedTime { get; set; }
     public DateTimeOffset UpdatedTime { get; set; }

@@ -23,7 +23,7 @@ public class SystemOrganization : IEntityBase, ITreeNode<SystemOrganization>
     [ForeignKey(nameof(ParentId))]
     public SystemOrganization? Parent { get; set; }
     public Guid? ParentId { get; set; }
-    public ICollection<SystemUser> Users { get; set; } = new List<SystemUser>();
+    public ICollection<SystemUser> Users { get; set; } = [];
     public Guid Id { get; set; }
     public DateTimeOffset CreatedTime { get; set; }
     public DateTimeOffset UpdatedTime { get; set; }
