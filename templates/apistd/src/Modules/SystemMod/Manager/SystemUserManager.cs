@@ -109,7 +109,10 @@ public class SystemUserManager(
         // 判断是否初始化
         SystemRole? role = await CommandContext.SystemRoles.SingleOrDefaultAsync(r => r.NameValue == AppConst.AdminUser);
 
-        if (role != null) { return; }
+        if (role != null)
+        {
+            return;
+        }
 
         var defaultPassword = _configuration.GetValue<string>("Key:DefaultPassword");
         if (string.IsNullOrWhiteSpace(defaultPassword))
