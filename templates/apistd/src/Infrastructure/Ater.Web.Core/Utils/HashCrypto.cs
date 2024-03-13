@@ -96,10 +96,22 @@ public class HashCrypto
         var b = new byte[4];
         string s = string.Empty;
         var str = custom;
-        if (useNum) { str += "0123456789"; }
-        if (useLow) { str += "abcdefghijklmnopqrstuvwxyz"; }
-        if (useUpp) { str += "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; }
-        if (useSpe) { str += "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"; }
+        if (useNum)
+        {
+            str += "0123456789";
+        }
+        if (useLow)
+        {
+            str += "abcdefghijklmnopqrstuvwxyz";
+        }
+        if (useUpp)
+        {
+            str += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        }
+        if (useSpe)
+        {
+            str += "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
+        }
 
         // 范围
         var range = str.Length - 1;

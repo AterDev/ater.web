@@ -1,12 +1,20 @@
-﻿namespace Ater.Web.Util;
+﻿using SkiaSharp;
+namespace Ater.Web.Util;
 
-using System;
-using System.IO;
-using SkiaSharp;
-
+/// <summary>
+/// 图形帮助类
+/// </summary>
 public class ImageHelper
 {
-    public static byte[] GenerateImageWithCaptcha(string captchaText, int width = 80, int height = 40, int fontSize = 24)
+    /// <summary>
+    ///  生成图形验证码
+    /// </summary>
+    /// <param name="captchaText"></param>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
+    /// <param name="fontSize"></param>
+    /// <returns>png文件的bytes</returns>
+    public static byte[] GenerateImageCaptcha(string captchaText, int width = 80, int height = 40, int fontSize = 24)
     {
         using (var surface = SKSurface.Create(new SKImageInfo(width, height)))
         {
