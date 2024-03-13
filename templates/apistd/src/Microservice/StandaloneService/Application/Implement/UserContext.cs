@@ -56,8 +56,27 @@ public partial class UserContext : IUserContext
         return Roles != null && Roles.Any(r => r == roleName);
     }
 
-    public Task<bool> ExistAsync()
+    public async Task<bool> ExistAsync()
     {
-        throw new NotImplementedException();
+        return await Task.FromResult(false);
+    }
+
+    /// <summary>
+    /// ªÒ»°ipµÿ÷∑
+    /// </summary>
+    /// <returns></returns>
+    public string? GetIpAddress()
+    {
+        HttpRequest? request = _httpContextAccessor.HttpContext?.Request;
+        return request == null
+            ? string.Empty
+            : request.Headers.ContainsKey("X-Forwarded-For")
+            ? request.Headers["X-Forwarded-For"].Where(x => x != null).FirstOrDefault()
+            : _httpContextAccessor.HttpContext!.Connection.RemoteIpAddress?.ToString();
+    }
+
+    public async Task<TUser?> GetUserAsync<TUser>() where TUser : class
+    {
+        return await _context.Set<TUser>().FindAsync(UserId);
     }
 }

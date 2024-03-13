@@ -68,6 +68,7 @@ public static class ServiceCollectionExtension
     /// <returns></returns>
     public static IServiceCollection AddSwagger(this IServiceCollection services)
     {
+
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(c =>
         {

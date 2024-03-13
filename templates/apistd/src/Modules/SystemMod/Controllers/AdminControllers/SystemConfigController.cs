@@ -54,7 +54,10 @@ public class SystemConfigController(
     public async Task<ActionResult<SystemConfig?>> UpdateAsync([FromRoute] Guid id, SystemConfigUpdateDto dto)
     {
         SystemConfig? current = await manager.GetCurrentAsync(id);
-        if (current == null) { return NotFound(ErrorMsg.NotFoundResource); };
+        if (current == null)
+        {
+            return NotFound(ErrorMsg.NotFoundResource);
+        };
         return await manager.UpdateAsync(current, dto);
     }
 
@@ -80,7 +83,10 @@ public class SystemConfigController(
     {
         // 注意删除权限
         SystemConfig? entity = await manager.GetCurrentAsync(id);
-        if (entity == null) { return NotFound(); };
+        if (entity == null)
+        {
+            return NotFound();
+        };
         return entity.IsSystem
             ? Problem("系统配置，无法删除!")
             : await manager.DeleteAsync(entity);

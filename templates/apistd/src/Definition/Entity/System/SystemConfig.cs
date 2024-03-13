@@ -9,7 +9,9 @@
 [Module(Modules.System)]
 public class SystemConfig : IEntityBase
 {
-     [MaxLength(100)]
+    public const string System = "System";
+
+    [MaxLength(100)]
     public required string Key { get; set; }
     /// <summary>
     /// 以json字符串形式存储

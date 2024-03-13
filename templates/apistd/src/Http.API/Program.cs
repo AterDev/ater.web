@@ -25,6 +25,7 @@ ConfigurationManager configuration = builder.Configuration;
 
 // 1 添加默认组件
 builder.AddDefaultComponents();
+
 // 2 配置
 services.ConfigWebComponents(configuration);
 

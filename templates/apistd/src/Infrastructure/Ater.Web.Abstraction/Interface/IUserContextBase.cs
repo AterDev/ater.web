@@ -8,5 +8,13 @@ public interface IUserContextBase
     public string? CurrentRole { get; set; }
     public List<string>? Roles { get; set; }
     public Guid? GroupId { get; init; }
-    bool IsRole(string roleName);
+    public bool IsRole(string roleName);
+    /// <summary>
+    /// 用户是否存在
+    /// </summary>
+    /// <returns></returns>
+    public Task<bool> ExistAsync();
+    public string? GetIpAddress();
+    public Task<TUser?> GetUserAsync<TUser>() where TUser : class;
+
 }
