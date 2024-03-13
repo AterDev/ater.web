@@ -60,7 +60,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderMod", "src\Modules\Ord
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SystemMod", "src\Modules\SystemMod\SystemMod.csproj", "{6E94CCB0-7232-47B5-BBCB-C34BE3582828}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ater.Web.Util", "src\Infrastructure\Ater.Web.Util\Ater.Web.Util.csproj", "{48BF3F1C-9868-4710-AD35-E4B0D377EF6A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ater.Web.Extention", "src\Infrastructure\Ater.Web.Extension\Ater.Web.Extension.csproj", "{48BF3F1C-9868-4710-AD35-E4B0D377EF6A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

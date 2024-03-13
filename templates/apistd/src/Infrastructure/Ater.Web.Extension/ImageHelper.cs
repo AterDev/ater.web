@@ -1,5 +1,5 @@
 ﻿using SkiaSharp;
-namespace Ater.Web.Util;
+namespace Ater.Web.Extention;
 
 /// <summary>
 /// 图形帮助类
@@ -40,7 +40,7 @@ public class ImageHelper
 
             // 添加干扰线条
             var random = new Random();
-            for (int i = 0; i < 8; i++)
+            for (var i = 0; i < 8; i++)
             {
                 var startX = random.Next(width);
                 var startY = random.Next(height);

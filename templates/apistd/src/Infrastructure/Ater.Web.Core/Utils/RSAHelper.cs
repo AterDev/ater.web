@@ -1,7 +1,4 @@
-﻿using System.Security.Cryptography;
-using System.Text;
-
-namespace Ater.Web.Util;
+﻿namespace Ater.Web.Core.Utils;
 /// <summary>
 /// RSA帮助类
 /// </summary>

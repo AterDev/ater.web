@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\templates\apistd\src\Infrastructure\Ater.Web.Util\Ater.Web.Util.csproj" />
+    <ProjectReference Include="..\templates\apistd\src\Infrastructure\Ater.Web.Extension\Ater.Web.Extension.csproj" />
   </ItemGroup>
 
 </Project>
