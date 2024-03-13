@@ -99,49 +99,4 @@ public class SystemUserManager(
         query = query.Where(q => q.Id == _userContext.UserId);
         return await query.FirstOrDefaultAsync();
     }
-
-    /// <summary>
-    /// 初始化管理员角色和账号
-    /// </summary>
-    /// <returns></returns>
-    public async Task InitSystemUserAndRoleAsync()
-    {
-        // 判断是否初始化
-        SystemRole? role = await CommandContext.SystemRoles.SingleOrDefaultAsync(r => r.NameValue == AppConst.AdminUser);
-
-        if (role != null)
-        {
-            return;
-        }
-
-        var defaultPassword = _configuration.GetValue<string>("Key:DefaultPassword");
-        if (string.IsNullOrWhiteSpace(defaultPassword))
-        {
-            defaultPassword = "Hello.Net";
-        }
-
-        SystemRole superRole = new()
-        {
-            Name = AppConst.SuperAdmin,
-            NameValue = AppConst.SuperAdmin,
-        };
-        SystemRole adminRole = new()
-        {
-            Name = AppConst.AdminUser,
-            NameValue = AppConst.AdminUser,
-        };
-        var salt = HashCrypto.BuildSalt();
-        SystemUser systemUser = new()
-        {
-            UserName = "admin",
-            PasswordSalt = salt,
-            PasswordHash = HashCrypto.GeneratePwd(defaultPassword, salt),
-            SystemRoles = [superRole, adminRole],
-        };
-        CommandContext.SystemRoles.Add(adminRole);
-        CommandContext.SystemRoles.Add(superRole);
-        CommandContext.SystemUsers.Add(systemUser);
-        await CommandContext.SaveChangesAsync();
-    }
-
 }

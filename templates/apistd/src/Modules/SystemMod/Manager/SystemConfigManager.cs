@@ -1,3 +1,5 @@
+using System.Text.Json;
+using Share.Options;
 using SystemMod.Models.SystemConfigDtos;
 
 namespace SystemMod.Manager;
@@ -70,42 +72,30 @@ public class SystemConfigManager(
     }
 
     /// <summary>
-    /// 更新版本信息
+    /// 获取登录安全策略
     /// </summary>
     /// <returns></returns>
-    public async Task UpdateVersionAsync()
+    public LoginSecurityPolicy GetLoginSecurityPolicy()
     {
-        SystemConfig? version = await CommandContext.SystemConfigs.Where(c => c.Key == AppConst.Version).FirstOrDefaultAsync();
-        if (version == null)
+        // 优先级：数据库>配置文件>默认配置
+        var policy = new LoginSecurityPolicy();
+
+        var configString = Query.Db.Where(q => q.GroupName.Equals(AppConst.SystemGroup) && q.Key.Equals(AppConst.LoginSecurityPolicy))
+            .Select(q => q.Value)
+            .FirstOrDefault();
+
+        if (configString != null)
         {
-            SystemConfig config = new()
-            {
-                IsSystem = true,
-                Valid = true,
-                Key = AppConst.Version,
-                GroupName = SystemConfig.System,
-                // 版本格式:yyMMdd.编号
-                Value = DateTime.UtcNow.ToString("yyMMdd") + ".01"
-            };
-            CommandContext.Add(config);
-            await CommandContext.SaveChangesAsync();
-            version = config;
-        }
-        // 比对新版本
-        var newVersion = _configuration.GetValue<string>(AppConst.Version);
-        if (double.TryParse(newVersion, out var newVersionValue)
-            && double.TryParse(version.Value, out var versionValue))
-        {
-            if (newVersionValue > versionValue)
-            {
-                // 执行更新方法
-                version.Value = newVersionValue.ToString();
-                await CommandContext.SaveChangesAsync();
-            }
+            policy = JsonSerializer.Deserialize<LoginSecurityPolicy>(configString);
         }
         else
         {
-            _logger.LogError("版本格式错误");
+            var config = _configuration.GetSection(AppConst.LoginSecurityPolicy);
+            if (config.Exists())
+            {
+                policy = config.Get<LoginSecurityPolicy>();
+            }
         }
+        return policy ?? new LoginSecurityPolicy();
     }
 }

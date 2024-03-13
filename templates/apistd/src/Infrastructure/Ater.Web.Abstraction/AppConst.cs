@@ -27,6 +27,19 @@ public static class AppConst
     public const string Version = "Version";
 
     /// <summary>
+    /// 登录安全策略
+    /// </summary>
+    public const string LoginSecurityPolicy = "LoginSecurityPolicy";
+    /// <summary>
+    /// 系统配置组名称
+    /// </summary>
+    public const string SystemGroup = "System";
+    /// <summary>
+    /// 初始化
+    /// </summary>
+    public const string IsInit = "IsInit";
+
+    /// <summary>
     /// 用户登录缓存前缀
     /// </summary>
     public const string LoginCachePrefix = "Login_";

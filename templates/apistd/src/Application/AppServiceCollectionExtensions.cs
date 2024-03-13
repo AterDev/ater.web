@@ -7,6 +7,7 @@ using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using Share.Options;
 
 namespace Application;
 
@@ -133,6 +134,13 @@ public static partial class AppServiceCollectionExtensions
         var resource = ResourceBuilder.CreateDefault()
             .AddService(serviceName: serviceName, serviceInstanceId: Environment.MachineName);
 
+        var section = builder.Configuration.GetSection("Opentelemetry");
+        bool exportConsole = false;
+        if (section != null)
+        {
+            exportConsole = section.Get<OpentelemetryOption>()?.ExportConsole ?? false;
+        }
+
         loggerOptions ??= new Action<OpenTelemetryLoggerOptions>(options =>
         {
             options.SetResourceBuilder(resource);
@@ -140,7 +148,8 @@ public static partial class AppServiceCollectionExtensions
             options.ParseStateValues = true;
             options.IncludeFormattedMessage = true;
             options.IncludeScopes = true;
-            options.AddConsoleExporter();
+            if (exportConsole)
+                options.AddConsoleExporter();
         });
         tracerProvider ??= new Action<TracerProviderBuilder>(options =>
         {
@@ -171,7 +180,8 @@ public static partial class AppServiceCollectionExtensions
         });
         builder.Services.AddLogging(loggerBuilder =>
         {
-            loggerBuilder.ClearProviders();
+            if (exportConsole)
+                loggerBuilder.ClearProviders();
             loggerBuilder.AddOpenTelemetry(loggerOptions);
         });
         builder.Services.AddOpenTelemetry()

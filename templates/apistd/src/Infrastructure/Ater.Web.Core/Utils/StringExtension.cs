@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Ater.Web.Core.Utils;
 
 namespace Ater.Web.Core.Utils;
@@ -216,11 +217,11 @@ public static class StringExtension
     /// </summary>
     /// <param name="str"></param>
     /// <returns></returns>
-    public static bool IsEmpty(this string? str)
+    public static bool IsEmpty([NotNullWhen(false)] this string? str)
     {
         return string.IsNullOrWhiteSpace(str);
     }
-    public static bool NotEmpty(this string? str)
+    public static bool NotEmpty([NotNullWhen(true)] this string? str)
     {
         return !string.IsNullOrWhiteSpace(str);
     }

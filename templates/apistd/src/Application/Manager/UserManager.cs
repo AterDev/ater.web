@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using Share.Models.UserDtos;
 
 namespace Application.Manager;
@@ -7,8 +8,10 @@ namespace Application.Manager;
 public class UserManager(
     DataAccessContext<User> dataContext,
     ILogger<UserManager> logger,
+    IConfiguration configuration,
     IUserContext userContext) : ManagerBase<User, UserUpdateDto, UserFilterDto, UserItemDto>(dataContext, logger)
 {
+    private readonly IConfiguration _configuration = configuration;
     private readonly IUserContext _userContext = userContext;
 
     /// <summary>
@@ -101,5 +104,4 @@ public class UserManager(
         // 获取用户所属的对象
         return await query.FirstOrDefaultAsync();
     }
-
 }

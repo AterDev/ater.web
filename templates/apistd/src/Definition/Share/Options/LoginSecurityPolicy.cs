@@ -15,7 +15,7 @@ public class LoginSecurityPolicy
     /// </summary>
     public bool IsNeedVerifyCode { get; set; }
     /// <summary>
-    /// 密码过期时间
+    /// 密码过期时间：月
     /// </summary>
     public int PasswordExpired { get; set; } = 3;
 
