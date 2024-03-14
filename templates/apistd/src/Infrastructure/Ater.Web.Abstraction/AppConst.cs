@@ -6,9 +6,7 @@ public static class AppConst
 {
     public const string DefaultStateName = "statestore";
     public const string DefaultPubSubName = "pubsub";
-
     public const string TenantId = "TenantId";
-
     /// <summary>
     /// 超级管理员
     /// </summary>
@@ -55,5 +53,16 @@ public static class AppConst
     /// 权限缓存前缀
     /// </summary>
     public const string PermissionCacheName = "Permissions";
+
+    public const string Web = "Web";
+    public const string IOS = "IOS";
+    public const string Android = "Android";
+    public const string Desktop = "Desktop";
+    public const string Windows = "Windows";
+    public const string Linux = "Linux";
+    public const string MacOS = "MacOS";
+
+    public const string ClientHeader = "X-Client-Identifier";
+    public const string Authorization = "Authorization";
 
 }

@@ -44,4 +44,28 @@ public class JwtService(string sign, string audience, string issuer)
         string encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
         return encodedJwt;
     }
+
+    /// <summary>
+    /// 解析Token
+    /// </summary>
+    /// <param name="token"></param>
+    /// <returns></returns>
+    public static JwtSecurityToken DecodeJwtToken(string token)
+    {
+        JwtSecurityTokenHandler tokenHandler = new();
+        return tokenHandler.ReadJwtToken(token);
+    }
+
+    /// <summary>
+    /// 获取token内容
+    /// </summary>
+    /// <param name="token"></param>
+    /// <param name="claimType"></param>
+    /// <returns></returns>
+    public static string GetClaimValue(string token, string claimType)
+    {
+        JwtSecurityToken jwtToken = DecodeJwtToken(token);
+        return jwtToken.Claims.First(c => c.Type == claimType).Value;
+    }
+
 }

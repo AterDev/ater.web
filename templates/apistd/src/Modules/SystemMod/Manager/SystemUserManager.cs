@@ -1,4 +1,8 @@
+using System.Text.RegularExpressions;
 using Ater.Web.Extention;
+using Share.Models.UserDtos;
+using Share.Options;
+using SystemMod.Models;
 using SystemMod.Models.SystemUserDtos;
 
 namespace SystemMod.Manager;
@@ -7,10 +11,14 @@ public class SystemUserManager(
     DataAccessContext<SystemUser> dataContext,
     IUserContext userContext,
     IConfiguration configuration,
+    CacheService cache,
+    SystemConfigManager systemConfig,
     ILogger<SystemUserManager> logger) : ManagerBase<SystemUser, SystemUserUpdateDto, SystemUserFilterDto, SystemUserItemDto>(dataContext, logger)
 {
     private readonly IUserContext _userContext = userContext;
+    private readonly SystemConfigManager _systemConfig = systemConfig;
     private readonly IConfiguration _configuration = configuration;
+    private readonly CacheService _cache = cache;
 
     /// <summary>
     /// 获取验证码
@@ -33,6 +41,126 @@ public class SystemUserManager(
         var code = GetCaptcha(length);
         var width = length * 20;
         return ImageHelper.GenerateImageCaptcha(code, width);
+    }
+
+    /// <summary>
+    /// 登录安全策略验证
+    /// </summary>
+    /// <param name="dto"></param>
+    /// <param name="user"></param>
+    /// <param name="loginPolicy"></param>
+    /// <returns></returns>
+    public async Task<bool> ValidateLoginAsync(LoginDto dto, SystemUser user, LoginSecurityPolicy loginPolicy)
+    {
+        if (loginPolicy == null)
+        {
+            return true;
+        }
+        // 刷新锁定状态
+        var lastLoginTime = user.LastLoginTime?.ToLocalTime() ?? DateTimeOffset.Now;
+        if ((DateTimeOffset.Now - lastLoginTime).Days >= 1)
+        {
+            user.RetryCount = 0;
+            if (user.LockoutEnabled)
+            {
+                user.LockoutEnabled = false;
+            }
+        }
+        // 登录记录
+        user.RetryCount++;
+        user.LastLoginTime = DateTimeOffset.UtcNow;
+
+        // 锁定状态
+        if (user.LockoutEnabled || user.RetryCount >= loginPolicy.LoginRetry)
+        {
+            user.LockoutEnabled = true;
+            ErrorMsg = "密码错误次数过多，账号已锁定";
+            return false;
+        }
+
+        // 验证码处理
+        if (loginPolicy.IsNeedVerifyCode)
+        {
+            if (dto.VerifyCode == null)
+            {
+                ErrorMsg = "验证码错误";
+                user.RetryCount++;
+                return false;
+            }
+            var key = AppConst.VerifyCodeCachePrefix + user.Email;
+            string? code = _cache.GetValue<string>(key);
+            if (code == null)
+            {
+                ErrorMsg = "验证码已过期";
+                user.RetryCount++;
+                return false;
+            }
+            if (!code.Equals(dto.VerifyCode))
+            {
+                await _cache.RemoveAsync(key);
+                ErrorMsg = "验证码错误";
+                user.RetryCount++;
+                return false;
+            }
+        }
+
+        // 密码过期时间
+        if ((DateTimeOffset.UtcNow - user.LastPwdEditTime).TotalDays > loginPolicy.PasswordExpired * 30)
+        {
+            ErrorMsg = "密码已过期，请修改密码";
+            user.RetryCount++;
+            return false;
+        }
+
+        if (!HashCrypto.Validate(dto.Password, user.PasswordSalt, user.PasswordHash))
+        {
+            ErrorMsg = "用户名或密码错误";
+            return false;
+        }
+        return true;
+    }
+
+    /// <summary>
+    /// 生成jwtToken
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="jwtOption"></param>
+    /// <returns></returns>
+    public AuthResult GenerateJwtToken(SystemUser user, JwtOption jwtOption)
+    {
+        if (jwtOption.Sign.NotEmpty()
+            && jwtOption.ValidIssuer.NotEmpty()
+            && jwtOption.ValidAudiences.NotEmpty())
+        {
+            // 加载关联数据
+            List<string> roles = user.SystemRoles?.Select(r => r.NameValue)?.ToList()
+                ?? [AppConst.AdminUser];
+            // 过期时间:秒
+            var expiredSeconds = jwtOption.ExpiredSeconds * 60 * 60;
+
+            JwtService jwt = new(jwtOption.Sign, jwtOption.ValidAudiences, jwtOption.ValidIssuer)
+            {
+                TokenExpires = expiredSeconds,
+            };
+            // 添加管理员用户标识
+            if (!roles.Contains(AppConst.AdminUser))
+            {
+                roles.Add(AppConst.AdminUser);
+            }
+            var token = jwt.GetToken(user.Id.ToString(), [.. roles]);
+
+            return new AuthResult
+            {
+                Id = user.Id,
+                Roles = [.. roles],
+                Token = token,
+                Username = user.UserName
+            };
+        }
+        else
+        {
+            throw new ArgumentNullException("缺少JWT配置，请联系管理员");
+        }
     }
 
     /// <summary>
@@ -111,5 +239,35 @@ public class SystemUserManager(
         // 获取用户所属的对象
         query = query.Where(q => q.Id == _userContext.UserId);
         return await query.FirstOrDefaultAsync();
+    }
+
+    /// <summary>
+    /// 验证密码复杂度
+    /// </summary>
+    /// <param name="password"></param>
+    /// <returns></returns>
+    public bool ValidatePassword(string password)
+    {
+        var loginPolicy = _systemConfig.GetLoginSecurityPolicy();
+        // 密码复杂度校验
+        string pwdReg = loginPolicy.PasswordLevel switch
+        {
+            Share.Options.PasswordLevel.Simple => "",
+            Share.Options.PasswordLevel.Normal => "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,60}$",
+            Share.Options.PasswordLevel.Strict => "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{8,}$",
+            _ => "^.{6,16}$"
+        };
+        if (!Regex.IsMatch(password, pwdReg))
+        {
+            ErrorMsg = loginPolicy.PasswordLevel switch
+            {
+                Share.Options.PasswordLevel.Simple => "密码长度6-60位",
+                Share.Options.PasswordLevel.Normal => "密码长度8-60位，必须包含大小写字母和数字",
+                Share.Options.PasswordLevel.Strict => "密码长度8位以上，必须包含大小写字母、数字和特殊字符",
+                _ => "密码长度6-16位"
+            };
+            return false;
+        }
+        return true;
     }
 }

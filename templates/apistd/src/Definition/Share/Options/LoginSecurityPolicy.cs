@@ -28,6 +28,11 @@ public class LoginSecurityPolicy
     /// 会话数量限制
     /// </summary>
     public SessionLevel SessionLevel { get; set; } = SessionLevel.None;
+
+    /// <summary>
+    /// 会话过期时间
+    /// </summary>
+    public int SessionExpiredSeconds { get; set; } = 1800;
 }
 
 /// <summary>

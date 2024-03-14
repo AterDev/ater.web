@@ -35,14 +35,19 @@ public class CacheService(IDistributedCache cache)
     /// <param name="sliding">相对过期时间</param>
     /// <param name="expiration">绝对过期时间</param>
     /// <returns></returns>
-    public async Task SetValueAsync(string key, object data, int sliding, int expiration)
+    public async Task SetValueAsync(string key, object data, int? sliding=null, int? expiration = null)
     {
         byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(data);
-        await _cache.SetAsync(key, bytes, new DistributedCacheEntryOptions()
+        var option = new DistributedCacheEntryOptions();
+        if (sliding.HasValue)
         {
-            SlidingExpiration = TimeSpan.FromSeconds(sliding),
-            AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(expiration)
-        });
+            option.SlidingExpiration = TimeSpan.FromSeconds(sliding.Value);
+        }
+        if (expiration.HasValue)
+        {
+            option.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(expiration.Value);
+        }
+        await _cache.SetAsync(key, bytes,option);
     }
 
     /// <summary>
@@ -69,6 +74,6 @@ public class CacheService(IDistributedCache cache)
             return default;
         }
         ReadOnlySpan<byte> readOnlySpan = new(bytes);
-        return JsonSerializer.Deserialize<T>(readOnlySpan);
+        return JsonSerializer.Deserialize<T?>(readOnlySpan);
     }
 }

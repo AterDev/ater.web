@@ -45,6 +45,10 @@ public class SystemUser : IEntityBase
     /// </summary>
     public DateTimeOffset? LastLoginTime { get; set; }
     /// <summary>
+    /// 最后密码修改时间
+    /// </summary>
+    public DateTimeOffset LastPwdEditTime { get; set; } = DateTimeOffset.UtcNow;
+    /// <summary>
     /// 密码重试次数
     /// </summary>
     public int RetryCount { get; set; }
@@ -64,6 +68,11 @@ public class SystemUser : IEntityBase
     public DateTimeOffset CreatedTime { get; set; }
     public DateTimeOffset UpdatedTime { get; set; }
     public bool IsDeleted { get; set; }
+
+    public string GetUniqueKey(string prefix, string client)
+    {
+        return prefix + client + Id.ToString();
+    }
 }
 
 /// <summary>
@@ -71,7 +80,19 @@ public class SystemUser : IEntityBase
 /// </summary>
 public enum Sex
 {
+    /// <summary>
+    /// 男性
+    /// </summary>
+    [Description("男性")]
     Male,
+    /// <summary>
+    /// 女性
+    /// </summary>
+    [Description("女性")]
     Female,
+    /// <summary>
+    /// 其他
+    /// </summary>
+    [Description("其他")]
     Else
 }
