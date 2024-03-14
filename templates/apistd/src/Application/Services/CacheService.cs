@@ -35,7 +35,7 @@ public class CacheService(IDistributedCache cache)
     /// <param name="sliding">相对过期时间</param>
     /// <param name="expiration">绝对过期时间</param>
     /// <returns></returns>
-    public async Task SetValueAsync(string key, object data, int? sliding=null, int? expiration = null)
+    public async Task SetValueAsync(string key, object data, int? sliding = null, int? expiration = null)
     {
         byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(data);
         var option = new DistributedCacheEntryOptions();
@@ -47,7 +47,7 @@ public class CacheService(IDistributedCache cache)
         {
             option.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(expiration.Value);
         }
-        await _cache.SetAsync(key, bytes,option);
+        await _cache.SetAsync(key, bytes, option);
     }
 
     /// <summary>

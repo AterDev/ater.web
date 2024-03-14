@@ -1,19 +1,25 @@
 ﻿using System.Text.Json;
+
 using EntityFramework.DBProvider;
+
 using Share.Options;
 
 namespace SystemMod;
-public static class InitModule
+public class InitModule
 {
     /// <summary>
     /// 模块初始化方法
     /// </summary>
-    /// <param name="context"></param>
-    /// <param name="configuration"></param>
-    /// <param name="logger"></param>
+    /// <param name="provider"></param>
     /// <returns></returns>
-    public static async Task InitializeAsync(CommandDbContext context, IConfiguration configuration, ILogger logger)
+    public static async Task InitializeAsync(IServiceProvider provider)
     {
+        ILoggerFactory loggerFactory = provider.GetRequiredService<ILoggerFactory>();
+        CommandDbContext context = provider.GetRequiredService<CommandDbContext>();
+        ILogger<InitModule> logger = loggerFactory.CreateLogger<InitModule>();
+        IConfiguration configuration = provider.GetRequiredService<IConfiguration>();
+        CacheService cache = provider.GetRequiredService<CacheService>();
+
         var isInitString = context.SystemConfigs.Where(c => c.Key.Equals(AppConst.IsInit))
             .Where(c => c.GroupName.Equals(AppConst.SystemGroup))
             .Select(c => c.Value)
@@ -67,6 +73,8 @@ public static class InitModule
 
                 logger.LogInformation("写入登录安全策略成功");
             }
+
+            await InitCacheAsync(context, cache, logger);
         }
         catch (Exception ex)
         {
@@ -74,4 +82,25 @@ public static class InitModule
         }
     }
 
+    /// <summary>
+    /// 加载配置缓存
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="cache"></param>
+    /// <param name="logger"></param>
+    /// <returns></returns>
+    public static async Task InitCacheAsync(CommandDbContext context, CacheService cache, ILogger logger)
+    {
+        logger.LogInformation("加载配置缓存");
+        var securityPolicy = context.SystemConfigs
+            .Where(c => c.Key.Equals(AppConst.LoginSecurityPolicy))
+            .Where(c => c.GroupName.Equals(AppConst.SystemGroup))
+            .Select(c => c.Value)
+            .FirstOrDefault();
+
+        if (securityPolicy != null)
+        {
+            await cache.SetValueAsync(AppConst.LoginSecurityPolicy, securityPolicy, null);
+        }
+    }
 }
