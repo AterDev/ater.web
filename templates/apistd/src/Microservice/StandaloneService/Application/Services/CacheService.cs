@@ -7,6 +7,7 @@ namespace StandaloneService.Application.Services;
 public class CacheService(IDistributedCache cache)
 {
     private readonly IDistributedCache _cache = cache;
+    public IDistributedCache Cache { get; init; } = cache;
 
     /// <summary>
     /// 缓存存储

@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EntityFramework.DBProvider;
 
@@ -46,6 +47,29 @@ public partial class ContextBase(DbContextOptions options) : DbContext(options)
                 modelBuilder.Entity(entityType.Name)
                     .HasKey("Id");
                 modelBuilder.Entity(entityType.ClrType).HasQueryFilter(ConvertFilterExpression<IEntityBase>(e => !e.IsDeleted, entityType.ClrType));
+            }
+        }
+    }
+
+    /// <summary>
+    /// sqliteµÄ¼æÈÝ´¦Àí
+    /// </summary>
+    /// <param name="modelBuilder"></param>
+    private void OnSqliteModelCreating(ModelBuilder modelBuilder)
+    {
+        if (Database.ProviderName == "Microsoft.EntityFrameworkCore.Sqlite")
+        {
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                var properties = entityType.ClrType.GetProperties()
+                    .Where(p => p.PropertyType == typeof(DateTimeOffset) || p.PropertyType == typeof(DateTimeOffset?));
+                foreach (var property in properties)
+                {
+                    modelBuilder
+                        .Entity(entityType.Name)
+                        .Property(property.Name)
+                        .HasConversion(new DateTimeOffsetToStringConverter());
+                }
             }
         }
     }

@@ -1,4 +1,6 @@
-﻿using Ater.Web.Abstraction;
+﻿using System.Net;
+using System.Threading.RateLimiting;
+using Ater.Web.Abstraction;
 using Http.API;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -22,6 +24,61 @@ public static class ServiceCollectionExtension
         services.AddJwtAuthentication(configuration);
         services.AddAuthorize();
         services.AddCors();
+        services.AddRateLimiter();
+        return services;
+    }
+
+    /// <summary>
+    /// 添加速率限制
+    /// </summary>
+    /// <param name="services"></param>
+    /// <returns></returns>
+    public static IServiceCollection AddRateLimiter(this IServiceCollection services)
+    {
+        services.AddRateLimiter(options =>
+        {
+            options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+            // 验证码  每10秒5次
+            options.AddPolicy("captcha", context =>
+            {
+                var remoteIpAddress = context.Connection.RemoteIpAddress;
+                if (!IPAddress.IsLoopback(remoteIpAddress!))
+                {
+                    return RateLimitPartition.GetFixedWindowLimiter(remoteIpAddress!.ToString(), _ =>
+                    new FixedWindowRateLimiterOptions
+                    {
+                        PermitLimit = 5,
+                        Window = TimeSpan.FromSeconds(10),
+                        QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                        QueueLimit = 3
+                    });
+                }
+                else
+                {
+                    return RateLimitPartition.GetNoLimiter(remoteIpAddress!.ToString());
+                }
+            });
+
+            // 全局限制 每10秒100次
+            options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, IPAddress>(context =>
+            {
+                IPAddress? remoteIpAddress = context.Connection.RemoteIpAddress;
+
+                if (!IPAddress.IsLoopback(remoteIpAddress!))
+                {
+                    return RateLimitPartition.GetFixedWindowLimiter(remoteIpAddress!, _ =>
+                    new FixedWindowRateLimiterOptions
+                    {
+                        PermitLimit = 100,
+                        Window = TimeSpan.FromSeconds(10),
+                        QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                        QueueLimit = 3
+                    });
+                }
+
+                return RateLimitPartition.GetNoLimiter(IPAddress.Loopback);
+            });
+        });
         return services;
     }
 
