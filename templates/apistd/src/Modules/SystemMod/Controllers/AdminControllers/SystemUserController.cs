@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.RateLimiting;
 using Share.Models.UserDtos;
 using Share.Options;
 
@@ -48,6 +49,19 @@ public class SystemUserController(
         // 缓存，默认5分钟过期
         await _cache.SetValueAsync(key, captcha, 60 * 5);
         return Ok();
+    }
+
+    /// <summary>
+    /// 获取图形验证码
+    /// 需要考虑限制及生成缓存
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet("captcha")]
+    [EnableRateLimiting("captcha")]
+    [AllowAnonymous]
+    public ActionResult GetCaptchaImage()
+    {
+        return File(manager.GetCaptchaImage(4), "image/png");
     }
 
     /// <summary>

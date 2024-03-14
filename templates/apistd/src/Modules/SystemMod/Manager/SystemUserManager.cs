@@ -1,3 +1,4 @@
+using Ater.Web.Extention;
 using SystemMod.Models.SystemUserDtos;
 
 namespace SystemMod.Manager;
@@ -20,6 +21,18 @@ public class SystemUserManager(
     public string GetCaptcha(int length = 6)
     {
         return HashCrypto.GetRnd(length);
+    }
+
+    /// <summary>
+    /// 获取图形验证码
+    /// </summary>
+    /// <param name="length"></param>
+    /// <returns></returns>
+    public byte[] GetCaptchaImage(int length = 4)
+    {
+        var code = GetCaptcha(length);
+        var width = length * 20;
+        return ImageHelper.GenerateImageCaptcha(code, width);
     }
 
     /// <summary>
