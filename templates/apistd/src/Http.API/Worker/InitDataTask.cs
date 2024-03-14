@@ -3,6 +3,11 @@
 namespace Http.API.Worker;
 public class InitDataTask
 {
+    /// <summary>
+    /// 初始化应用数据
+    /// </summary>
+    /// <param name="provider"></param>
+    /// <returns></returns>
     public static async Task InitDataAsync(IServiceProvider provider)
     {
         CommandDbContext context = provider.GetRequiredService<CommandDbContext>();
