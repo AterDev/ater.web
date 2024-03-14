@@ -64,5 +64,5 @@ public static class AppConst
 
     public const string ClientHeader = "X-Client-Identifier";
     public const string Authorization = "Authorization";
-
+    public const string AllPlatform = "AllPlatform";
 }

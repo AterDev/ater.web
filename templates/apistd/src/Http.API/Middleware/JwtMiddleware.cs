@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using System.Text.Json;
+
 using Ater.Web.Abstraction;
 
 namespace Http.API.Middleware;
@@ -25,7 +26,7 @@ public class JwtMiddleware(RequestDelegate next, CacheService redis, ILogger<Jwt
         }
 
         string token = context.Request.Headers[AppConst.Authorization].FirstOrDefault()?.Split(" ").Last() ?? string.Empty;
-        string client = context.Request.Headers[AppConst.ClientHeader].FirstOrDefault() ?? string.Empty;
+        string client = context.Request.Headers[AppConst.ClientHeader].FirstOrDefault() ?? AppConst.Web;
 
         if (token == null)
         {
@@ -38,17 +39,23 @@ public class JwtMiddleware(RequestDelegate next, CacheService redis, ILogger<Jwt
             // TODO:策略判断
             if (id.NotEmpty())
             {
+                var securityPolicy = _cache.GetValue<LoginSecurityPolicy>(AppConst.LoginSecurityPolicy) ?? new LoginSecurityPolicy();
+                if (securityPolicy.SessionLevel == SessionLevel.OnlyOne)
+                {
+                    client = AppConst.AllPlatform;
+                }
                 var key = AppConst.LoginCachePrefix + client + id;
-                var exist = _cache.GetValue<bool>(key);
-
-                if (!exist)
+                var cacheToken = _cache.GetValue<string>(key);
+                if (cacheToken.IsEmpty())
                 {
                     await SetResponseAndComplete(context, 401);
                     return;
                 }
-                else
+
+                if (securityPolicy.SessionLevel != SessionLevel.None && cacheToken != token)
                 {
-                    // 已经存在，则顶替
+                    await SetResponseAndComplete(context, 401, "账号已在其他客户端登录");
+                    return;
                 }
 
                 _cache.Cache.Refresh(key);

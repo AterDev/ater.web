@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.RateLimiting;
+
 using Share.Models.UserDtos;
 using Share.Options;
 
@@ -54,8 +55,7 @@ public class SystemUserController(
     }
 
     /// <summary>
-    /// 获取图形验证码
-    /// 需要考虑限制及生成缓存
+    /// 获取图形验证码 ✅
     /// </summary>
     /// <returns></returns>
     [HttpGet("captcha")]
@@ -107,7 +107,12 @@ public class SystemUserController(
 
             // 缓存登录状态
             string client = Request.Headers[AppConst.ClientHeader].FirstOrDefault() ?? AppConst.Web;
-            await _cache.SetValueAsync(user.GetUniqueKey(AppConst.LoginCachePrefix, client), true, sliding: loginPolicy.SessionExpiredSeconds);
+            if (loginPolicy.SessionLevel == SessionLevel.None)
+            {
+                client = AppConst.AllPlatform;
+            }
+
+            await _cache.SetValueAsync(user.GetUniqueKey(AppConst.LoginCachePrefix, client), result.Token, sliding: loginPolicy.SessionExpiredSeconds);
 
             result.Menus = menus;
             result.PermissionGroups = permissionGroups;
