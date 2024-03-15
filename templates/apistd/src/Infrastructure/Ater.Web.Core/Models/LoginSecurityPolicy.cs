@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace Ater.Web.Extension.Models;
+﻿namespace Ater.Web.Core.Models;
 /// <summary>
 /// 登录安全策略
 /// </summary>

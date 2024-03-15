@@ -1,4 +1,4 @@
-﻿namespace Share.Options;
+﻿namespace Ater.Web.Core.Models;
 /// <summary>
 /// 遥测选项
 /// </summary>

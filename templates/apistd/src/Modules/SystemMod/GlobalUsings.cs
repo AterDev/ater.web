@@ -8,7 +8,6 @@ global using Application.Services;
 global using Ater.Web.Abstraction;
 global using Ater.Web.Core.Models;
 global using Ater.Web.Core.Utils;
-global using Ater.Web.Extension.Models;
 global using Ater.Web.Extension.Services;
 global using Entity.System;
 

@@ -1,4 +1,4 @@
-﻿namespace Share.Options;
+﻿namespace Ater.Web.Core.Models;
 public class JwtOption
 {
     public required string ValidAudiences { get; set; }

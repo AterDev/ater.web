@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using Ater.Web.Core.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 

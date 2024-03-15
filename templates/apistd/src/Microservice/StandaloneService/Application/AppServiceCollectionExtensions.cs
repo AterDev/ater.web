@@ -1,4 +1,10 @@
-﻿namespace StandaloneService.Application;
+﻿using OpenTelemetry.Exporter;
+using OpenTelemetry.Logs;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
+
+namespace StandaloneService.Application;
 
 /// <summary>
 /// 应用配置常量
