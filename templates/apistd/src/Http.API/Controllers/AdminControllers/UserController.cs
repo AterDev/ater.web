@@ -1,5 +1,3 @@
-using Ater.Web.Abstraction;
-
 using Share.Models.UserDtos;
 namespace Http.API.Controllers.AdminControllers;
 
@@ -53,7 +51,10 @@ public class UserController(
     public async Task<ActionResult<User?>> UpdateAsync([FromRoute] Guid id, UserUpdateDto dto)
     {
         User? current = await manager.GetCurrentAsync(id);
-        if (current == null) { return NotFound(ErrorMsg.NotFoundResource); };
+        if (current == null)
+        {
+            return NotFound(ErrorMsg.NotFoundResource);
+        };
         return await manager.UpdateAsync(current, dto);
     }
 
@@ -79,7 +80,10 @@ public class UserController(
     {
         // 注意删除权限
         User? entity = await manager.GetCurrentAsync(id);
-        if (entity == null) { return NotFound(ErrorMsg.NotFoundUser); };
+        if (entity == null)
+        {
+            return NotFound(ErrorMsg.NotFoundUser);
+        };
         return await manager.DeleteAsync(entity);
     }
 }

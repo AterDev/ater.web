@@ -51,11 +51,17 @@ public class SystemPermissionController(
     public async Task<ActionResult<SystemPermission?>> UpdateAsync([FromRoute] Guid id, SystemPermissionUpdateDto dto)
     {
         SystemPermission? current = await manager.GetCurrentAsync(id, "Group");
-        if (current == null) { return NotFound(ErrorMsg.NotFoundResource); };
+        if (current == null)
+        {
+            return NotFound(ErrorMsg.NotFoundResource);
+        };
         if (dto.SystemPermissionGroupId != null && current.Group.Id != dto.SystemPermissionGroupId)
         {
             SystemPermissionGroup? systemPermissionGroup = await _systemPermissionGroupManager.GetCurrentAsync(dto.SystemPermissionGroupId.Value);
-            if (systemPermissionGroup == null) { return NotFound("不存在的权限组"); }
+            if (systemPermissionGroup == null)
+            {
+                return NotFound("不存在的权限组");
+            }
             current.Group = systemPermissionGroup;
         }
         return await manager.UpdateAsync(current, dto);
@@ -83,7 +89,10 @@ public class SystemPermissionController(
     {
         // 注意删除权限
         SystemPermission? entity = await manager.GetCurrentAsync(id);
-        if (entity == null) { return NotFound(); };
+        if (entity == null)
+        {
+            return NotFound();
+        };
         // return Forbid();
         return await manager.DeleteAsync(entity);
     }

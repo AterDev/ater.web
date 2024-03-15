@@ -37,7 +37,10 @@ public class FolderController(
         if (dto.ParentId != null)
         {
             var exist = await manager.ExistAsync(dto.ParentId.Value);
-            if (!exist) { return NotFound(ErrorMsg.NotFoundResource); };
+            if (!exist)
+            {
+                return NotFound(ErrorMsg.NotFoundResource);
+            };
         }
         Folder entity = await manager.CreateNewEntityAsync(dto);
         return await manager.AddAsync(entity);
@@ -66,7 +69,10 @@ public class FolderController(
     {
         // 注意删除权限
         Folder? entity = await manager.GetCurrentAsync(id);
-        if (entity == null) { return NotFound(); };
+        if (entity == null)
+        {
+            return NotFound();
+        };
         // return Forbid();
         return await manager.DeleteAsync(entity, false);
     }

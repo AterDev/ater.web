@@ -47,7 +47,10 @@ public class FolderController(
     public async Task<ActionResult<Folder?>> UpdateAsync([FromRoute] Guid id, FolderUpdateDto dto)
     {
         Folder? current = await manager.GetCurrentAsync(id);
-        if (current == null) { return NotFound(ErrorMsg.NotFoundResource); };
+        if (current == null)
+        {
+            return NotFound(ErrorMsg.NotFoundResource);
+        };
         return await manager.UpdateAsync(current, dto);
     }
 
@@ -74,7 +77,10 @@ public class FolderController(
     {
         // 注意删除权限
         Folder? entity = await manager.GetCurrentAsync(id);
-        if (entity == null) { return NotFound(); };
+        if (entity == null)
+        {
+            return NotFound();
+        };
         // return Forbid();
         return await manager.DeleteAsync(entity);
     }

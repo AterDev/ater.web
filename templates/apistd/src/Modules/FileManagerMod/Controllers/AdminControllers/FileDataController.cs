@@ -40,7 +40,10 @@ public class FileDataController(
         if (folderId != null)
         {
             folder = await _folderManager.GetCurrentAsync(folderId.Value);
-            if (folder == null) { return NotFound("错误的目录"); }
+            if (folder == null)
+            {
+                return NotFound("错误的目录");
+            }
         }
         List<FileData> data = await manager.CreateNewEntityAsync(files, folder);
         return await manager.AddFilesAsync(data);
@@ -84,7 +87,10 @@ public class FileDataController(
     {
         // 注意删除权限
         FileData? entity = await manager.GetCurrentAsync(id);
-        if (entity == null) { return NotFound(); };
+        if (entity == null)
+        {
+            return NotFound();
+        };
         return await manager.DeleteAsync(entity, false);
     }
 }

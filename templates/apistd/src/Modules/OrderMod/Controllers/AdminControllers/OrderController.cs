@@ -35,7 +35,10 @@ public class OrderController(
     public async Task<ActionResult<Order?>> UpdateAsync([FromRoute] Guid id, OrderUpdateDto dto)
     {
         Order? current = await manager.GetCurrentAsync(id);
-        if (current == null) { return NotFound(ErrorMsg.NotFoundResource); };
+        if (current == null)
+        {
+            return NotFound(ErrorMsg.NotFoundResource);
+        };
         return await manager.UpdateAsync(current, dto);
     }
 
