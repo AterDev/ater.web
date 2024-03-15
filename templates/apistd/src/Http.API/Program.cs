@@ -23,6 +23,7 @@ builder.AddDefaultWebServices();
 builder.Services.AddSingleton<IEmailService, EmailService>();
 WebApplication app = builder.Build();
 
+// 使用中间件
 app.UseDefaultWebServices();
 
 using (app)

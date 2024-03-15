@@ -24,16 +24,23 @@ public static class AppSetting
 public static partial class AppServiceCollectionExtensions
 {
     /// <summary>
-    /// 添加应用组件
+    /// 添加默认应用组件
+    /// pgsql/redis/otlp
     /// </summary>
-    /// <param name="services"></param>
-    /// <param name="configuration"></param>
     /// <returns></returns>
-    public static IServiceCollection AddAppComponents(this IServiceCollection services, IConfiguration configuration)
+    public static IHostApplicationBuilder AddDefaultComponents(this IHostApplicationBuilder builder)
     {
-        services.AddPgsqlDbContext(configuration);
-        services.AddRedisCache(configuration);
-        return services;
+        builder.AddPgsqlDbContext();
+        builder.AddRedisCache();
+        var otlpEndpoint = builder.Configuration.GetSection("OTLP")
+            .GetValue<string>("Endpoint")
+            ?? "http://localhost:4317";
+        builder.AddOpenTelemetry("MyProjectName", opt =>
+        {
+            opt.Endpoint = new Uri(otlpEndpoint);
+            //opt.Headers = "Authorization=Bearer OpenTelemetry";
+        });
+        return builder;
     }
 
     /// <summary>
@@ -51,14 +58,12 @@ public static partial class AppServiceCollectionExtensions
     /// <summary>
     /// add postgresql config
     /// </summary>
-    /// <param name="services"></param>
-    /// <param name="configuration"></param>
     /// <returns></returns>
-    public static IServiceCollection AddPgsqlDbContext(this IServiceCollection services, IConfiguration configuration)
+    public static IHostApplicationBuilder AddPgsqlDbContext(this IHostApplicationBuilder builder)
     {
-        var commandString = configuration.GetConnectionString(AppSetting.CommandDB);
-        var queryString = configuration.GetConnectionString(AppSetting.QueryDB);
-        services.AddDbContextPool<QueryDbContext>(option =>
+        var commandString = builder.Configuration.GetConnectionString(AppSetting.CommandDB);
+        var queryString = builder.Configuration.GetConnectionString(AppSetting.QueryDB);
+        builder.Services.AddDbContextPool<QueryDbContext>(option =>
         {
             option.UseNpgsql(queryString, sql =>
             {
@@ -66,7 +71,7 @@ public static partial class AppServiceCollectionExtensions
                 sql.CommandTimeout(10);
             });
         });
-        services.AddDbContextPool<CommandDbContext>(option =>
+        builder.Services.AddDbContextPool<CommandDbContext>(option =>
         {
             option.UseNpgsql(commandString, sql =>
             {
@@ -74,25 +79,104 @@ public static partial class AppServiceCollectionExtensions
                 sql.CommandTimeout(10);
             });
         });
-        return services;
+        return builder;
     }
 
     /// <summary>
     /// add redis cache config
     /// </summary>
-    /// <param name="services"></param>
-    /// <param name="configuration"></param>
     /// <returns></returns>
-    public static IServiceCollection AddRedisCache(this IServiceCollection services, IConfiguration configuration)
+    public static IHostApplicationBuilder AddRedisCache(this IHostApplicationBuilder builder)
     {
-        var cache = configuration.GetSection(AppSetting.Components).GetValue<string>(AppSetting.Cache);
-        return cache == AppSetting.Redis
-            ? services.AddStackExchangeRedisCache(options =>
+        var cache = builder.Configuration.GetSection(AppSetting.Components).GetValue<string>(AppSetting.Cache);
+        if (cache == AppSetting.Redis)
+        {
+            builder.Services.AddStackExchangeRedisCache(options =>
             {
-                options.Configuration = configuration.GetConnectionString(AppSetting.Cache);
-                options.InstanceName = configuration.GetConnectionString(AppSetting.CacheInstanceName);
-            })
-            : services.AddDistributedMemoryCache();
+                options.Configuration = builder.Configuration.GetConnectionString(AppSetting.Cache);
+                options.InstanceName = builder.Configuration.GetConnectionString(AppSetting.CacheInstanceName);
+            });
+        }
+        else
+        {
+            builder.Services.AddDistributedMemoryCache();
+        }
+        return builder;
+    }
 
+    /// <summary>
+    /// 添加 OpenTelemetry 服务及选项
+    /// </summary>
+    /// <param name="builder"></param>
+    /// <param name="serviceName"></param>
+    /// <param name="otlpOptions"></param>
+    /// <param name="loggerOptions"></param>
+    /// <param name="tracerProvider"></param>
+    /// <param name="meterProvider"></param>
+    public static IHostApplicationBuilder AddOpenTelemetry(this IHostApplicationBuilder builder,
+        string serviceName,
+        Action<OtlpExporterOptions> otlpOptions,
+        Action<OpenTelemetryLoggerOptions>? loggerOptions = null,
+        Action<TracerProviderBuilder>? tracerProvider = null,
+        Action<MeterProviderBuilder>? meterProvider = null)
+    {
+        var resource = ResourceBuilder.CreateDefault()
+            .AddService(serviceName: serviceName, serviceInstanceId: Environment.MachineName);
+
+        var section = builder.Configuration.GetSection("Opentelemetry");
+        bool exportConsole = false;
+        if (section != null)
+        {
+            exportConsole = section.Get<OpentelemetryOption>()?.ExportConsole ?? false;
+        }
+
+        loggerOptions ??= new Action<OpenTelemetryLoggerOptions>(options =>
+        {
+            options.SetResourceBuilder(resource);
+            options.AddOtlpExporter(otlpOptions);
+            options.ParseStateValues = true;
+            options.IncludeFormattedMessage = true;
+            options.IncludeScopes = true;
+            if (exportConsole)
+                options.AddConsoleExporter();
+        });
+        tracerProvider ??= new Action<TracerProviderBuilder>(options =>
+        {
+            options.AddSource(serviceName)
+                .SetResourceBuilder(resource)
+                .AddHttpClientInstrumentation(options =>
+                {
+                    options.RecordException = true;
+                })
+                .AddAspNetCoreInstrumentation(options =>
+                {
+                    options.EnrichWithException = (activity, exception) =>
+                    {
+                        activity.SetTag("stackTrace", exception.StackTrace);
+                        activity.SetTag("message", exception.Message);
+                    };
+                })
+                .AddOtlpExporter(otlpOptions);
+        });
+
+        meterProvider ??= new Action<MeterProviderBuilder>(options =>
+        {
+            options.AddMeter(serviceName)
+                .SetResourceBuilder(resource)
+                .AddHttpClientInstrumentation()
+                .AddAspNetCoreInstrumentation()
+                .AddOtlpExporter(otlpOptions);
+        });
+        builder.Services.AddLogging(loggerBuilder =>
+        {
+            if (exportConsole)
+                loggerBuilder.ClearProviders();
+            loggerBuilder.AddOpenTelemetry(loggerOptions);
+        });
+        builder.Services.AddOpenTelemetry()
+            .WithTracing(tracerProvider)
+            .WithMetrics(meterProvider);
+
+        return builder;
     }
 }
