@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using System.Net;
+using System.Threading.RateLimiting;
+using Ater.Web.Extension.Middleware;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -10,16 +13,137 @@ namespace StandaloneService;
 public static class ServiceCollectionExtension
 {
     /// <summary>
-    /// 添加web服务组件，如身份认证/swagger/cors
+    /// 注册和配置Web服务依赖
+    /// </summary>
+    /// <param name="builder"></param>
+    /// <returns></returns>
+    public static IServiceCollection AddDefaultWebServices(this WebApplicationBuilder builder)
+    {
+        builder.Services.ConfigWebComponents(builder.Configuration);
+        builder.Services.AddHttpContextAccessor();
+        builder.Services.AddTransient<IUserContext, UserContext>();
+        builder.Services.AddTransient<ITenantProvider, TenantProvider>();
+
+        builder.Services.AddManager();
+        // TODO:其他模块Manager
+        //services.AddSystemModManagers();
+        builder.Services.AddSingleton(typeof(CacheService));
+
+        builder.Services.AddControllers()
+            .ConfigureApiBehaviorOptions(o =>
+            {
+                o.InvalidModelStateResponseFactory = context =>
+                {
+                    return new CustomBadRequest(context, null);
+                };
+            }).AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+                options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
+            });
+        return builder.Services;
+    }
+
+    public static WebApplication UseDefaultWebServices(this WebApplication app)
+    {
+        // 异常统一处理
+        app.UseExceptionHandler(ExceptionHandler.Handler());
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseCors(AppConst.Default);
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/client/swagger.json", name: "client");
+                c.SwaggerEndpoint("/swagger/admin/swagger.json", "admin");
+            });
+        }
+        else
+        {
+            app.UseCors(AppConst.Default);
+            //app.UseHsts();
+            app.UseHttpsRedirection();
+        }
+
+        app.UseRateLimiter();
+        app.UseStaticFiles();
+        app.UseRouting();
+        app.UseMiddleware<JwtMiddleware>();
+        app.UseAuthentication();
+        app.UseAuthorization();
+        app.MapControllers();
+        app.MapFallbackToFile("index.html");
+
+        return app;
+    }
+
+    /// <summary>
+    /// 添加web服务组件，如身份认证/授权/swagger/cors
     /// </summary>
     /// <param name="services"></param>
     /// <param name="configuration"></param>
     /// <returns></returns>
-    public static IServiceCollection AddWebComponents(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection ConfigWebComponents(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddSwagger();
         services.AddJwtAuthentication(configuration);
+        services.AddAuthorize();
         services.AddCors();
+        services.AddRateLimiter();
+        return services;
+    }
+
+    /// <summary>
+    /// 添加速率限制
+    /// </summary>
+    /// <param name="services"></param>
+    /// <returns></returns>
+    public static IServiceCollection AddRateLimiter(this IServiceCollection services)
+    {
+        services.AddRateLimiter(options =>
+        {
+            options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+            // 验证码  每10秒5次
+            options.AddPolicy("captcha", context =>
+            {
+                var remoteIpAddress = context.Connection.RemoteIpAddress;
+                if (!IPAddress.IsLoopback(remoteIpAddress!))
+                {
+                    return RateLimitPartition.GetFixedWindowLimiter(remoteIpAddress!.ToString(), _ =>
+                    new FixedWindowRateLimiterOptions
+                    {
+                        PermitLimit = 5,
+                        Window = TimeSpan.FromSeconds(10),
+                        QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                        QueueLimit = 3
+                    });
+                }
+                else
+                {
+                    return RateLimitPartition.GetNoLimiter(remoteIpAddress!.ToString());
+                }
+            });
+
+            // 全局限制 每10秒100次
+            options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, IPAddress>(context =>
+            {
+                IPAddress? remoteIpAddress = context.Connection.RemoteIpAddress;
+
+                if (!IPAddress.IsLoopback(remoteIpAddress!))
+                {
+                    return RateLimitPartition.GetFixedWindowLimiter(remoteIpAddress!, _ =>
+                    new FixedWindowRateLimiterOptions
+                    {
+                        PermitLimit = 100,
+                        Window = TimeSpan.FromSeconds(10),
+                        QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                        QueueLimit = 3
+                    });
+                }
+
+                return RateLimitPartition.GetNoLimiter(IPAddress.Loopback);
+            });
+        });
         return services;
     }
 
@@ -66,6 +190,7 @@ public static class ServiceCollectionExtension
     /// <returns></returns>
     public static IServiceCollection AddSwagger(this IServiceCollection services)
     {
+
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(c =>
         {
@@ -92,10 +217,16 @@ public static class ServiceCollectionExtension
                     Array.Empty<string>()
                 }
             });
-            c.SwaggerDoc("service", new OpenApiInfo
+            c.SwaggerDoc("admin", new OpenApiInfo
             {
-                Title = "MyProjectName Service",
-                Description = "Service API 文档. 更新时间:" + DateTime.Now.ToString("yyyy-MM-dd H:mm:ss"),
+                Title = "MyProjectName",
+                Description = "Admin API 文档. 更新时间:" + DateTime.Now.ToString("yyyy-MM-dd H:mm:ss"),
+                Version = "v1"
+            });
+            c.SwaggerDoc("client", new OpenApiInfo
+            {
+                Title = "MyProjectName client",
+                Description = "Client API 文档. 更新时间:" + DateTime.Now.ToString("yyyy-MM-dd H:mm:ss"),
                 Version = "v1"
             });
             var xmlFiles = Directory.GetFiles(AppContext.BaseDirectory, "*.xml", SearchOption.TopDirectoryOnly);
@@ -128,11 +259,20 @@ public static class ServiceCollectionExtension
     {
         services.AddCors(options =>
         {
-            options.AddPolicy("default", builder =>
+            options.AddPolicy(AppConst.Default, builder =>
             {
                 builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
             });
         });
+        return services;
+    }
+
+    public static IServiceCollection AddAuthorize(this IServiceCollection services)
+    {
+        services.AddAuthorizationBuilder()
+            .AddPolicy(AppConst.User, policy => policy.RequireRole(AppConst.User))
+            .AddPolicy(AppConst.AdminUser, policy => policy.RequireRole(AppConst.SuperAdmin, AppConst.AdminUser))
+            .AddPolicy(AppConst.SuperAdmin, policy => policy.RequireRole(AppConst.SuperAdmin));
         return services;
     }
 }

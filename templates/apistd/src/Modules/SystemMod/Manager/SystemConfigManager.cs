@@ -1,5 +1,6 @@
 using System.Text.Json;
-using Share.Options;
+using Ater.Web.Extension.Models;
+using Ater.Web.Extension.Services;
 using SystemMod.Models.SystemConfigDtos;
 
 namespace SystemMod.Manager;
@@ -52,7 +53,7 @@ public class SystemConfigManager(
         if (res == null || res.Count == 0)
         {
             Dictionary<string, List<EnumDictionary>> data = EnumHelper.GetAllEnumInfo();
-            await _cache.SetValueAsync(AppConst.EnumCacheName, data);
+            await _cache.SetValueAsync(AppConst.EnumCacheName, data, null);
             return data;
         }
         return res;

@@ -4,6 +4,7 @@
 /// </summary>
 public static class AppConst
 {
+    public const string Default = "Default";
     public const string DefaultStateName = "statestore";
     public const string DefaultPubSubName = "pubsub";
     public const string TenantId = "TenantId";

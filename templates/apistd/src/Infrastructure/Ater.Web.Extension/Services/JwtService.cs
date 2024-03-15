@@ -1,8 +1,9 @@
 using System.IdentityModel.Tokens.Jwt;
-
+using System.Security.Claims;
+using System.Text;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Application.Services;
+namespace Ater.Web.Extension.Services;
 
 public class JwtService(string sign, string audience, string issuer)
 {
@@ -29,7 +30,7 @@ public class JwtService(string sign, string audience, string issuer)
         List<Claim> claims = [new Claim(ClaimTypes.NameIdentifier, id)];
         if (roles.Length != 0)
         {
-            foreach (string role in roles)
+            foreach (var role in roles)
             {
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
@@ -41,7 +42,7 @@ public class JwtService(string sign, string audience, string issuer)
         JwtSecurityToken jwt = new(Issuer, Audience, claims,
             expires: DateTime.UtcNow.AddMinutes(TokenExpires),
             signingCredentials: signingCredentials);
-        string encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+        var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
         return encodedJwt;
     }
 

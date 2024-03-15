@@ -1,5 +1,5 @@
 ﻿using SkiaSharp;
-namespace Ater.Web.Extention;
+namespace Ater.Web.Extension;
 
 /// <summary>
 /// 图形帮助类

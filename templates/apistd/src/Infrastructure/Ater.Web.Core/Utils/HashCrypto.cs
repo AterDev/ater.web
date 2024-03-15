@@ -1,6 +1,6 @@
 
-using System.Text.Json;
-using System.Text.Json.Serialization;
+global using System.Text.Json;
+global using System.Text.Json.Serialization;
 
 namespace Ater.Web.Core.Utils;
 /// <summary>
@@ -9,6 +9,12 @@ namespace Ater.Web.Core.Utils;
 public class HashCrypto
 {
     private static readonly RandomNumberGenerator Rng = RandomNumberGenerator.Create();
+    private static JsonSerializerOptions JsonSerializerOptions => new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        ReferenceHandler = ReferenceHandler.IgnoreCycles
+    };
+
     /// <summary>
     /// SHA512 encrypt
     /// </summary>
@@ -185,11 +191,7 @@ public class HashCrypto
     /// <returns></returns>
     public static string JsonEncrypt(object data)
     {
-        var bytes = JsonSerializer.SerializeToUtf8Bytes(data, new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            ReferenceHandler = ReferenceHandler.IgnoreCycles
-        });
+        var bytes = JsonSerializer.SerializeToUtf8Bytes(data, JsonSerializerOptions);
 
         if (bytes != null)
         {
@@ -217,11 +219,7 @@ public class HashCrypto
                 .ToArray();
             var jsonString = Encoding.UTF8.GetString(bytes);
 
-            return JsonSerializer.Deserialize<T>(jsonString, new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                ReferenceHandler = ReferenceHandler.IgnoreCycles
-            })!;
+            return JsonSerializer.Deserialize<T>(jsonString, JsonSerializerOptions)!;
         }
         return null;
     }

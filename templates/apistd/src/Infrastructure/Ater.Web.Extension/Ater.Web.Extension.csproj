@@ -11,4 +11,8 @@
     <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="2.88.7" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Ater.Web.Abstraction\Ater.Web.Abstraction.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Caching.Distributed;
-namespace Application.Services;
+namespace Ater.Web.Extension.Services;
 
 /// <summary>
 /// 简单封装对象的存储和获取
@@ -68,7 +68,7 @@ public class CacheService(IDistributedCache cache)
     /// <returns></returns>
     public T? GetValue<T>(string key)
     {
-        byte[]? bytes = _cache.Get(key);
+        var bytes = _cache.Get(key);
         if (bytes == null || bytes.Length < 1)
         {
             return default;

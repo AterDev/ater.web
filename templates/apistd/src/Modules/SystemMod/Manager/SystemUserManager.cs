@@ -1,5 +1,7 @@
 using System.Text.RegularExpressions;
-using Ater.Web.Extention;
+using Ater.Web.Extension;
+using Ater.Web.Extension.Models;
+using Ater.Web.Extension.Services;
 using Share.Models.UserDtos;
 using Share.Options;
 using SystemMod.Models;
@@ -252,18 +254,18 @@ public class SystemUserManager(
         // 密码复杂度校验
         string pwdReg = loginPolicy.PasswordLevel switch
         {
-            Share.Options.PasswordLevel.Simple => "",
-            Share.Options.PasswordLevel.Normal => "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,60}$",
-            Share.Options.PasswordLevel.Strict => "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{8,}$",
+            PasswordLevel.Simple => "",
+            PasswordLevel.Normal => "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,60}$",
+            PasswordLevel.Strict => "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{8,}$",
             _ => "^.{6,16}$"
         };
         if (!Regex.IsMatch(password, pwdReg))
         {
             ErrorMsg = loginPolicy.PasswordLevel switch
             {
-                Share.Options.PasswordLevel.Simple => "密码长度6-60位",
-                Share.Options.PasswordLevel.Normal => "密码长度8-60位，必须包含大小写字母和数字",
-                Share.Options.PasswordLevel.Strict => "密码长度8位以上，必须包含大小写字母、数字和特殊字符",
+                PasswordLevel.Simple => "密码长度6-60位",
+                PasswordLevel.Normal => "密码长度8-60位，必须包含大小写字母和数字",
+                PasswordLevel.Strict => "密码长度8位以上，必须包含大小写字母、数字和特殊字符",
                 _ => "密码长度6-16位"
             };
             return false;

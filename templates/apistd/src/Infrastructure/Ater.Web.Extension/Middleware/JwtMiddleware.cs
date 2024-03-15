@@ -1,9 +1,8 @@
 ﻿using System.Security.Claims;
-using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
-using Ater.Web.Abstraction;
-
-namespace Http.API.Middleware;
+namespace Ater.Web.Extension.Middleware;
 
 /// <summary>
 /// 在进入验证前，对token进行额外验证
@@ -25,8 +24,8 @@ public class JwtMiddleware(RequestDelegate next, CacheService redis, ILogger<Jwt
             return;
         }
 
-        string token = context.Request.Headers[AppConst.Authorization].FirstOrDefault()?.Split(" ").Last() ?? string.Empty;
-        string client = context.Request.Headers[AppConst.ClientHeader].FirstOrDefault() ?? AppConst.Web;
+        var token = context.Request.Headers[AppConst.Authorization].FirstOrDefault()?.Split(" ").Last() ?? string.Empty;
+        var client = context.Request.Headers[AppConst.ClientHeader].FirstOrDefault() ?? AppConst.Web;
 
         if (token == null)
         {
@@ -78,7 +77,7 @@ public class JwtMiddleware(RequestDelegate next, CacheService redis, ILogger<Jwt
             TraceId = context.TraceIdentifier
         };
 
-        string content = JsonSerializer.Serialize(res);
+        var content = JsonSerializer.Serialize(res);
         byte[] byteArray = Encoding.UTF8.GetBytes(content);
 
         context.Response.ContentType = "application/json";

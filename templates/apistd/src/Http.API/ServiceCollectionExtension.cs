@@ -1,6 +1,8 @@
 ﻿using System.Net;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 using System.Threading.RateLimiting;
-using Ater.Web.Abstraction;
+using Ater.Web.Extension.Middleware;
 using Http.API;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -12,6 +14,71 @@ namespace Http.API;
 
 public static class ServiceCollectionExtension
 {
+    /// <summary>
+    /// 注册和配置Web服务依赖
+    /// </summary>
+    /// <param name="builder"></param>
+    /// <returns></returns>
+    public static IServiceCollection AddDefaultWebServices(this WebApplicationBuilder builder)
+    {
+        builder.Services.ConfigWebComponents(builder.Configuration);
+        builder.Services.AddHttpContextAccessor();
+        builder.Services.AddTransient<IUserContext, UserContext>();
+        builder.Services.AddTransient<ITenantProvider, TenantProvider>();
+
+        builder.Services.AddManager();
+        // TODO:其他模块Manager
+        //services.AddSystemModManagers();
+        builder.Services.AddSingleton(typeof(CacheService));
+
+        builder.Services.AddControllers()
+            .ConfigureApiBehaviorOptions(o =>
+            {
+                o.InvalidModelStateResponseFactory = context =>
+                {
+                    return new CustomBadRequest(context, null);
+                };
+            }).AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+                options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
+            });
+        return builder.Services;
+    }
+
+    public static WebApplication UseDefaultWebServices(this WebApplication app)
+    {
+        // 异常统一处理
+        app.UseExceptionHandler(ExceptionHandler.Handler());
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseCors(AppConst.Default);
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/client/swagger.json", name: "client");
+                c.SwaggerEndpoint("/swagger/admin/swagger.json", "admin");
+            });
+        }
+        else
+        {
+            app.UseCors(AppConst.Default);
+            //app.UseHsts();
+            app.UseHttpsRedirection();
+        }
+
+        app.UseRateLimiter();
+        app.UseStaticFiles();
+        app.UseRouting();
+        app.UseMiddleware<JwtMiddleware>();
+        app.UseAuthentication();
+        app.UseAuthorization();
+        app.MapControllers();
+        app.MapFallbackToFile("index.html");
+
+        return app;
+    }
+
     /// <summary>
     /// 添加web服务组件，如身份认证/授权/swagger/cors
     /// </summary>
@@ -194,7 +261,7 @@ public static class ServiceCollectionExtension
     {
         services.AddCors(options =>
         {
-            options.AddPolicy("default", builder =>
+            options.AddPolicy(AppConst.Default, builder =>
             {
                 builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
             });

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Share.Options;
+namespace Ater.Web.Extension.Models;
 /// <summary>
 /// 登录安全策略
 /// </summary>
