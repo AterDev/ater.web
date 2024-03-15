@@ -5,7 +5,6 @@ using Ater.Web.Abstraction.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.Extensions.Logging;
 
 namespace Ater.Web.Abstraction;
 

@@ -1,7 +1,6 @@
 // 对常见查询方法的实现
 
 using Ater.Web.Abstraction.Interface;
-using Ater.Web.Core.Utils;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;

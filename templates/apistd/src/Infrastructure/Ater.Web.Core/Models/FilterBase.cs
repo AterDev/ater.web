@@ -29,8 +29,14 @@ public class FilterBase
         set
         {
             _pageSize = value;
-            if (value > 1000) { _pageSize = 1000; }
-            if (value < 0) { _pageSize = 0; }
+            if (value > 1000)
+            {
+                _pageSize = 1000;
+            }
+            if (value < 0)
+            {
+                _pageSize = 0;
+            }
         }
     }
 
