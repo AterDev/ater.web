@@ -11,7 +11,6 @@ public class UserManager(
     IConfiguration configuration,
     IUserContext userContext) : ManagerBase<User, UserUpdateDto, UserFilterDto, UserItemDto>(dataContext, logger)
 {
-    private readonly IConfiguration _configuration = configuration;
     private readonly IUserContext _userContext = userContext;
 
     /// <summary>

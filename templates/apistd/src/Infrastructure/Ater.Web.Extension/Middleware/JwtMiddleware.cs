@@ -17,7 +17,7 @@ public class JwtMiddleware(RequestDelegate next, CacheService redis, ILogger<Jwt
     public async Task Invoke(HttpContext context)
     {
         // 可匿名访问的放行
-        var endpoint = context.GetEndpoint();
+        Endpoint? endpoint = context.GetEndpoint();
         var allowAnon = endpoint?.Metadata.GetMetadata<IAllowAnonymous>() != null;
         if (allowAnon)
         {
@@ -39,7 +39,7 @@ public class JwtMiddleware(RequestDelegate next, CacheService redis, ILogger<Jwt
             // TODO:策略判断
             if (id.NotEmpty())
             {
-                var securityPolicy = _cache.GetValue<LoginSecurityPolicy>(AppConst.LoginSecurityPolicy) ?? new LoginSecurityPolicy();
+                LoginSecurityPolicy securityPolicy = _cache.GetValue<LoginSecurityPolicy>(AppConst.LoginSecurityPolicy) ?? new LoginSecurityPolicy();
                 if (securityPolicy.SessionLevel == SessionLevel.OnlyOne)
                 {
                     client = AppConst.AllPlatform;
@@ -65,9 +65,10 @@ public class JwtMiddleware(RequestDelegate next, CacheService redis, ILogger<Jwt
         }
         catch (Exception e)
         {
-            _logger.LogError(e.ToString());
+            _logger.LogError("{msg}", e.ToString());
         }
     }
+
     private async Task SetResponseAndComplete(HttpContext context, int statusCode, string? msg = "无效的凭证")
     {
         var res = new
@@ -83,7 +84,7 @@ public class JwtMiddleware(RequestDelegate next, CacheService redis, ILogger<Jwt
 
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = statusCode;
-        await context.Response.Body.WriteAsync(byteArray, 0, byteArray.Length);
+        await context.Response.Body.WriteAsync(byteArray);
         await context.Response.CompleteAsync();
     }
 }

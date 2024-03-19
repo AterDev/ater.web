@@ -26,7 +26,6 @@
 - CacheService与JwtService已移动到Ater.Web.Extension项目。
 - 提供了WebApplicationBuilder扩展方法，进一步简化服务的依赖和使用。
 - 添加了速率中间件的集成
-- 
 		</PackageReleaseNotes>
 		<NoWarn>$(NoWarn);NU5128;NU5110;NU5111</NoWarn>
 		<NoDefaultExcludes>true</NoDefaultExcludes>

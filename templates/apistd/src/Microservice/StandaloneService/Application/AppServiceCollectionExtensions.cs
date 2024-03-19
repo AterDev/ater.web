@@ -144,7 +144,9 @@ public static partial class AppServiceCollectionExtensions
             options.IncludeFormattedMessage = true;
             options.IncludeScopes = true;
             if (exportConsole)
+            {
                 options.AddConsoleExporter();
+            }
         });
         tracerProvider ??= new Action<TracerProviderBuilder>(options =>
         {
@@ -176,7 +178,10 @@ public static partial class AppServiceCollectionExtensions
         builder.Services.AddLogging(loggerBuilder =>
         {
             if (exportConsole)
+            {
                 loggerBuilder.ClearProviders();
+            }
+
             loggerBuilder.AddOpenTelemetry(loggerOptions);
         });
         builder.Services.AddOpenTelemetry()

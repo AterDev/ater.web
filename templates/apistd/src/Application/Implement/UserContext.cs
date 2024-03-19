@@ -1,6 +1,7 @@
 using EntityFramework.DBProvider;
 
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Primitives;
 
 namespace Application.Implement;
 
@@ -79,8 +80,7 @@ public class UserContext : IUserContext
         HttpRequest? request = _httpContextAccessor.HttpContext?.Request;
         return request == null
             ? string.Empty
-            : request.Headers.ContainsKey("X-Forwarded-For")
-            ? request.Headers["X-Forwarded-For"].Where(x => x != null).FirstOrDefault()
+            : request.Headers.TryGetValue("X-Forwarded-For", out StringValues value) ? value.Where(x => x != null).FirstOrDefault()
             : _httpContextAccessor.HttpContext!.Connection.RemoteIpAddress?.ToString();
     }
 
