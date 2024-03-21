@@ -21,6 +21,7 @@ builder.AddDefaultComponents();
 builder.AddDefaultWebServices();
 // 3 其他自定义选项及服务
 builder.Services.AddSingleton<IEmailService, EmailService>();
+
 WebApplication app = builder.Build();
 
 // 使用中间件
