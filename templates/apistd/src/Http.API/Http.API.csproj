@@ -1,29 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
-		<AssemblyName>Http.API</AssemblyName>
-		<RootNamespace>Http.API</RootNamespace>
 		<Nullable>enable</Nullable>
-		<SpaProxyServerUrl>http://localhost:14200</SpaProxyServerUrl>
-	</PropertyGroup>
-
-	<PropertyGroup>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<NoWarn>1701;1702;1591</NoWarn>
-		<DocumentationFile></DocumentationFile>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-		<DockerfileContext>..\..</DockerfileContext>
-		<UserSecretsId>561dd4f4-88f6-4f2c-896a-309a4e55161f</UserSecretsId>
 	</PropertyGroup>
-
-	<ItemGroup>
-	  <Compile Remove="Infrastructure\**" />
-	  <Content Remove="Infrastructure\**" />
-	  <EmbeddedResource Remove="Infrastructure\**" />
-	  <None Remove="Infrastructure\**" />
-	</ItemGroup>
-
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.3" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.3">
