@@ -52,7 +52,7 @@ public partial class ContextBase(DbContextOptions options) : DbContext(options)
     }
 
     /// <summary>
-    /// sqliteµÄ¼æÈİ´¦Àí
+    /// sqliteçš„å…¼å®¹å¤„ç†
     /// </summary>
     /// <param name="modelBuilder"></param>
     private void OnSqliteModelCreating(ModelBuilder modelBuilder)
