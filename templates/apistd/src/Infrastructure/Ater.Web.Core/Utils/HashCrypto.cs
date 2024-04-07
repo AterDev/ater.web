@@ -28,11 +28,36 @@ public class HashCrypto
         return Convert.ToBase64String(valueBytes);
     }
 
+    /// <summary>
+    /// 生成PAT
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="salt"></param>
+    /// <returns></returns>
+    public static string GeneratePAT(string value)
+    {
+        var salt = BuildSalt();
+        Rfc2898DeriveBytes encrpty = new(value, Encoding.UTF8.GetBytes(salt), 100, HashAlgorithmName.SHA512);
+        var valueBytes = encrpty.GetBytes(32);
+        return Convert.ToBase64String(valueBytes);
+    }
+
+    /// <summary>
+    /// 验证密码
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="salt"></param>
+    /// <param name="hash"></param>
+    /// <returns></returns>
     public static bool Validate(string value, string salt, string hash)
     {
         return GeneratePwd(value, salt) == hash;
     }
 
+    /// <summary>
+    /// 生成盐
+    /// </summary>
+    /// <returns></returns>
     public static string BuildSalt()
     {
         var randomBytes = new byte[128 / 8];

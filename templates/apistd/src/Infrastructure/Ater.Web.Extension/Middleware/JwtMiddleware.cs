@@ -36,7 +36,7 @@ public class JwtMiddleware(RequestDelegate next, CacheService redis, ILogger<Jwt
         try
         {
             var id = JwtService.GetClaimValue(token, ClaimTypes.NameIdentifier);
-            // TODO:策略判断
+            // 策略判断
             if (id.NotEmpty())
             {
                 LoginSecurityPolicy securityPolicy = _cache.GetValue<LoginSecurityPolicy>(AppConst.LoginSecurityPolicy) ?? new LoginSecurityPolicy();
