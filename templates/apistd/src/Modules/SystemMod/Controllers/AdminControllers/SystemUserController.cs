@@ -119,7 +119,7 @@ public class SystemUserController(
         }
         else
         {
-            return Problem(manager.ErrorMsg);
+            return Problem(ErrorInfo.Get(manager.ErrorStatus), manager.ErrorStatus);
         }
     }
     /// <summary>

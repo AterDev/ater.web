@@ -40,6 +40,11 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem>
     /// </summary>
     public string ErrorMsg { get; set; } = string.Empty;
 
+    /// <summary>
+    ///错误状态码
+    /// </summary>
+    public int ErrorStatus { get; set; }
+
     public DatabaseFacade Database { get; init; }
 
     public ManagerBase(DataAccessContext<TEntity> dataAccessContext, ILogger logger)

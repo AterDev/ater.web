@@ -76,7 +76,7 @@ public class SystemConfigManager(
     /// <returns></returns>
     public LoginSecurityPolicy GetLoginSecurityPolicy()
     {
-        // 优先级：数据库>配置文件>默认配置
+        // 优先级：数据库>配置文件
         var policy = new LoginSecurityPolicy();
 
         var configString = Query.Db.Where(q => q.GroupName.Equals(AppConst.SystemGroup) && q.Key.Equals(AppConst.LoginSecurityPolicy))

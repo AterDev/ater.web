@@ -62,7 +62,7 @@ public class RestControllerBase : ControllerBase
     [NonAction]
     public override NotFoundObjectResult NotFound([ActionResultObjectValue] object? value)
     {
-        var res = new
+        var res = new ErrorResult
         {
             Title = "访问的资源不存在",
             Detail = value?.ToString(),
@@ -82,7 +82,7 @@ public class RestControllerBase : ControllerBase
     [NonAction]
     public override ConflictObjectResult Conflict([ActionResultObjectValue] object? error)
     {
-        var res = new
+        var res = new ErrorResult
         {
             Title = "重复的资源",
             Detail = error?.ToString(),
@@ -100,13 +100,13 @@ public class RestControllerBase : ControllerBase
     /// <param name="detail"></param>
     /// <returns></returns>
     [NonAction]
-    public ObjectResult Problem(string? detail = null)
+    public ObjectResult Problem(string? detail = null, int status = 500)
     {
-        var res = new
+        var res = new ErrorResult
         {
             Title = "业务错误",
             Detail = detail,
-            Status = 500,
+            Status = status,
             TraceId = HttpContext.TraceIdentifier
         };
         Activity? at = Activity.Current;
@@ -125,7 +125,7 @@ public class RestControllerBase : ControllerBase
     [NonAction]
     public override BadRequestObjectResult BadRequest([ActionResultObjectValue] object? error)
     {
-        var res = new
+        var res = new ErrorResult
         {
             Title = "请求错误",
             Detail = error?.ToString(),

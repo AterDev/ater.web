@@ -15,7 +15,7 @@ public class LoginSecurityPolicy
     /// <summary>
     /// 密码过期时间：月
     /// </summary>
-    public int PasswordExpired { get; set; } = 3;
+    public int PasswordExpired { get; set; } = 12;
 
     /// <summary>
     /// 登录失败重试次数

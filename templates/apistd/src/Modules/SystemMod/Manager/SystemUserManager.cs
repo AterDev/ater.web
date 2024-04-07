@@ -73,7 +73,7 @@ public class SystemUserManager(
         if (user.LockoutEnabled || user.RetryCount >= loginPolicy.LoginRetry)
         {
             user.LockoutEnabled = true;
-            ErrorMsg = "密码错误次数过多，账号已锁定";
+            ErrorStatus = 500001;
             return false;
         }
 
@@ -82,22 +82,22 @@ public class SystemUserManager(
         {
             if (dto.VerifyCode == null)
             {
-                ErrorMsg = "验证码错误";
                 user.RetryCount++;
+                ErrorStatus = 500002;
                 return false;
             }
             var key = AppConst.VerifyCodeCachePrefix + user.Email;
             string? code = _cache.GetValue<string>(key);
             if (code == null)
             {
-                ErrorMsg = "验证码已过期";
+                ErrorStatus = 500003;
                 user.RetryCount++;
                 return false;
             }
             if (!code.Equals(dto.VerifyCode))
             {
                 await _cache.RemoveAsync(key);
-                ErrorMsg = "验证码错误";
+                ErrorStatus = 500002;
                 user.RetryCount++;
                 return false;
             }
@@ -106,14 +106,14 @@ public class SystemUserManager(
         // 密码过期时间
         if ((DateTimeOffset.UtcNow - user.LastPwdEditTime).TotalDays > loginPolicy.PasswordExpired * 30)
         {
-            ErrorMsg = "密码已过期，请修改密码";
+            ErrorStatus = 500004;
             user.RetryCount++;
             return false;
         }
 
         if (!HashCrypto.Validate(dto.Password, user.PasswordSalt, user.PasswordHash))
         {
-            ErrorMsg = "用户名或密码错误";
+            ErrorStatus = 500005;
             return false;
         }
         return true;
