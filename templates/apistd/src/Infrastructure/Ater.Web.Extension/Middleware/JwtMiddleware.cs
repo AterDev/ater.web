@@ -28,7 +28,7 @@ public class JwtMiddleware(RequestDelegate next, CacheService redis, ILogger<Jwt
         var token = context.Request.Headers[AppConst.Authorization].FirstOrDefault()?.Split(" ").Last() ?? string.Empty;
         var client = context.Request.Headers[AppConst.ClientHeader].FirstOrDefault() ?? AppConst.Web;
 
-        if (token == null)
+        if (token.IsEmpty())
         {
             await SetResponseAndComplete(context, 401);
             return;

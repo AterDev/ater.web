@@ -26,6 +26,7 @@ public static class ServiceCollectionExtension
         builder.Services.AddTransient<IUserContext, UserContext>();
         builder.Services.AddTransient<ITenantProvider, TenantProvider>();
 
+        builder.Services.AddHealthChecks();
         builder.Services.AddManager();
         // TODO:其他模块Manager
         //services.AddSystemModManagers();
@@ -50,7 +51,13 @@ public static class ServiceCollectionExtension
     {
         // 异常统一处理
         app.UseExceptionHandler(ExceptionHandler.Handler());
-        if (app.Environment.IsDevelopment())
+        if (app.Environment.IsProduction())
+        {
+            app.UseCors(AppConst.Default);
+            //app.UseHsts();
+            app.UseHttpsRedirection();
+        }
+        else
         {
             app.UseCors(AppConst.Default);
             app.UseSwagger();
@@ -60,13 +67,8 @@ public static class ServiceCollectionExtension
                 c.SwaggerEndpoint("/swagger/admin/swagger.json", "admin");
             });
         }
-        else
-        {
-            app.UseCors(AppConst.Default);
-            //app.UseHsts();
-            app.UseHttpsRedirection();
-        }
 
+        app.UseHealthChecks("/health");
         app.UseRateLimiter();
         app.UseStaticFiles();
         app.UseRouting();
