@@ -37,7 +37,11 @@ public class SystemLogs : IEntityBase
     [MaxLength(300)]
     public string? Description { get; set; }
 
-    public SystemUser SystemUser { get; set; } = default!;
+    [ForeignKey(nameof(SystemUserId))]
+    public SystemUser SystemUser { get; set; } = null!;
+
+    public Guid SystemUserId { get; set; } = default!;
+
     public Guid Id { get; set; }
     public DateTimeOffset CreatedTime { get; set; }
     public DateTimeOffset UpdatedTime { get; set; }

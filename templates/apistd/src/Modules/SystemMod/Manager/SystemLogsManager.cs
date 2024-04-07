@@ -19,9 +19,7 @@ public class SystemLogsManager(
     public async Task<SystemLogs> CreateNewEntityAsync(SystemLogsAddDto dto)
     {
         SystemLogs entity = dto.MapTo<SystemLogsAddDto, SystemLogs>();
-        Command.Db.Entry(entity).Property("SystemUserId").CurrentValue = _userContext.UserId;
-        // or entity.SystemUserId = _userContext.UserId;
-        // other required props
+        entity.SystemUserId = _userContext.UserId;
         return await Task.FromResult(entity);
     }
 
