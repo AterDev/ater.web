@@ -34,6 +34,7 @@ public class InitDataTask
                     await InitUserAsync(context, configuration, logger);
                 }
                 // [InitModule]
+                await SystemMod.InitModule.InitializeAsync(provider);
             }
         }
         catch (Exception)

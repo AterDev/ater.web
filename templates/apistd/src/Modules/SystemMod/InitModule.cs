@@ -28,7 +28,7 @@ public class InitModule
             {
                 logger.LogInformation("⛏️ 开始初始化系统");
                 SystemRole? role = await context.SystemRoles.SingleOrDefaultAsync(r => r.NameValue == AppConst.AdminUser);
-
+                // 初始化管理员账号和角色
                 if (role == null)
                 {
                     var defaultPassword = configuration.GetValue<string>("Key:DefaultPassword");
@@ -59,18 +59,9 @@ public class InitModule
                     await context.SaveChangesAsync();
                     logger.LogInformation("初始化管理员账号:{username}/{password}", systemUser.UserName, defaultPassword);
                 }
-
-                var initConfig = SystemConfig.NewSystemConfig(AppConst.SystemGroup, AppConst.IsInit, "true");
-                var loginSecurityPolicy = new LoginSecurityPolicy();
-                var loginSecurityPolicyConfig = SystemConfig.NewSystemConfig(AppConst.SystemGroup, AppConst.LoginSecurityPolicy, JsonSerializer.Serialize(loginSecurityPolicy));
-
-                context.SystemConfigs.Add(initConfig);
-                context.SystemConfigs.Add(loginSecurityPolicyConfig);
-                await context.SaveChangesAsync();
-
-                logger.LogInformation("写入登录安全策略成功");
+                // 初始化配置
+                await InitConfigAsync(context, configuration, logger);
             }
-
             await InitCacheAsync(context, cache, logger);
         }
         catch (Exception ex)
@@ -80,13 +71,38 @@ public class InitModule
     }
 
     /// <summary>
+    /// 初始化配置
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="configuration"></param>
+    /// <param name="logger"></param>
+    /// <returns></returns>
+    private static async Task InitConfigAsync(CommandDbContext context, IConfiguration configuration, ILogger logger)
+    {
+        // 初始化配置信息
+        var initConfig = SystemConfig.NewSystemConfig(AppConst.SystemGroup, AppConst.IsInit, "true");
+
+        var loginSecurityPolicy = configuration.GetSection(AppConst.LoginSecurityPolicy)
+            .Get<LoginSecurityPolicy>() ?? new LoginSecurityPolicy();
+
+        var loginSecurityPolicyConfig = SystemConfig.NewSystemConfig(AppConst.SystemGroup, AppConst.LoginSecurityPolicy, JsonSerializer.Serialize(loginSecurityPolicy));
+
+        context.SystemConfigs.Add(loginSecurityPolicyConfig);
+        context.SystemConfigs.Add(initConfig);
+
+        await context.SaveChangesAsync();
+
+        logger.LogInformation("写入登录安全策略成功");
+    }
+
+    /// <summary>
     /// 加载配置缓存
     /// </summary>
     /// <param name="context"></param>
     /// <param name="cache"></param>
     /// <param name="logger"></param>
     /// <returns></returns>
-    public static async Task InitCacheAsync(CommandDbContext context, CacheService cache, ILogger logger)
+    private static async Task InitCacheAsync(CommandDbContext context, CacheService cache, ILogger logger)
     {
         logger.LogInformation("加载配置缓存");
         var securityPolicy = context.SystemConfigs

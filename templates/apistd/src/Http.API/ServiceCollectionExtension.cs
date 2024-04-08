@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using SystemMod;
 
 namespace Http.API;
 
@@ -29,9 +30,9 @@ public static class ServiceCollectionExtension
         builder.Services.AddHealthChecks();
         builder.Services.AddManager();
         // TODO:其他模块Manager
-        //services.AddSystemModManagers();
-        builder.Services.AddSingleton(typeof(CacheService));
+        builder.Services.AddSystemModServices();
 
+        builder.Services.AddSingleton(typeof(CacheService));
         builder.Services.AddControllers()
             .ConfigureApiBehaviorOptions(o =>
             {

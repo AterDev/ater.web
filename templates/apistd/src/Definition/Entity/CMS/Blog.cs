@@ -3,6 +3,7 @@
 /// 博客
 /// </summary>
 [Module(Modules.CMS)]
+[LogDescription("博客", nameof(Title), Modules.CMS)]
 public class Blog : IEntityBase
 {
     /// <summary>

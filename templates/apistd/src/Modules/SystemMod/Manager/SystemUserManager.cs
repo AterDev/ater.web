@@ -3,6 +3,7 @@ using Ater.Web.Extension;
 using Share.Models.UserDtos;
 using SystemMod.Models;
 using SystemMod.Models.SystemUserDtos;
+using SystemMod.Worker;
 
 namespace SystemMod.Manager;
 
@@ -12,10 +13,12 @@ public class SystemUserManager(
     IConfiguration configuration,
     CacheService cache,
     SystemConfigManager systemConfig,
+    SystemLogTaskQueue taskQueue,
     ILogger<SystemUserManager> logger) : ManagerBase<SystemUser, SystemUserUpdateDto, SystemUserFilterDto, SystemUserItemDto>(dataContext, logger)
 {
     private readonly IUserContext _userContext = userContext;
     private readonly SystemConfigManager _systemConfig = systemConfig;
+    private readonly SystemLogTaskQueue _taskQueue = taskQueue;
     private readonly IConfiguration _configuration = configuration;
     private readonly CacheService _cache = cache;
 
@@ -268,5 +271,16 @@ public class SystemUserManager(
             return false;
         }
         return true;
+    }
+
+    /// <summary>
+    /// 保存登录记录
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="description"></param>
+    public async Task SaveLoginLogAsync(SystemUser user, string description)
+    {
+        var log = SystemLogs.NewLog(user.UserName, user.Id, "登录", ActionType.Login, description: description);
+        await _taskQueue.AddLogItemAsync(log);
     }
 }

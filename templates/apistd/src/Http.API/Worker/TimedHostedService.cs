@@ -46,8 +46,8 @@ public class TimedHostedService(
     /// </summary>
     public Task OperateDataBaseAsync(object? state)
     {
-        using IServiceScope scope = Services.CreateScope();
-        var userManager = scope.ServiceProvider.GetRequiredService<UserManager>();
+        //using IServiceScope scope = Services.CreateScope();
+        //var userManager = scope.ServiceProvider.GetRequiredService<UserManager>();
         return Task.CompletedTask;
     }
 

@@ -20,7 +20,7 @@ public class LoginSecurityPolicy
     /// <summary>
     /// 登录失败重试次数
     /// </summary>
-    public int LoginRetry { get; set; }
+    public int LoginRetry { get; set; } = 5;
 
     /// <summary>
     /// 会话数量限制

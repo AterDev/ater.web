@@ -76,13 +76,9 @@ public class SystemConfigManager(
     /// <returns></returns>
     public LoginSecurityPolicy GetLoginSecurityPolicy()
     {
-        // 优先级：数据库>配置文件
+        // 优先级：缓存>配置文件
         var policy = new LoginSecurityPolicy();
-
-        var configString = Query.Db.Where(q => q.GroupName.Equals(AppConst.SystemGroup) && q.Key.Equals(AppConst.LoginSecurityPolicy))
-            .Select(q => q.Value)
-            .FirstOrDefault();
-
+        var configString = _cache.GetValue<string>(AppConst.LoginSecurityPolicy);
         if (configString != null)
         {
             policy = JsonSerializer.Deserialize<LoginSecurityPolicy>(configString);

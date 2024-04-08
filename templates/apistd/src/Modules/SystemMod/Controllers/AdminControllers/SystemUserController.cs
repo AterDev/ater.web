@@ -115,11 +115,15 @@ public class SystemUserController(
 
             result.Menus = menus;
             result.PermissionGroups = permissionGroups;
+
+            await manager.SaveLoginLogAsync(user, "登录成功");
             return result;
         }
         else
         {
-            return Problem(ErrorInfo.Get(manager.ErrorStatus), manager.ErrorStatus);
+            var errorMsg = ErrorInfo.Get(manager.ErrorStatus);
+            await manager.SaveLoginLogAsync(user, "登录失败:" + errorMsg);
+            return Problem(errorMsg, manager.ErrorStatus);
         }
     }
     /// <summary>

@@ -1,4 +1,6 @@
 // 本文件由 ater.dry工具自动生成.
+using SystemMod.Worker;
+
 namespace SystemMod;
 /// <summary>
 /// 服务注入扩展
@@ -6,10 +8,23 @@ namespace SystemMod;
 public static class ServiceCollectionExtensions
 {
     /// <summary>
-    /// 添加OrderMod 注入服务
+    /// 添加模块服务
     /// </summary>
     /// <param name="services"></param>
-    public static void AddSystemModManagers(this IServiceCollection services)
+    /// <returns></returns>
+    public static IServiceCollection AddSystemModServices(this IServiceCollection services)
+    {
+        services.AddSystemModManagers();
+        services.AddSingleton(typeof(SystemLogTaskQueue));
+        services.AddHostedService<SystemLogTaskHostedService>();
+        return services;
+    }
+
+    /// <summary>
+    /// 添加Manager服务
+    /// </summary>
+    /// <param name="services"></param>
+    public static IServiceCollection AddSystemModManagers(this IServiceCollection services)
     {
         services.AddScoped(typeof(SystemConfigManager));
         services.AddScoped(typeof(SystemLogsManager));
@@ -18,6 +33,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped(typeof(SystemPermissionManager));
         services.AddScoped(typeof(SystemRoleManager));
         services.AddScoped(typeof(SystemUserManager));
+        return services;
     }
 }
 
