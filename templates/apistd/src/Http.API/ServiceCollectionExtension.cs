@@ -2,7 +2,9 @@
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using System.Threading.RateLimiting;
+
 using Ater.Web.Extension.Middleware;
+
 using Http.API;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -49,6 +51,7 @@ public static class ServiceCollectionExtension
 
     public static WebApplication UseDefaultWebServices(this WebApplication app)
     {
+        app.UseWebAppContext();
         // 异常统一处理
         app.UseExceptionHandler(ExceptionHandler.Handler());
         if (app.Environment.IsProduction())
