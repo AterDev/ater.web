@@ -1,4 +1,4 @@
-﻿using SystemMod.Worker;
+﻿using Ater.Web.Extension;
 
 namespace SystemMod;
 /// <summary>
@@ -7,7 +7,7 @@ namespace SystemMod;
 public class SystemLogService
 {
     private readonly IServiceProvider _serviceProvider;
-    private readonly SystemLogTaskQueue _taskQueue;
+    private readonly EntityTaskQueue<SystemLogs> _taskQueue;
     private readonly IUserContext _context;
 
     /// <summary>
@@ -15,7 +15,7 @@ public class SystemLogService
     /// </summary>
     /// <param name="serviceProvider"></param>
     /// <param name="taskQueue"></param>
-    public SystemLogService(IServiceProvider serviceProvider, SystemLogTaskQueue taskQueue)
+    public SystemLogService(IServiceProvider serviceProvider, EntityTaskQueue<SystemLogs> taskQueue)
     {
         _serviceProvider = serviceProvider;
         _taskQueue = taskQueue;

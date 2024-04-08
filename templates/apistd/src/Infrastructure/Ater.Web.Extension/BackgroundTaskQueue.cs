@@ -1,6 +1,6 @@
 ﻿using System.Threading.Channels;
 
-namespace Http.API.Worker;
+namespace Ater.Web.Extension;
 
 public interface IBackgroundTaskQueue
 {

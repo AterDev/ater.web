@@ -1,4 +1,4 @@
-﻿using System.Threading.Channels;
+﻿using Ater.Web.Extension;
 using EntityFramework.DBProvider;
 using Microsoft.Extensions.Hosting;
 
@@ -6,11 +6,11 @@ namespace SystemMod.Worker;
 /// <summary>
 /// 日志记录任务
 /// </summary>
-public class SystemLogTaskHostedService(IServiceProvider serviceProvider, SystemLogTaskQueue queue, ILogger<SystemLogTaskHostedService> logger) : BackgroundService
+public class SystemLogTaskHostedService(IServiceProvider serviceProvider, EntityTaskQueue<SystemLogs> queue, ILogger<SystemLogTaskHostedService> logger) : BackgroundService
 {
     private readonly IServiceProvider _serviceProvider = serviceProvider;
     private readonly ILogger<SystemLogTaskHostedService> _logger = logger;
-    private readonly SystemLogTaskQueue _taskQueue = queue;
+    private readonly EntityTaskQueue<SystemLogs> _taskQueue = queue;
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -55,34 +55,4 @@ public class SystemLogTaskHostedService(IServiceProvider serviceProvider, System
         _logger.LogInformation("Log Hosted Service is stopping.");
         await base.StopAsync(stoppingToken);
     }
-}
-
-/// <summary>
-/// 业务日志队列任务
-/// </summary>
-public class SystemLogTaskQueue
-{
-    private readonly Channel<SystemLogs> _queue;
-
-    public SystemLogTaskQueue(int capacity = 1000)
-    {
-        var options = new BoundedChannelOptions(capacity)
-        {
-            FullMode = BoundedChannelFullMode.Wait
-        };
-        _queue = Channel.CreateBounded<SystemLogs>(options);
-    }
-
-    public async ValueTask AddItemAsync(SystemLogs workItem)
-    {
-        ArgumentNullException.ThrowIfNull(workItem);
-        await _queue.Writer.WriteAsync(workItem);
-    }
-
-    public async ValueTask<SystemLogs> DequeueAsync(CancellationToken cancellationToken)
-    {
-        SystemLogs workItem = await _queue.Reader.ReadAsync(cancellationToken);
-        return workItem;
-    }
-
 }

@@ -1,4 +1,6 @@
-﻿namespace Http.API.Worker;
+﻿using Ater.Web.Extension;
+
+namespace Http.API.Worker;
 /// <summary>
 /// 后台队列任务服务示例
 /// </summary>

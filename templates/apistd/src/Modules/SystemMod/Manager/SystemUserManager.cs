@@ -3,7 +3,6 @@ using Ater.Web.Extension;
 using Share.Models.UserDtos;
 using SystemMod.Models;
 using SystemMod.Models.SystemUserDtos;
-using SystemMod.Worker;
 
 namespace SystemMod.Manager;
 
@@ -13,12 +12,10 @@ public class SystemUserManager(
     IConfiguration configuration,
     CacheService cache,
     SystemConfigManager systemConfig,
-    SystemLogTaskQueue taskQueue,
     ILogger<SystemUserManager> logger) : ManagerBase<SystemUser, SystemUserUpdateDto, SystemUserFilterDto, SystemUserItemDto>(dataContext, logger)
 {
     private readonly IUserContext _userContext = userContext;
     private readonly SystemConfigManager _systemConfig = systemConfig;
-    private readonly SystemLogTaskQueue _taskQueue = taskQueue;
     private readonly IConfiguration _configuration = configuration;
     private readonly CacheService _cache = cache;
 

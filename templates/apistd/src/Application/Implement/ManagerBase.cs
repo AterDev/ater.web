@@ -1,5 +1,5 @@
 using Ater.Web.Abstraction.EntityFramework;
-
+using Entity.System;
 using EntityFramework.DBProvider;
 
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -17,7 +17,15 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem>
     where TEntity : class, IEntityBase
     where TFilter : FilterBase
 {
+    #region Properties and Fields
     protected readonly ILogger _logger;
+    public IUserContext? UserContext { get; private set; }
+
+    /// <summary>
+    /// 自动日志类型
+    /// </summary>
+    public AutoLogType AutoLogType { get; private set; } = AutoLogType.None;
+
     /// <summary>
     /// 实体的只读仓储实现
     /// </summary>
@@ -46,6 +54,7 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem>
     public int ErrorStatus { get; set; }
 
     public DatabaseFacade Database { get; init; }
+    #endregion
 
     public ManagerBase(DataAccessContext<TEntity> dataAccessContext, ILogger logger)
     {
@@ -58,17 +67,15 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem>
         QueryContext = dataAccessContext.QueryContext;
     }
 
-    public async Task<int> SaveChangesAsync()
+    /// <summary>
+    /// 设置自动保存日志
+    /// </summary>
+    /// <param name="userContext"></param>
+    /// <param name="autoLogType"></param>
+    public void SetAutoLog(IUserContext userContext, AutoLogType autoLogType)
     {
-        return await Command.SaveChangesAsync();
-    }
-
-    private async Task AutoSaveAsync()
-    {
-        if (AutoSave)
-        {
-            _ = await SaveChangesAsync();
-        }
+        UserContext = userContext;
+        AutoLogType = autoLogType;
     }
 
     /// <summary>
@@ -150,4 +157,65 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem>
         return await Query.FilterAsync<TItem>(Queryable, filter.PageIndex, filter.PageSize, filter.OrderBy);
     }
 
+    public async Task<int> SaveChangesAsync()
+    {
+        return await Command.SaveChangesAsync();
+    }
+
+    private async Task AutoSaveAsync()
+    {
+        if (AutoSave)
+        {
+            _ = await SaveChangesAsync();
+        }
+    }
+
+    private void SaveToLog(TEntity entity, ActionType actionType)
+    {
+        if (UserContext == null)
+        {
+            _logger.LogWarning("UserContext is null, can't save log");
+            return;
+        }
+
+        var route = UserContext.GetHttpContext()?.Request.Path.Value;
+        var description = string.Empty;
+        var targetName = entity.GetType().Name;
+        if (UserContext.IsAdmin)
+        {
+            // 管理员日志
+            //var log = SystemLogs.NewLog(UserContext.Username ?? "", UserContext.UserId, targetName, actionType, route, description);
+            //CommandContext.Add(log);
+            //await SaveChangesAsync();
+        }
+        else
+        {
+            // TODO: 用户日志
+        }
+    }
+}
+
+public enum AutoLogType
+{
+    /// <summary>
+    /// 无
+    /// </summary>
+    None,
+    /// <summary>
+    /// 新增
+    /// </summary>
+    Add,
+    /// <summary>
+    /// 修改
+    /// </summary>
+    Update,
+    /// <summary>
+    /// 新增或修改
+    /// </summary>
+    AddOrUpdate,
+    /// <summary>
+    /// 删除
+    /// </summary>
+    Delete,
+    All
 }
