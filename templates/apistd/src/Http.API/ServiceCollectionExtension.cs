@@ -24,8 +24,8 @@ public static class ServiceCollectionExtension
     {
         builder.Services.ConfigWebComponents(builder.Configuration);
         builder.Services.AddHttpContextAccessor();
-        builder.Services.AddTransient<IUserContext, UserContext>();
-        builder.Services.AddTransient<ITenantProvider, TenantProvider>();
+        builder.Services.AddScoped<IUserContext, UserContext>();
+        builder.Services.AddScoped<ITenantProvider, TenantProvider>();
 
         builder.Services.AddHealthChecks();
         builder.Services.AddManager();

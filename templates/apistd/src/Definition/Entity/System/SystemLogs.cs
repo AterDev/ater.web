@@ -47,32 +47,6 @@ public class SystemLogs : IEntityBase
     public DateTimeOffset UpdatedTime { get; set; }
     public bool IsDeleted { get; set; }
 
-    public static SystemLogs NewCreateLog(SystemUser user, string targetName, string? route = null, string? description = null)
-    {
-        return new SystemLogs
-        {
-            SystemUserId = user.Id,
-            ActionUserName = user.UserName,
-            TargetName = targetName,
-            Route = route ?? string.Empty,
-            ActionType = ActionType.Add,
-            Description = description,
-        };
-    }
-
-    public static SystemLogs NewDeleteLog(SystemUser user, string targetName, string? route = null, string? description = null)
-    {
-        return new SystemLogs
-        {
-            SystemUserId = user.Id,
-            ActionUserName = user.UserName,
-            TargetName = targetName,
-            Route = route ?? string.Empty,
-            ActionType = ActionType.Delete,
-            Description = description,
-        };
-    }
-
     public static SystemLogs NewLog(string userName, Guid userId, string targetName, ActionType actionType, string? route = null, string? description = null)
     {
         return new SystemLogs

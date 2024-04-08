@@ -18,12 +18,14 @@ public class SystemUserController(
     CacheService cache,
     IConfiguration config,
     IEmailService emailService,
+    SystemLogService logService,
     SystemRoleManager roleManager) : RestControllerBase<SystemUserManager>(manager, user, logger)
 {
     private readonly SystemConfigManager _systemConfig = systemConfig;
     private readonly CacheService _cache = cache;
     private readonly IConfiguration _config = config;
     private readonly IEmailService _emailService = emailService;
+    private readonly SystemLogService _logService = logService;
     private readonly SystemRoleManager _roleManager = roleManager;
 
     /// <summary>
@@ -116,13 +118,13 @@ public class SystemUserController(
             result.Menus = menus;
             result.PermissionGroups = permissionGroups;
 
-            await manager.SaveLoginLogAsync(user, "登录成功");
+            await _logService.NewLog("登录", ActionType.Login, "登录成功", user.UserName, user.Id);
             return result;
         }
         else
         {
             var errorMsg = ErrorInfo.Get(manager.ErrorStatus);
-            await manager.SaveLoginLogAsync(user, "登录失败:" + errorMsg);
+            await _logService.NewLog("登录", ActionType.Login, "登录失败:" + errorMsg, user.UserName, user.Id);
             return Problem(errorMsg, manager.ErrorStatus);
         }
     }

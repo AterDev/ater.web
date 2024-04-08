@@ -28,9 +28,20 @@ public class SystemLogTaskHostedService(IServiceProvider serviceProvider, System
             var log = await _taskQueue.DequeueAsync(stoppingToken);
             try
             {
-                context.Add(log);
-                await context.SaveChangesAsync(stoppingToken);
-                _logger.LogInformation("Log {name} is saved.", log.TargetName);
+                // 查询今天是否有相同的日志
+                var today = DateTime.UtcNow.Date;
+                var exist = await context.SystemLogs.AnyAsync(l => l.ActionType == log.ActionType
+                    && l.ActionUserName == log.ActionUserName
+                    && l.SystemUserId == log.SystemUserId
+                    && l.CreatedTime >= today
+                    && l.TargetName == log.TargetName, stoppingToken);
+
+                if (!exist)
+                {
+                    context.Add(log);
+                    await context.SaveChangesAsync(stoppingToken);
+                    _logger.LogInformation("Log {name} is saved.", log.TargetName);
+                }
             }
             catch (Exception ex)
             {
@@ -62,7 +73,7 @@ public class SystemLogTaskQueue
         _queue = Channel.CreateBounded<SystemLogs>(options);
     }
 
-    public async ValueTask AddLogItemAsync(SystemLogs workItem)
+    public async ValueTask AddItemAsync(SystemLogs workItem)
     {
         ArgumentNullException.ThrowIfNull(workItem);
         await _queue.Writer.WriteAsync(workItem);

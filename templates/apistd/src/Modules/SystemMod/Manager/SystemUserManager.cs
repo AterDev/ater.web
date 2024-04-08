@@ -273,14 +273,4 @@ public class SystemUserManager(
         return true;
     }
 
-    /// <summary>
-    /// 保存登录记录
-    /// </summary>
-    /// <param name="user"></param>
-    /// <param name="description"></param>
-    public async Task SaveLoginLogAsync(SystemUser user, string description)
-    {
-        var log = SystemLogs.NewLog(user.UserName, user.Id, "登录", ActionType.Login, description: description);
-        await _taskQueue.AddLogItemAsync(log);
-    }
 }

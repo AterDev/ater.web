@@ -93,4 +93,10 @@ public class UserContext : IUserContext
     {
         return await _context.Set<TUser>().FindAsync(UserId);
     }
+
+    public HttpContext? GetHttpContext()
+    {
+        return _httpContextAccessor.HttpContext;
+    }
+
 }

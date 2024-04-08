@@ -16,6 +16,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddSystemModManagers();
         services.AddSingleton(typeof(SystemLogTaskQueue));
+        services.AddSingleton(typeof(SystemLogService));
         services.AddHostedService<SystemLogTaskHostedService>();
         return services;
     }
