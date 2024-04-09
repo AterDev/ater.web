@@ -8,13 +8,13 @@ public class CommandDbContextFactory(ITenantProvider tenantProvider, IDistribute
 
     public CommandDbContext CreateDbContext()
     {
-        var optionsBuilder = new DbContextOptionsBuilder<CommandDbContext>();
+        var builder = new DbContextOptionsBuilder<CommandDbContext>();
         Guid tenantId = _tenantProvider.TenantId;
 
         // 从缓存或配置中查询连接字符串
         var connectionStrings = _cache.GetString($"{tenantId}_CommandConnectionString");
 
-        optionsBuilder.UseNpgsql(connectionStrings);
-        return new CommandDbContext(optionsBuilder.Options);
+        builder.UseNpgsql(connectionStrings);
+        return new CommandDbContext(builder.Options);
     }
 }

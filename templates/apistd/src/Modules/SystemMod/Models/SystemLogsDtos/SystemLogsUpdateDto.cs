@@ -23,7 +23,7 @@ public class SystemLogsUpdateDto
     /// <summary>
     /// 操作类型
     /// </summary>
-    public ActionType? ActionType { get; set; }
+    public UserActionType? ActionType { get; set; }
     /// <summary>
     /// 描述
     /// </summary>

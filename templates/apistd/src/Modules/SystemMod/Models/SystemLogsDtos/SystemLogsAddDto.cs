@@ -23,7 +23,7 @@ public class SystemLogsAddDto
     /// <summary>
     /// 操作类型
     /// </summary>
-    public required ActionType ActionType { get; set; }
+    public required UserActionType ActionType { get; set; }
     /// <summary>
     /// 描述
     /// </summary>

@@ -32,7 +32,7 @@ public class SystemLogService
     /// <param name="userName"></param>
     /// <param name="userId"></param>
     /// <returns></returns>
-    public async Task NewLog(string targetName, ActionType actionType, string description, string? userName = null, Guid? userId = null)
+    public async Task NewLog(string targetName, UserActionType actionType, string description, string? userName = null, Guid? userId = null)
     {
         userId = _context.UserId == Guid.Empty ? userId : _context.UserId;
         userName = string.IsNullOrEmpty(_context.Username) ? userName : _context.Username;

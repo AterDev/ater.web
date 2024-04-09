@@ -118,13 +118,13 @@ public class SystemUserController(
             result.Menus = menus;
             result.PermissionGroups = permissionGroups;
 
-            await _logService.NewLog("登录", ActionType.Login, "登录成功", user.UserName, user.Id);
+            await _logService.NewLog("登录", UserActionType.Login, "登录成功", user.UserName, user.Id);
             return result;
         }
         else
         {
             var errorMsg = ErrorInfo.Get(manager.ErrorStatus);
-            await _logService.NewLog("登录", ActionType.Login, "登录失败:" + errorMsg, user.UserName, user.Id);
+            await _logService.NewLog("登录", UserActionType.Login, "登录失败:" + errorMsg, user.UserName, user.Id);
             return Problem(errorMsg, manager.ErrorStatus);
         }
     }

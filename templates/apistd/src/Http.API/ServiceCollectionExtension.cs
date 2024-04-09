@@ -4,7 +4,6 @@ using System.Text.Unicode;
 using System.Threading.RateLimiting;
 
 using Ater.Web.Extension.Middleware;
-
 using Http.API;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -31,9 +30,12 @@ public static class ServiceCollectionExtension
 
         builder.Services.AddHealthChecks();
         builder.Services.AddManager();
-        // TODO:其他模块Manager
+        builder.Services.AddSingleton<IEntityTaskQueue<UserLogs>, EntityTaskQueue<UserLogs>>();
+
+        // 添加后台系统模块服务
         builder.Services.AddSystemModServices();
 
+        // TODO:其他模块Manager
         builder.Services.AddSingleton(typeof(CacheService));
         builder.Services.AddControllers()
             .ConfigureApiBehaviorOptions(o =>

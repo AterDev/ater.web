@@ -23,7 +23,7 @@ public class SystemLogsShortDto
     /// <summary>
     /// 操作类型
     /// </summary>
-    public ActionType ActionType { get; set; } = default!;
+    public UserActionType ActionType { get; set; } = default!;
     /// <summary>
     /// 描述
     /// </summary>

@@ -8,13 +8,13 @@ public class QueryDbContextFactory(ITenantProvider tenantProvider, IDistributedC
 
     public QueryDbContext CreateDbContext()
     {
-        var optionsBuilder = new DbContextOptionsBuilder<QueryDbContext>();
+        var builder = new DbContextOptionsBuilder<QueryDbContext>();
         Guid tenantId = _tenantProvider.TenantId;
 
         // 从缓存或配置中查询连接字符串
         var connectionStrings = _cache.GetString($"{tenantId}_QueryConnectionString");
 
-        optionsBuilder.UseNpgsql(connectionStrings);
-        return new QueryDbContext(optionsBuilder.Options);
+        builder.UseNpgsql(connectionStrings);
+        return new QueryDbContext(builder.Options);
     }
 }

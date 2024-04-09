@@ -40,7 +40,7 @@ public static partial class AppServiceCollectionExtensions
     /// <returns></returns>
     public static IHostApplicationBuilder AddDefaultComponents(this IHostApplicationBuilder builder)
     {
-        builder.AddPgsqlDbContext();
+        builder.AddDbContext();
         builder.AddRedisCache();
         var otlpEndpoint = builder.Configuration.GetSection("OTLP")
             .GetValue<string>("Endpoint")
@@ -66,10 +66,10 @@ public static partial class AppServiceCollectionExtensions
     }
 
     /// <summary>
-    /// add postgresql config
+    /// 添加数据库上下文
     /// </summary>
     /// <returns></returns>
-    public static IHostApplicationBuilder AddPgsqlDbContext(this IHostApplicationBuilder builder)
+    public static IHostApplicationBuilder AddDbContext(this IHostApplicationBuilder builder)
     {
         var commandString = builder.Configuration.GetConnectionString(AppSetting.CommandDB);
         var queryString = builder.Configuration.GetConnectionString(AppSetting.QueryDB);

@@ -18,7 +18,7 @@ public class SystemLogsFilterDto : FilterBase
     /// <summary>
     /// 操作类型
     /// </summary>
-    public ActionType? ActionType { get; set; }
+    public UserActionType? ActionType { get; set; }
     /// <summary>
     /// 开始时间
     /// </summary>

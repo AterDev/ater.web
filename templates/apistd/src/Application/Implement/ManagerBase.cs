@@ -24,7 +24,7 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem>
     /// <summary>
     /// 自动日志类型
     /// </summary>
-    public AutoLogType AutoLogType { get; private set; } = AutoLogType.None;
+    public LogActionType AutoLogType { get; private set; } = LogActionType.None;
 
     /// <summary>
     /// 实体的只读仓储实现
@@ -68,17 +68,6 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem>
     }
 
     /// <summary>
-    /// 设置自动保存日志
-    /// </summary>
-    /// <param name="userContext"></param>
-    /// <param name="autoLogType"></param>
-    public void SetAutoLog(IUserContext userContext, AutoLogType autoLogType)
-    {
-        UserContext = userContext;
-        AutoLogType = autoLogType;
-    }
-
-    /// <summary>
     /// 在修改前查询对象
     /// </summary>
     /// <param name="id"></param>
@@ -88,10 +77,16 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem>
     {
         return await Command.FindAsync(e => e.Id == id, navigations);
     }
+
     public virtual async Task<TEntity> AddAsync(TEntity entity)
     {
         TEntity res = await Command.CreateAsync(entity);
         await AutoSaveAsync();
+
+        if (AutoLogType is LogActionType.Add or LogActionType.All or LogActionType.AddOrUpdate)
+        {
+            await SaveToLogAsync(entity, UserActionType.Add);
+        }
         return res;
     }
 
@@ -101,6 +96,10 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem>
         entity.UpdatedTime = DateTimeOffset.UtcNow;
         TEntity res = Command.Update(entity);
         await AutoSaveAsync();
+        if (AutoLogType is LogActionType.Update or LogActionType.All or LogActionType.AddOrUpdate)
+        {
+            await SaveToLogAsync(entity, UserActionType.Update);
+        }
         return res;
     }
 
@@ -109,6 +108,11 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem>
         Command.EnableSoftDelete = softDelete;
         TEntity? res = Command.Remove(entity);
         await AutoSaveAsync();
+
+        if (AutoLogType is LogActionType.Delete or LogActionType.All)
+        {
+            await SaveToLogAsync(entity, UserActionType.Delete);
+        }
         return res;
     }
 
@@ -170,7 +174,13 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem>
         }
     }
 
-    private async Task SaveToLogAsync(TEntity entity, ActionType actionType)
+    /// <summary>
+    /// 日志记录
+    /// </summary>
+    /// <param name="entity"></param>
+    /// <param name="actionType"></param>
+    /// <returns></returns>
+    private async Task SaveToLogAsync(TEntity entity, UserActionType actionType)
     {
         if (UserContext == null)
         {
@@ -185,6 +195,7 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem>
         if (UserContext.IsAdmin)
         {
             // 管理员日志
+            // 使用SystemMod时生效
             var log = SystemLogs.NewLog(UserContext.Username ?? "", UserContext.UserId, targetName, actionType, route, description);
             var taskQueue = WebAppContext.GetScopeService<EntityTaskQueue<SystemLogs>>();
             if (taskQueue != null)
@@ -194,32 +205,13 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem>
         }
         else
         {
-            // TODO: 用户日志
+            // 用户日志
+            var log = UserLogs.NewLog(UserContext.Username ?? "", UserContext.UserId, targetName, actionType, route, description);
+            var taskQueue = WebAppContext.GetScopeService<EntityTaskQueue<UserLogs>>();
+            if (taskQueue != null)
+            {
+                await taskQueue.AddItemAsync(log);
+            }
         }
     }
-}
-
-public enum AutoLogType
-{
-    /// <summary>
-    /// 无
-    /// </summary>
-    None,
-    /// <summary>
-    /// 新增
-    /// </summary>
-    Add,
-    /// <summary>
-    /// 修改
-    /// </summary>
-    Update,
-    /// <summary>
-    /// 新增或修改
-    /// </summary>
-    AddOrUpdate,
-    /// <summary>
-    /// 删除
-    /// </summary>
-    Delete,
-    All
 }
