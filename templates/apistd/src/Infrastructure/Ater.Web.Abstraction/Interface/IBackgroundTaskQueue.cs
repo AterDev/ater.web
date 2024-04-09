@@ -1,6 +1,6 @@
 ﻿using System.Threading.Channels;
 
-namespace Ater.Web.Extension;
+namespace Ater.Web.Abstraction.Interface;
 
 public interface IBackgroundTaskQueue
 {
@@ -16,8 +16,7 @@ public interface IBackgroundTaskQueue
     /// </summary>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    ValueTask<Func<object, ValueTask>> DequeueAsync(
-        CancellationToken cancellationToken);
+    ValueTask<Func<object, ValueTask>> DequeueAsync(CancellationToken cancellationToken);
 }
 /// <summary>
 /// 后台队列定义

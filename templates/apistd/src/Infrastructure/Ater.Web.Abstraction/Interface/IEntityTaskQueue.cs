@@ -1,10 +1,17 @@
 ﻿using System.Threading.Channels;
 
-namespace Ater.Web.Extension;
+namespace Ater.Web.Abstraction.Interface;
+
+public interface IEntityTaskQueue<TEntity> where TEntity : class
+{
+    ValueTask AddItemAsync(TEntity workItem);
+    ValueTask<TEntity> DequeueAsync(CancellationToken cancellationToken);
+}
+
 /// <summary>
 /// 实体队列任务
 /// </summary>
-public class EntityTaskQueue<TEntity> where TEntity : class
+public class EntityTaskQueue<TEntity> : IEntityTaskQueue<TEntity> where TEntity : class
 {
     private readonly Channel<TEntity> _queue;
 

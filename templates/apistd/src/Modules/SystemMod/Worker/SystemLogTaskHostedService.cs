@@ -1,4 +1,5 @@
-﻿using Ater.Web.Extension;
+﻿using Ater.Web.Abstraction.Interface;
+using Ater.Web.Extension;
 using EntityFramework.DBProvider;
 using Microsoft.Extensions.Hosting;
 
@@ -6,11 +7,11 @@ namespace SystemMod.Worker;
 /// <summary>
 /// 日志记录任务
 /// </summary>
-public class SystemLogTaskHostedService(IServiceProvider serviceProvider, EntityTaskQueue<SystemLogs> queue, ILogger<SystemLogTaskHostedService> logger) : BackgroundService
+public class SystemLogTaskHostedService(IServiceProvider serviceProvider, IEntityTaskQueue<SystemLogs> queue, ILogger<SystemLogTaskHostedService> logger) : BackgroundService
 {
     private readonly IServiceProvider _serviceProvider = serviceProvider;
     private readonly ILogger<SystemLogTaskHostedService> _logger = logger;
-    private readonly EntityTaskQueue<SystemLogs> _taskQueue = queue;
+    private readonly IEntityTaskQueue<SystemLogs> _taskQueue = queue;
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {

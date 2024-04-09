@@ -170,7 +170,7 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem>
         }
     }
 
-    private void SaveToLog(TEntity entity, ActionType actionType)
+    private async Task SaveToLogAsync(TEntity entity, ActionType actionType)
     {
         if (UserContext == null)
         {
@@ -181,12 +181,16 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem>
         var route = UserContext.GetHttpContext()?.Request.Path.Value;
         var description = string.Empty;
         var targetName = entity.GetType().Name;
+
         if (UserContext.IsAdmin)
         {
             // 管理员日志
-            //var log = SystemLogs.NewLog(UserContext.Username ?? "", UserContext.UserId, targetName, actionType, route, description);
-            //CommandContext.Add(log);
-            //await SaveChangesAsync();
+            var log = SystemLogs.NewLog(UserContext.Username ?? "", UserContext.UserId, targetName, actionType, route, description);
+            var taskQueue = WebAppContext.GetScopeService<EntityTaskQueue<SystemLogs>>();
+            if (taskQueue != null)
+            {
+                await taskQueue.AddItemAsync(log);
+            }
         }
         else
         {

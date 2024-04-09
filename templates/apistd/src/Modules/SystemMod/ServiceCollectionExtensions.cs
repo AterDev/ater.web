@@ -1,5 +1,5 @@
 // 本文件由 ater.dry工具自动生成.
-using Ater.Web.Extension;
+using Ater.Web.Abstraction.Interface;
 using SystemMod.Worker;
 
 namespace SystemMod;
@@ -16,7 +16,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddSystemModServices(this IServiceCollection services)
     {
         services.AddSystemModManagers();
-        services.AddSingleton(typeof(EntityTaskQueue<SystemLogs>));
+        services.AddSingleton<IEntityTaskQueue<SystemLogs>, EntityTaskQueue<SystemLogs>>();
         services.AddSingleton(typeof(SystemLogService));
         services.AddHostedService<SystemLogTaskHostedService>();
         return services;
