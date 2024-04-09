@@ -1,12 +1,11 @@
-﻿namespace Entity.System;
+﻿namespace Entity;
 /// <summary>
-/// 系统日志
+/// 用户日志
 /// </summary>
 [Index(nameof(ActionType))]
 [Index(nameof(ActionUserName))]
 [Index(nameof(CreatedTime))]
-[Module(Modules.System)]
-public class SystemLogs : IEntityBase
+public class UserLogs : IEntityBase
 {
     /// <summary>
     /// 操作人名称
@@ -29,7 +28,7 @@ public class SystemLogs : IEntityBase
     /// <summary>
     /// 操作类型
     /// </summary>
-    public required ActionType ActionType { get; set; }
+    public required UserActionType ActionType { get; set; }
 
     /// <summary>
     /// 描述
@@ -37,21 +36,21 @@ public class SystemLogs : IEntityBase
     [MaxLength(500)]
     public string? Description { get; set; }
 
-    [ForeignKey(nameof(SystemUserId))]
-    public SystemUser SystemUser { get; set; } = null!;
+    [ForeignKey(nameof(UserId))]
+    public User User { get; set; } = null!;
 
-    public Guid SystemUserId { get; set; } = default!;
+    public Guid UserId { get; set; } = default!;
 
     public Guid Id { get; set; }
     public DateTimeOffset CreatedTime { get; set; }
     public DateTimeOffset UpdatedTime { get; set; }
     public bool IsDeleted { get; set; }
 
-    public static SystemLogs NewLog(string userName, Guid userId, string targetName, ActionType actionType, string? route = null, string? description = null)
+    public static UserLogs NewLog(string userName, Guid userId, string targetName, UserActionType actionType, string? route = null, string? description = null)
     {
-        return new SystemLogs
+        return new UserLogs
         {
-            SystemUserId = userId,
+            UserId = userId,
             ActionUserName = userName,
             TargetName = targetName,
             Route = route ?? string.Empty,
@@ -60,7 +59,8 @@ public class SystemLogs : IEntityBase
         };
     }
 }
-public enum ActionType
+
+public enum UserActionType
 {
     /// <summary>
     /// 其它
