@@ -39,7 +39,12 @@ public class JwtMiddleware(RequestDelegate next, CacheService redis, ILogger<Jwt
             // 策略判断
             if (id.NotEmpty())
             {
-                LoginSecurityPolicy securityPolicy = _cache.GetValue<LoginSecurityPolicy>(AppConst.LoginSecurityPolicy) ?? new LoginSecurityPolicy();
+                var securityPolicy = _cache.GetValue<LoginSecurityPolicy>(AppConst.LoginSecurityPolicy);
+                if (securityPolicy == null)
+                {
+                    await _next(context);
+                    return;
+                }
                 if (securityPolicy.SessionLevel == SessionLevel.OnlyOne)
                 {
                     client = AppConst.AllPlatform;
