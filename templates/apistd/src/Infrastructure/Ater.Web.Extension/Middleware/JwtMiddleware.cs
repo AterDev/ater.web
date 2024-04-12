@@ -19,18 +19,11 @@ public class JwtMiddleware(RequestDelegate next, CacheService redis, ILogger<Jwt
         // 可匿名访问的放行
         Endpoint? endpoint = context.GetEndpoint();
         var allowAnon = endpoint?.Metadata.GetMetadata<IAllowAnonymous>() != null;
-        if (allowAnon)
-        {
-            await _next(context);
-            return;
-        }
-
         var token = context.Request.Headers[AppConst.Authorization].FirstOrDefault()?.Split(" ").Last() ?? string.Empty;
         var client = context.Request.Headers[AppConst.ClientHeader].FirstOrDefault() ?? AppConst.Web;
-
-        if (token.IsEmpty())
+        if (allowAnon || token.IsEmpty())
         {
-            await SetResponseAndComplete(context, 401);
+            await _next(context);
             return;
         }
         try
