@@ -46,4 +46,28 @@ public static partial class WebApplicationExtensions
         WebAppContext.SetWebAppContext(app.Services, app.Configuration, app.Environment);
         return app;
     }
+
+    /// <summary>
+    /// 记录更详细的错误信息
+    /// </summary>
+    /// <param name="app"></param>
+    /// <returns></returns>
+    public static WebApplication UseDomainException(this WebApplication app)
+    {
+        // get logger instance
+        var logger = app.Services.GetRequiredService<ILogger<WebApplication>>();
+
+        AppDomain.CurrentDomain.FirstChanceException += (sender, eventArgs) =>
+        {
+            if (eventArgs.Exception is OutOfMemoryException)
+            {
+                logger.LogError("=== OutOfMemory: {message}, {stackTrace}", eventArgs.Exception.Message, eventArgs.Exception.StackTrace);
+            }
+            else
+            {
+                logger.LogError("=== FirstChanceException: {message}, {stackTrace}", eventArgs.Exception.Message, eventArgs.Exception.StackTrace);
+            }
+        };
+        return app;
+    }
 }

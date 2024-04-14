@@ -74,7 +74,7 @@ public static class EnumHelper
     {
         Dictionary<string, List<EnumDictionary>> res = [];
         // TODO:自定义要查询的程序集
-        var myAssemblies = new List<string> { "Share.dll", "Entity.dll", "CMS.dll" };
+        var myAssemblies = new List<string> { "Share.dll", "Entity.dll", "SystemMod.dll" };
 
         List<Type> allTypes = [];
         var assemblies = AppDomain.CurrentDomain.GetAssemblies()

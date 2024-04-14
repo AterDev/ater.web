@@ -1,4 +1,5 @@
 using System.Text.Json;
+
 using SystemMod.Models.SystemConfigDtos;
 
 namespace SystemMod.Manager;
@@ -46,7 +47,7 @@ public class SystemConfigManager(
     /// <returns></returns>
     public async Task<Dictionary<string, List<EnumDictionary>>> GetEnumConfigsAsync()
     {
-        // TODO:程序启动时更新缓存
+        // 程序启动时更新缓存
         Dictionary<string, List<EnumDictionary>>? res = _cache.GetValue<Dictionary<string, List<EnumDictionary>>>(AppConst.EnumCacheName);
         if (res == null || res.Count == 0)
         {
