@@ -1,6 +1,7 @@
 {
   "RootPath": "./",
   "IsLight": true,
+  "ControllerType": 0,
   "ProjectId": "89ec520e-259e-41f4-89c0-ecb74cafbe64",
   "DtoPath": "src\\Definition\\Share",
   "EntityPath": "src\\Definition\\Entity",
