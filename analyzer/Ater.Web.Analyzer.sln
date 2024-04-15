@@ -1,0 +1,48 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.34804.81
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ater.Web.Analyzer", "Ater.Web.Analyzer\Ater.Web.Analyzer.csproj", "{FC1A0274-B8C1-46C4-86AE-6CB5877BB531}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ater.Web.Analyzer.CodeFixes", "Ater.Web.Analyzer.CodeFixes\Ater.Web.Analyzer.CodeFixes.csproj", "{35AB69E4-A7CA-4D6C-B6AF-291BFF1E1761}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ater.Web.Analyzer.Package", "Ater.Web.Analyzer.Package\Ater.Web.Analyzer.Package.csproj", "{F843DD8D-076A-472A-BB06-EFA065BD3691}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ater.Web.Analyzer.Test", "Ater.Web.Analyzer.Test\Ater.Web.Analyzer.Test.csproj", "{51E6EE81-F8D9-40A3-9880-1697272F5143}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ater.Web.Analyzer.Vsix", "Ater.Web.Analyzer.Vsix\Ater.Web.Analyzer.Vsix.csproj", "{138F53FB-AD47-4B6A-8D23-DCA24F9E88D5}"
+EndProject
+Global
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FBF7BA58-81E9-44F3-8F02-5DBE14AA4811}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{138F53FB-AD47-4B6A-8D23-DCA24F9E88D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{138F53FB-AD47-4B6A-8D23-DCA24F9E88D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{138F53FB-AD47-4B6A-8D23-DCA24F9E88D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{138F53FB-AD47-4B6A-8D23-DCA24F9E88D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35AB69E4-A7CA-4D6C-B6AF-291BFF1E1761}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35AB69E4-A7CA-4D6C-B6AF-291BFF1E1761}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35AB69E4-A7CA-4D6C-B6AF-291BFF1E1761}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35AB69E4-A7CA-4D6C-B6AF-291BFF1E1761}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51E6EE81-F8D9-40A3-9880-1697272F5143}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51E6EE81-F8D9-40A3-9880-1697272F5143}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51E6EE81-F8D9-40A3-9880-1697272F5143}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51E6EE81-F8D9-40A3-9880-1697272F5143}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F843DD8D-076A-472A-BB06-EFA065BD3691}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F843DD8D-076A-472A-BB06-EFA065BD3691}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F843DD8D-076A-472A-BB06-EFA065BD3691}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F843DD8D-076A-472A-BB06-EFA065BD3691}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC1A0274-B8C1-46C4-86AE-6CB5877BB531}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC1A0274-B8C1-46C4-86AE-6CB5877BB531}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC1A0274-B8C1-46C4-86AE-6CB5877BB531}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC1A0274-B8C1-46C4-86AE-6CB5877BB531}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
