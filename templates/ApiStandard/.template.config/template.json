@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "ater.niltor",
+  "classifications": [
+    "Web",
+    "WebAPI",
+    "Framework"
+  ],
+  "identity": "Ater.Web.Standard",
+  "name": "Ater Web API Standard",
+  "shortName": "atapi",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "sourceName": "MyProjectName",
+  "preferNameDirectory": true,
+  "sources": [
+  ]
+}
