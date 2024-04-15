@@ -1,4 +1,3 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32228.430
@@ -50,17 +49,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.Test", "test\Ap
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StandaloneService", "src\Microservice\StandaloneService\StandaloneService.csproj", "{06C1285E-9A6E-42E3-BEAF-3C4784F02DB6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ater.Web.Extention", "src\Infrastructure\Ater.Web.Extension\Ater.Web.Extension.csproj", "{48BF3F1C-9868-4710-AD35-E4B0D377EF6A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ater.Web.Extension", "src\Infrastructure\Ater.Web.Extension\Ater.Web.Extension.csproj", "{48BF3F1C-9868-4710-AD35-E4B0D377EF6A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{242FA834-49EA-4123-AA2E-3D1C3CE161D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMSMod", "src\Modules\CMSMod\CMSMod.csproj", "{934A9A91-6666-42E2-8EE4-CDBE7F4286C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CMSMod", "src\Modules\CMSMod\CMSMod.csproj", "{934A9A91-6666-42E2-8EE4-CDBE7F4286C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileManagerMod", "src\Modules\FileManagerMod\FileManagerMod.csproj", "{730AF571-DE50-47FB-A36B-5543B1757F5A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileManagerMod", "src\Modules\FileManagerMod\FileManagerMod.csproj", "{730AF571-DE50-47FB-A36B-5543B1757F5A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderMod", "src\Modules\OrderMod\OrderMod.csproj", "{4827498E-9E3D-495E-A713-27EA8118F4B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderMod", "src\Modules\OrderMod\OrderMod.csproj", "{4827498E-9E3D-495E-A713-27EA8118F4B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemMod", "src\Modules\SystemMod\SystemMod.csproj", "{E78DEA3D-8110-4083-A4E8-96A9C143473B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SystemMod", "src\Modules\SystemMod\SystemMod.csproj", "{E78DEA3D-8110-4083-A4E8-96A9C143473B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -152,3 +151,4 @@ Global
 		SolutionGuid = {E9C122E1-F965-4DE0-BA4B-CFC5D269C768}
 	EndGlobalSection
 EndGlobal
+bal
