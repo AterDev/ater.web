@@ -13,7 +13,6 @@ public class AppSetting
     public const string None = "None";
     public const string Redis = "Redis";
     public const string Memory = "Memory";
-    public const string Otlp = "otlp";
     public const string CommandDB = "CommandDb";
     public const string QueryDB = "QueryDb";
     public const string Cache = "Cache";
