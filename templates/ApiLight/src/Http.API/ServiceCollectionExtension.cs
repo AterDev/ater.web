@@ -21,9 +21,7 @@ public static class ServiceCollectionExtension
         builder.Services.ConfigWebComponents(builder.Configuration);
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddScoped<IUserContext, UserContext>();
-        builder.Services.AddScoped<ITenantProvider, TenantProvider>();
 
-        builder.Services.AddHealthChecks();
         builder.Services.AddManager();
 
         builder.Services.AddSingleton(typeof(CacheService));
@@ -44,7 +42,6 @@ public static class ServiceCollectionExtension
 
     public static WebApplication UseDefaultWebServices(this WebApplication app)
     {
-        app.UseWebAppContext();
         // 异常统一处理
         app.UseExceptionHandler(ExceptionHandler.Handler());
         if (app.Environment.IsProduction())
@@ -63,14 +60,11 @@ public static class ServiceCollectionExtension
             });
         }
 
-        app.UseHealthChecks("/health");
         app.UseStaticFiles();
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
         app.MapControllers();
-        app.MapFallbackToFile("index.html");
-
         return app;
     }
 

@@ -7,14 +7,13 @@ namespace Application;
 /// <summary>
 /// 应用配置常量
 /// </summary>
-public static class AppSetting
+public class AppSetting
 {
     public const string Components = "Components";
     public const string None = "None";
     public const string Redis = "Redis";
     public const string Memory = "Memory";
     public const string Otlp = "otlp";
-
     public const string CommandDB = "CommandDb";
     public const string QueryDB = "QueryDb";
     public const string Cache = "Cache";
@@ -29,13 +28,13 @@ public static partial class AppServiceCollectionExtensions
 {
     /// <summary>
     /// 添加默认应用组件
-    /// pgsql/redis/otlp
+    /// database/cache
     /// </summary>
     /// <returns></returns>
     public static IHostApplicationBuilder AddDefaultComponents(this IHostApplicationBuilder builder)
     {
         builder.AddDbContext();
-        builder.AddRedisCache();
+        builder.AddCache();
         return builder;
     }
 
@@ -79,10 +78,10 @@ public static partial class AppServiceCollectionExtensions
     }
 
     /// <summary>
-    /// add redis cache config
+    /// add cache
     /// </summary>
     /// <returns></returns>
-    public static IHostApplicationBuilder AddRedisCache(this IHostApplicationBuilder builder)
+    public static IHostApplicationBuilder AddCache(this IHostApplicationBuilder builder)
     {
         var cache = builder.Configuration.GetSection(AppSetting.Components).GetValue<string>(AppSetting.Cache);
         if (cache == AppSetting.Redis)

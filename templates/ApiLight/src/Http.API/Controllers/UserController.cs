@@ -11,12 +11,10 @@ public class UserController(
     ILogger<UserController> logger,
     UserManager manager,
     CacheService cache,
-    IEmailService emailService,
     IConfiguration config) : ClientControllerBase<UserManager>(manager, user, logger)
 {
     private readonly CacheService _cache = cache;
     private readonly IConfiguration _config = config;
-    private readonly IEmailService _emailService = emailService;
 
     /// <summary>
     /// 用户注册 ✅
@@ -51,55 +49,6 @@ public class UserController(
             }
         }
         return await manager.RegisterAsync(dto);
-    }
-
-    /// <summary>
-    /// 注册时，发送邮箱验证码 ✅
-    /// </summary>
-    /// <param name="email"></param>
-    /// <returns></returns>
-    [HttpPost("regVerifyCode")]
-    [AllowAnonymous]
-    public async Task<ActionResult> SendRegVerifyCodeAsync(string email)
-    {
-        var captcha = HashCrypto.GetRnd(6);
-        var key = AppConst.VerifyCodeCachePrefix + email;
-        if (_cache.GetValue<string>(key) != null)
-        {
-            return Conflict("验证码已发送!");
-        }
-        // 使用 smtp，可替换成其他
-        await _emailService.SendRegisterVerifyAsync(email, captcha);
-        // 缓存，默认5分钟过期
-        await _cache.SetValueAsync(key, captcha, 60 * 5);
-        return Ok();
-    }
-
-    /// <summary>
-    /// 登录时，发送邮箱验证码 ✅
-    /// </summary>
-    /// <param name="email"></param>
-    /// <returns></returns>
-    [HttpPost("loginVerifyCode")]
-    [AllowAnonymous]
-    public async Task<ActionResult> SendVerifyCodeAsync(string email)
-    {
-        if (!manager.Query.Db.Any(q => q.Email != null && q.Email.Equals(email)))
-        {
-            return NotFound("不存在的邮箱账号");
-        }
-        var captcha = HashCrypto.GetRnd(6);
-        var key = AppConst.VerifyCodeCachePrefix + email;
-        if (_cache.GetValue<string>(key) != null)
-        {
-            return Conflict("验证码已发送!");
-        }
-        // 使用 smtp，可替换成其他
-        await _emailService.SendLoginVerifyAsync(email, captcha);
-        // 缓存，默认5分钟过期
-        await _cache.SetValueAsync(key, captcha, 60 * 5);
-
-        return Ok();
     }
 
     /// <summary>

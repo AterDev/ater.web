@@ -49,16 +49,16 @@ Write-Host "Clean files"
 if (Test-Path ./nuget) {
     Remove-Item ./nuget -Force -Recurse
 }
-if (Test-Path ./templates/apistd/src/Http.API/Migrations) {
-    Remove-Item ./templates/apistd/src/Http.API/Migrations -Force -Recurse
+if (Test-Path ./templates/ApiStandard/src/Http.API/Migrations) {
+    Remove-Item ./templates/ApiStandard/src/Http.API/Migrations -Force -Recurse
 }
 $location = Get-Location
-$entityPath = Join-Path $location "./templates/apistd/src/Entity"
+$entityPath = Join-Path $location "./templates/ApiStandard/src/Entity"
 
 # 模块名称
 $modulesNames = @("CMS", "FileManager", "Order", "System")
 
-$solutionPath = Join-Path $location "./templates/apistd"
+$solutionPath = Join-Path $location "./templates/ApiStandard"
 $tmp = Join-Path $solutionPath "./.tmp"
 if (!(Test-Path $tmp)) {
     New-Item -Path $tmp -ItemType Directory -Force | Out-Null

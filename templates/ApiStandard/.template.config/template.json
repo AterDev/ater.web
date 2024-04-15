@@ -3,8 +3,9 @@
   "author": "ater.niltor",
   "classifications": [
     "Web",
-    "WebAPI",
-    "Framework"
+    "Web API",
+    "API",
+    "Service"
   ],
   "identity": "Ater.Web.Standard",
   "name": "Ater Web API Standard",

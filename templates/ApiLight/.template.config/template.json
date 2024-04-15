@@ -3,8 +3,9 @@
   "author": "ater.niltor",
   "classifications": [
     "Web",
-    "WebAPI",
-    "Framework"
+    "Web API",
+    "API",
+    "Service"
   ],
   "identity": "Ater.Web.Light",
   "name": "Ater Web API Light",
@@ -15,6 +16,5 @@
   },
   "sourceName": "MyProjectName",
   "preferNameDirectory": true,
-  "sources": [
-  ]
+  "sources": []
 }
