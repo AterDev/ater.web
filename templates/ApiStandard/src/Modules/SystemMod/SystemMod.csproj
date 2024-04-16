@@ -6,9 +6,7 @@
 		<Nullable>enable</Nullable>
 		<NoWarn>1701;1702;1591</NoWarn>
 	</PropertyGroup>
-	<ItemGroup>
-		<FrameworkReference Include="Microsoft.AspNetCore.App" />
-	</ItemGroup>
+
 	<ItemGroup>
 		<ProjectReference Include="..\..\Application\Application.csproj" />
 		<ProjectReference Include="..\..\Infrastructure\Ater.Web.Extension\Ater.Web.Extension.csproj" />
