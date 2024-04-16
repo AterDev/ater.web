@@ -51,6 +51,7 @@ namespace Ater.Web.Analyzer
             var fieldSymbol = typeSymbol;
 
             var xmlString = fieldSymbol.GetDocumentationCommentXml();
+            if (string.IsNullOrWhiteSpace(xmlString)) return document.Project.Solution;
             var xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(xmlString);
 

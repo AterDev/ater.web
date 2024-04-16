@@ -34,8 +34,11 @@ namespace Ater.Web.Analyzer
             {
                 if (!fieldSymbol.GetAttributes().Any(a => a.AttributeClass?.ToDisplayString() == "System.ComponentModel.DescriptionAttribute"))
                 {
-                    var diagnostic = Diagnostic.Create(Rule, fieldSymbol.Locations.First(), fieldSymbol.Name);
-                    context.ReportDiagnostic(diagnostic);
+                    if (!string.IsNullOrWhiteSpace(fieldSymbol.GetDocumentationCommentXml()))
+                    {
+                        var diagnostic = Diagnostic.Create(Rule, fieldSymbol.Locations.First(), fieldSymbol.Name);
+                        context.ReportDiagnostic(diagnostic);
+                    }
                 }
             }
         }
