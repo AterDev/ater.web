@@ -15,7 +15,7 @@ namespace Ater.Web.Analyzer
         private static readonly LocalizableString Description = new LocalizableResourceString(nameof(Resources.AnalyzerDescription), Resources.ResourceManager, typeof(Resources));
         private const string Category = "Naming";
 
-        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, MessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: Description);
+        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, MessageFormat, Category, DiagnosticSeverity.Info, isEnabledByDefault: true, description: Description);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(Rule); } }
 
@@ -23,24 +23,20 @@ namespace Ater.Web.Analyzer
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
-
-            // TODO: Consider registering other actions that act on syntax instead of or in addition to symbols
-            // See https://github.com/dotnet/roslyn/blob/main/docs/analyzers/Analyzer%20Actions%20Semantics.md for more information
-            context.RegisterSymbolAction(AnalyzeSymbol, SymbolKind.NamedType);
+            context.RegisterSymbolAction(AnalyzeSymbol, SymbolKind.Field);
         }
 
         private static void AnalyzeSymbol(SymbolAnalysisContext context)
         {
-            // TODO: Replace the following code with your own analysis, generating Diagnostic objects for any issues you find
-            var namedTypeSymbol = (INamedTypeSymbol)context.Symbol;
-
-            // Find just those named type symbols with names containing lowercase letters.
-            if (namedTypeSymbol.Name.ToCharArray().Any(char.IsLower))
+            var fieldSymbol = (IFieldSymbol)context.Symbol;
+            // 其所属类是否为枚举类
+            if (fieldSymbol.ContainingType.TypeKind == TypeKind.Enum)
             {
-                // For all such symbols, produce a diagnostic.
-                var diagnostic = Diagnostic.Create(Rule, namedTypeSymbol.Locations[0], namedTypeSymbol.Name);
-
-                context.ReportDiagnostic(diagnostic);
+                if (!fieldSymbol.GetAttributes().Any(a => a.AttributeClass?.ToDisplayString() == "System.ComponentModel.DescriptionAttribute"))
+                {
+                    var diagnostic = Diagnostic.Create(Rule, fieldSymbol.Locations.First(), fieldSymbol.Name);
+                    context.ReportDiagnostic(diagnostic);
+                }
             }
         }
     }
