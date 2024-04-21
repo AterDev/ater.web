@@ -12,6 +12,7 @@ public partial class ContextBase(DbContextOptions options) : DbContext(options)
 
         base.OnModelCreating(builder);
         OnModelExtendCreating(builder);
+        OnSQLiteModelCreating(builder);
     }
     public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
     {
@@ -44,8 +45,7 @@ public partial class ContextBase(DbContextOptions options) : DbContext(options)
         {
             if (typeof(IEntityBase).IsAssignableFrom(entityType.ClrType))
             {
-                modelBuilder.Entity(entityType.Name)
-                    .HasKey("Id");
+                modelBuilder.Entity(entityType.Name).HasKey("Id");
                 modelBuilder.Entity(entityType.ClrType).HasQueryFilter(ConvertFilterExpression<IEntityBase>(e => !e.IsDeleted, entityType.ClrType));
             }
         }
@@ -55,7 +55,7 @@ public partial class ContextBase(DbContextOptions options) : DbContext(options)
     /// sqlite的兼容处理
     /// </summary>
     /// <param name="modelBuilder"></param>
-    private void OnSqliteModelCreating(ModelBuilder modelBuilder)
+    private void OnSQLiteModelCreating(ModelBuilder modelBuilder)
     {
         if (Database.ProviderName == "Microsoft.EntityFrameworkCore.Sqlite")
         {

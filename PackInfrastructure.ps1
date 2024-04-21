@@ -9,8 +9,8 @@ $location = Get-Location
 $infrastructurePath = Join-Path $location "./templates/ApiStandard/src/Infrastructure/"
 
 $projects = @(
-    "Ater.Web.Abstraction/Ater.Web.Abstraction.csproj", 
     "Ater.Web.Core/Ater.Web.Core.csproj", 
+    "Ater.Web.Abstraction/Ater.Web.Abstraction.csproj", 
     "Ater.Web.Extension/Ater.Web.Extension.csproj")
 
 
@@ -24,7 +24,9 @@ try {
         $node = $csproj.SelectSingleNode("//Version")
         $node.InnerText = $version
         $csproj.Save($csprojPath);
-
+    }
+    foreach ($project in $projects) {
+        $csprojPath = Join-Path $infrastructurePath $project
         dotnet pack $csprojPath -o ./pack
     }
 

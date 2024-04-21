@@ -19,7 +19,7 @@
     <PackageLicenseUrl>
     </PackageLicenseUrl>
     <PackageIcon>logo.jpg</PackageIcon>
-    <Version>0.1.1</Version>
+    <Version>0.1.2</Version>
     <PackageId>Ater.Web.Core</PackageId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Copyright />
