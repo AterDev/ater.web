@@ -1,12 +1,38 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<TargetFrameworks>net8.0</TargetFrameworks>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
-	</PropertyGroup>
-
-	<ItemGroup>
-		<PackageReference Include="Mapster" Version="7.4.0" />
-	</ItemGroup>
-
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net8.0</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <Authors>NilTor,AterDev</Authors>
+    <Company>Geethin</Company>
+    <Description>The Core for Ater.Web.Templates</Description>
+    <PackageReleaseNotes>
+    </PackageReleaseNotes>
+    <PackageProjectUrl>https://docs.dusi.dev/en/index.html</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/AterDev/ater.web</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>asp.net core,webapi,web,framework,api</PackageTags>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <FileVersion>0.1.0.0</FileVersion>
+    <PackageLicenseUrl>
+    </PackageLicenseUrl>
+    <PackageIcon>logo.jpg</PackageIcon>
+    <Version>0.1.1</Version>
+    <PackageId>Ater.Web.Core</PackageId>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Copyright />
+    <OutputType>Library</OutputType>
+    <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\..\logo.jpg">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Mapster" Version="7.4.0" />
+  </ItemGroup>
 </Project>
