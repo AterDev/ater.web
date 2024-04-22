@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 // import { OAuthService, OAuthErrorEvent, UserInfo } from 'angular-oauth2-oidc';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { LoginService } from 'src/app/auth/login.service';
-import { AuthService } from 'src/app/share/services/auth.service';
+import { LoginService } from '../../../auth/login.service';
+import { AuthService } from '../../../share/services/auth.service';
 
 @Component({
   selector: 'app-login',
