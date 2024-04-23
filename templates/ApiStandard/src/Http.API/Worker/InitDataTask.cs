@@ -34,13 +34,12 @@ public class InitDataTask
                     await InitUserAsync(context, configuration, logger);
                 }
                 await SystemMod.InitModule.InitializeAsync(provider);
-
                 // [InitModule]
             }
         }
         catch (Exception)
         {
-            logger.LogError("初始化异常,请检查数据库配置：{message}", connectionString);
+            logger.LogError("初始化异常,请检查数据库配置并确认已经进行【迁移操作】");
         }
     }
 

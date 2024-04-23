@@ -41,7 +41,7 @@ public static partial class AppServiceCollectionExtensions
     public static IHostApplicationBuilder AddDefaultComponents(this IHostApplicationBuilder builder)
     {
         builder.AddDbContext();
-        builder.AddRedisCache();
+        builder.AddCache();
         var otlpEndpoint = builder.Configuration.GetSection("OTLP")
             .GetValue<string>("Endpoint")
             ?? "http://localhost:4317";
@@ -93,10 +93,10 @@ public static partial class AppServiceCollectionExtensions
     }
 
     /// <summary>
-    /// add redis cache config
+    /// add cache config
     /// </summary>
     /// <returns></returns>
-    public static IHostApplicationBuilder AddRedisCache(this IHostApplicationBuilder builder)
+    public static IHostApplicationBuilder AddCache(this IHostApplicationBuilder builder)
     {
         var cache = builder.Configuration.GetSection(AppSetting.Components).GetValue<string>(AppSetting.Cache);
         if (cache == AppSetting.Redis)
