@@ -2,7 +2,7 @@ namespace FileManagerMod.Models.FileDataDtos;
 /// <summary>
 /// 文件数据添加时请求结构
 /// </summary>
-/// <see cref="Entity.FileManager.FileData"/>
+/// <see cref="Entity.FileManagerMod.FileData"/>
 public class FileDataAddDto
 {
     /// <summary>

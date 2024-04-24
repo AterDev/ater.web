@@ -2,7 +2,7 @@ namespace SystemMod.Models.SystemRoleDtos;
 /// <summary>
 /// 角色概要
 /// </summary>
-/// <inheritdoc cref="Entity.System.SystemRole"/>
+/// <inheritdoc cref="Entity.SystemMod.SystemRole"/>
 public class SystemRoleShortDto
 {
     /// <summary>

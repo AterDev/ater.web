@@ -2,7 +2,7 @@ namespace FileManagerMod.Models.FolderDtos;
 /// <summary>
 /// 文件夹添加时请求结构
 /// </summary>
-/// <see cref="Entity.FileManager.Folder"/>
+/// <see cref="Entity.FileManagerMod.Folder"/>
 public class FolderAddDto
 {
     /// <summary>

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Entity.System;
+namespace Entity.SystemMod;
 /// <summary>
 /// 系统用户
 /// </summary>

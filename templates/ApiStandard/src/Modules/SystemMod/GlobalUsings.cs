@@ -9,7 +9,7 @@ global using Ater.Web.Abstraction;
 global using Ater.Web.Core.Models;
 global using Ater.Web.Core.Utils;
 global using Ater.Web.Extension.Services;
-global using Entity.System;
+global using Entity.SystemMod;
 
 global using EntityFramework;
 

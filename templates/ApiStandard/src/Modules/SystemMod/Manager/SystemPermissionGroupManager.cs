@@ -1,3 +1,4 @@
+using Entity.SystemMod;
 using SystemMod.Models.SystemPermissionGroupDtos;
 
 namespace SystemMod.Manager;

@@ -1,3 +1,4 @@
+using Entity.SystemMod;
 using SystemMod.Models.SystemMenuDtos;
 
 namespace SystemMod.Manager;

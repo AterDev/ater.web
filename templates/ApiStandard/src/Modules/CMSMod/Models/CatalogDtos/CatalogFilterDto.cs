@@ -1,3 +1,5 @@
+using Entity.CMSMod;
+
 namespace CMSMod.Models.CatalogDtos;
 /// <summary>
 /// 目录查询筛选

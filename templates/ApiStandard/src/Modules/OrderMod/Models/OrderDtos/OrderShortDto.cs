@@ -1,8 +1,10 @@
+using Entity.OrderMod;
+
 namespace OrderMod.Models.OrderDtos;
 /// <summary>
 /// 订单概要
 /// </summary>
-/// <see cref="Entity.Order.Order"/>
+/// <see cref="Entity.OrderMod.Order"/>
 public class OrderShortDto
 {
     /// <summary>

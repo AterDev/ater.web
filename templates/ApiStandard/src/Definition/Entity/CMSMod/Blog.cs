@@ -1,4 +1,4 @@
-﻿namespace Entity.CMS;
+﻿namespace Entity.CMSMod;
 /// <summary>
 /// 博客
 /// </summary>

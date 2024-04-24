@@ -1,8 +1,10 @@
+using Entity.OrderMod;
+
 namespace OrderMod.Models.ProductDtos;
 /// <summary>
 /// 产品查询筛选
 /// </summary>
-/// <see cref="Entity.Order.Product"/>
+/// <see cref="Entity.OrderMod.Product"/>
 public class ProductFilterDto : FilterBase
 {
     /// <summary>

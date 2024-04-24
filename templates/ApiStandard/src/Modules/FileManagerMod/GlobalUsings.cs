@@ -7,7 +7,7 @@ global using Ater.Web.Abstraction;
 global using Ater.Web.Core.Models;
 global using Ater.Web.Core.Utils;
 
-global using Entity.FileManager;
+global using Entity.FileManagerMod;
 
 global using EntityFramework;
 

@@ -1,4 +1,6 @@
-﻿namespace SystemMod.Models;
+﻿using Entity.SystemMod;
+
+namespace SystemMod.Models;
 
 public class AuthResult
 {

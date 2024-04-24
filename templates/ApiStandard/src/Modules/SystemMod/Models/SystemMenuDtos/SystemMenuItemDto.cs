@@ -1,3 +1,5 @@
+using Entity.SystemMod;
+
 namespace SystemMod.Models.SystemMenuDtos;
 /// <summary>
 /// 系统菜单列表元素

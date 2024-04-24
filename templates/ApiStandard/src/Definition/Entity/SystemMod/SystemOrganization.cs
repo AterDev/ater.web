@@ -1,4 +1,4 @@
-﻿namespace Entity.System;
+﻿namespace Entity.SystemMod;
 /// <summary>
 /// 组织结构
 /// </summary>

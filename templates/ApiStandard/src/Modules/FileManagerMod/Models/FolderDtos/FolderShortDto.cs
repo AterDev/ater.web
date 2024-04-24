@@ -1,8 +1,10 @@
+using Entity.FileManagerMod;
+
 namespace FileManagerMod.Models.FolderDtos;
 /// <summary>
 /// 文件夹概要
 /// </summary>
-/// <see cref="Entity.FileManager.Folder"/>
+/// <see cref="Entity.FileManagerMod.Folder"/>
 public class FolderShortDto
 {
     /// <summary>

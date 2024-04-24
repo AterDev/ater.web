@@ -2,7 +2,7 @@ namespace FileManagerMod.Models.FolderDtos;
 /// <summary>
 /// 文件夹列表元素
 /// </summary>
-/// <see cref="Entity.FileManager.Folder"/>
+/// <see cref="Entity.FileManagerMod.Folder"/>
 public class FolderItemDto
 {
     /// <summary>

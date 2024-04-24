@@ -2,7 +2,7 @@ namespace OrderMod.Models.OrderDtos;
 /// <summary>
 /// 新订单
 /// </summary>
-/// <see cref="Entity.Order.Order"/>
+/// <see cref="Entity.OrderMod.Order"/>
 public class OrderAddDto
 {
     /// <summary>

@@ -1,4 +1,4 @@
-﻿namespace Entity.System;
+﻿namespace Entity.SystemMod;
 /// <summary>
 /// 系统配置
 /// </summary>

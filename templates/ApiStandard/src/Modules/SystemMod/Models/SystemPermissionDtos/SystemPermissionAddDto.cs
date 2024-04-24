@@ -1,3 +1,5 @@
+using Entity.SystemMod;
+
 namespace SystemMod.Models.SystemPermissionDtos;
 /// <summary>
 /// 权限添加时请求结构

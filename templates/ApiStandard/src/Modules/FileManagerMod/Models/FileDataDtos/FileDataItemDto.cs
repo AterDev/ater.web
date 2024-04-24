@@ -2,7 +2,7 @@ namespace FileManagerMod.Models.FileDataDtos;
 /// <summary>
 /// 文件数据列表元素
 /// </summary>
-/// <see cref="Entity.FileManager.FileData"/>
+/// <see cref="Entity.FileManagerMod.FileData"/>
 public class FileDataItemDto
 {
     /// <summary>

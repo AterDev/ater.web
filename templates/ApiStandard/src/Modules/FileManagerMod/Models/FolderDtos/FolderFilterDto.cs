@@ -2,7 +2,7 @@ namespace FileManagerMod.Models.FolderDtos;
 /// <summary>
 /// 文件夹查询筛选
 /// </summary>
-/// <see cref="Entity.FileManager.Folder"/>
+/// <see cref="Entity.FileManagerMod.Folder"/>
 public class FolderFilterDto : FilterBase
 {
     /// <summary>

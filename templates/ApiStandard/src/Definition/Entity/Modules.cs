@@ -2,7 +2,7 @@
 /// <summary>
 /// 定义模块名称
 /// </summary>
-internal class Modules
+public class Modules
 {
     /// <summary>
     /// 内容管理模块

@@ -1,3 +1,5 @@
+using Entity.SystemMod;
+
 namespace SystemMod.Models.SystemUserDtos;
 /// <summary>
 /// 系统用户更新时请求结构

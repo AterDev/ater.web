@@ -2,7 +2,7 @@ namespace OrderMod.Models.ProductDtos;
 /// <summary>
 /// 产品概要
 /// </summary>
-/// <see cref="Entity.Order.Product"/>
+/// <see cref="Entity.OrderMod.Product"/>
 public class ProductShortDto
 {
     /// <summary>

@@ -1,6 +1,6 @@
 namespace SystemMod.Models.SystemPermissionGroupDtos;
 
-/// <see cref="Entity.System.SystemPermissionGroup"/>
+/// <see cref="Entity.SystemMod.SystemPermissionGroup"/>
 public class SystemPermissionGroupUpdateDto
 {
     /// <summary>

@@ -1,4 +1,4 @@
-﻿namespace Entity.Order;
+﻿namespace Entity.OrderMod;
 /// <summary>
 /// 商品
 /// </summary>

@@ -16,8 +16,7 @@ function TempModule([string]$solutionPath, [string]$moduleName) {
     Move-Item -Path $entityPath\* -Destination $entityDestDir -Force
 
     # remove module reference project
-    $moduleNameMod = $moduleName + "Mod"
-    $moduleProjectFile = Join-Path $solutionPath "src/Modules/"$moduleNameMod "$moduleNameMod.csproj"
+    $moduleProjectFile = Join-Path $solutionPath "src/Modules/"$moduleName "$moduleName.csproj"
     $apiProjectFile = Join-Path $solutionPath "src/Http.API/Http.API.csproj"
 
     dotnet remove $apiProjectFile reference $moduleProjectFile
@@ -37,8 +36,7 @@ function RestoreModule ([string]$solutionPath, [string]$moduleName) {
         Move-Item -Path $entityDestDir\* -Destination $entityPath -Force
     }
     # recover module reference project
-    $moduleNameMod = $moduleName + "Mod"
-    $moduleProjectFile = Join-Path $solutionPath "src/Modules/"$moduleNameMod "$moduleNameMod.csproj"
+    $moduleProjectFile = Join-Path $solutionPath "src/Modules/"$moduleName "$moduleName.csproj"
     dotnet sln $solutionPath/MyProjectName.sln add $moduleProjectFile
 }
 
@@ -56,7 +54,7 @@ $location = Get-Location
 $entityPath = Join-Path $location "./templates/ApiStandard/src/Entity"
 
 # 模块名称
-$modulesNames = @("CMS", "FileManager", "Order", "System")
+$modulesNames = @("CMSMod", "FileManagerMod", "OrderMod", "SystemMod")
 
 $solutionPath = Join-Path $location "./templates/ApiStandard"
 $tmp = Join-Path $solutionPath "./.tmp"

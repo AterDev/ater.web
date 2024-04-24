@@ -1,3 +1,5 @@
+using Entity.CMSMod;
+
 namespace CMSMod.Models.BlogDtos;
 /// <summary>
 /// 博客查询筛选

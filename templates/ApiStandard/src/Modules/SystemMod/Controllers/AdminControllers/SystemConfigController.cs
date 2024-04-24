@@ -1,3 +1,4 @@
+using Entity.SystemMod;
 using SystemMod.Models.SystemConfigDtos;
 namespace SystemMod.Controllers.AdminControllers;
 

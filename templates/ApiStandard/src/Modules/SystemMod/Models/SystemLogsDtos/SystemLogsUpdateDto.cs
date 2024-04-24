@@ -1,3 +1,5 @@
+using Entity.SystemMod;
+
 namespace SystemMod.Models.SystemLogsDtos;
 /// <summary>
 /// 系统日志更新时请求结构

@@ -1,6 +1,6 @@
 ﻿using Ater.Web.Core.Utils;
 
-namespace Entity.Order;
+namespace Entity.OrderMod;
 /// <summary>
 /// 订单
 /// </summary>

@@ -3,7 +3,7 @@
 /// <summary>
 /// 菜单更新
 /// </summary>
-/// <see cref="Entity.System.SystemRole"/>
+/// <see cref="Entity.SystemMod.SystemRole"/>
 public class SystemRoleSetPermissionGroupsDto
 {
     /// <summary>

@@ -1,7 +1,7 @@
 using Application;
 
 using CMSMod.Models.CatalogDtos;
-
+using Entity.CMSMod;
 using EntityFramework;
 
 namespace CMSMod.Manager;

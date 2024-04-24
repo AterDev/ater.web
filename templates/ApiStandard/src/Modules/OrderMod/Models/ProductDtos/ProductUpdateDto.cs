@@ -1,8 +1,10 @@
+using Entity.OrderMod;
+
 namespace OrderMod.Models.ProductDtos;
 /// <summary>
 /// 产品更新时请求结构
 /// </summary>
-/// <see cref="Entity.Order.Product"/>
+/// <see cref="Entity.OrderMod.Product"/>
 public class ProductUpdateDto
 {
     /// <summary>

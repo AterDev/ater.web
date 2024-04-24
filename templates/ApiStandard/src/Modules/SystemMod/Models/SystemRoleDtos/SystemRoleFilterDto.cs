@@ -2,7 +2,7 @@ namespace SystemMod.Models.SystemRoleDtos;
 /// <summary>
 /// 角色查询筛选
 /// </summary>
-/// <inheritdoc cref="Entity.System.SystemRole"/>
+/// <inheritdoc cref="Entity.SystemMod.SystemRole"/>
 public class SystemRoleFilterDto : FilterBase
 {
     /// <summary>

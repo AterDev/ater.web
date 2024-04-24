@@ -2,7 +2,7 @@ namespace SystemMod.Models.SystemConfigDtos;
 /// <summary>
 /// 系统配置更新时请求结构
 /// </summary>
-/// <see cref="Entity.System.SystemConfig"/>
+/// <see cref="Entity.SystemMod.SystemConfig"/>
 public class SystemConfigUpdateDto
 {
     /// <summary>

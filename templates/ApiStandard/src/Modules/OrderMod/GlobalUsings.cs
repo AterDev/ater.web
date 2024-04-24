@@ -8,7 +8,7 @@ global using Ater.Web.Core.Models;
 global using Ater.Web.Core.Utils;
 
 global using Entity;
-global using Entity.Order;
+global using Entity.OrderMod;
 
 global using EntityFramework;
 

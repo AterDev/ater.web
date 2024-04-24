@@ -1,4 +1,4 @@
-﻿namespace Entity.Order;
+﻿namespace Entity.OrderMod;
 /// <summary>
 /// 优惠码
 /// </summary>

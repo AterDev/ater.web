@@ -1,4 +1,4 @@
-﻿namespace Entity.System;
+﻿namespace Entity.SystemMod;
 /// <summary>
 /// 权限
 /// </summary>

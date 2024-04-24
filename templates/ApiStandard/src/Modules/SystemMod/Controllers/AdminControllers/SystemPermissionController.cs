@@ -1,3 +1,4 @@
+using Entity.SystemMod;
 using SystemMod.Models.SystemPermissionDtos;
 namespace SystemMod.Controllers.AdminControllers;
 

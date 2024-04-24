@@ -2,7 +2,7 @@ namespace SystemMod.Models.SystemRoleDtos;
 /// <summary>
 /// 角色更新时请求结构
 /// </summary>
-/// <inheritdoc cref="Entity.System.SystemRole"/>
+/// <inheritdoc cref="Entity.SystemMod.SystemRole"/>
 public class SystemRoleUpdateDto
 {
     /// <summary>

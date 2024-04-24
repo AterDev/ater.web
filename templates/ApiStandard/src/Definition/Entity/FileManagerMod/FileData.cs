@@ -1,4 +1,4 @@
-﻿namespace Entity.FileManager;
+﻿namespace Entity.FileManagerMod;
 
 /// <summary>
 /// 文件数据

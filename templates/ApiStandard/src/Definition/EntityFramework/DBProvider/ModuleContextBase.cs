@@ -1,7 +1,7 @@
-﻿using Entity.CMS;
-using Entity.FileManager;
-using Entity.Order;
-using Entity.System;
+﻿using Entity.CMSMod;
+using Entity.FileManagerMod;
+using Entity.OrderMod;
+using Entity.SystemMod;
 
 namespace EntityFramework.DBProvider;
 public partial class ContextBase

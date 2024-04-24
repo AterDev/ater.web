@@ -3,7 +3,7 @@ namespace FileManagerMod.Models.FileDataDtos;
 /// <summary>
 /// 文件数据查询筛选
 /// </summary>
-/// <see cref="Entity.FileManager.FileData"/>
+/// <see cref="Entity.FileManagerMod.FileData"/>
 public class FileDataFilterDto : FilterBase
 {
     /// <summary>

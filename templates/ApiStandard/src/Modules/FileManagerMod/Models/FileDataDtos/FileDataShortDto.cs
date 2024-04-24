@@ -1,8 +1,10 @@
+using Entity.FileManagerMod;
+
 namespace FileManagerMod.Models.FileDataDtos;
 /// <summary>
 /// 文件数据概要
 /// </summary>
-/// <see cref="Entity.FileManager.FileData"/>
+/// <see cref="Entity.FileManagerMod.FileData"/>
 public class FileDataShortDto
 {
     public Folder? Folder { get; set; }
