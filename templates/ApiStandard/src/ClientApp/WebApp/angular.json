@@ -72,10 +72,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "NGAdmin:build:production"
+              "buildTarget": "NGAdmin:build:production"
             },
             "development": {
-              "browserTarget": "NGAdmin:build:development",
+              "buildTarget": "NGAdmin:build:development",
               "proxyConfig": "proxy.conf.json"
             }
           },
@@ -84,7 +84,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "NGAdmin:build"
+            "buildTarget": "NGAdmin:build"
           }
         },
         "test": {

@@ -187,6 +187,7 @@ $light-theme: mat.define-light-theme((color: (primary: $light-primary,
   border: none;
 }
 
+@include mat.all-component-themes($dark-theme);
 @media (prefers-color-scheme: dark) {
   .btn {
     color: white;
@@ -240,37 +241,9 @@ $light-theme: mat.define-light-theme((color: (primary: $light-primary,
     box-shadow: 0px 12px 14px 0px rgba(29, 31, 35, 0.05);
   }
 
-  .correct-char {
-    color: mat.get-theme-color($dark-theme, primary, 400);
-  }
-
-  .wrong-char {
-    color: mat.get-theme-color($dark-theme, warn, 700);
-  }
-
-  .correct-input {
-    border: mat.get-theme-color($dark-theme, primary, 400);
-  }
-
-  .wrong-input {
-    color: mat.get-theme-color($dark-theme, warn, 700);
-  }
-
   .trans-dialog {
     background-color: $dark-bgh-color;
     opacity: 0.9;
-  }
-
-  .pause-dialog {
-    opacity: 0.8;
-    background: $dark-bg-color;
-    margin-top: 64px;
-    height: 100vh;
-    width: 100vw;
-  }
-
-  .success-bg {
-    background-image: url('/assets/img/dark/typing/完成弹窗.png');
   }
 
   table tr:nth-child(odd) {
@@ -366,8 +339,6 @@ $light-theme: mat.define-light-theme((color: (primary: $light-primary,
   .text-accent {
     color: mat.get-theme-color($dark-theme, accent, 400);
   }
-
-  @include mat.all-component-themes($dark-theme);
 }
 
 @media (prefers-color-scheme: light) {
@@ -423,29 +394,9 @@ $light-theme: mat.define-light-theme((color: (primary: $light-primary,
     box-shadow: 0px 12px 14px 0px rgba(29, 31, 35, 0.05);
   }
 
-  .correct-char {
-    color: mat.get-theme-color($light-theme, primary, 700);
-  }
-
-  .wrong-char {
-    color: mat.get-theme-color($light-theme, warn, 700);
-  }
-
   .trans-dialog {
     background-color: $light-bgh-color;
     opacity: 0.9;
-  }
-
-  .pause-dialog {
-    opacity: 0.8;
-    background: $dark-bg-color;
-    height: 100vh;
-    margin-top: 64px;
-    width: 100vw;
-  }
-
-  .success-bg {
-    background-image: url('/assets/img/light/typing/完成弹窗.png');
   }
 
   table tr:nth-child(odd) {
@@ -541,5 +492,5 @@ $light-theme: mat.define-light-theme((color: (primary: $light-primary,
     color: mat.get-theme-color($light-theme, primary, 900);
   }
 
-  @include mat.all-component-themes($light-theme);
+  @include mat.all-component-colors($light-theme);
 }
