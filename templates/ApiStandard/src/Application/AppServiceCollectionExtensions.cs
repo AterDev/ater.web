@@ -42,9 +42,9 @@ public static partial class AppServiceCollectionExtensions
     {
         builder.AddDbContext();
         builder.AddCache();
-        var otlpEndpoint = builder.Configuration.GetSection("OTLP")
-            .GetValue<string>("Endpoint")
-            ?? "http://localhost:4317";
+        var otlpEndpoint = builder.Configuration.GetSection("Opentelemetry").GetValue<string>("Endpoint");
+        otlpEndpoint = otlpEndpoint.NotEmpty() ? otlpEndpoint : builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"] ?? "http://localhost:4317";
+
         builder.AddOpenTelemetry("MyProjectName", opt =>
         {
             opt.Endpoint = new Uri(otlpEndpoint);

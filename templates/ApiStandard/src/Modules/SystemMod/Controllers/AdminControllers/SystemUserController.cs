@@ -1,4 +1,3 @@
-using Entity.SystemMod;
 using Microsoft.AspNetCore.RateLimiting;
 
 using Share.Models.UserDtos;
@@ -109,7 +108,7 @@ public class SystemUserController(
 
             // 缓存登录状态
             string client = Request.Headers[AppConst.ClientHeader].FirstOrDefault() ?? AppConst.Web;
-            if (loginPolicy.SessionLevel == SessionLevel.None)
+            if (loginPolicy.SessionLevel == SessionLevel.OnlyOne)
             {
                 client = AppConst.AllPlatform;
             }
