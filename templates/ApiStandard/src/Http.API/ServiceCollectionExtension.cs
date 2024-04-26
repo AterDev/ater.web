@@ -79,6 +79,7 @@ public static class ServiceCollectionExtension
         app.UseStaticFiles();
         app.UseRouting();
         app.UseMiddleware<JwtMiddleware>();
+        app.UseRequestLocalization();
         app.UseAuthentication();
         app.UseAuthorization();
         app.MapControllers();
@@ -153,6 +154,28 @@ public static class ServiceCollectionExtension
 
                 return RateLimitPartition.GetNoLimiter(IPAddress.Loopback);
             });
+        });
+        return services;
+    }
+
+    /// <summary>
+    /// 添加本地化支持
+    /// </summary>
+    /// <param name="services"></param>
+    /// <returns></returns>
+    public static IServiceCollection AddLocalizer(this IServiceCollection services)
+    {
+        services.AddLocalization();
+        services.AddRequestLocalization(options =>
+        {
+            // TODO:添加更多语言支持
+            var supportedCultures = new[] { "zh-CN", "en-US" };
+            options.SetDefaultCulture(supportedCultures[0])
+                .AddSupportedCultures(supportedCultures)
+                .AddSupportedUICultures(supportedCultures);
+            options.FallBackToParentCultures = true;
+            options.FallBackToParentUICultures = true;
+            options.ApplyCurrentCultureToResponseHeaders = true;
         });
         return services;
     }
