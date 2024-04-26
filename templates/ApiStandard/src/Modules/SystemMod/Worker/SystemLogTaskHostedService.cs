@@ -1,6 +1,4 @@
 ﻿using Ater.Web.Abstraction.Interface;
-using Ater.Web.Extension;
-using Entity.SystemMod;
 using EntityFramework.DBProvider;
 using Microsoft.Extensions.Hosting;
 
@@ -16,7 +14,7 @@ public class SystemLogTaskHostedService(IServiceProvider serviceProvider, IEntit
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _logger.LogInformation($"Log Hosted Service is running.");
+        _logger.LogInformation($"🚀 System Log Hosted Service is running.");
         await BackgroundProcessing(stoppingToken);
     }
 
@@ -42,7 +40,11 @@ public class SystemLogTaskHostedService(IServiceProvider serviceProvider, IEntit
                 {
                     context.Add(log);
                     await context.SaveChangesAsync(stoppingToken);
-                    _logger.LogInformation("Log {name} is saved.", log.TargetName);
+                    _logger.LogInformation("✍️ New Log {name} is saved.", log.TargetName);
+                }
+                else
+                {
+                    _logger.LogInformation("ℹ️ Log {name} repeated.", log.TargetName);
                 }
             }
             catch (Exception ex)
@@ -54,7 +56,7 @@ public class SystemLogTaskHostedService(IServiceProvider serviceProvider, IEntit
 
     public override async Task StopAsync(CancellationToken stoppingToken)
     {
-        _logger.LogInformation("Log Hosted Service is stopping.");
+        _logger.LogInformation("🛑 System Log Hosted Service is stopping.");
         await base.StopAsync(stoppingToken);
     }
 }

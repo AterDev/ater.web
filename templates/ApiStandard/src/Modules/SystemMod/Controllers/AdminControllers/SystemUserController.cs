@@ -79,7 +79,6 @@ public class SystemUserController(
         dto.Password = dto.Password.Trim();
         // 查询用户
         SystemUser? user = await manager.Command.Db.Where(u => u.UserName.Equals(dto.UserName))
-            .AsNoTracking()
             .Include(u => u.SystemRoles)
             .SingleOrDefaultAsync();
         if (user == null)

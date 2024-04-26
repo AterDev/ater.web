@@ -1,6 +1,5 @@
 using System.Text.RegularExpressions;
 using Ater.Web.Extension;
-using Entity.SystemMod;
 using Share.Models.UserDtos;
 using SystemMod.Models;
 using SystemMod.Models.SystemUserDtos;
