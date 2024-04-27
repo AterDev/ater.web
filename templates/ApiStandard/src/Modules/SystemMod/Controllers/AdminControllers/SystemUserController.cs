@@ -228,6 +228,6 @@ public class SystemUserController(
     {
         // 注意删除权限
         SystemUser? entity = await manager.GetCurrentAsync(id);
-        return entity == null ? (ActionResult<SystemUser?>)NotFound() : (ActionResult<SystemUser?>)await manager.DeleteAsync(entity);
+        return entity == null ? (ActionResult<SystemUser?>)NotFound() : (ActionResult<SystemUser?>)await manager.DeleteAsync(entity, false);
     }
 }

@@ -1,4 +1,3 @@
-using Entity.SystemMod;
 using SystemMod.Models.SystemRoleDtos;
 namespace SystemMod.Controllers.AdminControllers;
 
@@ -117,6 +116,6 @@ public class SystemRoleController(
             return NotFound();
         }
         // return Forbid();
-        return await manager.DeleteAsync(entity);
+        return await manager.DeleteAsync(entity, false);
     }
 }
