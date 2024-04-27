@@ -1,5 +1,7 @@
 using Ater.Web.Abstraction.EntityFramework;
+
 using Entity.SystemMod;
+
 using EntityFramework.DBProvider;
 
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -159,6 +161,30 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem>
     public virtual async Task<PageList<TItem>> FilterAsync(TFilter filter)
     {
         return await Query.FilterAsync<TItem>(Queryable, filter.PageIndex, filter.PageSize, filter.OrderBy);
+    }
+
+    /// <summary>
+    /// 加载导航数据
+    /// </summary>
+    /// <typeparam name="TProperty"></typeparam>
+    /// <param name="entity"></param>
+    /// <param name="propertyExpression"></param>
+    /// <returns></returns>
+    public async Task LoadAsync<TProperty>(TEntity entity, Expression<Func<TEntity, TProperty?>> propertyExpression) where TProperty : class
+    {
+        await CommandContext.Entry(entity).Reference(propertyExpression).LoadAsync();
+    }
+
+    /// <summary>
+    /// 加载关联数据
+    /// </summary>
+    /// <typeparam name="TProperty"></typeparam>
+    /// <param name="entity"></param>
+    /// <param name="propertyExpression"></param>
+    /// <returns></returns>
+    public async Task LoadManyAsync<TProperty>(TEntity entity, Expression<Func<TEntity, IEnumerable<TProperty>>> propertyExpression) where TProperty : class
+    {
+        await CommandContext.Entry(entity).Collection(propertyExpression).LoadAsync();
     }
 
     public async Task<int> SaveChangesAsync()

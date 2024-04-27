@@ -39,4 +39,8 @@ public class SystemUserUpdateDto
     /// </summary>
     public Sex? Sex { get; set; }
 
+    /// <summary>
+    /// 角色Id
+    /// </summary>
+    public List<Guid>? RoleIds { get; set; }
 }

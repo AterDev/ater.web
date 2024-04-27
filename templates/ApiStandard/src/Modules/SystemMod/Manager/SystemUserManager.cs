@@ -1,6 +1,9 @@
 using System.Text.RegularExpressions;
+
 using Ater.Web.Extension;
+
 using Share.Models.UserDtos;
+
 using SystemMod.Models;
 using SystemMod.Models.SystemUserDtos;
 
@@ -65,8 +68,7 @@ public class SystemUserManager(
                 user.LockoutEnabled = false;
             }
         }
-        // 登录记录
-        user.RetryCount++;
+
         user.LastLoginTime = DateTimeOffset.UtcNow;
 
         // 锁定状态
@@ -114,6 +116,7 @@ public class SystemUserManager(
         if (!HashCrypto.Validate(dto.Password, user.PasswordSalt, user.PasswordHash))
         {
             ErrorStatus = 500005;
+            user.RetryCount++;
             return false;
         }
         return true;
@@ -190,21 +193,27 @@ public class SystemUserManager(
         // 角色处理
         if (dto.RoleIds != null && dto.RoleIds.Count != 0)
         {
-            IQueryable<SystemRole> roles = CommandContext.SystemRoles.Where(r => dto.RoleIds.Contains(r.Id));
-            entity.SystemRoles = roles.ToList();
+            var roles = CommandContext.SystemRoles.Where(r => dto.RoleIds.Contains(r.Id))
+                .ToList();
+            entity.SystemRoles = roles;
         }
         return Task.FromResult(entity);
     }
 
     public override async Task<SystemUser> UpdateAsync(SystemUser entity, SystemUserUpdateDto dto)
     {
-
         if (dto.Password != null)
         {
             entity.PasswordSalt = HashCrypto.BuildSalt();
             entity.PasswordHash = HashCrypto.GeneratePwd(dto.Password, entity.PasswordSalt);
         }
-
+        if (dto.RoleIds != null)
+        {
+            await LoadManyAsync(entity, e => e.SystemRoles);
+            var roles = CommandContext.SystemRoles.Where(r => dto.RoleIds.Contains(r.Id))
+                .ToList();
+            entity.SystemRoles = roles;
+        }
         return await base.UpdateAsync(entity, dto);
     }
 
@@ -270,4 +279,10 @@ public class SystemUserManager(
         return true;
     }
 
+    public override async Task<SystemUser?> FindAsync(Guid id)
+    {
+        return await Query.Db.Where(q => q.Id == id)
+            .Include(q => q.SystemRoles)
+            .FirstOrDefaultAsync();
+    }
 }

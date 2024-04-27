@@ -111,8 +111,12 @@ public class SystemUserController(
             {
                 client = AppConst.AllPlatform;
             }
-
-            await _cache.SetValueAsync(user.GetUniqueKey(AppConst.LoginCachePrefix, client), result.Token, sliding: loginPolicy.SessionExpiredSeconds);
+            var key = user.GetUniqueKey(AppConst.LoginCachePrefix, client);
+            // 若会话过期时间为0，则使用jwt过期时间
+            await _cache.SetValueAsync(key, result.Token,
+                sliding: loginPolicy.SessionExpiredSeconds == 0
+                ? jwtOption.ExpiredSeconds
+                : loginPolicy.SessionExpiredSeconds);
 
             result.Menus = menus;
             result.PermissionGroups = permissionGroups;
