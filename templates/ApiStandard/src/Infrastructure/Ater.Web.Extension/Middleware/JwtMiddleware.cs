@@ -26,45 +26,39 @@ public class JwtMiddleware(RequestDelegate next, CacheService redis, ILogger<Jwt
             await _next(context);
             return;
         }
-        try
+
+        var id = JwtService.GetClaimValue(token, ClaimTypes.NameIdentifier);
+        // 策略判断
+        if (id.NotEmpty())
         {
-            var id = JwtService.GetClaimValue(token, ClaimTypes.NameIdentifier);
-            // 策略判断
-            if (id.NotEmpty())
+            var securityPolicyStr = _cache.GetValue<string>(AppConst.LoginSecurityPolicy);
+            var securityPolicy = JsonSerializer.Deserialize<LoginSecurityPolicy>(securityPolicyStr!);
+            if (securityPolicy == null)
             {
-                var securityPolicyStr = _cache.GetValue<string>(AppConst.LoginSecurityPolicy);
-                var securityPolicy = JsonSerializer.Deserialize<LoginSecurityPolicy>(securityPolicyStr!);
-                if (securityPolicy == null)
-                {
-                    await _next(context);
-                    return;
-                }
-                if (securityPolicy.SessionLevel == SessionLevel.OnlyOne)
-                {
-                    client = AppConst.AllPlatform;
-                }
-                var key = AppConst.LoginCachePrefix + client + id;
-                var cacheToken = _cache.GetValue<string>(key);
-                if (cacheToken.IsEmpty())
-                {
-                    await SetResponseAndComplete(context, 401);
-                    return;
-                }
-
-                if (securityPolicy.SessionLevel != SessionLevel.None && cacheToken != token)
-                {
-                    await SetResponseAndComplete(context, 401, "账号已在其他客户端登录");
-                    return;
-                }
-
-                _cache.Cache.Refresh(key);
                 await _next(context);
                 return;
             }
-        }
-        catch (Exception e)
-        {
-            _logger.LogError("{msg}", e.ToString());
+            if (securityPolicy.SessionLevel == SessionLevel.OnlyOne)
+            {
+                client = AppConst.AllPlatform;
+            }
+            var key = AppConst.LoginCachePrefix + client + id;
+            var cacheToken = _cache.GetValue<string>(key);
+            if (cacheToken.IsEmpty())
+            {
+                await SetResponseAndComplete(context, 401);
+                return;
+            }
+
+            if (securityPolicy.SessionLevel != SessionLevel.None && cacheToken != token)
+            {
+                await SetResponseAndComplete(context, 401, "账号已在其他客户端登录");
+                return;
+            }
+
+            _cache.Cache.Refresh(key);
+            await _next(context);
+            return;
         }
     }
 

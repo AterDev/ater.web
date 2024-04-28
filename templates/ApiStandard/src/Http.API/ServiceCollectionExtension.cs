@@ -2,7 +2,7 @@
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using System.Threading.RateLimiting;
-
+using Ater.Web.Core.Converter;
 using Ater.Web.Extension.Middleware;
 using Http.API;
 
@@ -48,6 +48,7 @@ public static class ServiceCollectionExtension
             {
                 options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
                 options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
+                options.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
             });
         return builder.Services;
     }

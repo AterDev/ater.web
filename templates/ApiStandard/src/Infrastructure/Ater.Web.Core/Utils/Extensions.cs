@@ -85,10 +85,11 @@ public static partial class Extensions
     {
         if (field != null)
         {
-            if (field is string str && str.NotEmpty())
+            if (field is string str && str.IsEmpty())
             {
-                return source.Where(expression);
+                return source;
             }
+            return source.Where(expression);
         }
         return source;
     }
