@@ -1,4 +1,3 @@
-using Entity.SystemMod;
 using SystemMod.Models.SystemLogsDtos;
 
 namespace SystemMod.Manager;
@@ -34,12 +33,13 @@ public class SystemLogsManager(
         Queryable = Queryable
             .WhereNotNull(filter.ActionUserName, q => q.ActionUserName == filter.ActionUserName)
             .WhereNotNull(filter.TargetName, q => q.TargetName == filter.TargetName)
-            .WhereNotNull(filter.ActionType, q => q.ActionType == filter.ActionType)
-            .WhereNotNull(filter.SystemUserId, q => q.SystemUser.Id == filter.SystemUserId);
+            .WhereNotNull(filter.ActionType, q => q.ActionType == filter.ActionType);
 
-        if (filter.StartDate != null && filter.EndDate != null)
+        if (filter.StartDate.HasValue && filter.EndDate.HasValue)
         {
-            Queryable = Queryable.Between(q => q.CreatedTime, filter.StartDate.Value, filter.EndDate.Value);
+            // 包含今天
+            var endDate = filter.EndDate.Value.AddDays(1);
+            Queryable = Queryable.Between(q => q.CreatedTime, filter.StartDate.Value, endDate);
         }
         return await Query.FilterAsync<SystemLogsItemDto>(Queryable, filter.PageIndex, filter.PageSize, filter.OrderBy);
     }

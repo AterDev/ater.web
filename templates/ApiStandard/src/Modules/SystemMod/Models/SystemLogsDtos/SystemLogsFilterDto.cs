@@ -29,7 +29,4 @@ public class SystemLogsFilterDto : FilterBase
     /// 结束时间
     /// </summary>
     public DateOnly? EndDate { get; set; }
-
-    public Guid? SystemUserId { get; set; }
-
 }

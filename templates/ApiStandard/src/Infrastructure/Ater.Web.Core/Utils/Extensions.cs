@@ -83,7 +83,15 @@ public static partial class Extensions
     /// <returns></returns>
     public static IQueryable<TSource> WhereNotNull<TSource>(this IQueryable<TSource> source, object? field, Expression<Func<TSource, bool>> expression)
     {
-        return field != null ? source.Where(expression) : source;
+        if (field != null)
+        {
+            if (field is string str && str.IsEmpty())
+            {
+                return source;
+            }
+            return source.Where(expression);
+        }
+        return source;
     }
 
     public static IQueryable<TResult> ProjectTo<TResult>(this IQueryable source)
