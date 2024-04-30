@@ -9,7 +9,7 @@ public class AdditionProperty
     [MaxLength(30)]
     public required string Name { get; set; }
 
-    public JsonDocument? Value { get; set; }
+    public required string Value { get; set; }
 
     /// <summary>
     /// 排序
