@@ -1,6 +1,4 @@
 // 本文件由 ater.dry工具自动生成.
-using CustomerMod.Manager;
-
 namespace CustomerMod;
 /// <summary>
 /// 服务注入扩展
@@ -19,7 +17,6 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-
     /// <summary>
     /// 添加CustomerMod 注入服务
     /// </summary>
@@ -27,9 +24,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddCustomerModManagers(this IServiceCollection services)
     {
         services.AddScoped(typeof(CustomerInfoManager));
-        services.AddScoped(typeof(CustomerRegisterManager));
         services.AddScoped(typeof(CustomerTagManager));
-
         return services;
     }
 }

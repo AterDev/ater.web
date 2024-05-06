@@ -1,14 +1,26 @@
 ﻿using Ater.Web.Core.Utils;
+using Entity.CustomerMod;
 
 namespace Entity.OrderMod;
 /// <summary>
 /// 订单
 /// </summary>
 [Module(Modules.Order)]
+[Index(nameof(OrderNumber))]
 [Index(nameof(DiscountCode))]
 [Index(nameof(Status))]
 public class Order : IEntityBase
 {
+    #region 关联属性
+    [ForeignKey(nameof(UserId))]
+    public User User { get; set; } = null!;
+    public Guid UserId { get; set; }
+
+    [ForeignKey(nameof(CustomerInfoId))]
+    public CustomerInfo CustomerInfo { get; set; } = null!;
+    public Guid CustomerInfoId { get; set; }
+    #endregion
+
     /// <summary>
     /// 订单编号 
     /// </summary>
@@ -33,13 +45,6 @@ public class Order : IEntityBase
     /// </summary>
     [MaxLength(60)]
     public required string ProductName { get; set; }
-
-    /// <summary>
-    /// 客户
-    /// </summary>
-    [ForeignKey(nameof(UserId))]
-    public User User { get; set; } = null!;
-    public Guid UserId { get; set; }
 
     /// <summary>
     /// 原价格

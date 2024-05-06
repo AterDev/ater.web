@@ -16,7 +16,7 @@ namespace Entity.CustomerMod;
 [Module(Modules.Customer)]
 public class CustomerInfo : EntityBase
 {
-    #region 业务字段
+    #region 关联属性
 
     /// <summary>
     /// 订单

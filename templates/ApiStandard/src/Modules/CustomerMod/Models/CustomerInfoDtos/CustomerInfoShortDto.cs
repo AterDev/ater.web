@@ -43,6 +43,5 @@ public class CustomerInfoShortDto
     /// 自定义信息
     /// </summary>
     public List<AdditionProperty> AdditionProperties { get; set; } = [];
-    public CustomerAccount? CustomerAccount { get; set; }
 
 }

@@ -1,3 +1,6 @@
+# 模块名称
+$modulesNames = @("CMSMod", "FileManagerMod", "OrderMod", "SystemMod", "CustomerMod")
+
 #region 函数定义
 # 移动模块到临时目录
 function TempModule([string]$solutionPath, [string]$moduleName) {
@@ -53,8 +56,7 @@ if (Test-Path ./templates/ApiStandard/src/Http.API/Migrations) {
 $location = Get-Location
 $entityPath = Join-Path $location "./templates/ApiStandard/src/Entity"
 
-# 模块名称
-$modulesNames = @("CMSMod", "FileManagerMod", "OrderMod", "SystemMod")
+
 
 $solutionPath = Join-Path $location "./templates/ApiStandard"
 $tmp = Join-Path $solutionPath "./.tmp"

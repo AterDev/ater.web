@@ -61,11 +61,6 @@ public class InitModule
                 Name = AppConst.AdminUser,
                 NameValue = AppConst.AdminUser,
             };
-            SystemRole consultantRole = new()
-            {
-                Name = "教学顾问",
-                NameValue = "Consultant",
-            };
             var salt = HashCrypto.BuildSalt();
             SystemUser adminUser = new()
             {

@@ -13,5 +13,5 @@ public static class ErrorMsg
     /// 未找到的资源
     /// </summary>
     public const string NotFoundResource = "未找到的资源!";
-
+    public const string ConflictResource = "已存在的资源!";
 }
