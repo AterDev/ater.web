@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Hosting;
 
 namespace Ater.Web.Abstraction;
 
@@ -15,11 +14,12 @@ public static class ExceptionHandler
             {
                 context.Response.StatusCode = 500;
                 Exception? exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
-
-                var result = new ErrorResult
+                var result = new
                 {
                     Title = "异常错误",
+                    exception?.Source,
                     Detail = exception?.Message + exception?.InnerException?.Message,
+                    exception?.StackTrace,
                     Status = 500,
                     TraceId = context.TraceIdentifier
                 };

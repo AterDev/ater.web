@@ -20,9 +20,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TypedCellDefDirective } from '../components/typed-cell-def.directive';
 
 @NgModule({
-  declarations: [ToKeyValuePipe],
+  declarations: [ToKeyValuePipe, TypedCellDefDirective],
   imports: [
     CommonModule,
     RouterModule,
@@ -36,7 +37,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     ReactiveFormsModule,
     FormsModule,
     ComponentsModule,
-    ToKeyValuePipe
+    ToKeyValuePipe,
+    TypedCellDefDirective
   ]
 })
 export class ShareModule { }
@@ -76,14 +78,3 @@ const FormModules = [
   ]
 })
 export class FormModule { }
-
-
-
-
-// @NgModule({
-//   declarations: [EnumTextPipe],
-//   exports: [
-//     EnumTextPipe
-//   ]
-// })
-// export class EnumPipeModule { }

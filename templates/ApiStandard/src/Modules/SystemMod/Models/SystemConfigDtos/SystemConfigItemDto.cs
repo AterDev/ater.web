@@ -5,6 +5,8 @@ namespace SystemMod.Models.SystemConfigDtos;
 /// <see cref="Entity.SystemMod.SystemConfig"/>
 public class SystemConfigItemDto
 {
+    public Guid Id { get; set; }
+
     [MaxLength(100)]
     public string Key { get; set; } = default!;
     [MaxLength(500)]
@@ -18,5 +20,10 @@ public class SystemConfigItemDto
     /// 组
     /// </summary>
     public string? GroupName { get; set; }
+    /// <summary>
+    /// 以json字符串形式存储
+    /// </summary>
+    [MaxLength(2000)]
+    public string? Value { get; set; }
 
 }

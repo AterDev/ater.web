@@ -66,6 +66,7 @@ public class Product : IEntityBase
     public DateTimeOffset CreatedTime { get; set; }
     public DateTimeOffset UpdatedTime { get; set; }
     public bool IsDeleted { get; set; }
+    public int SpecQuantity { get; set; }
 }
 
 /// <summary>

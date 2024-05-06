@@ -1,4 +1,5 @@
-﻿Microsoft Visual Studio Solution File, Format Version 12.00
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32228.430
 MinimumVisualStudioVersion = 10.0.40219.1
@@ -53,13 +54,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ater.Web.Extension", "src\I
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{97456A98-8373-4B21-8464-A1ED365938F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMSMod", "src\Modules\CMSMod\CMSMod.csproj", "{9FAA8A61-7E98-4C1B-8145-85C52F6864CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CMSMod", "src\Modules\CMSMod\CMSMod.csproj", "{9FAA8A61-7E98-4C1B-8145-85C52F6864CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileManagerMod", "src\Modules\FileManagerMod\FileManagerMod.csproj", "{55C87E7A-1C03-4906-9AC4-81942C5B2689}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileManagerMod", "src\Modules\FileManagerMod\FileManagerMod.csproj", "{55C87E7A-1C03-4906-9AC4-81942C5B2689}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderMod", "src\Modules\OrderMod\OrderMod.csproj", "{0C53B1E4-7D2D-4EB1-8FEC-48EDACC1C5B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderMod", "src\Modules\OrderMod\OrderMod.csproj", "{0C53B1E4-7D2D-4EB1-8FEC-48EDACC1C5B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemMod", "src\Modules\SystemMod\SystemMod.csproj", "{37E5E6A8-2952-402B-8A86-508DB32194EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SystemMod", "src\Modules\SystemMod\SystemMod.csproj", "{37E5E6A8-2952-402B-8A86-508DB32194EC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomerMod", "src\Modules\CustomerMod\CustomerMod.csproj", "{B7D23023-5809-4FDC-A1CE-80649F3915A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -123,6 +126,10 @@ Global
 		{37E5E6A8-2952-402B-8A86-508DB32194EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37E5E6A8-2952-402B-8A86-508DB32194EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{37E5E6A8-2952-402B-8A86-508DB32194EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7D23023-5809-4FDC-A1CE-80649F3915A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7D23023-5809-4FDC-A1CE-80649F3915A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7D23023-5809-4FDC-A1CE-80649F3915A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7D23023-5809-4FDC-A1CE-80649F3915A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -146,6 +153,7 @@ Global
 		{55C87E7A-1C03-4906-9AC4-81942C5B2689} = {97456A98-8373-4B21-8464-A1ED365938F8}
 		{0C53B1E4-7D2D-4EB1-8FEC-48EDACC1C5B3} = {97456A98-8373-4B21-8464-A1ED365938F8}
 		{37E5E6A8-2952-402B-8A86-508DB32194EC} = {97456A98-8373-4B21-8464-A1ED365938F8}
+		{B7D23023-5809-4FDC-A1CE-80649F3915A2} = {97456A98-8373-4B21-8464-A1ED365938F8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E9C122E1-F965-4DE0-BA4B-CFC5D269C768}

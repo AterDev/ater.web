@@ -168,6 +168,7 @@ public class QuerySet<TContent, TEntity> :
     /// <returns></returns>
     public virtual async Task<PageList<TItem>> FilterAsync<TItem>(IQueryable<TEntity> query, int pageIndex = 1, int pageSize = 12, Dictionary<string, bool>? order = null)
     {
+
         if (pageIndex < 1)
         {
             pageIndex = 1;
@@ -178,7 +179,7 @@ public class QuerySet<TContent, TEntity> :
             Queryable = query;
         }
 
-        Queryable = order != null ? Queryable.OrderBy(order) : (IQueryable<TEntity>)Queryable.OrderByDescending(t => t.CreatedTime);
+        Queryable = order != null ? Queryable.OrderBy(order) : Queryable.OrderByDescending(t => t.CreatedTime);
         var count = Queryable.Count();
         List<TItem> data = await Queryable
             .AsNoTracking()

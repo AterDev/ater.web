@@ -1,5 +1,5 @@
 using System.Text.Json;
-using Entity.SystemMod;
+
 using SystemMod.Models.SystemConfigDtos;
 
 namespace SystemMod.Manager;
@@ -29,13 +29,18 @@ public class SystemConfigManager(
 
     public override async Task<SystemConfig> UpdateAsync(SystemConfig entity, SystemConfigUpdateDto dto)
     {
+        if (entity.IsSystem)
+        {
+            dto.Key = null;
+            dto.GroupName = null;
+        }
         return await base.UpdateAsync(entity, dto);
     }
 
     public override async Task<PageList<SystemConfigItemDto>> FilterAsync(SystemConfigFilterDto filter)
     {
         Queryable = Queryable
-            .WhereNotNull(filter.Key, q => q.Key == filter.Key)
+            .WhereNotNull(filter.Key, q => q.Key.Contains(filter.Key!, StringComparison.CurrentCultureIgnoreCase))
             .WhereNotNull(filter.GroupName, q => q.GroupName == filter.GroupName);
 
         return await Query.FilterAsync<SystemConfigItemDto>(Queryable, filter.PageIndex, filter.PageSize, filter.OrderBy);

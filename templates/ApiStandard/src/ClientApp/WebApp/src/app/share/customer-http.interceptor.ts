@@ -11,14 +11,14 @@ import { catchError } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, throwError } from 'rxjs';
 import { Router } from '@angular/router';
-import { LoginService } from '../auth/login.service';
+import { LoginStateService } from '../auth/login-state.service';
 
 @Injectable()
 export class CustomerHttpInterceptor implements HttpInterceptor {
   constructor(
     private snb: MatSnackBar,
     private router: Router,
-    private auth: LoginService
+    private auth: LoginStateService
   ) {
 
   }
@@ -26,7 +26,6 @@ export class CustomerHttpInterceptor implements HttpInterceptor {
     return next.handle(request)
       .pipe(
         catchError((error: HttpErrorResponse) => {
-          console.log(error);
           return this.handleError(error);
         })
       );
@@ -47,7 +46,7 @@ export class CustomerHttpInterceptor implements HttpInterceptor {
         errors.detail = '403:已拒绝请求';
         break;
       case 409:
-        errors.detail = error.error;
+        errors.detail = error.error.detail;
         break;
       default:
         if (!error.error) {

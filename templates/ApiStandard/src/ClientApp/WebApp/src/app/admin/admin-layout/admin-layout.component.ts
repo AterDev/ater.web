@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { BaseService } from 'src/app/services/admin/base.service';
 
 @Component({
   selector: 'app-admin-layout',
@@ -7,7 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdminLayoutComponent implements OnInit {
 
-  constructor() { }
+  isMobile: boolean = false;
+  constructor(
+    service: BaseService
+  ) {
+    this.isMobile = service.isMobile;
+  }
 
   ngOnInit(): void {
   }

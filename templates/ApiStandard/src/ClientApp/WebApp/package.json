@@ -1,5 +1,5 @@
 {
-  "name": "admin",
+  "name": "web-app",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",

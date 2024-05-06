@@ -37,10 +37,11 @@ public class SystemUserUpdateDto
     /// <summary>
     /// 性别
     /// </summary>
-    public Sex? Sex { get; set; }
+    public GenderType? Sex { get; set; }
 
     /// <summary>
     /// 角色Id
     /// </summary>
     public List<Guid>? RoleIds { get; set; }
+
 }

@@ -103,6 +103,7 @@ public class SystemUserController(
                 menus = await _roleManager.GetSystemMenusAsync([.. user.SystemRoles]);
                 permissionGroups = await _roleManager.GetPermissionGroupsAsync([.. user.SystemRoles]);
             }
+
             await manager.Command.SaveChangesAsync();
 
             // 缓存登录状态
@@ -111,6 +112,7 @@ public class SystemUserController(
             {
                 client = AppConst.AllPlatform;
             }
+
             var key = user.GetUniqueKey(AppConst.LoginCachePrefix, client);
             // 若会话过期时间为0，则使用jwt过期时间
             await _cache.SetValueAsync(key, result.Token,
@@ -183,7 +185,7 @@ public class SystemUserController(
     public async Task<ActionResult<SystemUser?>> UpdateAsync([FromRoute] Guid id, SystemUserUpdateDto dto)
     {
         SystemUser? current = await manager.GetCurrentAsync(id);
-        return current == null ? (ActionResult<SystemUser?>)NotFound(ErrorMsg.NotFoundResource) : (ActionResult<SystemUser?>)await manager.UpdateAsync(current, dto);
+        return current == null ? NotFound(ErrorMsg.NotFoundResource) : await manager.UpdateAsync(current, dto);
     }
 
     /// <summary>
@@ -228,6 +230,6 @@ public class SystemUserController(
     {
         // 注意删除权限
         SystemUser? entity = await manager.GetCurrentAsync(id);
-        return entity == null ? (ActionResult<SystemUser?>)NotFound() : (ActionResult<SystemUser?>)await manager.DeleteAsync(entity, false);
+        return entity == null ? NotFound() : await manager.DeleteAsync(entity, false);
     }
 }

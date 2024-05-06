@@ -187,6 +187,15 @@ $light-theme: mat.define-light-theme((color: (primary: $light-primary,
   border: none;
 }
 
+th {
+  font-weight: bold !important;
+}
+
+.paginator {
+  margin: 2px auto;
+  background-color: var(--mat-paginator-container-background-color);
+}
+
 @include mat.all-component-themes($dark-theme);
 @media (prefers-color-scheme: dark) {
   .btn {
@@ -246,25 +255,24 @@ $light-theme: mat.define-light-theme((color: (primary: $light-primary,
     opacity: 0.9;
   }
 
-  table tr:nth-child(odd) {
+  table:not(.mat-calendar-table) tr:nth-child(odd) {
     background-color: $dark-bgh-color;
   }
 
-  table tr:nth-child(even) {
+  table:not(.mat-calendar-table) tr:nth-child(even) {
     background-color: $dark-bg-color;
   }
 
-  table {
+  table:not(.mat-calendar-table) {
     border-bottom: 1px solid $dark-text-light-color !important;
   }
 
-  th {
+  table:not(.mat-calendar-table) th:not(.mat-calendar-table-header) {
     border: 1px solid $dark-text-light-color;
-    background-color: $dark-bg-color;
+    background-color: $dark-bg-color !important;
   }
 
-  td {
-
+  table:not(.mat-calendar-table) td {
     border-right: 1px solid $dark-text-light-color;
     border-left: 1px solid $dark-text-light-color;
   }
@@ -302,6 +310,10 @@ $light-theme: mat.define-light-theme((color: (primary: $light-primary,
     border: 2px solid rgba(255, 255, 255, 0.03);
     box-shadow: inset 0px 0px 2px 0px rgb(133 132 133 / 44%);
     border-radius: 8px;
+  }
+
+  .box-shadow {
+    box-shadow: 0px 1px 2px 0px rgb(133 132 133 / 44%);
   }
 
   .active {
@@ -399,25 +411,25 @@ $light-theme: mat.define-light-theme((color: (primary: $light-primary,
     opacity: 0.9;
   }
 
-  table tr:nth-child(odd) {
+  table:not(.mat-calendar-table) tr:nth-child(odd) {
     background-color: $light-bgh-color;
   }
 
-  table tr:nth-child(even) {
+  table:not(.mat-calendar-table) tr:nth-child(even) {
     background-color: $light-bg-color;
   }
 
-  table {
+  table:not(.mat-calendar-table) {
     border-bottom: 1px solid $light-text-light-color !important;
   }
 
-  td {
+  table:not(.mat-calendar-table) td {
     border-right: 1px solid $light-text-light-color;
     border-left: 1px solid $light-text-light-color;
   }
 
-  th {
-    background-color: $light-bgh-color;
+  table:not(.mat-calendar-table) th {
+    background-color: $light-bgh-color !important;
     border: 1px solid $light-text-light-color;
   }
 
@@ -454,6 +466,10 @@ $light-theme: mat.define-light-theme((color: (primary: $light-primary,
     border: 2px solid $light-bgh-color;
     box-shadow: 0px 12px 14px 0px #1d1f2300;
     border-radius: 8px;
+  }
+
+  .box-shadow {
+    box-shadow: 0px 12px 14px 0px #1d1f2300;
   }
 
   .active {

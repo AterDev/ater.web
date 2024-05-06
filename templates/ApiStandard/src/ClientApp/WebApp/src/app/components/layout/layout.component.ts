@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
-import { LoginService } from 'src/app/auth/login.service';
+import { LoginStateService } from 'src/app/auth/login-state.service';
+import { BaseService } from 'src/app/services/admin/base.service';
 
 @Component({
   selector: 'app-layout',
@@ -10,15 +11,18 @@ import { LoginService } from 'src/app/auth/login.service';
 export class LayoutComponent implements OnInit {
   isLogin = false;
   isAdmin = false;
+  isMobile = false;
   username?: string | null = null;
   constructor(
-    private auth: LoginService,
+    private auth: LoginStateService,
+    private baseService: BaseService,
     private router: Router
   ) {
+
+    this.isMobile = this.baseService.isMobile;
     // this layout is out of router-outlet, so we need to listen router event and change isLogin status
     router.events.subscribe((event) => {
       if (event instanceof NavigationStart) {
-        console.log(event);
         this.isLogin = this.auth.isLogin;
         this.isAdmin = this.auth.isAdmin;
         this.username = this.auth.userName;
@@ -31,6 +35,15 @@ export class LayoutComponent implements OnInit {
     this.isAdmin = this.auth.isAdmin;
     if (this.isLogin) {
       this.username = this.auth.userName!;
+    }
+  }
+
+  goToAdmin(): void {
+    if (this.isMobile) {
+      this.router.navigateByUrl('/mobile');
+    } else {
+      this.router.navigateByUrl('/admin')
+
     }
   }
   login(): void {

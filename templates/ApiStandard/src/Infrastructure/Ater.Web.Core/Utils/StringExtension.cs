@@ -49,7 +49,7 @@ public static class StringExtension
     /// </summary>
     /// <param name="str"></param>
     /// <returns></returns>
-    public static string ToSankeLower(this string str)
+    public static string ToSnakeLower(this string str)
     {
         return str.ToHyphen('_');
     }
@@ -86,10 +86,6 @@ public static class StringExtension
         {
             return string.Empty;
         }
-        if (str.Length <= 1)
-        {
-            return str.ToLower();
-        }
         str = str.ToPascalCase();
         return char.ToLower(str[0]) + str[1..];
     }
@@ -121,7 +117,7 @@ public static class StringExtension
         }
 
         var stepsToSame = source.ComputeLevenshteinDistance(target);
-        return 1.0 - (stepsToSame / (double)Math.Max(source.Length, target.Length));
+        return 1.0 - stepsToSame / (double)Math.Max(source.Length, target.Length);
     }
     /// <summary>
     /// 计算两字符串转变距离
@@ -231,6 +227,7 @@ public static class StringExtension
     {
         return !string.IsNullOrWhiteSpace(str);
     }
+
     /// <summary>
     /// 保留字符串中的数字和字母
     /// </summary>
@@ -294,6 +291,7 @@ public static class StringExtension
         }
         return null;
     }
+
 
     /// <summary>
     /// 计算字符串表达式，仅支持整数加减法

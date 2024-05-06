@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Ater.Web.Core.Models;
 using Ater.Web.Core.Utils;
 
@@ -83,7 +84,7 @@ public static partial class Extensions
     /// <returns></returns>
     public static IQueryable<TSource> WhereNotNull<TSource>(this IQueryable<TSource> source, object? field, Expression<Func<TSource, bool>> expression)
     {
-        if (field != null)
+        if (field is not null)
         {
             if (field is string str && str.IsEmpty())
             {

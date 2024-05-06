@@ -74,6 +74,6 @@ public class CacheService(IDistributedCache cache)
             return default;
         }
         ReadOnlySpan<byte> readOnlySpan = new(bytes);
-        return JsonSerializer.Deserialize<T?>(readOnlySpan);
+        return JsonSerializer.Deserialize<T?>(bytes);
     }
 }

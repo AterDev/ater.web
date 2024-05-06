@@ -18,7 +18,6 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatStepperModule } from '@angular/material/stepper';
-import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -36,6 +35,10 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { AvatarComponent } from './avatar/avatar.component';
+import { SyncButtonComponent } from './sync-button/sync-button.component';
+import { CustomPaginatorIntl } from './CustomPaginatorIntl';
+import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
+import { TagComponent } from './tag/tag.component';
 
 const MaterialModules = [
   MatToolbarModule,
@@ -69,11 +72,14 @@ const MaterialModules = [
   MatSlideToggleModule,
   MatChipsModule,
   MatAutocompleteModule,
-  MatRadioModule
+  MatRadioModule,
 ];
 
 @NgModule({
-  declarations: [LayoutComponent, ConfirmDialogComponent, AvatarComponent],
+  declarations: [LayoutComponent, ConfirmDialogComponent, AvatarComponent, SyncButtonComponent,TagComponent],
+  providers: [
+    { provide: MatPaginatorIntl, useClass: CustomPaginatorIntl },
+  ],
   imports: [
     CommonModule,
     RouterModule,
@@ -85,7 +91,9 @@ const MaterialModules = [
     ...MaterialModules,
     LayoutComponent,
     ConfirmDialogComponent,
-    AvatarComponent
+    AvatarComponent,
+    SyncButtonComponent,
+    TagComponent
   ]
 })
 export class ComponentsModule { }

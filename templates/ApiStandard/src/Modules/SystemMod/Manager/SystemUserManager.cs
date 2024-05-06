@@ -223,10 +223,24 @@ public class SystemUserManager(
             .WhereNotNull(filter.UserName, q => q.UserName == filter.UserName)
             .WhereNotNull(filter.RealName, q => q.RealName == filter.RealName)
             .WhereNotNull(filter.Email, q => q.Email == filter.Email)
-            .WhereNotNull(filter.PhoneNumber, q => q.PhoneNumber == filter.PhoneNumber)
-            .WhereNotNull(filter.Sex, q => q.Sex == filter.Sex)
-            .WhereNotNull(filter.EmailConfirmed, q => q.EmailConfirmed == filter.EmailConfirmed)
-            .WhereNotNull(filter.PhoneNumberConfirmed, q => q.PhoneNumberConfirmed == filter.PhoneNumberConfirmed);
+            .WhereNotNull(filter.PhoneNumber, q => q.PhoneNumber == filter.PhoneNumber);
+
+        if (filter.RoleId != null)
+        {
+            var role = await QueryContext.SystemRoles.FindAsync(filter.RoleId);
+            if (role != null)
+            {
+                Queryable = Queryable.Where(q => q.SystemRoles.Contains(role));
+            }
+        }
+        if (filter.RoleName.NotEmpty())
+        {
+            var role = await QueryContext.SystemRoles.FirstOrDefaultAsync(r => r.NameValue.Equals(filter.RoleName));
+            if (role != null)
+            {
+                Queryable = Queryable.Where(q => q.SystemRoles.Contains(role));
+            }
+        }
 
         if (filter.RoleId != null)
         {

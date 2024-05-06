@@ -19,17 +19,16 @@ public class SystemUserFilterDto : FilterBase
     public string? RealName { get; set; }
     [MaxLength(100)]
     public string? Email { get; set; }
-    public bool? EmailConfirmed { get; set; }
     [MaxLength(20)]
     public string? PhoneNumber { get; set; }
-    public bool? PhoneNumberConfirmed { get; set; }
-    /// <summary>
-    /// 性别
-    /// </summary>
-    public Sex? Sex { get; set; }
     /// <summary>
     /// 角色id
     /// </summary>
     public Guid? RoleId { get; set; }
 
+    /// <summary>
+    /// 角色名
+    /// </summary>
+    [MaxLength(60)]
+    public string? RoleName { get; set; }
 }

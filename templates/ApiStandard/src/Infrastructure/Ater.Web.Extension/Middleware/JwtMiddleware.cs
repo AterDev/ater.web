@@ -1,5 +1,8 @@
-﻿using System.Security.Claims;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+
 using Ater.Web.Core.Models;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 
@@ -26,6 +29,13 @@ public class JwtMiddleware(RequestDelegate next, CacheService redis, ILogger<Jwt
             await _next(context);
             return;
         }
+        // 判断 token 是否有效
+        JwtSecurityTokenHandler tokenHandler = new();
+        if (tokenHandler.CanReadToken(token) == false)
+        {
+            await _next(context);
+            return;
+        }
 
         var id = JwtService.GetClaimValue(token, ClaimTypes.NameIdentifier);
         // 策略判断
@@ -33,7 +43,8 @@ public class JwtMiddleware(RequestDelegate next, CacheService redis, ILogger<Jwt
         {
             var securityPolicyStr = _cache.GetValue<string>(AppConst.LoginSecurityPolicy);
             var securityPolicy = JsonSerializer.Deserialize<LoginSecurityPolicy>(securityPolicyStr!);
-            if (securityPolicy == null)
+
+            if (securityPolicy == null || !securityPolicy.IsEnable)
             {
                 await _next(context);
                 return;

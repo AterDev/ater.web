@@ -43,7 +43,7 @@ public class SystemUserItemDto
     /// <summary>
     /// 性别
     /// </summary>
-    public Sex Sex { get; set; } = Sex.Male;
+    public GenderType Sex { get; set; } = GenderType.Male;
     public Guid Id { get; set; } = Guid.NewGuid();
     public DateTimeOffset CreatedTime { get; set; } = DateTimeOffset.UtcNow;
     public DateTimeOffset UpdatedTime { get; set; } = DateTimeOffset.UtcNow;

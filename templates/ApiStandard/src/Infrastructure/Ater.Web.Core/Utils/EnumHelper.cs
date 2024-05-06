@@ -69,18 +69,12 @@ public static class EnumHelper
     /// <summary>
     /// 获取程序集所有枚举信息
     /// </summary>
-    /// <param name="assemblyNames">程序集名称</param>
     /// <returns></returns>
-    public static Dictionary<string, List<EnumDictionary>> GetAllEnumInfo(params string[] assemblyNames)
+    public static Dictionary<string, List<EnumDictionary>> GetAllEnumInfo()
     {
         Dictionary<string, List<EnumDictionary>> res = [];
-
-        var myAssemblies = new List<string> { "Share.dll", "Entity.dll", "Definition.dll" };
-
-        if (assemblyNames.Count() > 0)
-        {
-            myAssemblies.AddRange(assemblyNames);
-        }
+        // TODO:自定义要查询的程序集
+        var myAssemblies = new List<string> { "Share.dll", "Entity.dll", "SystemMod.dll" };
 
         List<Type> allTypes = [];
         var assemblies = AppDomain.CurrentDomain.GetAssemblies()
@@ -107,5 +101,4 @@ public struct EnumDictionary
     public string Name { get; set; }
     public string Description { get; set; }
     public int Value { get; set; }
-    public bool Selected { get; set; }
 }

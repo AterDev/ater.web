@@ -1,5 +1,5 @@
 ﻿using System.Text.Json;
-using Entity.SystemMod;
+
 using EntityFramework.DBProvider;
 
 namespace SystemMod;
@@ -27,39 +27,8 @@ public class InitModule
             // 未初始化时
             if (isInitString.IsEmpty() || isInitString.Equals("false"))
             {
-                logger.LogInformation("⛏️ 开始初始化系统");
-                SystemRole? role = await context.SystemRoles.SingleOrDefaultAsync(r => r.NameValue == AppConst.AdminUser);
-                // 初始化管理员账号和角色
-                if (role == null)
-                {
-                    var defaultPassword = configuration.GetValue<string>("Key:DefaultPassword");
-                    if (string.IsNullOrWhiteSpace(defaultPassword))
-                    {
-                        defaultPassword = "Hello.Net";
-                    }
-                    SystemRole superRole = new()
-                    {
-                        Name = AppConst.SuperAdmin,
-                        NameValue = AppConst.SuperAdmin,
-                    };
-                    SystemRole adminRole = new()
-                    {
-                        Name = AppConst.AdminUser,
-                        NameValue = AppConst.AdminUser,
-                    };
-                    var salt = HashCrypto.BuildSalt();
-                    SystemUser systemUser = new()
-                    {
-                        UserName = "admin",
-                        PasswordSalt = salt,
-                        PasswordHash = HashCrypto.GeneratePwd(defaultPassword, salt),
-                        SystemRoles = [superRole, adminRole],
-                    };
-
-                    context.SystemUsers.Add(systemUser);
-                    await context.SaveChangesAsync();
-                    logger.LogInformation("初始化管理员账号:{username}/{password}", systemUser.UserName, defaultPassword);
-                }
+                logger.LogInformation("⛏️ 开始初始化[System]模块");
+                await InitRoleAndUserAsync(context, logger, configuration);
                 // 初始化配置
                 await InitConfigAsync(context, configuration, logger);
             }
@@ -68,6 +37,56 @@ public class InitModule
         catch (Exception ex)
         {
             logger.LogError("初始化系统配置失败！{message}", ex.Message);
+        }
+    }
+
+    private static async Task InitRoleAndUserAsync(CommandDbContext context, ILogger<InitModule> logger, IConfiguration configuration)
+    {
+        SystemRole? role = await context.SystemRoles.SingleOrDefaultAsync(r => r.NameValue == AppConst.AdminUser);
+        // 初始化管理员账号和角色
+        if (role == null)
+        {
+            var defaultPassword = configuration.GetValue<string>("Key:DefaultPassword");
+            if (string.IsNullOrWhiteSpace(defaultPassword))
+            {
+                defaultPassword = "Hello.Net";
+            }
+            SystemRole superRole = new()
+            {
+                Name = AppConst.SuperAdmin,
+                NameValue = AppConst.SuperAdmin,
+            };
+            SystemRole adminRole = new()
+            {
+                Name = AppConst.AdminUser,
+                NameValue = AppConst.AdminUser,
+            };
+            SystemRole consultantRole = new()
+            {
+                Name = "教学顾问",
+                NameValue = "Consultant",
+            };
+            var salt = HashCrypto.BuildSalt();
+            SystemUser adminUser = new()
+            {
+                UserName = "admin",
+                PasswordSalt = salt,
+                PasswordHash = HashCrypto.GeneratePwd(defaultPassword, salt),
+                SystemRoles = [superRole, adminRole],
+            };
+
+            SystemUser manager = new()
+            {
+                UserName = "manager",
+                PasswordSalt = salt,
+                PasswordHash = HashCrypto.GeneratePwd(defaultPassword, salt),
+                SystemRoles = [superRole],
+            };
+
+            context.SystemUsers.Add(adminUser);
+            context.SystemUsers.Add(manager);
+            await context.SaveChangesAsync();
+            logger.LogInformation("初始化管理员账号:{username}/{password}", adminUser.UserName, defaultPassword);
         }
     }
 

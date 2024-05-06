@@ -15,6 +15,7 @@ public class AdditionProperty
     /// 排序
     /// </summary>
     public int Sort { get; set; }
+
     /// <summary>
     /// 是否必须
     /// </summary>

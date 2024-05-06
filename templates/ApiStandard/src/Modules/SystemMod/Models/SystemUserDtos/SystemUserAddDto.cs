@@ -43,7 +43,7 @@ public class SystemUserAddDto
     /// <summary>
     /// 性别
     /// </summary>
-    public Sex Sex { get; set; } = Sex.Male;
+    public GenderType Sex { get; set; } = GenderType.Male;
 
     /// <summary>
     /// 角色id
