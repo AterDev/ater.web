@@ -1,6 +1,6 @@
 ﻿namespace Entity.OrderMod;
 /// <summary>
-/// 商品
+/// 产品
 /// </summary>
 [Module(Modules.Order)]
 [Index(nameof(Sort))]
@@ -19,6 +19,16 @@ public class Product : IEntityBase
     /// </summary>
     [MaxLength(500)]
     public string? Description { get; set; }
+
+    /// <summary>
+    /// 产品图片
+    /// </summary>
+    public List<string> Images { get; set; } = [];
+
+    /// <summary>
+    /// 产品视频
+    /// </summary>
+    public List<string> Videos { get; set; } = [];
 
     /// <summary>
     /// 价格
@@ -45,6 +55,8 @@ public class Product : IEntityBase
     /// </summary>
     public ProductType ProductType { get; set; }
 
+    public ProductStatus Status { get; set; }
+
     /// <summary>
     /// 原价
     /// </summary>
@@ -57,10 +69,37 @@ public class Product : IEntityBase
 }
 
 /// <summary>
+/// 产品状态
+/// </summary>
+public enum ProductStatus
+{
+    /// <summary>
+    /// 默认待上架
+    /// </summary>
+    [Description("默认待上架")]
+    Default,
+    /// <summary>
+    /// 上架
+    /// </summary>
+    [Description("上架")]
+    OnSale,
+    /// <summary>
+    /// 下架
+    /// </summary>
+    [Description("下架")]
+    OffSale,
+}
+
+/// <summary>
 /// 产品类型
 /// </summary>
 public enum ProductType
 {
+    /// <summary>
+    /// 试用
+    /// </summary>
+    [Description("试用")]
+    Trial,
     /// <summary>
     /// 商品
     /// </summary>

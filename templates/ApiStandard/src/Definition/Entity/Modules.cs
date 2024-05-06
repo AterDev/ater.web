@@ -9,19 +9,21 @@ public class Modules
     /// </summary>
     public const string CMS = "CMSMod";
     /// <summary>
-    /// 商品订单模块
+    /// 产品订单模块
     /// </summary>
     public const string Order = "OrderMod";
     /// <summary>
     /// 文件管理
     /// </summary>
     public const string FileManager = "FileManagerMod";
-
     /// <summary>
     /// 消息通知
     /// </summary>
     public const string Notification = "NotificationMod";
-
+    /// <summary>
+    /// 客户管理模块
+    /// </summary>
+    public const string Customer = "CustomerMod";
     /// <summary>
     /// 系统管理
     /// </summary>
