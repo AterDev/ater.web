@@ -15,7 +15,4 @@ export class SyncButtonComponent {
   constructor() {
     this.isSync = false;
   }
-  onClick() {
-    this.click.emit();
-  }
 }
