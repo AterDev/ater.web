@@ -75,7 +75,7 @@ public static class ServiceCollectionExtension
             });
         }
 
-        app.UseHealthChecks("/health");
+        app.UseHealthChecks("/api/health");
         app.UseRateLimiter();
         app.UseStaticFiles();
         app.UseRouting();

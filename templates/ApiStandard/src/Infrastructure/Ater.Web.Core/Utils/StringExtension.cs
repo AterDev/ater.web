@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-
+using System.Text.RegularExpressions;
 using Ater.Web.Core.Utils;
 
 namespace Ater.Web.Core.Utils;
@@ -229,6 +229,16 @@ public static class StringExtension
     }
 
     /// <summary>
+    /// IsEmail
+    /// </summary>
+    /// <param name="str"></param>
+    /// <returns></returns>
+    public static bool IsEmail(this string str)
+    {
+        return Regex.IsMatch(str, @"^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$");
+    }
+
+    /// <summary>
     /// 保留字符串中的数字和字母
     /// </summary>
     /// <param name="str"></param>
@@ -258,7 +268,7 @@ public static class StringExtension
     private static readonly string[] dateFormats = ["yyyy-MM-dd", "yyyy-MM-ddTHH:mm:ss", "yyyy-MM-ddTHH:mm:ssZ"];
 
     /// <summary>
-    /// 字符串转换为 DateTimeOffset
+    /// 字符串转换为 DateTimeOffset UTC 时间
     /// </summary>
     /// <param name="str"></param>
     /// <returns></returns>
@@ -271,27 +281,25 @@ public static class StringExtension
         // 尝试解析为 ISO 8601 格式
         if (DateTimeOffset.TryParseExact(str, dateFormats, CultureInfo.InvariantCulture, DateTimeStyles.AllowInnerWhite, out DateTimeOffset dt))
         {
-            return dt;
+            return dt.ToUniversalTime();
         }
-
-        // 尝试解析为自定义格式
-        if (str.Contains("/"))
+        else if (str.Contains("/"))
         {
-            if (DateTimeOffset.TryParseExact(str, "MM/dd/yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.AllowInnerWhite, out dt))
+            // 尝试解析为自定义格式
+            if (DateTimeOffset.TryParseExact(str, ["MM/dd/yyyy HH:mm", "M/d/yyyy HH:mm", "M/dd/yyyy", "M/d/yy", "M/d/yy HH:mm"], CultureInfo.InvariantCulture, DateTimeStyles.AllowInnerWhite, out dt))
             {
-                return dt;
+                return dt.ToUniversalTime();
             }
         }
         else if (str.Contains("."))
         {
-            if (DateTimeOffset.TryParseExact(str, "yyyy.MM.dd", CultureInfo.InvariantCulture, DateTimeStyles.AllowInnerWhite, out dt))
+            if (DateTimeOffset.TryParseExact(str, ["yyyy.MM.dd"], CultureInfo.InvariantCulture, DateTimeStyles.AllowInnerWhite, out dt))
             {
-                return dt;
+                return dt.ToUniversalTime();
             }
         }
         return null;
     }
-
 
     /// <summary>
     /// 计算字符串表达式，仅支持整数加减法
@@ -318,7 +326,7 @@ public static class StringExtension
             {
                 operand = operand * 10 + (currentChar - '0');
             }
-            else if (currentChar == '+' || currentChar == '-')
+            else if (currentChar is '+' or '-')
             {
                 result = ApplyOperation(result, operand, operation);
                 operand = 0;
@@ -335,14 +343,11 @@ public static class StringExtension
 
     private static int ApplyOperation(int result, int operand, char operation)
     {
-        switch (operation)
+        return operation switch
         {
-            case '+':
-                return result + operand;
-            case '-':
-                return result - operand;
-            default:
-                throw new FormatException($"Invalid operator: {operation}");
-        }
+            '+' => result + operand,
+            '-' => result - operand,
+            _ => throw new FormatException($"Invalid operator: {operation}"),
+        };
     }
 }
