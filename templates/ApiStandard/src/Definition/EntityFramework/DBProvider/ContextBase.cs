@@ -9,13 +9,27 @@ public partial class ContextBase(DbContextOptions options) : DbContext(options)
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-
         base.OnModelCreating(builder);
         OnModelExtendCreating(builder);
         OnSQLiteModelCreating(builder);
+
+        OnModuleModelCreating(builder);
     }
+
+    protected void OnModuleModelCreating(ModelBuilder builder)
+    {
+        // TODO:定义模型实体关系
+        //builder.Entity<CustomerInfo>(e =>
+        //{
+        //    e.OwnsMany(e => e.AdditionProperties).ToJson();
+        //    e.HasMany(e => e.Tags).WithMany(t => t.Customers).UsingEntity<CustomerInfoTag>();
+        //});
+    }
+
     public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
     {
+        // 创建和更新时间处理
+
         var entries = ChangeTracker.Entries().Where(e => e.State == EntityState.Added).ToList();
         foreach (Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry? entityEntry in entries)
         {
@@ -32,12 +46,15 @@ public partial class ContextBase(DbContextOptions options) : DbContext(options)
             if (property != null && property.ClrType == typeof(DateTimeOffset))
             {
                 entityEntry.Property("UpdatedTime").CurrentValue = DateTimeOffset.UtcNow;
-
             }
         }
         return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
     }
 
+    /// <summary>
+    /// 设置主键Id和软删除过滤
+    /// </summary>
+    /// <param name="modelBuilder"></param>
     private void OnModelExtendCreating(ModelBuilder modelBuilder)
     {
         IEnumerable<Microsoft.EntityFrameworkCore.Metadata.IMutableEntityType> entityTypes = modelBuilder.Model.GetEntityTypes();

@@ -26,4 +26,5 @@ public partial class ContextBase
     public DbSet<Product> Products { get; set; }
     public DbSet<Blog> Blogs { get; set; }
     public DbSet<Catalog> Catalogs { get; set; }
+
 }
