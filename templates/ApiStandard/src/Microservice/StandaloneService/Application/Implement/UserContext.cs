@@ -1,7 +1,8 @@
+using Microsoft.Extensions.Primitives;
 
 namespace StandaloneService.Application.Implement;
 
-public partial class UserContext : IUserContext
+public class UserContext : IUserContext
 {
     public Guid UserId { get; init; }
     public string? Username { get; init; }
@@ -36,12 +37,12 @@ public partial class UserContext : IUserContext
             .Select(c => c.Value).ToList();
         if (Roles != null)
         {
-            IsAdmin = Roles.Any(r => r.Equals(AppConst.AdminUser));
+            IsAdmin = Roles.Any(r => r.Equals(AppConst.AdminUser) || r.Equals(AppConst.SuperAdmin));
         }
         _context = context;
     }
 
-    public Claim? FindClaim(string claimType)
+    protected Claim? FindClaim(string claimType)
     {
         return _httpContextAccessor?.HttpContext?.User?.FindFirst(claimType);
     }
@@ -56,11 +57,6 @@ public partial class UserContext : IUserContext
         return Roles != null && Roles.Any(r => r == roleName);
     }
 
-    public async Task<bool> ExistAsync()
-    {
-        return await Task.FromResult(false);
-    }
-
     /// <summary>
     /// ªÒ»°ipµÿ÷∑
     /// </summary>
@@ -70,13 +66,22 @@ public partial class UserContext : IUserContext
         HttpRequest? request = _httpContextAccessor.HttpContext?.Request;
         return request == null
             ? string.Empty
-            : request.Headers.ContainsKey("X-Forwarded-For")
-            ? request.Headers["X-Forwarded-For"].Where(x => x != null).FirstOrDefault()
+            : request.Headers.TryGetValue("X-Forwarded-For", out StringValues value) ? value.Where(x => x != null).FirstOrDefault()
             : _httpContextAccessor.HttpContext!.Connection.RemoteIpAddress?.ToString();
     }
 
     public async Task<TUser?> GetUserAsync<TUser>() where TUser : class
     {
         return await _context.Set<TUser>().FindAsync(UserId);
+    }
+
+    public HttpContext? GetHttpContext()
+    {
+        return _httpContextAccessor.HttpContext;
+    }
+
+    public Task<bool> ExistAsync()
+    {
+        throw new NotImplementedException();
     }
 }

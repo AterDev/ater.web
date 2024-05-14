@@ -26,6 +26,7 @@
 
 	<ItemGroup>
 		<Folder Include="Application\Manager\" />
+		<Folder Include="Application\Services\" />
 		<Folder Include="Controllers\" />
 		<Folder Include="Definition\Share\" />
 	</ItemGroup>

@@ -98,5 +98,4 @@ public class UserContext : IUserContext
     {
         return _httpContextAccessor.HttpContext;
     }
-
 }

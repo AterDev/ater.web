@@ -36,11 +36,11 @@ public static partial class AppServiceCollectionExtensions
     /// <returns></returns>
     public static IHostApplicationBuilder AddDefaultComponents(this IHostApplicationBuilder builder)
     {
-        builder.AddPgsqlDbContext();
-        builder.AddRedisCache();
-        var otlpEndpoint = builder.Configuration.GetSection("OTLP")
-            .GetValue<string>("Endpoint")
-            ?? "http://localhost:4317";
+        builder.AddDbContext();
+        builder.AddCache();
+        var otlpEndpoint = builder.Configuration.GetSection("Opentelemetry").GetValue<string>("Endpoint");
+        otlpEndpoint = otlpEndpoint.NotEmpty() ? otlpEndpoint : builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"] ?? "http://localhost:4317";
+
         builder.AddOpenTelemetry("MyProjectName", opt =>
         {
             opt.Endpoint = new Uri(otlpEndpoint);
@@ -62,10 +62,10 @@ public static partial class AppServiceCollectionExtensions
     }
 
     /// <summary>
-    /// add postgresql config
+    /// 添加数据库上下文
     /// </summary>
     /// <returns></returns>
-    public static IHostApplicationBuilder AddPgsqlDbContext(this IHostApplicationBuilder builder)
+    public static IHostApplicationBuilder AddDbContext(this IHostApplicationBuilder builder)
     {
         var commandString = builder.Configuration.GetConnectionString(AppSetting.CommandDB);
         var queryString = builder.Configuration.GetConnectionString(AppSetting.QueryDB);
@@ -89,10 +89,10 @@ public static partial class AppServiceCollectionExtensions
     }
 
     /// <summary>
-    /// add redis cache config
+    /// add cache config
     /// </summary>
     /// <returns></returns>
-    public static IHostApplicationBuilder AddRedisCache(this IHostApplicationBuilder builder)
+    public static IHostApplicationBuilder AddCache(this IHostApplicationBuilder builder)
     {
         var cache = builder.Configuration.GetSection(AppSetting.Components).GetValue<string>(AppSetting.Cache);
         if (cache == AppSetting.Redis)
