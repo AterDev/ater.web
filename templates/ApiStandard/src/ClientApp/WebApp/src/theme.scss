@@ -255,27 +255,28 @@ th {
     opacity: 0.9;
   }
 
-  table:not(.mat-calendar-table) tr:nth-child(odd) {
+  table.default tr:nth-child(odd) {
     background-color: $dark-bgh-color;
   }
 
-  table:not(.mat-calendar-table) tr:nth-child(even) {
+  table.default tr:nth-child(even) {
     background-color: $dark-bg-color;
   }
 
-  table:not(.mat-calendar-table) {
+  table.default {
     border-bottom: 1px solid $dark-text-light-color !important;
   }
 
-  table:not(.mat-calendar-table) th:not(.mat-calendar-table-header) {
+  table.default th {
     border: 1px solid $dark-text-light-color;
     background-color: $dark-bg-color !important;
   }
 
-  table:not(.mat-calendar-table) td {
+  table.default td {
     border-right: 1px solid $dark-text-light-color;
     border-left: 1px solid $dark-text-light-color;
   }
+
 
   .text-color {
     color: $dark-text-color;
@@ -411,24 +412,24 @@ th {
     opacity: 0.9;
   }
 
-  table:not(.mat-calendar-table) tr:nth-child(odd) {
+  table.default tr:nth-child(odd) {
     background-color: $light-bgh-color;
   }
 
-  table:not(.mat-calendar-table) tr:nth-child(even) {
+  table.default tr:nth-child(even) {
     background-color: $light-bg-color;
   }
 
-  table:not(.mat-calendar-table) {
+  table.default {
     border-bottom: 1px solid $light-text-light-color !important;
   }
 
-  table:not(.mat-calendar-table) td {
+  table.default td {
     border-right: 1px solid $light-text-light-color;
     border-left: 1px solid $light-text-light-color;
   }
 
-  table:not(.mat-calendar-table) th {
+  table.default th {
     background-color: $light-bgh-color !important;
     border: 1px solid $light-text-light-color;
   }
