@@ -67,6 +67,7 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem>
         _logger = logger;
         CommandContext = dataAccessContext.CommandContext;
         QueryContext = dataAccessContext.QueryContext;
+
     }
 
     /// <summary>
@@ -223,7 +224,7 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem>
             // 管理员日志
             // 使用SystemMod时生效
             var log = SystemLogs.NewLog(UserContext.Username ?? "", UserContext.UserId, targetName, actionType, route, description);
-            var taskQueue = WebAppContext.GetScopeService<EntityTaskQueue<SystemLogs>>();
+            var taskQueue = WebAppContext.GetScopeService<IEntityTaskQueue<SystemLogs>>();
             if (taskQueue != null)
             {
                 await taskQueue.AddItemAsync(log);
@@ -233,7 +234,7 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem>
         {
             // 用户日志
             var log = UserLogs.NewLog(UserContext.Username ?? "", UserContext.UserId, targetName, actionType, route, description);
-            var taskQueue = WebAppContext.GetScopeService<EntityTaskQueue<UserLogs>>();
+            var taskQueue = WebAppContext.GetScopeService<IEntityTaskQueue<UserLogs>>();
             if (taskQueue != null)
             {
                 await taskQueue.AddItemAsync(log);

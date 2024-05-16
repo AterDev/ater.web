@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text.RegularExpressions;
 
 using Ater.Web.Extension;
@@ -149,6 +150,7 @@ public class SystemUserManager(
             {
                 roles.Add(AppConst.AdminUser);
             }
+            jwt.Claims = [new(ClaimTypes.Name, user.UserName),];
             var token = jwt.GetToken(user.Id.ToString(), [.. roles]);
 
             return new AuthResult

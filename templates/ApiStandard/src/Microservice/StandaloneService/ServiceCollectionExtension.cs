@@ -26,7 +26,7 @@ public static class ServiceCollectionExtension
         builder.Services.AddTransient<ITenantProvider, TenantProvider>();
 
         builder.Services.AddManager();
-        // TODO:其他模块Manager
+        // TODO:其他模块Managerz
         //services.AddSystemModManagers();
         builder.Services.AddSingleton(typeof(CacheService));
 
