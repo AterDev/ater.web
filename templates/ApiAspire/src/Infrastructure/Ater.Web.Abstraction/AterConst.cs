@@ -2,7 +2,7 @@
 /// <summary>
 /// 应用程序常量
 /// </summary>
-public static class AppConst
+public static class AterConst
 {
     public const string Default = "Default";
     public const string DefaultStateName = "statestore";
