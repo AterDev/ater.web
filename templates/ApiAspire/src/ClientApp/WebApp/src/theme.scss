@@ -1,0 +1,513 @@
+@use '@angular/material' as mat;
+@import './vars.scss';
+@include mat.core();
+
+@for $i from 8 through 25 {
+  .fs#{$i} {
+    font-size: #{calc($i/10)}rem !important;
+  }
+}
+
+@for $i from 1 through 6 {
+  .gap-#{$i} {
+    gap: #{calc($i*8)}px;
+  }
+
+  .row-gap-#{$i} {
+    row-gap: #{calc($i*4)}px !important;
+  }
+
+  .column-gap-#{$i} {
+    column-gap: #{calc($i*4)}px !important;
+  }
+
+  .zindex-#{$i} {
+    z-index: $i;
+  }
+}
+
+$warn-colors: (
+  50 : #ffeaea,
+  100 : #ffc9c9,
+  200 : #ffa6a6,
+  300 : #ff8282,
+  400 : #ff6767,
+  500 : #ff4c4c,
+  600 : #ff4545,
+  700 : #ff3c3c,
+  800 : #ff3333,
+  900 : #ff2424,
+  A100 : #ffffff,
+  A200 : #ffffff,
+  A400 : #ffd2d2,
+  A700 : #ffb8b8,
+  contrast: (50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #000000,
+    500 : #000000,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #ffffff,
+    A200 : #ffffff,
+    A400 : #ffffff,
+    A700 : #ffffff,
+  ),
+);
+
+$accent-colors: (
+  50 : #fff3e8,
+  100 : #ffe2c6,
+  200 : #ffcea1,
+  300 : #ffba7b,
+  400 : #ffac5e,
+  500 : #ff9d42,
+  600 : #ff953c,
+  700 : #ff8b33,
+  800 : #ff812b,
+  900 : #ff6f1d,
+  A100 : #ffffff,
+  A200 : #ffffff,
+  A400 : #ffdece,
+  A700 : #ffcdb4,
+  contrast: (50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #000000,
+    500 : #000000,
+    600 : #000000,
+    700 : #000000,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  ),
+);
+
+$dark-colors: (
+  50 : #f5efff,
+  100 : #e6d8ff,
+  200 : #d5beff,
+  300 : #c4a4fe,
+  400 : #b891fe,
+  500 : #ab7dfe,
+  600 : #a475fe,
+  700 : #9a6afe,
+  800 : #9160fe,
+  900 : #804dfd,
+  A100 : #ffffff,
+  A200 : #ffffff,
+  A400 : #f5f1ff,
+  A700 : #e3d8ff,
+  contrast: (50: white,
+    100: white,
+    200: white,
+    300: white,
+    400: white,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+    A100: white,
+    A200: white,
+    A400: white,
+    A700: white,
+  )
+);
+
+$light-colors: (
+  50 : #edecfa,
+  100 : #d3cff3,
+  200 : #b6afeb,
+  300 : #988fe3,
+  400 : #8277dd,
+  500 : #6c5fd7,
+  600 : #6457d3,
+  700 : #594dcd,
+  800 : #4f43c7,
+  900 : #3d32be,
+  A100 : #ffffff,
+  A200 : #d4d1ff,
+  A400 : #a59eff,
+  A700 : #8d85ff,
+  contrast: (50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #000000,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  )
+);
+
+$light-primary: mat.define-palette($light-colors, 500, 700, 900);
+$light-accent: mat.define-palette($accent-colors, 500, 700, 900);
+$light-warn: mat.define-palette($warn-colors, 500, 700, 900);
+
+$dark-primary: mat.define-palette($dark-colors, 500, 600, 700);
+$dark-accent: mat.define-palette($accent-colors, 500, 600, 700);
+$dark-warn: mat.define-palette($warn-colors, 500, 700, 900);
+
+$dark-theme: mat.define-dark-theme((color: (primary: $dark-primary,
+        accent: $dark-accent,
+        warn: $dark-warn,
+      ),
+      typography: mat.define-typography-config(),
+      density: 0,
+    ));
+
+
+$light-theme: mat.define-light-theme((color: (primary: $light-primary,
+        accent: $light-accent,
+        warn: $light-warn,
+      ),
+      typography: mat.define-typography-config(),
+      density: 0,
+    ));
+
+.btn {
+  padding: 10px 28px;
+  vertical-align: middle;
+  text-align: center;
+  border-radius: 8px;
+  border: none;
+}
+
+th {
+  font-weight: bold !important;
+}
+
+.paginator {
+  margin: 2px auto;
+  background-color: var(--mat-paginator-container-background-color);
+}
+
+@include mat.all-component-themes($dark-theme);
+@media (prefers-color-scheme: dark) {
+  .btn {
+    color: white;
+    background-color: $dark-primary-color;
+  }
+
+  .feedback {
+    background: $dark-bgh-color;
+    border: 2px solid rgba(255, 255, 255, 0.03);
+    box-shadow: 0px 12px 14px 0px rgba(29, 31, 35, 0.05);
+  }
+
+  .mat-mdc-card {
+    background-color: $dark-bgh-color !important;
+    border: 2px solid rgba(255, 255, 255, 0.03);
+    box-shadow: 0px 12px 14px 0px rgba(29, 31, 35, 0.05);
+    border-radius: 8px;
+  }
+
+  .tab-select {
+    background-color: darken($color: $dark-primary-color, $amount: 8%) !important;
+  }
+
+  .tab-left {
+    background-color: $dark-primary-color;
+    border-radius: 25px 0 0 0;
+    border-right: 8px solid mat.get-theme-color($dark-theme, primary, 700);
+  }
+
+  .tab-item {
+    background-color: $dark-primary-color;
+    border-right: 8px solid mat.get-theme-color($dark-theme, primary, 700);
+  }
+
+  .tab-right {
+    background-color: $dark-primary-color;
+    border-radius: 0 25px 0 0;
+  }
+
+  tr.clickable:hover {
+    background-color: mat.get-theme-color($dark-theme, primary, 500);
+  }
+
+  .selected-tr {
+    background-color: mat.get-theme-color($dark-theme, primary, 500) !important;
+  }
+
+  .content-card {
+    background-color: $dark-bgh-color;
+    border: 2px solid rgba(255, 255, 255, 0.03);
+    box-shadow: 0px 12px 14px 0px rgba(29, 31, 35, 0.05);
+  }
+
+  .trans-dialog {
+    background-color: $dark-bgh-color;
+    opacity: 0.9;
+  }
+
+  table.default tr:nth-child(odd) {
+    background-color: $dark-bgh-color;
+  }
+
+  table.default tr:nth-child(even) {
+    background-color: $dark-bg-color;
+  }
+
+  table.default {
+    border-bottom: 1px solid $dark-text-light-color !important;
+  }
+
+  table.default th {
+    border: 1px solid $dark-text-light-color;
+    background-color: $dark-bg-color !important;
+  }
+
+  table.default td {
+    border-right: 1px solid $dark-text-light-color;
+    border-left: 1px solid $dark-text-light-color;
+  }
+
+
+  .text-color {
+    color: $dark-text-color;
+  }
+
+  .text-secondary-color {
+    color: $dark-text-secondary-color;
+  }
+
+  .text-gray-color {
+    color: $dark-text-gray-color;
+  }
+
+  .text-light-color {
+    color: $dark-text-light-color;
+  }
+
+  .bg-primary {
+    background-color: $dark-primary-color !important;
+  }
+
+  .bg-1 {
+    background-color: $dark-bg-color !important;
+  }
+
+  .bg-h {
+    background-color: $dark-bgh-color;
+  }
+
+  .card-style {
+    background-color: $dark-bgh-color !important;
+    border: 2px solid rgba(255, 255, 255, 0.03);
+    box-shadow: inset 0px 0px 2px 0px rgb(133 132 133 / 44%);
+    border-radius: 8px;
+  }
+
+  .box-shadow {
+    box-shadow: 0px 1px 2px 0px rgb(133 132 133 / 44%);
+  }
+
+  .active {
+    background-color: mat.get-color-from-palette($dark-primary, 500) !important;
+  }
+
+  .mat-app-background {
+    background-color: $dark-bg-color !important;
+  }
+
+  .mat-drawer-container {
+    background-color: $dark-bg-color !important;
+  }
+
+  .trans-bg {
+    background-color: rgba(80, 80, 80, 0.85);
+  }
+
+  .trans-bg-6 {
+    background-color: #50505099 !important;
+  }
+
+  .trans-bg-3 {
+    background-color: #0c0c0c4d !important;
+  }
+
+  a {
+    color: mat.get-theme-color($dark-theme, primary, 300);
+  }
+
+  .text-primary {
+    color: mat.get-theme-color($dark-theme, primary, 300);
+  }
+
+  .text-accent {
+    color: mat.get-theme-color($dark-theme, accent, 400);
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .btn {
+    color: white;
+    background-color: $light-primary-color;
+  }
+
+  .feedback {
+    background-image: linear-gradient(125deg, #FAFBFE 0%, #FFFFFF 83%);
+    border: 2px solid rgba(255, 255, 255, 0.03);
+    box-shadow: 0px 12px 14px 0px rgba(29, 31, 35, 0.05);
+  }
+
+  .mat-mdc-card {
+    background-color: $light-bgh-color !important;
+    border: 2px solid #edf0f2;
+    box-shadow: 0px 12px 14px 0px #1d1f230d;
+    border-radius: 8px;
+  }
+
+  .tab-select {
+    background-color: darken($color: $light-primary-color, $amount: 8%) !important;
+  }
+
+  .tab-left {
+    background-color: $light-primary-color;
+    border-radius: 25px 0 0 0;
+    border-right: 8px solid mat.get-theme-color($light-theme, primary, 700);
+  }
+
+  .tab-item {
+    background-color: $light-primary-color;
+    border-right: 8px solid mat.get-theme-color($light-theme, primary, 700);
+  }
+
+  .tab-right {
+    background-color: $light-primary-color;
+    border-radius: 0 25px 0 0;
+  }
+
+  tr.clickable:hover {
+    background-color: mat.get-theme-color($light-theme, primary, 300);
+  }
+
+  .selected-tr {
+    background-color: mat.get-theme-color($light-theme, primary, 300) !important;
+  }
+
+  .content-card {
+    background-color: $light-bgh-color;
+    border: 2px solid rgba(255, 255, 255, 0.03);
+    box-shadow: 0px 12px 14px 0px rgba(29, 31, 35, 0.05);
+  }
+
+  .trans-dialog {
+    background-color: $light-bgh-color;
+    opacity: 0.9;
+  }
+
+  table.default tr:nth-child(odd) {
+    background-color: $light-bgh-color;
+  }
+
+  table.default tr:nth-child(even) {
+    background-color: $light-bg-color;
+  }
+
+  table.default {
+    border-bottom: 1px solid $light-text-light-color !important;
+  }
+
+  table.default td {
+    border-right: 1px solid $light-text-light-color;
+    border-left: 1px solid $light-text-light-color;
+  }
+
+  table.default th {
+    background-color: $light-bgh-color !important;
+    border: 1px solid $light-text-light-color;
+  }
+
+  .text-color {
+    color: $light-text-color;
+  }
+
+  .text-secondary-color {
+    color: $light-text-secondary-color;
+  }
+
+  .text-gray-color {
+    color: $light-text-gray-color;
+  }
+
+  .text-light-color {
+    color: $light-text-light-color;
+  }
+
+  .bg-primary {
+    background-color: lighten($color: $light-primary-color , $amount: 15%) !important;
+  }
+
+  .bg-1 {
+    background-color: $light-bg-color !important;
+  }
+
+  .bg-h {
+    background-color: $light-bgh-color;
+  }
+
+  .card-style {
+    background-color: $light-bgh-color !important;
+    border: 2px solid $light-bgh-color;
+    box-shadow: 0px 12px 14px 0px #1d1f2300;
+    border-radius: 8px;
+  }
+
+  .box-shadow {
+    box-shadow: 0px 12px 14px 0px #1d1f2300;
+  }
+
+  .active {
+    background-color: mat.get-theme-color($light-theme, primary, 200) !important;
+  }
+
+  .mat-app-background {
+    background-color: $light-bg-color !important;
+  }
+
+  .mat-drawer-container {
+    background-color: $light-bg-color !important;
+  }
+
+  .trans-bg {
+    background-color: rgba(240, 240, 240, 0.85);
+  }
+
+  .trans-bg-6 {
+    background-color: rgba(240, 240, 240, 0.6) !important;
+  }
+
+  .trans-bg-3 {
+    background-color: rgba(223, 223, 223, 0.3) !important;
+  }
+
+  a {
+    color: mat.get-theme-color($light-theme, primary, 900);
+  }
+
+  .text-primary {
+    color: mat.get-theme-color($light-theme, primary, 900);
+  }
+
+  .text-accent {
+    color: mat.get-theme-color($light-theme, primary, 900);
+  }
+
+  @include mat.all-component-colors($light-theme);
+}

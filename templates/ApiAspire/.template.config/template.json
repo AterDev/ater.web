@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "ater.niltor",
+  "classifications": [
+    "Web",
+    "Web API",
+    "API",
+    "Service",
+    "Aspire"
+  ],
+  "identity": "Ater.Web.Aspire",
+  "name": "Ater Web API Aspire",
+  "shortName": "ataspire",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "sourceName": "MyProjectName",
+  "preferNameDirectory": true,
+  "sources": [
+  ]
+}
