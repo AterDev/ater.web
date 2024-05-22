@@ -5,7 +5,7 @@ namespace SystemMod.Controllers.AdminControllers;
 /// 系统角色
 /// <see cref="SystemRoleManager"/>
 /// </summary>
-[Authorize(AppConst.SuperAdmin)]
+[Authorize(AterConst.SuperAdmin)]
 public class SystemRoleController(
     IUserContext user,
     ILogger<SystemRoleController> logger,

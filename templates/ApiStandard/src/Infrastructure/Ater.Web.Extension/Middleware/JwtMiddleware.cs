@@ -22,8 +22,8 @@ public class JwtMiddleware(RequestDelegate next, CacheService redis, ILogger<Jwt
         // 可匿名访问的放行
         Endpoint? endpoint = context.GetEndpoint();
         var allowAnon = endpoint?.Metadata.GetMetadata<IAllowAnonymous>() != null;
-        var token = context.Request.Headers[AppConst.Authorization].FirstOrDefault()?.Split(" ").Last() ?? string.Empty;
-        var client = context.Request.Headers[AppConst.ClientHeader].FirstOrDefault() ?? AppConst.Web;
+        var token = context.Request.Headers[AterConst.Authorization].FirstOrDefault()?.Split(" ").Last() ?? string.Empty;
+        var client = context.Request.Headers[AterConst.ClientHeader].FirstOrDefault() ?? AterConst.Web;
         if (allowAnon || token.IsEmpty())
         {
             await _next(context);
@@ -41,7 +41,7 @@ public class JwtMiddleware(RequestDelegate next, CacheService redis, ILogger<Jwt
         // 策略判断
         if (id.NotEmpty())
         {
-            var securityPolicyStr = _cache.GetValue<string>(AppConst.LoginSecurityPolicy);
+            var securityPolicyStr = _cache.GetValue<string>(AterConst.LoginSecurityPolicy);
             var securityPolicy = JsonSerializer.Deserialize<LoginSecurityPolicy>(securityPolicyStr!);
 
             if (securityPolicy == null || !securityPolicy.IsEnable)
@@ -51,9 +51,9 @@ public class JwtMiddleware(RequestDelegate next, CacheService redis, ILogger<Jwt
             }
             if (securityPolicy.SessionLevel == SessionLevel.OnlyOne)
             {
-                client = AppConst.AllPlatform;
+                client = AterConst.AllPlatform;
             }
-            var key = AppConst.LoginCachePrefix + client + id;
+            var key = AterConst.LoginCachePrefix + client + id;
             var cacheToken = _cache.GetValue<string>(key);
             if (cacheToken.IsEmpty())
             {

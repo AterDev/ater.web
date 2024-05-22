@@ -89,7 +89,7 @@ public class SystemUserManager(
                 ErrorStatus = 500002;
                 return false;
             }
-            var key = AppConst.VerifyCodeCachePrefix + user.Email;
+            var key = AterConst.VerifyCodeCachePrefix + user.Email;
             string? code = _cache.GetValue<string>(key);
             if (code == null)
             {
@@ -137,7 +137,7 @@ public class SystemUserManager(
         {
             // 加载关联数据
             List<string> roles = user.SystemRoles?.Select(r => r.NameValue)?.ToList()
-                ?? [AppConst.AdminUser];
+                ?? [AterConst.AdminUser];
             // 过期时间:秒
             var expiredSeconds = jwtOption.ExpiredSeconds * 60 * 60;
 
@@ -146,9 +146,9 @@ public class SystemUserManager(
                 TokenExpires = expiredSeconds,
             };
             // 添加管理员用户标识
-            if (!roles.Contains(AppConst.AdminUser))
+            if (!roles.Contains(AterConst.AdminUser))
             {
-                roles.Add(AppConst.AdminUser);
+                roles.Add(AterConst.AdminUser);
             }
             jwt.Claims = [new(ClaimTypes.Name, user.UserName),];
             var token = jwt.GetToken(user.Id.ToString(), [.. roles]);
