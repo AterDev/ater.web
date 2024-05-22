@@ -5,9 +5,7 @@ param (
     $version = "1.0.0"
 )
 $location = Get-Location
-
-$infrastructurePath = Join-Path $location "./templates/ApiStandard/src/Infrastructure/"
-
+$infrastructurePath = Join-Path $location "../templates/ApiAspire/src/Infrastructure/"
 $projects = @(
     "Ater.Web.Core/Ater.Web.Core.csproj", 
     "Ater.Web.Abstraction/Ater.Web.Abstraction.csproj", 
@@ -29,8 +27,6 @@ try {
         $csprojPath = Join-Path $infrastructurePath $project
         dotnet pack $csprojPath -o ./pack
     }
-
-
 }
 catch {
     Write-Host $_.Exception.Message -ForegroundColor Red

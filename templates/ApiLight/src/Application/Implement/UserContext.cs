@@ -39,7 +39,7 @@ public class UserContext : IUserContext
             .Select(c => c.Value).ToList();
         if (Roles != null)
         {
-            IsAdmin = Roles.Any(r => r.Equals(AppConst.AdminUser) || r.Equals(AppConst.SuperAdmin));
+            IsAdmin = Roles.Any(r => r.Equals(AterConst.AdminUser) || r.Equals(AterConst.SuperAdmin));
         }
         _context = context;
     }

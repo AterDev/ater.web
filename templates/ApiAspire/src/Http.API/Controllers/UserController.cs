@@ -39,7 +39,7 @@ public class UserController(
             {
                 return BadRequest("邮箱不能为空");
             }
-            var key = AppConst.VerifyCodeCachePrefix + dto.Email;
+            var key = AterConst.VerifyCodeCachePrefix + dto.Email;
             var code = _cache.GetValue<string>(key);
             if (code == null)
             {
@@ -63,7 +63,7 @@ public class UserController(
     public async Task<ActionResult> SendRegVerifyCodeAsync(string email)
     {
         var captcha = HashCrypto.GetRnd(6);
-        var key = AppConst.VerifyCodeCachePrefix + email;
+        var key = AterConst.VerifyCodeCachePrefix + email;
         if (_cache.GetValue<string>(key) != null)
         {
             return Conflict("验证码已发送!");
@@ -89,7 +89,7 @@ public class UserController(
             return NotFound("不存在的邮箱账号");
         }
         var captcha = HashCrypto.GetRnd(6);
-        var key = AppConst.VerifyCodeCachePrefix + email;
+        var key = AterConst.VerifyCodeCachePrefix + email;
         if (_cache.GetValue<string>(key) != null)
         {
             return Conflict("验证码已发送!");
@@ -122,7 +122,7 @@ public class UserController(
         // 可将 dto.VerifyCode 设置为必填，以强制验证
         if (dto.VerifyCode != null)
         {
-            var key = AppConst.VerifyCodeCachePrefix + user.Email;
+            var key = AterConst.VerifyCodeCachePrefix + user.Email;
             var cacheCode = _cache.GetValue<string>(key);
             if (cacheCode == null)
             {
@@ -148,7 +148,7 @@ public class UserController(
                 !string.IsNullOrWhiteSpace(audience))
             {
                 // 设置角色或用户等级以区分权限
-                var roles = new List<string> { AppConst.User };
+                var roles = new List<string> { AterConst.User };
                 // 过期时间:minutes
                 var expired = 60 * 24;
                 JwtService jwt = new(sign, audience, issuer)
@@ -156,13 +156,13 @@ public class UserController(
                     TokenExpires = expired,
                 };
                 // 添加管理员用户标识
-                if (!roles.Contains(AppConst.User))
+                if (!roles.Contains(AterConst.User))
                 {
-                    roles.Add(AppConst.User);
+                    roles.Add(AterConst.User);
                 }
                 var token = jwt.GetToken(user.Id.ToString(), [.. roles]);
                 // 缓存登录状态
-                await _cache.SetValueAsync(AppConst.LoginCachePrefix + user.Id.ToString(), true, expired * 60);
+                await _cache.SetValueAsync(AterConst.LoginCachePrefix + user.Id.ToString(), true, expired * 60);
 
                 return new LoginResult
                 {
@@ -193,7 +193,7 @@ public class UserController(
         if (await manager.ExistAsync(id))
         {
             // 清除缓存状态
-            await _cache.RemoveAsync(AppConst.LoginCachePrefix + id.ToString());
+            await _cache.RemoveAsync(AterConst.LoginCachePrefix + id.ToString());
             return Ok();
         }
         return NotFound();

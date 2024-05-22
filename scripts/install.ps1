@@ -54,11 +54,8 @@ if (Test-Path ./templates/ApiStandard/src/Http.API/Migrations) {
     Remove-Item ./templates/ApiStandard/src/Http.API/Migrations -Force -Recurse
 }
 $location = Get-Location
-$entityPath = Join-Path $location "./templates/ApiStandard/src/Entity"
-
-
-
-$solutionPath = Join-Path $location "./templates/ApiStandard"
+$entityPath = Join-Path $location "../templates/ApiStandard/src/Entity"
+$solutionPath = Join-Path $location "../templates/ApiStandard"
 $tmp = Join-Path $solutionPath "./.tmp"
 if (!(Test-Path $tmp)) {
     New-Item -Path $tmp -ItemType Directory -Force | Out-Null
@@ -101,10 +98,12 @@ try {
     #re install package
     dotnet new uninstall $PackageId
     dotnet new install .\nuget\$PackageId.$Version.nupkg
+    Set-Location $location;
 }
 catch {
     Write-Error $_.Exception.Message
     Remove-Item $tmp -Force -Recurse
+    Set-Location $location;
 }
 
 

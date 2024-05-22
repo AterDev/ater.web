@@ -5,7 +5,7 @@ namespace Http.API.Controllers.AdminControllers;
 /// 用户账户
 /// </summary>
 /// <see cref="Application.Manager.UserManager"/>
-[Authorize(AppConst.AdminUser)]
+[Authorize(AterConst.AdminUser)]
 public class UserController(
     IUserContext user,
     ILogger<UserController> logger,

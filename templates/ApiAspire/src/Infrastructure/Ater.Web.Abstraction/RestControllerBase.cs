@@ -12,7 +12,7 @@ namespace Ater.Web.Abstraction;
 /// 管理后台权限控制器
 /// </summary>
 [Route("api/admin/[controller]")]
-[Authorize(AppConst.AdminUser)]
+[Authorize(AterConst.AdminUser)]
 [ApiExplorerSettings(GroupName = "admin")]
 public class RestControllerBase<TManager>(
     TManager manager,
@@ -31,7 +31,7 @@ public class RestControllerBase<TManager>(
 /// 用户端权限控制器
 /// </summary>
 /// <typeparam name="TManager"></typeparam>
-[Authorize(AppConst.User)]
+[Authorize(AterConst.User)]
 [ApiExplorerSettings(GroupName = "client")]
 public class ClientControllerBase<TManager>(
     TManager manager,

@@ -6,7 +6,7 @@ namespace SystemMod.Controllers.AdminControllers;
 /// 系统菜单
 /// </summary>
 /// <see cref="SystemMenuManager"/>
-[Authorize(AppConst.SuperAdmin)]
+[Authorize(AterConst.SuperAdmin)]
 public class SystemMenuController(
     IUserContext user,
     ILogger<SystemMenuController> logger,

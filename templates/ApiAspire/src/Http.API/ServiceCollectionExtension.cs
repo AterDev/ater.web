@@ -60,13 +60,13 @@ public static class ServiceCollectionExtension
         app.UseExceptionHandler(ExceptionHandler.Handler());
         if (app.Environment.IsProduction())
         {
-            app.UseCors(AppConst.Default);
+            app.UseCors(AterConst.Default);
             //app.UseHsts();
             app.UseHttpsRedirection();
         }
         else
         {
-            app.UseCors(AppConst.Default);
+            app.UseCors(AterConst.Default);
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
@@ -293,7 +293,7 @@ public static class ServiceCollectionExtension
     {
         services.AddCors(options =>
         {
-            options.AddPolicy(AppConst.Default, builder =>
+            options.AddPolicy(AterConst.Default, builder =>
             {
                 builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
             });
@@ -304,9 +304,9 @@ public static class ServiceCollectionExtension
     public static IServiceCollection AddAuthorize(this IServiceCollection services)
     {
         services.AddAuthorizationBuilder()
-            .AddPolicy(AppConst.User, policy => policy.RequireRole(AppConst.User))
-            .AddPolicy(AppConst.AdminUser, policy => policy.RequireRole(AppConst.SuperAdmin, AppConst.AdminUser))
-            .AddPolicy(AppConst.SuperAdmin, policy => policy.RequireRole(AppConst.SuperAdmin));
+            .AddPolicy(AterConst.User, policy => policy.RequireRole(AterConst.User))
+            .AddPolicy(AterConst.AdminUser, policy => policy.RequireRole(AterConst.SuperAdmin, AterConst.AdminUser))
+            .AddPolicy(AterConst.SuperAdmin, policy => policy.RequireRole(AterConst.SuperAdmin));
         return services;
     }
 }
