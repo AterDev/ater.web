@@ -4,7 +4,7 @@
 /// </summary>
 [Module(Modules.System)]
 [Index(nameof(Name))]
-public class SystemOrganization : IEntityBase, ITreeNode<SystemOrganization>
+public class SystemOrganization : EntityBase, ITreeNode<SystemOrganization>
 {
     /// <summary>
     /// 名称
@@ -24,8 +24,5 @@ public class SystemOrganization : IEntityBase, ITreeNode<SystemOrganization>
     public SystemOrganization? Parent { get; set; }
     public Guid? ParentId { get; set; }
     public ICollection<SystemUser> Users { get; set; } = [];
-    public Guid Id { get; set; }
-    public DateTimeOffset CreatedTime { get; set; }
-    public DateTimeOffset UpdatedTime { get; set; }
-    public bool IsDeleted { get; set; }
+
 }

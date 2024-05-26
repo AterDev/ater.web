@@ -5,7 +5,7 @@
 [Index(nameof(Key))]
 [Index(nameof(Valid))]
 [Index(nameof(GroupName))]
-public class UserConfig : IEntityBase
+public class UserConfig : EntityBase
 {
     [MaxLength(100)]
     public required string Key { get; set; }
@@ -26,10 +26,5 @@ public class UserConfig : IEntityBase
     [ForeignKey(nameof(UserId))]
     public User User { get; set; } = null!;
     public Guid UserId { get; set; } = default!;
-
-    public Guid Id { get; set; }
-    public DateTimeOffset CreatedTime { get; set; }
-    public DateTimeOffset UpdatedTime { get; set; }
-    public bool IsDeleted { get; set; }
 
 }

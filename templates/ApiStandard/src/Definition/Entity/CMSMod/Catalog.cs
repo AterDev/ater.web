@@ -5,7 +5,7 @@
 [Index(nameof(Name))]
 [Index(nameof(Level))]
 [Module(Modules.CMS)]
-public class Catalog : IEntityBase, ITreeNode<Catalog>
+public class Catalog : EntityBase, ITreeNode<Catalog>
 {
     /// <summary>
     /// 目录名称
@@ -33,8 +33,4 @@ public class Catalog : IEntityBase, ITreeNode<Catalog>
     [ForeignKey(nameof(UserId))]
     public User User { get; set; } = null!;
     public Guid UserId { get; set; }
-    public Guid Id { get; set; }
-    public DateTimeOffset CreatedTime { get; set; }
-    public DateTimeOffset UpdatedTime { get; set; }
-    public bool IsDeleted { get; set; }
 }

@@ -6,7 +6,7 @@
 [Index(nameof(Sort))]
 [Index(nameof(Name))]
 [Index(nameof(ProductType))]
-public class Product : IEntityBase
+public class Product : EntityBase
 {
     /// <summary>
     /// 名称
@@ -62,11 +62,6 @@ public class Product : IEntityBase
     /// </summary>
     public decimal OriginPrice { get; set; }
     public ICollection<Order> Orders { get; set; } = [];
-    public Guid Id { get; set; }
-    public DateTimeOffset CreatedTime { get; set; }
-    public DateTimeOffset UpdatedTime { get; set; }
-    public bool IsDeleted { get; set; }
-    public int SpecQuantity { get; set; }
 }
 
 /// <summary>

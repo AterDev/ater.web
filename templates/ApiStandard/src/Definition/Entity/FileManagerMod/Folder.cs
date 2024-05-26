@@ -5,7 +5,7 @@
 /// </summary>
 [Index(nameof(Name))]
 [Module(Modules.FileManager)]
-public class Folder : IEntityBase, ITreeNode<Folder>
+public class Folder : EntityBase, ITreeNode<Folder>
 {
     /// <summary>
     /// 名称
@@ -25,8 +25,4 @@ public class Folder : IEntityBase, ITreeNode<Folder>
     public string? Path { get; set; }
 
     public ICollection<FileData> Files { get; set; } = [];
-    public Guid Id { get; set; }
-    public DateTimeOffset CreatedTime { get; set; }
-    public DateTimeOffset UpdatedTime { get; set; }
-    public bool IsDeleted { get; set; }
 }

@@ -7,7 +7,7 @@
 [Index(nameof(Valid))]
 [Index(nameof(GroupName))]
 [Module(Modules.System)]
-public class SystemConfig : IEntityBase
+public class SystemConfig : EntityBase
 {
     [MaxLength(100)]
     public required string Key { get; set; }
@@ -30,10 +30,6 @@ public class SystemConfig : IEntityBase
     /// </summary>
     [MaxLength(60)]
     public string GroupName { get; set; } = string.Empty;
-    public Guid Id { get; set; }
-    public DateTimeOffset CreatedTime { get; set; }
-    public DateTimeOffset UpdatedTime { get; set; }
-    public bool IsDeleted { get; set; }
 
     /// <summary>
     /// 创建系统配置

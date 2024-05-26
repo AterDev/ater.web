@@ -1,4 +1,5 @@
 ﻿using Ater.Web.Core.Utils;
+
 using Entity.CustomerMod;
 
 namespace Entity.OrderMod;
@@ -9,7 +10,7 @@ namespace Entity.OrderMod;
 [Index(nameof(OrderNumber))]
 [Index(nameof(DiscountCode))]
 [Index(nameof(Status))]
-public class Order : IEntityBase
+public class Order : EntityBase
 {
     #region 关联属性
     [ForeignKey(nameof(UserId))]
@@ -65,10 +66,6 @@ public class Order : IEntityBase
     /// 订单当前状态。
     /// </summary>
     public OrderStatus Status { get; set; }
-    public Guid Id { get; set; }
-    public DateTimeOffset CreatedTime { get; set; }
-    public DateTimeOffset UpdatedTime { get; set; }
-    public bool IsDeleted { get; set; }
 }
 /// <summary>
 /// 订单状态

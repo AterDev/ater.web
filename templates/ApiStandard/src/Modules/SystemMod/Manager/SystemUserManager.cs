@@ -1,9 +1,9 @@
-using System.Security.Claims;
-using System.Text.RegularExpressions;
-
 using Ater.Web.Extension;
 
 using Share.Models.UserDtos;
+
+using System.Security.Claims;
+using System.Text.RegularExpressions;
 
 using SystemMod.Models;
 using SystemMod.Models.SystemUserDtos;

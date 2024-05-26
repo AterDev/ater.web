@@ -5,7 +5,7 @@
 /// </summary>
 [Module(Modules.System)]
 [Index(nameof(Name))]
-public class SystemPermissionGroup : IEntityBase
+public class SystemPermissionGroup : EntityBase
 {
     /// <summary>
     /// 权限名称标识
@@ -21,8 +21,5 @@ public class SystemPermissionGroup : IEntityBase
     public ICollection<SystemPermission> Permissions { get; set; } = [];
 
     public ICollection<SystemRole> Roles { get; set; } = [];
-    public Guid Id { get; set; }
-    public DateTimeOffset CreatedTime { get; set; }
-    public DateTimeOffset UpdatedTime { get; set; }
-    public bool IsDeleted { get; set; }
+
 }
