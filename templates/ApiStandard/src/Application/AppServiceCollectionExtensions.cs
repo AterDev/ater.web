@@ -131,7 +131,7 @@ public static partial class AppServiceCollectionExtensions
         Action<MeterProviderBuilder>? meterProvider = null)
     {
         var resource = ResourceBuilder.CreateDefault()
-            .AddService(serviceName: serviceName, serviceInstanceId: Environment.MachineName);
+            .AddService(serviceName: serviceName, serviceInstanceId: $"{serviceName}_{Environment.MachineName}");
 
         var section = builder.Configuration.GetSection("OpenTelemetry");
         bool exportConsole = false;
