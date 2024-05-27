@@ -42,7 +42,7 @@ public static partial class AppServiceCollectionExtensions
     {
         builder.AddDbContext();
         builder.AddCache();
-        var otlpEndpoint = builder.Configuration.GetSection("Opentelemetry").GetValue<string>("Endpoint");
+        var otlpEndpoint = builder.Configuration.GetSection("OpenTelemetry").GetValue<string>("Endpoint");
         otlpEndpoint = otlpEndpoint.NotEmpty() ? otlpEndpoint : builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"] ?? "http://localhost:4317";
 
         builder.AddOpenTelemetry("MyProjectName", opt =>
@@ -133,7 +133,7 @@ public static partial class AppServiceCollectionExtensions
         var resource = ResourceBuilder.CreateDefault()
             .AddService(serviceName: serviceName, serviceInstanceId: Environment.MachineName);
 
-        var section = builder.Configuration.GetSection("Opentelemetry");
+        var section = builder.Configuration.GetSection("OpenTelemetry");
         bool exportConsole = false;
         if (section != null)
         {
