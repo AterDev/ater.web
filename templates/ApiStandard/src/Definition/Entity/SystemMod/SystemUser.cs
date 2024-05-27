@@ -10,7 +10,7 @@ namespace Entity.SystemMod;
 [Index(nameof(CreatedTime))]
 [Index(nameof(IsDeleted))]
 [Module(Modules.System)]
-public class SystemUser : IEntityBase
+public class SystemUser : EntityBase
 {
     /// <summary>
     /// 用户名
@@ -64,10 +64,6 @@ public class SystemUser : IEntityBase
     /// 性别
     /// </summary>
     public Sex Sex { get; set; } = Sex.Male;
-    public Guid Id { get; set; }
-    public DateTimeOffset CreatedTime { get; set; }
-    public DateTimeOffset UpdatedTime { get; set; }
-    public bool IsDeleted { get; set; }
 
     public string GetUniqueKey(string prefix, string client)
     {

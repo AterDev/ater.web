@@ -9,7 +9,7 @@ namespace Entity;
 [Index(nameof(PhoneNumber), IsUnique = true)]
 [Index(nameof(CreatedTime))]
 [Index(nameof(IsDeleted))]
-public class User : IEntityBase
+public class User : EntityBase
 {
     // TODO:根据实际需求调整字段
 
@@ -57,10 +57,6 @@ public class User : IEntityBase
     /// </summary>
     [MaxLength(200)]
     public string? Avatar { get; set; }
-    public Guid Id { get; set; }
-    public DateTimeOffset CreatedTime { get; set; }
-    public DateTimeOffset UpdatedTime { get; set; }
-    public bool IsDeleted { get; set; }
 
     #region 用户关联内容
 

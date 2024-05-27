@@ -5,7 +5,7 @@
 [Module(Modules.System)]
 [Index(nameof(AccessCode))]
 [Index(nameof(Name))]
-public class SystemMenu : IEntityBase, ITreeNode<SystemMenu>
+public class SystemMenu : EntityBase, ITreeNode<SystemMenu>
 {
     /// <summary>
     /// 菜单名称
@@ -61,10 +61,6 @@ public class SystemMenu : IEntityBase, ITreeNode<SystemMenu>
     /// 是否显示
     /// </summary>
     public bool Hidden { get; set; } = true;
-    public Guid Id { get; set; }
-    public DateTimeOffset CreatedTime { get; set; }
-    public DateTimeOffset UpdatedTime { get; set; }
-    public bool IsDeleted { get; set; }
 }
 
 public enum MenuType

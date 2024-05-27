@@ -4,7 +4,7 @@
 /// </summary>
 [Module(Modules.CMS)]
 [LogDescription("博客", nameof(Title), Modules.CMS)]
-public class Blog : IEntityBase
+public class Blog : EntityBase
 {
     /// <summary>
     /// 标题
@@ -72,10 +72,6 @@ public class Blog : IEntityBase
     /// 浏览量
     /// </summary>
     public int ViewCount { get; set; }
-    public Guid Id { get; set; }
-    public DateTimeOffset CreatedTime { get; set; }
-    public DateTimeOffset UpdatedTime { get; set; }
-    public bool IsDeleted { get; set; }
 }
 
 public enum BlogType

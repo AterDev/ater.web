@@ -5,7 +5,7 @@
 [Index(nameof(Name))]
 [Index(nameof(PermissionType))]
 [Module(Modules.System)]
-public class SystemPermission : IEntityBase
+public class SystemPermission : EntityBase
 {
     /// <summary>
     /// 权限名称标识
@@ -32,10 +32,7 @@ public class SystemPermission : IEntityBase
     /// 权限组
     /// </summary>
     public required SystemPermissionGroup Group { get; set; }
-    public Guid Id { get; set; }
-    public DateTimeOffset CreatedTime { get; set; }
-    public DateTimeOffset UpdatedTime { get; set; }
-    public bool IsDeleted { get; set; }
+
 }
 
 /// <summary>

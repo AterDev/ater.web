@@ -5,7 +5,7 @@
 [Index(nameof(ActionType))]
 [Index(nameof(ActionUserName))]
 [Index(nameof(CreatedTime))]
-public class UserLogs : IEntityBase
+public class UserLogs : EntityBase
 {
     /// <summary>
     /// 操作人名称
@@ -41,10 +41,6 @@ public class UserLogs : IEntityBase
 
     public Guid UserId { get; set; } = default!;
 
-    public Guid Id { get; set; }
-    public DateTimeOffset CreatedTime { get; set; }
-    public DateTimeOffset UpdatedTime { get; set; }
-    public bool IsDeleted { get; set; }
 
     public static UserLogs NewLog(string userName, Guid userId, string targetName, UserActionType actionType, string? route = null, string? description = null)
     {

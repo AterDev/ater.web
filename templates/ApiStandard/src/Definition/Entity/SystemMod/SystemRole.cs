@@ -5,7 +5,7 @@
 [Index(nameof(Name))]
 [Index(nameof(NameValue), IsUnique = true)]
 [Module(Modules.System)]
-public class SystemRole : IEntityBase
+public class SystemRole : EntityBase
 {
     /// <summary>
     /// 角色显示名称
@@ -36,8 +36,4 @@ public class SystemRole : IEntityBase
     /// 菜单权限
     /// </summary>
     public ICollection<SystemMenu> Menus { get; set; } = [];
-    public Guid Id { get; set; }
-    public DateTimeOffset CreatedTime { get; set; }
-    public DateTimeOffset UpdatedTime { get; set; }
-    public bool IsDeleted { get; set; }
 }

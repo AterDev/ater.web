@@ -7,7 +7,7 @@
 [Index(nameof(FileName))]
 [Index(nameof(Extension))]
 [Module(Modules.FileManager)]
-public class FileData : IEntityBase
+public class FileData : EntityBase
 {
     public Folder? Folder { get; set; }
     /// <summary>
@@ -33,8 +33,4 @@ public class FileData : IEntityBase
     /// </summary>
     [MaxLength(1024 * 1024 * 2)]
     public required byte[] Content { get; set; }
-    public Guid Id { get; set; }
-    public DateTimeOffset CreatedTime { get; set; }
-    public DateTimeOffset UpdatedTime { get; set; }
-    public bool IsDeleted { get; set; }
 }
