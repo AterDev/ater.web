@@ -1,4 +1,5 @@
-using Entity.SystemMod;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 using SystemMod.Models.SystemMenuDtos;
 namespace SystemMod.Controllers.AdminControllers;
 
@@ -10,9 +11,11 @@ namespace SystemMod.Controllers.AdminControllers;
 public class SystemMenuController(
     IUserContext user,
     ILogger<SystemMenuController> logger,
+    IWebHostEnvironment env,
     SystemMenuManager manager
         ) : RestControllerBase<SystemMenuManager>(manager, user, logger)
 {
+    private readonly IWebHostEnvironment _env = env;
 
     /// <summary>
     /// 筛选 ✅
@@ -36,12 +39,15 @@ public class SystemMenuController(
     [AllowAnonymous]
     public async Task<ActionResult<bool>> SyncSystemMenus(string token, List<SystemMenuSyncDto> menus)
     {
+        if (_env.IsProduction())
+        {
+            return Forbid();
+        }
         // 不经过jwt验证，定义自己的key用来开发时同步菜单
         if (token != "MyProjectNameDefaultKey")
         {
             return Forbid();
         }
-
         if (menus != null && menus.Count != 0)
         {
             return await manager.SyncSystemMenusAsync(menus);

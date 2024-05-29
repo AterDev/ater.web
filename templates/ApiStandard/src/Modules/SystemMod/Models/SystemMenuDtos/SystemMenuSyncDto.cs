@@ -1,16 +1,13 @@
-﻿using System.Text.Json.Serialization;
-
-namespace SystemMod.Models.SystemMenuDtos;
+﻿namespace SystemMod.Models.SystemMenuDtos;
+/// <summary>
+/// <inheritdoc cref="SystemMenu"/>
+/// </summary>
 public class SystemMenuSyncDto
 {
-    [JsonPropertyName("name")]
     public required string Name { get; set; }
-    [JsonPropertyName("accessCode")]
     public required string AccessCode { get; set; }
-    [JsonPropertyName("menuType")]
-    public int MenuType { get; set; } = 0;
-    [JsonPropertyName("parentId")]
-    public Guid? ParentId { get; set; }
-    [JsonPropertyName("children")]
+    public int MenuType { get; set; }
+    public int? Sort { get; set; }
+    public string? Icon { get; set; }
     public List<SystemMenuSyncDto> Children { get; set; } = [];
 }

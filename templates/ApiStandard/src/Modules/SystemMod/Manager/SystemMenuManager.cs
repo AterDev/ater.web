@@ -1,4 +1,3 @@
-using Entity.SystemMod;
 using SystemMod.Models.SystemMenuDtos;
 
 namespace SystemMod.Manager;
@@ -53,11 +52,10 @@ public class SystemMenuManager(
             if (currentMenus.Any(c => c.AccessCode == menu.AccessCode))
             {
                 var index = currentMenus.FindIndex(m => m.AccessCode.Equals(menu.AccessCode));
-                if (currentMenus[index].Name != menu.Name)
-                {
-                    currentMenus[index].Name = menu.Name;
-                    Command.Update(currentMenus[index]);
-                }
+                currentMenus[index].Name = menu.Name;
+                currentMenus[index].Sort = menu.Sort;
+                currentMenus[index].Icon = menu.Icon;
+                Command.Update(currentMenus[index]);
             }
             else
             {
@@ -94,6 +92,8 @@ public class SystemMenuManager(
                     AccessCode = item.AccessCode,
                     MenuType = (MenuType)item.MenuType,
                     Parent = parent,
+                    Sort = item.Sort ?? 0,
+                    Icon = item.Icon
                 };
                 res.Add(menu);
                 List<SystemMenu> children = FlatTree(item.Children, menu);
@@ -107,6 +107,8 @@ public class SystemMenuManager(
                     AccessCode = item.AccessCode,
                     MenuType = (MenuType)item.MenuType,
                     Parent = parent,
+                    Sort = item.Sort ?? 0,
+                    Icon = item.Icon
                 };
                 res.Add(menu);
             }
