@@ -40,10 +40,6 @@ public class CustomerInfoUpdateDto
     /// </summary>
     [MaxLength(100)]
     public string? ContactEmail { get; set; }
-    /// <summary>
-    /// 自定义信息
-    /// </summary>
-    public List<AdditionProperty>? AdditionProperties { get; set; }
     public Guid? CustomerAccountId { get; set; }
     public List<Guid>? CustomerTagsIds { get; set; }
 

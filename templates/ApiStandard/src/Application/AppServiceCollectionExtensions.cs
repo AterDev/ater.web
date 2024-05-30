@@ -111,6 +111,7 @@ public static partial class AppServiceCollectionExtensions
         {
             builder.Services.AddDistributedMemoryCache();
         }
+        builder.Services.AddMemoryCache();
         return builder;
     }
 

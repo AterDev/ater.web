@@ -175,11 +175,6 @@ public class CustomerInfo : EntityBase
     public string? ContactEmail { get; set; }
 
     /// <summary>
-    /// 自定义信息
-    /// </summary>
-    public List<AdditionProperty>? AdditionProperties { get; set; } = [];
-
-    /// <summary>
     /// 关联的登记信息
     /// </summary>
     public CustomerRegister? CustomerRegister { get; set; }

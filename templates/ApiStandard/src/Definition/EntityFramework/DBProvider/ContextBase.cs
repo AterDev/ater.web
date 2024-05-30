@@ -12,19 +12,9 @@ public partial class ContextBase(DbContextOptions options) : DbContext(options)
         base.OnModelCreating(builder);
         OnModelExtendCreating(builder);
         OnSQLiteModelCreating(builder);
-
-        OnModuleModelCreating(builder);
     }
 
-    protected void OnModuleModelCreating(ModelBuilder builder)
-    {
-        // TODO:定义模型实体关系
-        //builder.Entity<CustomerInfo>(e =>
-        //{
-        //    e.OwnsMany(e => e.AdditionProperties).ToJson();
-        //    e.HasMany(e => e.Tags).WithMany(t => t.Customers).UsingEntity<CustomerInfoTag>();
-        //});
-    }
+
 
     public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
     {

@@ -61,8 +61,8 @@ public static class ServiceCollectionExtension
         if (app.Environment.IsProduction())
         {
             app.UseCors(AterConst.Default);
-            //app.UseHsts();
-            app.UseHttpsRedirection();
+            // app.UseHsts();
+            // app.UseHttpsRedirection();
         }
         else
         {
