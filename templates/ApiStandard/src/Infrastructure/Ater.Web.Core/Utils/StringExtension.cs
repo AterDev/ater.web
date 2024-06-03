@@ -1,8 +1,7 @@
-using Ater.Web.Core.Utils;
-
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using Ater.Web.Core.Utils;
 
 namespace Ater.Web.Core.Utils;
 
@@ -264,6 +263,24 @@ public static class StringExtension
             }
         }
         return result.ToString();
+    }
+
+    /// <summary>
+    /// FromBase64
+    /// </summary>
+    /// <param name="str"></param>
+    /// <returns></returns>
+    public static string? FromBase64String(this string str)
+    {
+        byte[] buffer = new byte[str.Length * 3 / 4];
+        if (Convert.TryFromBase64String(str, buffer, out int bytesWritten))
+        {
+            return Encoding.UTF8.GetString(buffer, 0, bytesWritten);
+        }
+        else
+        {
+            return null;
+        }
     }
 
     private static readonly string[] dateFormats = ["yyyy-MM-dd", "yyyy-MM-ddTHH:mm:ss", "yyyy-MM-ddTHH:mm:ssZ"];
