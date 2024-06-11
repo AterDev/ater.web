@@ -23,7 +23,7 @@ public class FolderController(
     [HttpPost("filter")]
     public async Task<ActionResult<PageList<FolderItemDto>>> FilterAsync(FolderFilterDto filter)
     {
-        return await manager.FilterAsync(filter);
+        return await _manager.FilterAsync(filter);
     }
 
     /// <summary>
@@ -36,14 +36,14 @@ public class FolderController(
     {
         if (dto.ParentId != null)
         {
-            var exist = await manager.ExistAsync(dto.ParentId.Value);
+            var exist = await _manager.ExistAsync(dto.ParentId.Value);
             if (!exist)
             {
                 return NotFound(ErrorMsg.NotFoundResource);
             };
         }
-        Folder entity = await manager.CreateNewEntityAsync(dto);
-        return await manager.AddAsync(entity);
+        Folder entity = await _manager.CreateNewEntityAsync(dto);
+        return await _manager.AddAsync(entity);
     }
 
     /// <summary>
@@ -54,7 +54,7 @@ public class FolderController(
     [HttpGet("{id}")]
     public async Task<ActionResult<Folder?>> GetDetailAsync([FromRoute] Guid id)
     {
-        Folder? res = await manager.FindAsync(id);
+        Folder? res = await _manager.FindAsync(id);
         return (res == null) ? NotFound() : res;
     }
 
@@ -68,12 +68,12 @@ public class FolderController(
     public async Task<ActionResult<Folder?>> DeleteAsync([FromRoute] Guid id)
     {
         // 注意删除权限
-        Folder? entity = await manager.GetCurrentAsync(id);
+        Folder? entity = await _manager.GetCurrentAsync(id);
         if (entity == null)
         {
             return NotFound();
         };
         // return Forbid();
-        return await manager.DeleteAsync(entity, false);
+        return await _manager.DeleteAsync(entity, false);
     }
 }

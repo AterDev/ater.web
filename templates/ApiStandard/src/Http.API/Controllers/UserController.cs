@@ -28,7 +28,7 @@ public class UserController(
     public async Task<ActionResult<User>> RegisterAsync(RegisterDto dto)
     {
         // 判断重复用户名
-        if (manager.Query.Db.Any(q => q.UserName.Equals(dto.UserName)))
+        if (_manager.Query.Db.Any(q => q.UserName.Equals(dto.UserName)))
         {
             return Conflict(ErrorMsg.ExistUser);
         }
@@ -50,7 +50,7 @@ public class UserController(
                 return BadRequest("验证码错误");
             }
         }
-        return await manager.RegisterAsync(dto);
+        return await _manager.RegisterAsync(dto);
     }
 
     /// <summary>
@@ -84,7 +84,7 @@ public class UserController(
     [AllowAnonymous]
     public async Task<ActionResult> SendVerifyCodeAsync(string email)
     {
-        if (!manager.Query.Db.Any(q => q.Email != null && q.Email.Equals(email)))
+        if (!_manager.Query.Db.Any(q => q.Email != null && q.Email.Equals(email)))
         {
             return NotFound("不存在的邮箱账号");
         }
@@ -112,7 +112,7 @@ public class UserController(
     public async Task<ActionResult<LoginResult>> LoginAsync(LoginDto dto)
     {
         // 查询用户
-        User? user = await manager.Query.Db.Where(u => u.UserName.Equals(dto.UserName))
+        User? user = await _manager.Query.Db.Where(u => u.UserName.Equals(dto.UserName))
             .FirstOrDefaultAsync();
         if (user == null)
         {
@@ -190,7 +190,7 @@ public class UserController(
     [HttpPut("logout/{id}")]
     public async Task<ActionResult<bool>> LogoutAsync([FromRoute] Guid id)
     {
-        if (await manager.ExistAsync(id))
+        if (await _manager.ExistAsync(id))
         {
             // 清除缓存状态
             await _cache.RemoveAsync(AterConst.LoginCachePrefix + id.ToString());
@@ -206,14 +206,14 @@ public class UserController(
     [HttpPut("changePassword")]
     public async Task<ActionResult<bool>> ChangePassword(string password, string newPassword)
     {
-        if (!await manager.ExistAsync(_user.UserId))
+        if (!await _manager.ExistAsync(_user.UserId))
         {
             return NotFound("");
         }
-        User? user = await manager.GetCurrentAsync(_user.UserId);
+        User? user = await _manager.GetCurrentAsync(_user.UserId);
         return !HashCrypto.Validate(password, user!.PasswordSalt, user.PasswordHash)
             ? (ActionResult<bool>)Problem("当前密码不正确")
-            : await manager.ChangePasswordAsync(user, newPassword);
+            : await _manager.ChangePasswordAsync(user, newPassword);
     }
 
     /// <summary>
@@ -224,12 +224,12 @@ public class UserController(
     [HttpPut]
     public async Task<ActionResult<User?>> UpdateAsync(UserUpdateDto dto)
     {
-        User? current = await manager.GetCurrentAsync(_user.UserId);
+        User? current = await _manager.GetCurrentAsync(_user.UserId);
         if (current == null)
         {
             return NotFound(ErrorMsg.NotFoundResource);
         };
-        return await manager.UpdateAsync(current, dto);
+        return await _manager.UpdateAsync(current, dto);
     }
 
     /// <summary>
@@ -239,7 +239,7 @@ public class UserController(
     [HttpGet]
     public async Task<ActionResult<User?>> GetDetailAsync()
     {
-        User? res = await manager.FindAsync(_user.UserId);
+        User? res = await _manager.FindAsync(_user.UserId);
         return (res == null) ? NotFound(ErrorMsg.NotFoundResource) : res;
     }
 }

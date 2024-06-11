@@ -37,11 +37,11 @@ public class SystemUserController(
     [AllowAnonymous]
     public async Task<ActionResult> SendVerifyCodeAsync(string email)
     {
-        if (!manager.Query.Db.Any(q => q.Email != null && q.Email.Equals(email)))
+        if (!_manager.Query.Db.Any(q => q.Email != null && q.Email.Equals(email)))
         {
             return NotFound("不存在的邮箱账号");
         }
-        var captcha = manager.GetCaptcha();
+        var captcha = _manager.GetCaptcha();
         var key = AterConst.VerifyCodeCachePrefix + email;
         if (_cache.GetValue<string>(key) != null)
         {
@@ -64,7 +64,7 @@ public class SystemUserController(
     [AllowAnonymous]
     public ActionResult GetCaptchaImage()
     {
-        return File(manager.GetCaptchaImage(4), "image/png");
+        return File(_manager.GetCaptchaImage(4), "image/png");
     }
 
     /// <summary>
@@ -78,7 +78,7 @@ public class SystemUserController(
     {
         dto.Password = dto.Password.Trim();
         // 查询用户
-        SystemUser? user = await manager.Command.Db.Where(u => u.UserName.Equals(dto.UserName))
+        SystemUser? user = await _manager.Command.Db.Where(u => u.UserName.Equals(dto.UserName))
             .Include(u => u.SystemRoles)
             .SingleOrDefaultAsync();
         if (user == null)
@@ -88,13 +88,13 @@ public class SystemUserController(
 
         var loginPolicy = _systemConfig.GetLoginSecurityPolicy();
 
-        if (await manager.ValidateLoginAsync(dto, user, loginPolicy))
+        if (await _manager.ValidateLoginAsync(dto, user, loginPolicy))
         {
             // 获取Jwt配置
             JwtOption jwtOption = _config.GetSection("Authentication:Jwt").Get<JwtOption>()
                 ?? throw new ArgumentNullException("未找到Jwt选项!");
 
-            var result = manager.GenerateJwtToken(user, jwtOption);
+            var result = _manager.GenerateJwtToken(user, jwtOption);
 
             var menus = new List<SystemMenu>();
             var permissionGroups = new List<SystemPermissionGroup>();
@@ -104,7 +104,7 @@ public class SystemUserController(
                 permissionGroups = await _roleManager.GetPermissionGroupsAsync([.. user.SystemRoles]);
             }
 
-            await manager.Command.SaveChangesAsync();
+            await _manager.Command.SaveChangesAsync();
 
             // 缓存登录状态
             string client = Request.Headers[AterConst.ClientHeader].FirstOrDefault() ?? AterConst.Web;
@@ -128,9 +128,9 @@ public class SystemUserController(
         }
         else
         {
-            var errorMsg = ErrorInfo.Get(manager.ErrorStatus);
+            var errorMsg = ErrorInfo.Get(_manager.ErrorStatus);
             await _logService.NewLog("登录", UserActionType.Login, "登录失败:" + errorMsg, user.UserName, user.Id);
-            return Problem(errorMsg, manager.ErrorStatus);
+            return Problem(errorMsg, _manager.ErrorStatus);
         }
     }
     /// <summary>
@@ -140,7 +140,7 @@ public class SystemUserController(
     [HttpPut("logout/{id}")]
     public async Task<ActionResult<bool>> LogoutAsync([FromRoute] Guid id)
     {
-        if (await manager.ExistAsync(id))
+        if (await _manager.ExistAsync(id))
         {
             // 清除缓存状态
             await _cache.RemoveAsync(AterConst.LoginCachePrefix + id.ToString());
@@ -158,7 +158,7 @@ public class SystemUserController(
     [Authorize(AterConst.SuperAdmin)]
     public async Task<ActionResult<PageList<SystemUserItemDto>>> FilterAsync(SystemUserFilterDto filter)
     {
-        return await manager.FilterAsync(filter);
+        return await _manager.FilterAsync(filter);
     }
 
     /// <summary>
@@ -170,8 +170,8 @@ public class SystemUserController(
     [Authorize(AterConst.SuperAdmin)]
     public async Task<ActionResult<SystemUser>> AddAsync(SystemUserAddDto dto)
     {
-        SystemUser entity = await manager.CreateNewEntityAsync(dto);
-        return await manager.AddAsync(entity);
+        SystemUser entity = await _manager.CreateNewEntityAsync(dto);
+        return await _manager.AddAsync(entity);
     }
 
     /// <summary>
@@ -184,8 +184,8 @@ public class SystemUserController(
     [Authorize(AterConst.SuperAdmin)]
     public async Task<ActionResult<SystemUser?>> UpdateAsync([FromRoute] Guid id, SystemUserUpdateDto dto)
     {
-        SystemUser? current = await manager.GetCurrentAsync(id);
-        return current == null ? NotFound(ErrorMsg.NotFoundResource) : await manager.UpdateAsync(current, dto);
+        SystemUser? current = await _manager.GetCurrentAsync(id);
+        return current == null ? NotFound(ErrorMsg.NotFoundResource) : await _manager.UpdateAsync(current, dto);
     }
 
     /// <summary>
@@ -195,14 +195,14 @@ public class SystemUserController(
     [HttpPut("changePassword")]
     public async Task<ActionResult<bool>> ChangePassword(string password, string newPassword)
     {
-        if (!await manager.ExistAsync(_user.UserId))
+        if (!await _manager.ExistAsync(_user.UserId))
         {
             return NotFound("");
         }
-        SystemUser? user = await manager.GetCurrentAsync(_user.UserId);
+        SystemUser? user = await _manager.GetCurrentAsync(_user.UserId);
         return !HashCrypto.Validate(password, user!.PasswordSalt, user.PasswordHash)
             ? (ActionResult<bool>)Problem("当前密码不正确")
-            : (ActionResult<bool>)await manager.ChangePasswordAsync(user, newPassword);
+            : (ActionResult<bool>)await _manager.ChangePasswordAsync(user, newPassword);
     }
 
     /// <summary>
@@ -214,8 +214,8 @@ public class SystemUserController(
     public async Task<ActionResult<SystemUser?>> GetDetailAsync([FromRoute] Guid id)
     {
         SystemUser? res = _user.IsRole(AterConst.SuperAdmin)
-            ? await manager.FindAsync(id)
-            : await manager.FindAsync(_user.UserId);
+            ? await _manager.FindAsync(id)
+            : await _manager.FindAsync(_user.UserId);
         return res == null ? NotFound() : res;
     }
 
@@ -229,7 +229,7 @@ public class SystemUserController(
     public async Task<ActionResult<SystemUser?>> DeleteAsync([FromRoute] Guid id)
     {
         // 注意删除权限
-        SystemUser? entity = await manager.GetCurrentAsync(id);
-        return entity == null ? NotFound() : await manager.DeleteAsync(entity, false);
+        SystemUser? entity = await _manager.GetCurrentAsync(id);
+        return entity == null ? NotFound() : await _manager.DeleteAsync(entity, false);
     }
 }

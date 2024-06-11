@@ -20,7 +20,7 @@ public class CustomerTagController(
     [HttpPost("filter")]
     public async Task<ActionResult<PageList<CustomerTagItemDto>>> FilterAsync(CustomerTagFilterDto filter)
     {
-        return await manager.FilterAsync(filter);
+        return await _manager.FilterAsync(filter);
     }
 
     /// <summary>
@@ -31,8 +31,8 @@ public class CustomerTagController(
     [HttpPost]
     public async Task<ActionResult<CustomerTag>> AddAsync(CustomerTagAddDto dto)
     {
-        var entity = await manager.CreateNewEntityAsync(dto);
-        return await manager.AddAsync(entity);
+        var entity = await _manager.CreateNewEntityAsync(dto);
+        return await _manager.AddAsync(entity);
     }
 
     /// <summary>
@@ -44,9 +44,9 @@ public class CustomerTagController(
     [HttpPatch("{id}")]
     public async Task<ActionResult<CustomerTag?>> UpdateAsync([FromRoute] Guid id, CustomerTagUpdateDto dto)
     {
-        var current = await manager.GetCurrentAsync(id);
+        var current = await _manager.GetCurrentAsync(id);
         if (current == null) { return NotFound("不存在的资源"); };
-        return await manager.UpdateAsync(current, dto);
+        return await _manager.UpdateAsync(current, dto);
     }
 
     /// <summary>
@@ -57,7 +57,7 @@ public class CustomerTagController(
     [HttpGet("{id}")]
     public async Task<ActionResult<CustomerTag?>> GetDetailAsync([FromRoute] Guid id)
     {
-        var res = await manager.FindAsync(id);
+        var res = await _manager.FindAsync(id);
         return (res == null) ? NotFound() : res;
     }
 
@@ -71,9 +71,9 @@ public class CustomerTagController(
     public async Task<ActionResult<CustomerTag?>> DeleteAsync([FromRoute] Guid id)
     {
         // 注意删除权限
-        var entity = await manager.GetCurrentAsync(id);
+        var entity = await _manager.GetCurrentAsync(id);
         if (entity == null) { return NotFound(); };
         // return Forbid();
-        return await manager.DeleteAsync(entity);
+        return await _manager.DeleteAsync(entity);
     }
 }

@@ -22,7 +22,7 @@ public class OrderController(
     public async Task<ActionResult<PageList<OrderItemDto>>> FilterAsync(OrderFilterDto filter)
     {
         filter.UserId = _user.UserId;
-        return await manager.FilterAsync(filter);
+        return await _manager.FilterAsync(filter);
     }
 
     /// <summary>
@@ -33,7 +33,7 @@ public class OrderController(
     [HttpGet("{id}")]
     public async Task<ActionResult<Order?>> GetDetailAsync([FromRoute] Guid id)
     {
-        Order? res = await manager.FindAsync(id);
+        Order? res = await _manager.FindAsync(id);
         return (res == null) ? NotFound() : res;
     }
 }

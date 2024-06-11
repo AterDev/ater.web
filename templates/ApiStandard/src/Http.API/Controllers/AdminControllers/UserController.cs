@@ -21,7 +21,7 @@ public class UserController(
     [HttpPost("filter")]
     public async Task<ActionResult<PageList<UserItemDto>>> FilterAsync(UserFilterDto filter)
     {
-        return await manager.FilterAsync(filter);
+        return await _manager.FilterAsync(filter);
     }
 
     /// <summary>
@@ -33,12 +33,12 @@ public class UserController(
     public async Task<ActionResult<User>> AddAsync(UserAddDto dto)
     {
         // 判断重复用户名
-        if (manager.Query.Db.Any(q => q.UserName.Equals(dto.UserName)))
+        if (_manager.Query.Db.Any(q => q.UserName.Equals(dto.UserName)))
         {
             return Conflict(ErrorMsg.ExistUser);
         }
-        User entity = await manager.CreateNewEntityAsync(dto);
-        return await manager.AddAsync(entity);
+        User entity = await _manager.CreateNewEntityAsync(dto);
+        return await _manager.AddAsync(entity);
     }
 
     /// <summary>
@@ -50,12 +50,12 @@ public class UserController(
     [HttpPatch("{id}")]
     public async Task<ActionResult<User?>> UpdateAsync([FromRoute] Guid id, UserUpdateDto dto)
     {
-        User? current = await manager.GetCurrentAsync(id);
+        User? current = await _manager.GetCurrentAsync(id);
         if (current == null)
         {
             return NotFound(ErrorMsg.NotFoundResource);
         };
-        return await manager.UpdateAsync(current, dto);
+        return await _manager.UpdateAsync(current, dto);
     }
 
     /// <summary>
@@ -66,7 +66,7 @@ public class UserController(
     [HttpGet("{id}")]
     public async Task<ActionResult<User?>> GetDetailAsync([FromRoute] Guid id)
     {
-        User? res = await manager.FindAsync(id);
+        User? res = await _manager.FindAsync(id);
         return (res == null) ? NotFound() : res;
     }
 
@@ -79,11 +79,11 @@ public class UserController(
     public async Task<ActionResult<User?>> DeleteAsync([FromRoute] Guid id)
     {
         // 注意删除权限
-        User? entity = await manager.GetCurrentAsync(id);
+        User? entity = await _manager.GetCurrentAsync(id);
         if (entity == null)
         {
             return NotFound(ErrorMsg.NotFoundUser);
         };
-        return await manager.DeleteAsync(entity);
+        return await _manager.DeleteAsync(entity);
     }
 }

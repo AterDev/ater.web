@@ -25,7 +25,7 @@ public class SystemMenuController(
     [HttpPost("filter")]
     public async Task<ActionResult<PageList<SystemMenu>>> FilterAsync(SystemMenuFilterDto filter)
     {
-        return await manager.FilterAsync(filter);
+        return await _manager.FilterAsync(filter);
     }
 
     /// <summary>
@@ -50,7 +50,7 @@ public class SystemMenuController(
         }
         if (menus != null && menus.Count != 0)
         {
-            return await manager.SyncSystemMenusAsync(menus);
+            return await _manager.SyncSystemMenusAsync(menus);
         }
         return false;
     }
@@ -65,13 +65,13 @@ public class SystemMenuController(
     {
         if (dto.ParentId != null)
         {
-            if (!await manager.ExistAsync(dto.ParentId.Value))
+            if (!await _manager.ExistAsync(dto.ParentId.Value))
             {
                 return NotFound(ErrorMsg.NotFoundResource);
             }
         }
-        SystemMenu entity = await manager.CreateNewEntityAsync(dto);
-        return await manager.AddAsync(entity);
+        SystemMenu entity = await _manager.CreateNewEntityAsync(dto);
+        return await _manager.AddAsync(entity);
     }
 
     /// <summary>
@@ -83,12 +83,12 @@ public class SystemMenuController(
     [HttpPatch("{id}")]
     public async Task<ActionResult<SystemMenu?>> UpdateAsync([FromRoute] Guid id, SystemMenuUpdateDto dto)
     {
-        SystemMenu? current = await manager.GetCurrentAsync(id);
+        SystemMenu? current = await _manager.GetCurrentAsync(id);
         if (current == null)
         {
             return NotFound(ErrorMsg.NotFoundResource);
         };
-        return await manager.UpdateAsync(current, dto);
+        return await _manager.UpdateAsync(current, dto);
     }
 
     /// <summary>
@@ -101,11 +101,11 @@ public class SystemMenuController(
     public async Task<ActionResult<SystemMenu?>> DeleteAsync([FromRoute] Guid id)
     {
         // 注意删除权限
-        SystemMenu? entity = await manager.GetCurrentAsync(id);
+        SystemMenu? entity = await _manager.GetCurrentAsync(id);
         if (entity == null)
         {
             return NotFound();
         };
-        return await manager.DeleteAsync(entity);
+        return await _manager.DeleteAsync(entity);
     }
 }

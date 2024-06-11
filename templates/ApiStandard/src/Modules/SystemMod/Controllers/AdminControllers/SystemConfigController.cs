@@ -21,7 +21,7 @@ public class SystemConfigController(
     [HttpPost("filter")]
     public async Task<ActionResult<PageList<SystemConfigItemDto>>> FilterAsync(SystemConfigFilterDto filter)
     {
-        return await manager.FilterAsync(filter);
+        return await _manager.FilterAsync(filter);
     }
 
     /// <summary>
@@ -31,7 +31,7 @@ public class SystemConfigController(
     [HttpGet("enum")]
     public async Task<ActionResult<Dictionary<string, List<EnumDictionary>>>> GetEnumConfigsAsync()
     {
-        return await manager.GetEnumConfigsAsync();
+        return await _manager.GetEnumConfigsAsync();
     }
     /// <summary>
     /// 新增 ✅
@@ -41,8 +41,8 @@ public class SystemConfigController(
     [HttpPost]
     public async Task<ActionResult<SystemConfig>> AddAsync(SystemConfigAddDto dto)
     {
-        SystemConfig entity = await manager.CreateNewEntityAsync(dto);
-        return await manager.AddAsync(entity);
+        SystemConfig entity = await _manager.CreateNewEntityAsync(dto);
+        return await _manager.AddAsync(entity);
     }
 
     /// <summary>
@@ -54,12 +54,12 @@ public class SystemConfigController(
     [HttpPatch("{id}")]
     public async Task<ActionResult<SystemConfig?>> UpdateAsync([FromRoute] Guid id, SystemConfigUpdateDto dto)
     {
-        SystemConfig? current = await manager.GetCurrentAsync(id);
+        SystemConfig? current = await _manager.GetCurrentAsync(id);
         if (current == null)
         {
             return NotFound(ErrorMsg.NotFoundResource);
         };
-        return await manager.UpdateAsync(current, dto);
+        return await _manager.UpdateAsync(current, dto);
     }
 
     /// <summary>
@@ -70,7 +70,7 @@ public class SystemConfigController(
     [HttpGet("{id}")]
     public async Task<ActionResult<SystemConfig?>> GetDetailAsync([FromRoute] Guid id)
     {
-        SystemConfig? res = await manager.FindAsync(id);
+        SystemConfig? res = await _manager.FindAsync(id);
         return res == null ? NotFound() : res;
     }
 
@@ -83,13 +83,13 @@ public class SystemConfigController(
     public async Task<ActionResult<SystemConfig?>> DeleteAsync([FromRoute] Guid id)
     {
         // 注意删除权限
-        SystemConfig? entity = await manager.GetCurrentAsync(id);
+        SystemConfig? entity = await _manager.GetCurrentAsync(id);
         if (entity == null)
         {
             return NotFound();
         };
         return entity.IsSystem
             ? Problem("系统配置，无法删除!")
-            : await manager.DeleteAsync(entity);
+            : await _manager.DeleteAsync(entity);
     }
 }

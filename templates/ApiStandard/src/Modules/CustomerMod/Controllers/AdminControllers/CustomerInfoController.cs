@@ -20,7 +20,7 @@ public class CustomerInfoController(
     [HttpPost("filter")]
     public async Task<ActionResult<PageList<CustomerInfoItemDto>>> FilterAsync(CustomerInfoFilterDto filter)
     {
-        return await manager.FilterAsync(filter);
+        return await _manager.FilterAsync(filter);
     }
 
     /// <summary>
@@ -31,12 +31,12 @@ public class CustomerInfoController(
     [HttpPost]
     public async Task<ActionResult<CustomerInfo>> AddAsync(CustomerInfoAddDto dto)
     {
-        if (await manager.IsConflictAsync(dto.Name, dto.ContactInfo))
+        if (await _manager.IsConflictAsync(dto.Name, dto.ContactInfo))
         {
             return Conflict(ErrorMsg.ConflictResource);
         }
-        var entity = await manager.CreateNewEntityAsync(dto);
-        return await manager.AddAsync(entity);
+        var entity = await _manager.CreateNewEntityAsync(dto);
+        return await _manager.AddAsync(entity);
     }
 
     /// <summary>
@@ -48,9 +48,9 @@ public class CustomerInfoController(
     [HttpPatch("{id}")]
     public async Task<ActionResult<CustomerInfo?>> UpdateAsync([FromRoute] Guid id, CustomerInfoUpdateDto dto)
     {
-        var current = await manager.GetCurrentAsync(id);
+        var current = await _manager.GetCurrentAsync(id);
         if (current == null) { return NotFound("不存在的资源"); };
-        return await manager.UpdateAsync(current, dto);
+        return await _manager.UpdateAsync(current, dto);
     }
 
     /// <summary>
@@ -61,7 +61,7 @@ public class CustomerInfoController(
     [HttpGet("{id}")]
     public async Task<ActionResult<CustomerInfo?>> GetDetailAsync([FromRoute] Guid id)
     {
-        var res = await manager.GetDetailAsync(id);
+        var res = await _manager.GetDetailAsync(id);
         return (res == null) ? NotFound() : res;
     }
 
@@ -75,9 +75,9 @@ public class CustomerInfoController(
     public async Task<ActionResult<CustomerInfo?>> DeleteAsync([FromRoute] Guid id)
     {
         // 注意删除权限
-        var entity = await manager.GetCurrentAsync(id);
+        var entity = await _manager.GetCurrentAsync(id);
         if (entity == null) { return NotFound(); };
         // return Forbid();
-        return await manager.DeleteAsync(entity);
+        return await _manager.DeleteAsync(entity);
     }
 }

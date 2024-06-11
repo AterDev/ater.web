@@ -21,7 +21,7 @@ public class ProductController(
     [HttpGet("list")]
     public async Task<ActionResult<List<ProductItemDto>>> FilterAsync()
     {
-        return await manager.ListAsync<ProductItemDto>();
+        return await _manager.ListAsync<ProductItemDto>();
     }
 
     /// <summary>
@@ -32,8 +32,8 @@ public class ProductController(
     [HttpPost("buy/{id}")]
     public async Task<ActionResult<Order>> BuyProductAsync([FromRoute] Guid id)
     {
-        Order? res = await manager.BuyProductAsync(id);
-        return res == null ? Problem(manager.ErrorMsg) : (ActionResult<Order>)res;
+        Order? res = await _manager.BuyProductAsync(id);
+        return res == null ? Problem(_manager.ErrorMsg) : (ActionResult<Order>)res;
     }
 
     /// <summary>
@@ -44,7 +44,7 @@ public class ProductController(
     [HttpGet("{id}")]
     public async Task<ActionResult<Product?>> GetDetailAsync([FromRoute] Guid id)
     {
-        Product? res = await manager.FindAsync(id);
+        Product? res = await _manager.FindAsync(id);
         return (res == null) ? NotFound() : res;
     }
 }

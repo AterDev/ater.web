@@ -22,7 +22,7 @@ public class FileDataController(
     [HttpPost("filter")]
     public async Task<ActionResult<PageList<FileDataItemDto>>> FilterAsync(FileDataFilterDto filter)
     {
-        return await manager.FilterAsync(filter);
+        return await _manager.FilterAsync(filter);
     }
 
     /// <summary>
@@ -34,12 +34,12 @@ public class FileDataController(
     [HttpPatch("{id}")]
     public async Task<ActionResult<FileData?>> UpdateAsync([FromRoute] Guid id, FileDataUpdateDto dto)
     {
-        FileData? current = await manager.GetCurrentAsync(id);
+        FileData? current = await _manager.GetCurrentAsync(id);
         if (current == null)
         {
             return NotFound(ErrorMsg.NotFoundResource);
         };
-        return await manager.UpdateAsync(current, dto);
+        return await _manager.UpdateAsync(current, dto);
     }
 
     /// <summary>
@@ -50,7 +50,7 @@ public class FileDataController(
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<FileData?>> GetDetailAsync([FromRoute] Guid id)
     {
-        FileData? res = await manager.FindAsync(id);
+        FileData? res = await _manager.FindAsync(id);
         return (res == null) ? NotFound() : res;
     }
 
@@ -64,7 +64,7 @@ public class FileDataController(
     [AllowAnonymous]
     public async Task<ActionResult<string>> GetContentAsync(string path, string md5)
     {
-        FileData? res = await manager.GetByMd5Async(path, md5);
+        FileData? res = await _manager.GetByMd5Async(path, md5);
         if (res == null)
         {
             return NoContent();
@@ -86,12 +86,12 @@ public class FileDataController(
     public async Task<ActionResult<FileData?>> DeleteAsync([FromRoute] Guid id)
     {
         // 注意删除权限
-        FileData? entity = await manager.GetCurrentAsync(id);
+        FileData? entity = await _manager.GetCurrentAsync(id);
         if (entity == null)
         {
             return NotFound();
         };
         // return Forbid();
-        return await manager.DeleteAsync(entity);
+        return await _manager.DeleteAsync(entity);
     }
 }

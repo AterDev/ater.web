@@ -22,7 +22,7 @@ public class OrderController(
     [HttpPost("filter")]
     public async Task<ActionResult<PageList<OrderItemDto>>> FilterAsync(OrderFilterDto filter)
     {
-        return await manager.FilterAsync(filter);
+        return await _manager.FilterAsync(filter);
     }
 
     /// <summary>
@@ -34,12 +34,12 @@ public class OrderController(
     [HttpPatch("{id}")]
     public async Task<ActionResult<Order?>> UpdateAsync([FromRoute] Guid id, OrderUpdateDto dto)
     {
-        Order? current = await manager.GetCurrentAsync(id);
+        Order? current = await _manager.GetCurrentAsync(id);
         if (current == null)
         {
             return NotFound(ErrorMsg.NotFoundResource);
         };
-        return await manager.UpdateAsync(current, dto);
+        return await _manager.UpdateAsync(current, dto);
     }
 
     /// <summary>
@@ -50,7 +50,7 @@ public class OrderController(
     [HttpGet("{id}")]
     public async Task<ActionResult<Order?>> GetDetailAsync([FromRoute] Guid id)
     {
-        Order? res = await manager.FindAsync(id);
+        Order? res = await _manager.FindAsync(id);
         return (res == null) ? NotFound() : res;
     }
 
