@@ -1,4 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.Text.RegularExpressions;
 using Ater.Web.Core.Utils;
 
 namespace Ater.Web.Core.Utils;
@@ -47,7 +49,7 @@ public static class StringExtension
     /// </summary>
     /// <param name="str"></param>
     /// <returns></returns>
-    public static string ToSankeLower(this string str)
+    public static string ToSnakeLower(this string str)
     {
         return str.ToHyphen('_');
     }
@@ -224,5 +226,128 @@ public static class StringExtension
     public static bool NotEmpty([NotNullWhen(true)] this string? str)
     {
         return !string.IsNullOrWhiteSpace(str);
+    }
+
+    /// <summary>
+    /// IsEmail
+    /// </summary>
+    /// <param name="str"></param>
+    /// <returns></returns>
+    public static bool IsEmail(this string str)
+    {
+        return Regex.IsMatch(str, @"^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$");
+    }
+
+    /// <summary>
+    /// 保留字符串中的数字和字母
+    /// </summary>
+    /// <param name="str"></param>
+    /// <param name="additionChars">额外字符</param>
+    /// <returns></returns>
+    public static string KeepDigitsAndLetters(this string str, char[]? additionChars = null)
+    {
+        if (string.IsNullOrWhiteSpace(str))
+        {
+            return str;
+        }
+        var result = new StringBuilder();
+        foreach (var item in str)
+        {
+            if (char.IsLetterOrDigit(item))
+            {
+                _ = result.Append(item);
+            }
+            if (additionChars != null && additionChars.Contains(item))
+            {
+                _ = result.Append(item);
+            }
+        }
+        return result.ToString();
+    }
+
+    private static readonly string[] dateFormats = ["yyyy-MM-dd", "yyyy-MM-ddTHH:mm:ss", "yyyy-MM-ddTHH:mm:ssZ"];
+
+    /// <summary>
+    /// 字符串转换为 DateTimeOffset UTC 时间
+    /// </summary>
+    /// <param name="str"></param>
+    /// <returns></returns>
+    public static DateTimeOffset? ToDateTimeOffset(this string str)
+    {
+        if (string.IsNullOrWhiteSpace(str))
+        {
+            return null;
+        }
+        // 尝试解析为 ISO 8601 格式
+        if (DateTimeOffset.TryParseExact(str, dateFormats, CultureInfo.InvariantCulture, DateTimeStyles.AllowInnerWhite, out DateTimeOffset dt))
+        {
+            return dt.ToUniversalTime();
+        }
+        else if (str.Contains("/"))
+        {
+            // 尝试解析为自定义格式
+            if (DateTimeOffset.TryParseExact(str, ["MM/dd/yyyy HH:mm", "M/d/yyyy HH:mm", "M/dd/yyyy", "M/d/yy", "M/d/yy HH:mm"], CultureInfo.InvariantCulture, DateTimeStyles.AllowInnerWhite, out dt))
+            {
+                return dt.ToUniversalTime();
+            }
+        }
+        else if (str.Contains("."))
+        {
+            if (DateTimeOffset.TryParseExact(str, ["yyyy.MM.dd"], CultureInfo.InvariantCulture, DateTimeStyles.AllowInnerWhite, out dt))
+            {
+                return dt.ToUniversalTime();
+            }
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// 计算字符串表达式，仅支持整数加减法
+    /// </summary>
+    /// <param name="expression"></param>
+    /// <returns></returns>
+    /// <exception cref="FormatException"></exception>
+    public static int CalculateExpression(this string expression)
+    {
+        if (string.IsNullOrEmpty(expression))
+        {
+            return 0;
+        }
+
+        int result = 0;
+        int operand = 0;
+        char operation = '+';
+
+        for (int i = 0; i < expression.Length; i++)
+        {
+            char currentChar = expression[i];
+
+            if (char.IsDigit(currentChar))
+            {
+                operand = operand * 10 + (currentChar - '0');
+            }
+            else if (currentChar is '+' or '-')
+            {
+                result = ApplyOperation(result, operand, operation);
+                operand = 0;
+                operation = currentChar;
+            }
+            else if (!char.IsWhiteSpace(currentChar))
+            {
+                return 0;
+            }
+        }
+
+        return ApplyOperation(result, operand, operation);
+    }
+
+    private static int ApplyOperation(int result, int operand, char operation)
+    {
+        return operation switch
+        {
+            '+' => result + operand,
+            '-' => result - operand,
+            _ => throw new FormatException($"Invalid operator: {operation}"),
+        };
     }
 }

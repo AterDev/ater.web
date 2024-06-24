@@ -75,6 +75,7 @@ try {
         TempModule $solutionPath $moduleName
     }
 
+    Set-Location ../
     # pack
     dotnet pack -c release -o ./nuget
 

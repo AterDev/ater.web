@@ -21,7 +21,7 @@ public class RestControllerBase<TManager>(
         ) : RestControllerBase
      where TManager : class
 {
-    protected readonly TManager _manager = manager;
+    protected readonly TManager manager = manager;
     protected readonly ILogger _logger = logger;
     protected readonly IUserContextBase _user = user;
 
@@ -40,7 +40,7 @@ public class ClientControllerBase<TManager>(
         ) : RestControllerBase
      where TManager : class
 {
-    protected readonly TManager _manager = manager;
+    protected readonly TManager manager = manager;
     protected readonly ILogger _logger = logger;
     protected readonly IUserContextBase _user = user;
 }

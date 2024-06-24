@@ -31,6 +31,10 @@ public class LoginSecurityPolicy
     /// 会话过期时间
     /// </summary>
     public int SessionExpiredSeconds { get; set; } = 1800;
+    /// <summary>
+    /// 是否开启密码策略
+    /// </summary>
+    public bool IsEnable { get; set; }
 }
 
 /// <summary>

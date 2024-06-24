@@ -88,25 +88,13 @@ public class HashCrypto
     public static string Md5Hash(string str)
     {
         var data = MD5.HashData(Encoding.UTF8.GetBytes(str));
-        return ToHexString(data);
-    }
-
-    /// <summary>
-    /// To Hex string
-    /// </summary>
-    /// <param name="data"></param>
-    /// <param name="format"></param>
-    /// <returns></returns>
-    public static string ToHexString(byte[] data, string format = "x2")
-    {
         StringBuilder sBuilder = new();
         for (var i = 0; i < data.Length; i++)
         {
-            _ = sBuilder.Append(data[i].ToString(format));
+            _ = sBuilder.Append(data[i].ToString("x2"));
         }
         return sBuilder.ToString();
     }
-
     /// <summary>
     /// 某文件的md5值
     /// </summary>
@@ -122,25 +110,6 @@ public class HashCrypto
             _ = sBuilder.Append(data[i].ToString("x2"));
         }
         return sBuilder.ToString();
-    }
-
-    /// <summary>
-    /// Hash string
-    /// </summary>
-    /// <param name="utf8Str">utf8 string</param>
-    /// <param name="type"></param>
-    /// <returns></returns>
-    /// <exception cref="NotSupportedException"></exception>
-    public static byte[] HashString(string utf8Str, HashType type)
-    {
-        var bytes = Encoding.UTF8.GetBytes(utf8Str);
-        return type switch
-        {
-            HashType.MD5 => MD5.HashData(bytes),
-            HashType.SHA256 => SHA256.HashData(bytes),
-            HashType.SHA512 => SHA512.HashData(bytes),
-            _ => throw new NotSupportedException()
-        };
     }
 
     /// <summary>
@@ -279,10 +248,4 @@ public class HashCrypto
         }
         return null;
     }
-}
-public enum HashType
-{
-    MD5,
-    SHA256,
-    SHA512,
 }

@@ -14,9 +14,9 @@ $projects = @(
 try {
     
     foreach ($project in $projects) {
-        $projectPath = Join-Path $infrastructurePath $project
+        $projectPath = Join-Path $standardPath $project
         Copy-Item -Path $projectPath -Destination $lightPath -Recurse -Force
-        Copy-Item -Path $projectPath -Destination $standardPath -Recurse -Force
+        Copy-Item -Path $projectPath -Destination $infrastructurePath -Recurse -Force
     }
 }
 catch {

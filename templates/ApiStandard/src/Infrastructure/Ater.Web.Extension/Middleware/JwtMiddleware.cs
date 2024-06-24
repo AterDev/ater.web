@@ -34,7 +34,9 @@ public class JwtMiddleware(RequestDelegate next, CacheService redis, ILogger<Jwt
         if (tokenHandler.CanReadToken(token) == false)
         {
             await _next(context);
+            return;
         }
+
         var id = JwtService.GetClaimValue(token, ClaimTypes.NameIdentifier);
         // 策略判断
         if (id.NotEmpty())
@@ -67,6 +69,7 @@ public class JwtMiddleware(RequestDelegate next, CacheService redis, ILogger<Jwt
 
             _cache.Cache.Refresh(key);
             await _next(context);
+            return;
         }
     }
 

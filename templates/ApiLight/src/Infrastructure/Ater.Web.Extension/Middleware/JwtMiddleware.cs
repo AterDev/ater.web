@@ -1,5 +1,8 @@
-﻿using System.Security.Claims;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+
 using Ater.Web.Core.Models;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 
@@ -26,44 +29,47 @@ public class JwtMiddleware(RequestDelegate next, CacheService redis, ILogger<Jwt
             await _next(context);
             return;
         }
-        try
+        // 判断 token 是否有效
+        JwtSecurityTokenHandler tokenHandler = new();
+        if (tokenHandler.CanReadToken(token) == false)
         {
-            var id = JwtService.GetClaimValue(token, ClaimTypes.NameIdentifier);
-            // 策略判断
-            if (id.NotEmpty())
+            await _next(context);
+            return;
+        }
+
+        var id = JwtService.GetClaimValue(token, ClaimTypes.NameIdentifier);
+        // 策略判断
+        if (id.NotEmpty())
+        {
+            var securityPolicyStr = _cache.GetValue<string>(AterConst.LoginSecurityPolicy);
+            var securityPolicy = JsonSerializer.Deserialize<LoginSecurityPolicy>(securityPolicyStr!);
+
+            if (securityPolicy == null || !securityPolicy.IsEnable)
             {
-                var securityPolicy = _cache.GetValue<LoginSecurityPolicy>(AterConst.LoginSecurityPolicy);
-                if (securityPolicy == null)
-                {
-                    await _next(context);
-                    return;
-                }
-                if (securityPolicy.SessionLevel == SessionLevel.OnlyOne)
-                {
-                    client = AterConst.AllPlatform;
-                }
-                var key = AterConst.LoginCachePrefix + client + id;
-                var cacheToken = _cache.GetValue<string>(key);
-                if (cacheToken.IsEmpty())
-                {
-                    await SetResponseAndComplete(context, 401);
-                    return;
-                }
-
-                if (securityPolicy.SessionLevel != SessionLevel.None && cacheToken != token)
-                {
-                    await SetResponseAndComplete(context, 401, "账号已在其他客户端登录");
-                    return;
-                }
-
-                _cache.Cache.Refresh(key);
                 await _next(context);
                 return;
             }
-        }
-        catch (Exception e)
-        {
-            _logger.LogError("{msg}", e.ToString());
+            if (securityPolicy.SessionLevel == SessionLevel.OnlyOne)
+            {
+                client = AterConst.AllPlatform;
+            }
+            var key = AterConst.LoginCachePrefix + client + id;
+            var cacheToken = _cache.GetValue<string>(key);
+            if (cacheToken.IsEmpty())
+            {
+                await SetResponseAndComplete(context, 401);
+                return;
+            }
+
+            if (securityPolicy.SessionLevel != SessionLevel.None && cacheToken != token)
+            {
+                await SetResponseAndComplete(context, 401, "账号已在其他客户端登录");
+                return;
+            }
+
+            _cache.Cache.Refresh(key);
+            await _next(context);
+            return;
         }
     }
 

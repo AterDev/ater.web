@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Ater.Web.Core.Models;
 using Ater.Web.Core.Utils;
 
@@ -74,16 +75,24 @@ public static partial class Extensions
     }
 
     /// <summary>
-    /// 不为空时执行的条件
+    /// 不为空(字符串)时执行的条件
     /// </summary>
     /// <typeparam name="TSource"></typeparam>
     /// <param name="source"></param>
-    /// <param name="field">不为空的字段</param>
+    /// <param name="field">要判断的字段</param>
     /// <param name="expression">不为空时执行的条件</param>
     /// <returns></returns>
     public static IQueryable<TSource> WhereNotNull<TSource>(this IQueryable<TSource> source, object? field, Expression<Func<TSource, bool>> expression)
     {
-        return field != null ? source.Where(expression) : source;
+        if (field is not null)
+        {
+            if (field is string str && str.IsEmpty())
+            {
+                return source;
+            }
+            return source.Where(expression);
+        }
+        return source;
     }
 
     public static IQueryable<TResult> ProjectTo<TResult>(this IQueryable source)
