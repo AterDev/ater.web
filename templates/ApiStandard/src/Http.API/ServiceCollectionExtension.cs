@@ -28,7 +28,6 @@ public static class ServiceCollectionExtension
         builder.Services.AddScoped<IUserContext, UserContext>();
         builder.Services.AddScoped<ITenantProvider, TenantProvider>();
 
-        builder.Services.AddHealthChecks();
         builder.Services.AddManager();
         builder.Services.AddSingleton<IEntityTaskQueue<UserLogs>, EntityTaskQueue<UserLogs>>();
 
@@ -75,7 +74,6 @@ public static class ServiceCollectionExtension
             });
         }
 
-        app.UseHealthChecks("/api/health");
         app.UseRateLimiter();
         app.UseStaticFiles();
         app.UseRouting();
