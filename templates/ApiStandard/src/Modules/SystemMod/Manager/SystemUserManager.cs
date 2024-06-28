@@ -1,7 +1,5 @@
 using Ater.Web.Extension;
 
-using Share.Models.UserDtos;
-
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 
