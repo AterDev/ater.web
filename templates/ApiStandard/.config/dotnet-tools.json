@@ -7,6 +7,12 @@
       "commands": [
         "dotnet-ef"
       ]
+    },
+    "ater.dry": {
+      "version": "8.2.0",
+      "commands": [
+        "dry"
+      ]
     }
   }
 }
