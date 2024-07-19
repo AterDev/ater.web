@@ -1,26 +1,30 @@
-// 定义基本颜色
-$dark-primary-color: #AB7DFE;
-$light-primary-color: #6c5fd7;
-$accent-color: #FF9D42;
-$error-color: #FF4C4C;
+@use '@angular/material' as mat;
 
-// 背景色，高亮面/分割底色
-$dark-bg-color: #1d1f23;
-$dark-bgh-color: #25272d;
-$dark-bgd-color: #1b1d21;
+$dark-theme: mat.define-theme((color: (theme-type: dark,
+        primary: mat.$violet-palette,
+        tertiary: mat.$orange-palette,
+      ),
+      typography: (use-system-variables: false),
+    ));
 
-$light-bg-color: #ffffff;
-$light-bgh-color: #f5f7ff;
-$light-bgd-color: #edf0f2;
+$light-theme: mat.define-theme((color: (theme-type: light,
+        primary: mat.$violet-palette,
+        tertiary: mat.$orange-palette,
+      ),
+      typography: (use-system-variables: false),
+    ));
 
-// 字体颜色
-$light-text-color: #000000;
-$light-text-secondary-color: #50565c;
-$light-text-gray-color: #868e96;
-$light-text-light-color: #d1d7dd;
+$dark-primary-color: mat.get-theme-color($dark-theme, primary, 60);
+$light-primary-color: mat.get-theme-color($light-theme, primary, 40);
 
-$dark-text-color: #ffffff;
-$dark-text-secondary-color: #d1d7dd;
-$dark-text-gray-color: #868e96;
-$dark-text-light-color: #50565c;
-
+$dark-primary-text: rgba(black, 0.87);
+$dark-secondary-text: rgba(black, 0.54);
+$dark-disabled-text: rgba(black, 0.38);
+$dark-dividers: rgba(black, 0.12);
+$dark-focused: rgba(black, 0.12);
+$light-primary-text: white;
+$light-secondary-text: rgba(white, 0.7);
+$light-disabled-text: rgba(white, 0.5);
+$light-dividers: rgba(white, 0.12);
+$light-focused: rgba(white, 0.12);
+$dark-color: #212121;
