@@ -28,24 +28,9 @@ public class SystemLogTaskHostedService(IServiceProvider serviceProvider, IEntit
             var log = await _taskQueue.DequeueAsync(stoppingToken);
             try
             {
-                // 查询今天是否有相同的日志
-                var today = DateTime.UtcNow.Date;
-                var exist = await context.SystemLogs.AnyAsync(l => l.ActionType == log.ActionType
-                    && l.ActionUserName == log.ActionUserName
-                    && l.SystemUserId == log.SystemUserId
-                    && l.CreatedTime >= today
-                    && l.TargetName == log.TargetName, stoppingToken);
-
-                if (!exist)
-                {
-                    context.Add(log);
-                    await context.SaveChangesAsync(stoppingToken);
-                    _logger.LogInformation("✍️ New Log {name} is saved.", log.TargetName);
-                }
-                else
-                {
-                    _logger.LogInformation("ℹ️ Log {name} repeated.", log.TargetName);
-                }
+                context.Add(log);
+                await context.SaveChangesAsync(stoppingToken);
+                _logger.LogInformation("✍️ New Log {name} is saved.", log.TargetName);
             }
             catch (Exception ex)
             {
