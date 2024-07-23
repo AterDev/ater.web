@@ -53,7 +53,28 @@ public class ClientControllerBase<TManager>(
 [Produces("application/json")]
 public class RestControllerBase : ControllerBase
 {
-
+    /// <summary>
+    /// 自定义403
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    [NonAction]
+    public ObjectResult Forbid([ActionResultObjectValue] string value)
+    {
+        var res = new ErrorResult
+        {
+            Title = "无权访问",
+            Detail = value?.ToString(),
+            Status = 403,
+            TraceId = HttpContext.TraceIdentifier
+        };
+        Activity? at = Activity.Current;
+        _ = (at?.SetTag("responseBody", value));
+        return new ObjectResult(res)
+        {
+            StatusCode = 403
+        };
+    }
     /// <summary>
     /// 404返回格式处理
     /// </summary>

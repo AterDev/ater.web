@@ -28,7 +28,7 @@ public class UserController(
     public async Task<ActionResult<User>> RegisterAsync(RegisterDto dto)
     {
         // 判断重复用户名
-        if (_manager.Query.Db.Any(q => q.UserName.Equals(dto.UserName)))
+        if (await _manager.ExistAsync(q => q.UserName.Equals(dto.UserName)))
         {
             return Conflict(ErrorMsg.ExistUser);
         }
@@ -84,7 +84,7 @@ public class UserController(
     [AllowAnonymous]
     public async Task<ActionResult> SendVerifyCodeAsync(string email)
     {
-        if (!_manager.Query.Db.Any(q => q.Email != null && q.Email.Equals(email)))
+        if (!await _manager.ExistAsync(q => q.Email != null && q.Email.Equals(email)))
         {
             return NotFound("不存在的邮箱账号");
         }
@@ -112,8 +112,7 @@ public class UserController(
     public async Task<ActionResult<LoginResult>> LoginAsync(LoginDto dto)
     {
         // 查询用户
-        User? user = await _manager.Query.Db.Where(u => u.UserName.Equals(dto.UserName))
-            .FirstOrDefaultAsync();
+        User? user = await _manager.FindAsync<User>(u => u.UserName.Equals(dto.UserName));
         if (user == null)
         {
             return NotFound("不存在该用户");

@@ -35,7 +35,7 @@ public class SystemUserController(
     [AllowAnonymous]
     public async Task<ActionResult> SendVerifyCodeAsync(string email)
     {
-        if (!_manager.Query.Db.Any(q => q.Email != null && q.Email.Equals(email)))
+        if (!await _manager.IsExistAsync(email))
         {
             return NotFound("不存在的邮箱账号");
         }
@@ -76,9 +76,7 @@ public class SystemUserController(
     {
         dto.Password = dto.Password.Trim();
         // 查询用户
-        SystemUser? user = await _manager.Command.Db.Where(u => u.UserName.Equals(dto.UserName))
-            .Include(u => u.SystemRoles)
-            .SingleOrDefaultAsync();
+        SystemUser? user = await _manager.FindByUserNameAsync(dto.UserName);
         if (user == null)
         {
             return NotFound("不存在该用户");
@@ -102,7 +100,7 @@ public class SystemUserController(
                 permissionGroups = await _roleManager.GetPermissionGroupsAsync([.. user.SystemRoles]);
             }
 
-            await _manager.Command.SaveChangesAsync();
+            await _manager.SaveChangesAsync();
 
             // 缓存登录状态
             string client = Request.Headers[AterConst.ClientHeader].FirstOrDefault() ?? AterConst.Web;

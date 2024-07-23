@@ -89,6 +89,7 @@ public class CommandSet<TContent, TEntity>(TContent commandDbContext) : ICommand
         if (EnableSoftDelete)
         {
             entity.IsDeleted = true;
+            _db.Entry(entity).Property(e => e.IsDeleted).IsModified = true;
         }
         else
         {

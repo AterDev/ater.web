@@ -251,6 +251,16 @@ public class SystemUserManager(
     }
 
     /// <summary>
+    /// 是否存在
+    /// </summary>
+    /// <param name="email"></param>
+    /// <returns></returns>
+    public async Task<bool> IsExistAsync(string email)
+    {
+        return await Query.Db.AnyAsync(q => q.Email == email);
+    }
+
+    /// <summary>
     /// 当前用户所拥有的对象
     /// </summary>
     /// <param name="id"></param>
@@ -298,5 +308,13 @@ public class SystemUserManager(
         return await Query.Db.Where(q => q.Id == id)
             .Include(q => q.SystemRoles)
             .FirstOrDefaultAsync();
+    }
+
+
+    public async Task<SystemUser?> FindByUserNameAsync(string userName)
+    {
+        return await Command.Db.Where(u => u.UserName.Equals(userName))
+            .Include(u => u.SystemRoles)
+            .SingleOrDefaultAsync();
     }
 }

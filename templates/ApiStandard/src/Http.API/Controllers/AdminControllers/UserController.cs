@@ -33,7 +33,7 @@ public class UserController(
     public async Task<ActionResult<User>> AddAsync(UserAddDto dto)
     {
         // 判断重复用户名
-        if (_manager.Query.Db.Any(q => q.UserName.Equals(dto.UserName)))
+        if (await _manager.ExistAsync(q => q.UserName.Equals(dto.UserName)))
         {
             return Conflict(ErrorMsg.ExistUser);
         }

@@ -21,30 +21,30 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem>
 {
     #region Properties and Fields
     protected readonly ILogger _logger;
-    public IUserContext? UserContext { get; private set; }
+    protected IUserContext? UserContext { get; private set; }
 
     /// <summary>
     /// 自动日志类型
     /// </summary>
-    public LogActionType AutoLogType { get; private set; } = LogActionType.None;
+    protected LogActionType AutoLogType { get; private set; } = LogActionType.None;
 
     /// <summary>
     /// 实体的只读仓储实现
     /// </summary>
-    public QuerySet<QueryDbContext, TEntity> Query { get; init; }
+    protected QuerySet<QueryDbContext, TEntity> Query { get; init; }
     /// <summary>
     /// 实体的可写仓储实现
     /// </summary>
-    public CommandSet<CommandDbContext, TEntity> Command { get; init; }
-    public IQueryable<TEntity> Queryable { get; set; }
+    protected CommandSet<CommandDbContext, TEntity> Command { get; init; }
+    protected IQueryable<TEntity> Queryable { get; set; }
 
-    public CommandDbContext CommandContext { get; init; }
+    protected CommandDbContext CommandContext { get; init; }
 
-    public QueryDbContext QueryContext { get; init; }
+    protected QueryDbContext QueryContext { get; init; }
     /// <summary>
     /// 是否自动保存(调用SaveChanges)
     /// </summary>
-    public bool AutoSave { get; set; } = true;
+    protected bool AutoSave { get; set; } = true;
     /// <summary>
     /// 错误信息
     /// </summary>
@@ -55,7 +55,7 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem>
     /// </summary>
     public int ErrorStatus { get; set; }
 
-    public DatabaseFacade Database { get; init; }
+    protected DatabaseFacade Database { get; init; }
     #endregion
 
     public ManagerBase(DataAccessContext<TEntity> dataAccessContext, ILogger logger)
@@ -137,6 +137,16 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem>
     public virtual async Task<bool> ExistAsync(Guid id)
     {
         return await Query.Db.AnyAsync(q => q.Id == id);
+    }
+
+    /// <summary>
+    /// 存在判断
+    /// </summary>
+    /// <param name="whereExp"></param>
+    /// <returns></returns>
+    public virtual async Task<bool> ExistAsync(Expression<Func<TEntity, bool>> whereExp)
+    {
+        return await Query.Db.AnyAsync(whereExp);
     }
 
     /// <summary>
