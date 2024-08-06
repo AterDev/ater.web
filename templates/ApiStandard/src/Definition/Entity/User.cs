@@ -11,11 +11,10 @@ namespace Entity;
 [Index(nameof(IsDeleted))]
 public class User : EntityBase
 {
-    // TODO:根据实际需求调整字段
-
     /// <summary>
     /// 用户名
     /// </summary>
+    [MaxLength(40)]
     [Length(2, 40)]
     public required string UserName { get; set; }
 
@@ -27,6 +26,7 @@ public class User : EntityBase
     /// <summary>
     /// 邮箱
     /// </summary>
+    [MaxLength(100)]
     [Length(5, 100)]
     [EmailAddress]
     public string? Email { get; set; } = null!;

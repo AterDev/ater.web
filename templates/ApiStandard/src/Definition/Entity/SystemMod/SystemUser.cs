@@ -16,10 +16,12 @@ public class SystemUser : EntityBase
     /// 用户名
     /// </summary>
     [Length(3, 30)]
+    [MaxLength(30)]
     public required string UserName { get; set; }
     /// <summary>
     /// 真实姓名
     /// </summary>
+    [MaxLength(30)]
     [Length(2, 30)]
     public string? RealName { get; set; }
     [MaxLength(100)]

@@ -11,16 +11,15 @@ namespace Application.Implement;
 /// <summary>
 /// Manager base class
 /// </summary>
-/// <typeparam name="TEntity"></typeparam>
-/// <typeparam name="TUpdate"></typeparam>
-/// <typeparam name="TFilter"></typeparam>
-/// <typeparam name="TItem"></typeparam>
-public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem>
+/// <typeparam name="TEntity">实体类型</typeparam>
+/// <typeparam name="TUpdate">更新DTO</typeparam>
+/// <typeparam name="TFilter">筛选DTO</typeparam>
+/// <typeparam name="TItem">列表元素DTO</typeparam>
+public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem> : ManagerBase<TEntity>
     where TEntity : class, IEntityBase
     where TFilter : FilterBase
 {
     #region Properties and Fields
-    protected readonly ILogger _logger;
     protected IUserContext? UserContext { get; private set; }
 
     /// <summary>
@@ -28,19 +27,6 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem>
     /// </summary>
     protected LogActionType AutoLogType { get; private set; } = LogActionType.None;
 
-    /// <summary>
-    /// 实体的只读仓储实现
-    /// </summary>
-    protected QuerySet<QueryDbContext, TEntity> Query { get; init; }
-    /// <summary>
-    /// 实体的可写仓储实现
-    /// </summary>
-    protected CommandSet<CommandDbContext, TEntity> Command { get; init; }
-    protected IQueryable<TEntity> Queryable { get; set; }
-
-    protected CommandDbContext CommandContext { get; init; }
-
-    protected QueryDbContext QueryContext { get; init; }
     /// <summary>
     /// 是否自动保存(调用SaveChanges)
     /// </summary>
@@ -54,20 +40,16 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem>
     ///错误状态码
     /// </summary>
     public int ErrorStatus { get; set; }
-
-    protected DatabaseFacade Database { get; init; }
     #endregion
 
-    public ManagerBase(DataAccessContext<TEntity> dataAccessContext, ILogger logger)
+    public ManagerBase(DataAccessContext<TEntity> dataAccessContext, ILogger logger) : base(dataAccessContext, logger)
     {
         Query = dataAccessContext.QuerySet();
         Command = dataAccessContext.CommandSet();
         Queryable = Query.Queryable;
         Database = Command.Database;
-        _logger = logger;
         CommandContext = dataAccessContext.CommandContext;
         QueryContext = dataAccessContext.QueryContext;
-
     }
 
     /// <summary>
@@ -250,5 +232,39 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem>
                 await taskQueue.AddItemAsync(log);
             }
         }
+    }
+}
+
+/// <summary>
+/// Manager基类
+/// </summary>
+/// <typeparam name="TEntity">实体类型</typeparam>
+public class ManagerBase<TEntity> where TEntity : class, IEntityBase
+{
+    protected readonly ILogger _logger;
+    /// <summary>
+    /// 实体的只读仓储实现
+    /// </summary>
+    protected QuerySet<QueryDbContext, TEntity> Query { get; init; }
+    /// <summary>
+    /// 实体的可写仓储实现
+    /// </summary>
+    protected CommandSet<CommandDbContext, TEntity> Command { get; init; }
+    protected IQueryable<TEntity> Queryable { get; set; }
+
+    protected CommandDbContext CommandContext { get; init; }
+
+    protected QueryDbContext QueryContext { get; init; }
+    protected DatabaseFacade Database { get; init; }
+
+    public ManagerBase(DataAccessContext<TEntity> dataAccessContext, ILogger logger)
+    {
+        Query = dataAccessContext.QuerySet();
+        Command = dataAccessContext.CommandSet();
+        Queryable = Query.Queryable;
+        Database = Command.Database;
+        _logger = logger;
+        CommandContext = dataAccessContext.CommandContext;
+        QueryContext = dataAccessContext.QueryContext;
     }
 }
