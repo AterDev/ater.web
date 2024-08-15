@@ -17,7 +17,7 @@ public interface ICommandStoreExt<TId, TEntity>
     /// <param name="whereExp"></param>
     /// <param name="dto"></param>
     /// <returns></returns>
-    Task<int> UpdateRangeAsync<TUpdate>(Expression<Func<TEntity, bool>> whereExp, TUpdate dto);
+    //Task<int> UpdateRangeAsync<TUpdate>(Expression<Func<TEntity, bool>> whereExp, TUpdate dto);
 
     /// <summary>
     /// 批量删除
