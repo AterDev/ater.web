@@ -183,9 +183,7 @@ public class CustomerInfo : EntityBase
     /// <summary>
     /// 标签
     /// </summary>
-    public List<CustomerTag>? Tags { get; set; } = [];
-    public List<CustomerInfoTag>? CustomerInfoTags { get; set; } = [];
-
+    public List<string>? Tags { get; set; } = [];
 }
 
 /// <summary>

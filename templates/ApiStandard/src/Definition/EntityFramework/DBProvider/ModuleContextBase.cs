@@ -1,4 +1,5 @@
 ﻿using Entity.CMSMod;
+using Entity.CustomerMod;
 using Entity.FileManagerMod;
 using Entity.OrderMod;
 using Entity.SystemMod;
@@ -26,4 +27,8 @@ public partial class ContextBase
     public DbSet<Product> Products { get; set; }
     public DbSet<Blog> Blogs { get; set; }
     public DbSet<Catalog> Catalogs { get; set; }
+
+
+    public DbSet<CustomerInfo> CustomerInfos { get; set; }
+    public DbSet<CustomerRegister> CustomerRegisters { get; set; }
 }
