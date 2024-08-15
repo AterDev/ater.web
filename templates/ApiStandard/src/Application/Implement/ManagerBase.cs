@@ -40,6 +40,10 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem> : ManagerBase
     ///错误状态码
     /// </summary>
     public int ErrorStatus { get; set; }
+    /// <summary>
+    /// 当前实体
+    /// </summary>
+    public TEntity? CurrentEntity { get; set; }
     #endregion
 
     public ManagerBase(DataAccessContext<TEntity> dataAccessContext, ILogger logger) : base(dataAccessContext, logger)
@@ -56,11 +60,10 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem> : ManagerBase
     /// 在修改前查询对象
     /// </summary>
     /// <param name="id"></param>
-    /// <param name="navigations">include navigations</param>
     /// <returns></returns>
-    public virtual async Task<TEntity?> GetCurrentAsync(Guid id, params string[]? navigations)
+    public virtual async Task<TEntity?> GetCurrentAsync(Guid id)
     {
-        return await Command.FindAsync(e => e.Id == id, navigations);
+        return await Command.FindAsync(e => e.Id == id);
     }
 
     public virtual async Task<TEntity> AddAsync(TEntity entity)
@@ -75,6 +78,14 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem> : ManagerBase
         return res;
     }
 
+
+    /// <summary>
+    /// 更新简单对象
+    /// 有关联对象需要手动处理
+    /// </summary>
+    /// <param name="entity"></param>
+    /// <param name="dto"></param>
+    /// <returns></returns>
     public virtual async Task<TEntity> UpdateAsync(TEntity entity, TUpdate dto)
     {
         _ = entity.Merge(dto, true);
@@ -178,6 +189,25 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem> : ManagerBase
     public async Task LoadManyAsync<TProperty>(TEntity entity, Expression<Func<TEntity, IEnumerable<TProperty>>> propertyExpression) where TProperty : class
     {
         await CommandContext.Entry(entity).Collection(propertyExpression).LoadAsync();
+    }
+
+
+    /// <summary>
+    /// 更新关联数据
+    /// </summary>
+    /// <typeparam name="TProperty"></typeparam>
+    /// <param name="entity"></param>
+    /// <param name="propertyExpression"></param>
+    /// <param name="data"></param>
+    public void UpdateRelation<TProperty>(TEntity entity, Expression<Func<TEntity, IEnumerable<TProperty>>> propertyExpression, List<TProperty> data) where TProperty : class
+    {
+        var currentValue = CommandContext.Entry(entity).Collection(propertyExpression).CurrentValue;
+        if (currentValue != null && currentValue.Any())
+        {
+            CommandContext.RemoveRange(currentValue);
+            CommandContext.Entry(entity).Collection(propertyExpression).CurrentValue = null;
+        }
+        CommandContext.AddRange(data);
     }
 
     public async Task<int> SaveChangesAsync()

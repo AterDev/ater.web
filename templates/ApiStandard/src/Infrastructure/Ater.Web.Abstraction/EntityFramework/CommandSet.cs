@@ -28,18 +28,11 @@ public class CommandSet<TContent, TEntity>(TContent commandDbContext) : ICommand
         return await _commandDbContext.SaveChangesAsync();
     }
 
-    public virtual async Task<TEntity?> FindAsync(Expression<Func<TEntity, bool>>? whereExp, string[]? navigations = null)
+    public virtual async Task<TEntity?> FindAsync(Expression<Func<TEntity, bool>>? whereExp)
     {
         Expression<Func<TEntity, bool>> exp = e => true;
         whereExp ??= exp;
         IQueryable<TEntity> _query = _db.Where(whereExp).AsQueryable();
-        if (navigations != null)
-        {
-            foreach (var item in navigations)
-            {
-                _query = _query.Include(item);
-            }
-        }
         return await _query.FirstOrDefaultAsync();
     }
 
@@ -141,20 +134,6 @@ public class CommandSet<TContent, TEntity>(TContent commandDbContext) : ICommand
             _ = await SaveChangesAsync();
         }
         return entities;
-    }
-
-    /// <summary>
-    /// 条件更新
-    /// </summary>
-    /// <typeparam name="TUpdate"></typeparam>
-    /// <param name="whereExp"></param>
-    /// <param name="dto"></param>
-    /// <returns></returns>
-    [Obsolete("Not Implement")]
-    public virtual Task<int> UpdateRangeAsync<TUpdate>(Expression<Func<TEntity, bool>> whereExp, TUpdate dto)
-    {
-        //return await _db.Where(whereExp).ExecuteUpdateAsync(d => d.SetProperty(d => d.Id, d => Guid.NewGuid()));
-        throw new NotImplementedException();
     }
 
     /// <summary>
