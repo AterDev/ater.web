@@ -51,7 +51,7 @@ public class SystemPermissionController(
     [HttpPatch("{id}")]
     public async Task<ActionResult<SystemPermission?>> UpdateAsync([FromRoute] Guid id, SystemPermissionUpdateDto dto)
     {
-        SystemPermission? current = await _manager.GetCurrentAsync(id, "Group");
+        SystemPermission? current = await _manager.GetCurrentAsync(id);
         if (current == null)
         {
             return NotFound(ErrorMsg.NotFoundResource);

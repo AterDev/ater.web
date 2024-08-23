@@ -23,9 +23,11 @@ public class SystemPermissionManager(
         return await Task.FromResult(entity);
     }
 
-    public override Task<SystemPermission?> GetCurrentAsync(Guid id, params string[]? navigations)
+    public override Task<SystemPermission?> GetCurrentAsync(Guid id)
     {
-        return base.GetCurrentAsync(id, navigations);
+        return Command.Db.Where(p => p.Id == id)
+            .Include(p => p.Group)
+            .FirstOrDefaultAsync();
     }
 
     public override async Task<SystemPermission> UpdateAsync(SystemPermission entity, SystemPermissionUpdateDto dto)
