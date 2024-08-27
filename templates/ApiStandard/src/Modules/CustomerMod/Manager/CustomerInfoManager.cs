@@ -18,7 +18,7 @@ public class CustomerInfoManager(
     /// </summary>
     /// <param name="dto"></param>
     /// <returns></returns>
-    public async Task<CustomerInfo> CreateNewEntityAsync(CustomerInfoAddDto dto)
+    public async Task<Guid?> AddAsync(CustomerInfoAddDto dto)
     {
         var entity = dto.MapTo<CustomerInfoAddDto, CustomerInfo>();
         entity.RealName = dto.Name;
@@ -30,10 +30,10 @@ public class CustomerInfoManager(
         entity.CreatedUserId = _userContext.UserId;
         entity.ManagerId = consult!.Id;
 
-        return await Task.FromResult(entity);
+        return await base.AddAsync(entity) ? entity.Id : null;
     }
 
-    public override async Task<CustomerInfo> UpdateAsync(CustomerInfo entity, CustomerInfoUpdateDto dto)
+    public async Task<bool> UpdateAsync(CustomerInfo entity, CustomerInfoUpdateDto dto)
     {
         /*
         if (dto.CustomerTagIds != null && dto.CustomerTagIds.Count > 0)
@@ -47,10 +47,10 @@ public class CustomerInfoManager(
             }
         }
         */
-        return await base.UpdateAsync(entity, dto);
+        return await base.UpdateAsync(entity);
     }
 
-    public override async Task<PageList<CustomerInfoItemDto>> FilterAsync(CustomerInfoFilterDto filter)
+    public override async Task<PageList<CustomerInfoItemDto>> ToPageAsync(CustomerInfoFilterDto filter)
     {
         Queryable = Queryable
             .WhereNotNull(filter.SearchKey, q => q.Name == filter.SearchKey || q.Numbering == filter.SearchKey)
@@ -59,7 +59,7 @@ public class CustomerInfoManager(
             .WhereNotNull(filter.FollowUpStatus, q => q.FollowUpStatus == filter.FollowUpStatus)
             .WhereNotNull(filter.GenderType, q => q.GenderType == filter.GenderType);
 
-        return await Query.FilterAsync<CustomerInfoItemDto>(Queryable, filter.PageIndex, filter.PageSize, filter.OrderBy);
+        return await base.ToPageAsync(filter);
     }
 
 
@@ -77,7 +77,6 @@ public class CustomerInfoManager(
             .FirstOrDefaultAsync();
     }
 
-
     /// <summary>
     /// 是否唯一
     /// </summary>
@@ -85,7 +84,7 @@ public class CustomerInfoManager(
     public async Task<bool> IsConflictAsync(string name, string contactInfo)
     {
         // 自定义唯一性验证参数和逻辑
-        return await Command.Db.AnyAsync(q => q.Name.Equals(name) && q.ContactInfo!.Equals(contactInfo));
+        return await Command.AnyAsync(q => q.Name.Equals(name) && q.ContactInfo!.Equals(contactInfo));
     }
 
     /// <summary>
@@ -95,7 +94,7 @@ public class CustomerInfoManager(
     /// <returns></returns>
     public async Task<CustomerInfo?> GetOwnedAsync(Guid id)
     {
-        var query = Command.Db.Where(q => q.Id == id);
+        var query = Command.Where(q => q.Id == id);
         // 获取用户所属的对象
         // query = query.Where(q => q.User.Id == _userContext.UserId);
         return await query.FirstOrDefaultAsync();

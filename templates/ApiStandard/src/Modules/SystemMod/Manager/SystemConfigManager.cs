@@ -20,30 +20,30 @@ public class SystemConfigManager(
     /// </summary>
     /// <param name="dto"></param>
     /// <returns></returns>
-    public async Task<SystemConfig> CreateNewEntityAsync(SystemConfigAddDto dto)
+    public async Task<Guid?> AddAsync(SystemConfigAddDto dto)
     {
         SystemConfig entity = dto.MapTo<SystemConfigAddDto, SystemConfig>();
         // other required props
-        return await Task.FromResult(entity);
+        return await base.AddAsync(entity) ? entity.Id : null;
     }
 
-    public override async Task<SystemConfig> UpdateAsync(SystemConfig entity, SystemConfigUpdateDto dto)
+    public async Task<bool> UpdateAsync(SystemConfig entity, SystemConfigUpdateDto dto)
     {
         if (entity.IsSystem)
         {
             dto.Key = null;
             dto.GroupName = null;
         }
-        return await base.UpdateAsync(entity, dto);
+        return await base.UpdateAsync(entity);
     }
 
-    public override async Task<PageList<SystemConfigItemDto>> FilterAsync(SystemConfigFilterDto filter)
+    public override async Task<PageList<SystemConfigItemDto>> ToPageAsync(SystemConfigFilterDto filter)
     {
         Queryable = Queryable
             .WhereNotNull(filter.Key, q => q.Key.Contains(filter.Key!, StringComparison.CurrentCultureIgnoreCase))
             .WhereNotNull(filter.GroupName, q => q.GroupName == filter.GroupName);
 
-        return await Query.FilterAsync<SystemConfigItemDto>(Queryable, filter.PageIndex, filter.PageSize, filter.OrderBy);
+        return await base.ToPageAsync(filter);
     }
 
     /// <summary>
@@ -70,7 +70,7 @@ public class SystemConfigManager(
     /// <returns></returns>
     public async Task<SystemConfig?> GetOwnedAsync(Guid id)
     {
-        IQueryable<SystemConfig> query = Command.Db.Where(q => q.Id == id);
+        IQueryable<SystemConfig> query = Command.Where(q => q.Id == id);
         // 获取用户所属的对象
         // query = query.Where(q => q.User.Id == _userContext.UserId);
         return await query.FirstOrDefaultAsync();

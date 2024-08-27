@@ -1,5 +1,4 @@
 using Application;
-using Entity.OrderMod;
 using OrderMod.Models.ProductDtos;
 
 namespace OrderMod.Manager;
@@ -19,18 +18,18 @@ public class ProductManager(
     /// </summary>
     /// <param name="dto"></param>
     /// <returns></returns>
-    public async Task<Product> CreateNewEntityAsync(ProductAddDto dto)
+    public async Task<Guid?> AddAsync(ProductAddDto dto)
     {
         Product entity = dto.MapTo<ProductAddDto, Product>();
-        return await Task.FromResult(entity);
+        return await base.AddAsync(entity) ? entity.Id : null;
     }
 
-    public override async Task<Product> UpdateAsync(Product entity, ProductUpdateDto dto)
+    public async Task<bool> UpdateAsync(Product entity, ProductUpdateDto dto)
     {
-        return await base.UpdateAsync(entity, dto);
+        return await base.UpdateAsync(entity);
     }
 
-    public override async Task<PageList<ProductItemDto>> FilterAsync(ProductFilterDto filter)
+    public override async Task<PageList<ProductItemDto>> ToPageAsync(ProductFilterDto filter)
     {
         Queryable = Queryable
             .WhereNotNull(filter.ProductType, q => q.ProductType == filter.ProductType)
@@ -41,7 +40,7 @@ public class ProductManager(
             ["Sort"] = true
         };
 
-        return await Query.FilterAsync<ProductItemDto>(Queryable, filter.PageIndex, filter.PageSize, filter.OrderBy);
+        return await base.ToPageAsync(filter);
     }
 
     /// <summary>
@@ -81,7 +80,7 @@ public class ProductManager(
     /// <returns></returns>
     public async Task<Product?> GetOwnedAsync(Guid id)
     {
-        IQueryable<Product> query = Command.Db.Where(q => q.Id == id);
+        IQueryable<Product> query = Command.Where(q => q.Id == id);
         // 获取用户所属的对象
         // query = query.Where(q => q.User.Id == _userContext.UserId);
         return await query.FirstOrDefaultAsync();

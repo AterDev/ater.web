@@ -1,7 +1,6 @@
 using Application;
 
 using CMSMod.Models.BlogDtos;
-using Entity.CMSMod;
 using EntityFramework;
 
 namespace CMSMod.Manager;
@@ -20,22 +19,21 @@ public class BlogManager(
     /// </summary>
     /// <param name="dto"></param>
     /// <returns></returns>
-    public async Task<Blog> CreateNewEntityAsync(BlogAddDto dto)
+    public async Task<Guid?> AddAsync(BlogAddDto dto)
     {
         Blog entity = dto.MapTo<BlogAddDto, Blog>();
         entity.UserId = _userContext.UserId;
-        Command.Db.Entry(entity).Property("CatalogId").CurrentValue = dto.CatalogId;
-        // or entity.CatalogId = dto.CatalogId;
+        entity.CatalogId = dto.CatalogId;
         // other required props
-        return await Task.FromResult(entity);
+        return await base.AddAsync(entity) ? entity.Id : null;
     }
 
-    public override async Task<Blog> UpdateAsync(Blog entity, BlogUpdateDto dto)
+    public async Task<bool> UpdateAsync(Blog entity, BlogUpdateDto dto)
     {
-        return await base.UpdateAsync(entity, dto);
+        return await base.UpdateAsync(entity);
     }
 
-    public override async Task<PageList<BlogItemDto>> FilterAsync(BlogFilterDto filter)
+    public override async Task<PageList<BlogItemDto>> ToPageAsync(BlogFilterDto filter)
     {
         Queryable = Queryable
             .WhereNotNull(filter.Title, q => q.Title == filter.Title)
@@ -46,7 +44,7 @@ public class BlogManager(
             .WhereNotNull(filter.IsOriginal, q => q.IsOriginal == filter.IsOriginal)
             .WhereNotNull(filter.UserId, q => q.User.Id == filter.UserId)
             .WhereNotNull(filter.CatalogId, q => q.Catalog.Id == filter.CatalogId);
-        return await Query.FilterAsync<BlogItemDto>(Queryable, filter.PageIndex, filter.PageSize, filter.OrderBy);
+        return await base.ToPageAsync(filter);
     }
 
     /// <summary>
@@ -56,7 +54,7 @@ public class BlogManager(
     /// <returns></returns>
     public async Task<Blog?> GetOwnedAsync(Guid id)
     {
-        IQueryable<Blog> query = Command.Db.Where(q => q.Id == id);
+        IQueryable<Blog> query = Command.Where(q => q.Id == id);
         // 获取用户所属的对象
         // query = query.Where(q => q.User.Id == _userContext.UserId);
         return await query.FirstOrDefaultAsync();

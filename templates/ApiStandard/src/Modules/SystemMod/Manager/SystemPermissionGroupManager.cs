@@ -1,4 +1,3 @@
-using Entity.SystemMod;
 using SystemMod.Models.SystemPermissionGroupDtos;
 
 namespace SystemMod.Manager;
@@ -14,35 +13,28 @@ public class SystemPermissionGroupManager(
     /// </summary>
     /// <param name="dto"></param>
     /// <returns></returns>
-    public async Task<SystemPermissionGroup> CreateNewEntityAsync(SystemPermissionGroupAddDto dto)
+    public async Task<Guid?> AddAsync(SystemPermissionGroupAddDto dto)
     {
         SystemPermissionGroup entity = dto.MapTo<SystemPermissionGroupAddDto, SystemPermissionGroup>();
-        return await Task.FromResult(entity);
+        return await base.AddAsync(entity) ? entity.Id : null;
     }
 
-    public override async Task<SystemPermissionGroup> UpdateAsync(SystemPermissionGroup entity, SystemPermissionGroupUpdateDto dto)
+    public async Task<bool> UpdateAsync(SystemPermissionGroup entity, SystemPermissionGroupUpdateDto dto)
     {
-        return await base.UpdateAsync(entity, dto);
+        return await base.UpdateAsync(entity);
     }
 
-    public override async Task<PageList<SystemPermissionGroupItemDto>> FilterAsync(SystemPermissionGroupFilterDto filter)
+    public override async Task<PageList<SystemPermissionGroupItemDto>> ToPageAsync(SystemPermissionGroupFilterDto filter)
     {
         Queryable = Queryable.WhereNotNull(filter.Name, q => q.Name.Contains(filter.Name!));
-        return await Query.PageListAsync<SystemPermissionGroupItemDto>(Queryable, filter.PageIndex, filter.PageSize);
-
+        return await base.ToPageAsync(filter);
     }
 
     public override async Task<SystemPermissionGroup?> FindAsync(Guid id)
     {
-        return await Query.Db.Include(g => g.Permissions)
+        return await Query.Include(g => g.Permissions)
             .AsNoTracking()
             .SingleOrDefaultAsync(g => g.Id == id);
-    }
-
-    public override Task<SystemPermissionGroup?> DeleteAsync(SystemPermissionGroup entity, bool softDelete = true)
-    {
-        // load permissions
-        return base.DeleteAsync(entity, false);
     }
 
     /// <summary>
@@ -52,7 +44,7 @@ public class SystemPermissionGroupManager(
     /// <returns></returns>
     public async Task<SystemPermissionGroup?> GetOwnedAsync(Guid id)
     {
-        IQueryable<SystemPermissionGroup> query = Command.Db.Where(q => q.Id == id);
+        IQueryable<SystemPermissionGroup> query = Command.Where(q => q.Id == id);
         // 获取用户所属的对象
         // query = query.Where(q => q.User.Id == _userContext.UserId);
         return await query.FirstOrDefaultAsync();

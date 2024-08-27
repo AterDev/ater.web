@@ -20,7 +20,7 @@ public class SystemLogsController(
     [HttpPost("filter")]
     public async Task<ActionResult<PageList<SystemLogsItemDto>>> FilterAsync(SystemLogsFilterDto filter)
     {
-        return await _manager.FilterAsync(filter);
+        return await _manager.ToPageAsync(filter);
     }
 
 }

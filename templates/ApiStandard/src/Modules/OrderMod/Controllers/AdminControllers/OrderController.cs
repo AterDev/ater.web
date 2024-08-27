@@ -1,5 +1,4 @@
 using Application;
-using Entity.OrderMod;
 using OrderMod.Models.OrderDtos;
 namespace OrderMod.Controllers.AdminControllers;
 
@@ -22,7 +21,7 @@ public class OrderController(
     [HttpPost("filter")]
     public async Task<ActionResult<PageList<OrderItemDto>>> FilterAsync(OrderFilterDto filter)
     {
-        return await _manager.FilterAsync(filter);
+        return await _manager.ToPageAsync(filter);
     }
 
     /// <summary>
@@ -32,7 +31,7 @@ public class OrderController(
     /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPatch("{id}")]
-    public async Task<ActionResult<Order?>> UpdateAsync([FromRoute] Guid id, OrderUpdateDto dto)
+    public async Task<ActionResult<bool?>> UpdateAsync([FromRoute] Guid id, OrderUpdateDto dto)
     {
         Order? current = await _manager.GetCurrentAsync(id);
         if (current == null)

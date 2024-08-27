@@ -1,4 +1,3 @@
-using Entity.SystemMod;
 using SystemMod.Models.SystemLogsDtos;
 
 namespace SystemMod.Manager;
@@ -17,19 +16,19 @@ public class SystemLogsManager(
     /// </summary>
     /// <param name="dto"></param>
     /// <returns></returns>
-    public async Task<SystemLogs> CreateNewEntityAsync(SystemLogsAddDto dto)
+    public async Task<Guid?> AddAsync(SystemLogsAddDto dto)
     {
         SystemLogs entity = dto.MapTo<SystemLogsAddDto, SystemLogs>();
         entity.SystemUserId = _userContext.UserId;
-        return await Task.FromResult(entity);
+        return await base.AddAsync(entity) ? entity.Id : null;
     }
 
-    public override async Task<SystemLogs> UpdateAsync(SystemLogs entity, SystemLogsUpdateDto dto)
+    public async Task<bool> UpdateAsync(SystemLogs entity, SystemLogsUpdateDto dto)
     {
-        return await base.UpdateAsync(entity, dto);
+        return await base.UpdateAsync(entity);
     }
 
-    public override async Task<PageList<SystemLogsItemDto>> FilterAsync(SystemLogsFilterDto filter)
+    public override async Task<PageList<SystemLogsItemDto>> ToPageAsync(SystemLogsFilterDto filter)
     {
         Queryable = Queryable
             .WhereNotNull(filter.ActionUserName, q => q.ActionUserName == filter.ActionUserName)
@@ -42,7 +41,7 @@ public class SystemLogsManager(
             var endDate = filter.EndDate.Value.AddDays(1);
             Queryable = Queryable.Between(q => q.CreatedTime, filter.StartDate.Value, endDate);
         }
-        return await Query.FilterAsync<SystemLogsItemDto>(Queryable, filter.PageIndex, filter.PageSize, filter.OrderBy);
+        return await base.ToPageAsync(filter);
     }
 
     /// <summary>
@@ -52,7 +51,7 @@ public class SystemLogsManager(
     /// <returns></returns>
     public async Task<SystemLogs?> GetOwnedAsync(Guid id)
     {
-        IQueryable<SystemLogs> query = Command.Db.Where(q => q.Id == id);
+        IQueryable<SystemLogs> query = Command.Where(q => q.Id == id);
         // 获取用户所属的对象
         // query = query.Where(q => q.User.Id == _userContext.UserId);
         return await query.FirstOrDefaultAsync();

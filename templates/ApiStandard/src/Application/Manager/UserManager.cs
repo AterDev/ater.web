@@ -22,7 +22,7 @@ public class UserManager(
         user.PasswordSalt = HashCrypto.BuildSalt();
         user.PasswordHash = HashCrypto.GeneratePwd(newPassword, user.PasswordSalt);
         Command.Update(user);
-        return await Command.SaveChangesAsync() > 0;
+        return await SaveChangesAsync() > 0;
     }
 
     /// <summary>
@@ -51,33 +51,32 @@ public class UserManager(
     /// </summary>
     /// <param name="dto"></param>
     /// <returns></returns>
-    public async Task<User> CreateNewEntityAsync(UserAddDto dto)
+    public async Task<Guid?> AddAsync(UserAddDto dto)
     {
-        var user = new User
+        var entity = new User
         {
             UserName = dto.UserName,
             PasswordSalt = HashCrypto.BuildSalt()
         };
-        user.PasswordHash = HashCrypto.GeneratePwd(dto.Password, user.PasswordSalt);
+        entity.PasswordHash = HashCrypto.GeneratePwd(dto.Password, entity.PasswordSalt);
         if (dto.Email != null)
         {
-            user.Email = dto.Email;
+            entity.Email = dto.Email;
         }
-        await AddAsync(user);
-        return user;
+        return await base.AddAsync(entity) ? entity.Id : null;
     }
 
-    public override async Task<User> UpdateAsync(User entity, UserUpdateDto dto)
+    public async Task<bool> UpdateAsync(User entity, UserUpdateDto dto)
     {
         if (dto.Password != null && _userContext != null && _userContext.IsAdmin)
         {
             entity.PasswordSalt = HashCrypto.BuildSalt();
             entity.PasswordHash = HashCrypto.GeneratePwd(dto.Password, entity.PasswordSalt);
         }
-        return await base.UpdateAsync(entity, dto);
+        return await base.UpdateAsync(entity);
     }
 
-    public override async Task<PageList<UserItemDto>> FilterAsync(UserFilterDto filter)
+    public override async Task<PageList<UserItemDto>> ToPageAsync(UserFilterDto filter)
     {
         Queryable = Queryable
             .WhereNotNull(filter.UserName, q => q.UserName == filter.UserName)
@@ -87,7 +86,7 @@ public class UserManager(
             .WhereNotNull(filter.EmailConfirmed, q => q.EmailConfirmed == filter.EmailConfirmed)
             .WhereNotNull(filter.PhoneNumberConfirmed, q => q.PhoneNumberConfirmed == filter.PhoneNumberConfirmed);
 
-        return await Query.FilterAsync<UserItemDto>(Queryable, filter.PageIndex, filter.PageSize, filter.OrderBy);
+        return await base.ToPageAsync(filter);
     }
 
     /// <summary>
@@ -97,7 +96,7 @@ public class UserManager(
     /// <returns></returns>
     public async Task<User?> GetOwnedAsync(Guid id)
     {
-        IQueryable<User> query = Command.Db.Where(q => q.Id == id);
+        IQueryable<User> query = Command.Where(q => q.Id == id);
         // 获取用户所属的对象
         return await query.FirstOrDefaultAsync();
     }

@@ -16,6 +16,7 @@ public class User : EntityBase
     /// </summary>
     [MaxLength(40)]
     [Length(2, 40)]
+    
     public required string UserName { get; set; }
 
     /// <summary>

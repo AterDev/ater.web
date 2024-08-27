@@ -1,5 +1,4 @@
 using Application;
-using Entity.FileManagerMod;
 using FileManagerMod.Models.FolderDtos;
 
 namespace FileManagerMod.Controllers.AdminControllers;
@@ -23,7 +22,7 @@ public class FolderController(
     [HttpPost("filter")]
     public async Task<ActionResult<PageList<FolderItemDto>>> FilterAsync(FolderFilterDto filter)
     {
-        return await _manager.FilterAsync(filter);
+        return await _manager.ToPageAsync(filter);
     }
 
     /// <summary>
@@ -32,7 +31,7 @@ public class FolderController(
     /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<ActionResult<Folder>> AddAsync(FolderAddDto dto)
+    public async Task<ActionResult<Guid?>> AddAsync(FolderAddDto dto)
     {
         if (dto.ParentId != null)
         {
@@ -42,8 +41,8 @@ public class FolderController(
                 return NotFound(ErrorMsg.NotFoundResource);
             };
         }
-        Folder entity = await _manager.CreateNewEntityAsync(dto);
-        return await _manager.AddAsync(entity);
+        var id = await _manager.AddAsync(dto);
+        return id == null ? Problem(Constant.AddFailed) : id;
     }
 
     /// <summary>
@@ -65,15 +64,11 @@ public class FolderController(
     /// <returns></returns>
     // [ApiExplorerSettings(IgnoreApi = true)]
     [HttpDelete("{id}")]
-    public async Task<ActionResult<Folder?>> DeleteAsync([FromRoute] Guid id)
+    public async Task<ActionResult<bool?>> DeleteAsync([FromRoute] Guid id)
     {
         // 注意删除权限
         Folder? entity = await _manager.GetCurrentAsync(id);
-        if (entity == null)
-        {
-            return NotFound();
-        };
         // return Forbid();
-        return await _manager.DeleteAsync(entity, false);
+        return entity == null ? NotFound() : await _manager.DeleteAsync([id], false);
     }
 }

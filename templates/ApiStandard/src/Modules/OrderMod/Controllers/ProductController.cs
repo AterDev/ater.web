@@ -21,7 +21,7 @@ public class ProductController(
     [HttpGet("list")]
     public async Task<ActionResult<List<ProductItemDto>>> FilterAsync()
     {
-        return await _manager.ListAsync<ProductItemDto>();
+        return await _manager.ToListAsync<ProductItemDto>();
     }
 
     /// <summary>

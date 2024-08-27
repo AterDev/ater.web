@@ -1,7 +1,6 @@
 using Application;
 
 using CMSMod.Models.CatalogDtos;
-using Entity.CMSMod;
 using EntityFramework;
 
 namespace CMSMod.Manager;
@@ -18,7 +17,7 @@ public class CatalogManager(DataAccessContext<Catalog> dataContext, IUserContext
     /// </summary>
     /// <param name="dto"></param>
     /// <returns></returns>
-    public async Task<Catalog> CreateNewEntityAsync(CatalogAddDto dto)
+    public async Task<Guid?> AddAsync(CatalogAddDto dto)
     {
         Catalog entity = dto.MapTo<CatalogAddDto, Catalog>();
         entity.UserId = _userContext.UserId;
@@ -36,19 +35,19 @@ public class CatalogManager(DataAccessContext<Catalog> dataContext, IUserContext
                 entity.Level = 0;
             }
         }
-        return entity;
+        return await base.AddAsync(entity) ? entity.Id : null;
     }
 
-    public override async Task<Catalog> UpdateAsync(Catalog entity, CatalogUpdateDto dto)
+    public async Task<bool> UpdateAsync(Catalog entity, CatalogUpdateDto dto)
     {
-        return await base.UpdateAsync(entity, dto);
+        return await base.UpdateAsync(entity);
     }
 
-    public override async Task<PageList<CatalogItemDto>> FilterAsync(CatalogFilterDto filter)
+    public override async Task<PageList<CatalogItemDto>> ToPageAsync(CatalogFilterDto filter)
     {
         // TODO:根据实际业务构建筛选条件
         // if ... Queryable = ...
-        return await Query.FilterAsync<CatalogItemDto>(Queryable, filter.PageIndex, filter.PageSize);
+        return await base.ToPageAsync(filter);
     }
 
     /// <summary>
@@ -57,7 +56,7 @@ public class CatalogManager(DataAccessContext<Catalog> dataContext, IUserContext
     /// <returns></returns>
     public async Task<List<Catalog>> GetTreeAsync()
     {
-        List<Catalog> data = await ListAsync(null);
+        List<Catalog> data = await ToListAsync(null);
         List<Catalog> tree = data.BuildTree();
         return tree;
     }
@@ -72,7 +71,7 @@ public class CatalogManager(DataAccessContext<Catalog> dataContext, IUserContext
             .Select(s => s.ParentId)
             .ToListAsync();
 
-        List<Catalog> source = await Query.Db.Where(c => !parentIds.Contains(c.Id))
+        List<Catalog> source = await Query.Where(c => !parentIds.Contains(c.Id))
             .Include(c => c.Parent)
             .ToListAsync();
         return source;
@@ -85,7 +84,7 @@ public class CatalogManager(DataAccessContext<Catalog> dataContext, IUserContext
     /// <returns></returns>
     public async Task<Catalog?> GetOwnedAsync(Guid id)
     {
-        IQueryable<Catalog> query = Command.Db.Where(q => q.Id == id);
+        IQueryable<Catalog> query = Command.Where(q => q.Id == id);
         // 属于当前角色的对象
         query = query.Where(q => q.User.Id == _userContext.UserId);
         return await query.FirstOrDefaultAsync();

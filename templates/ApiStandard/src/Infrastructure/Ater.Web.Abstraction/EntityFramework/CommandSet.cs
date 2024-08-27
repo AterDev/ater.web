@@ -9,11 +9,11 @@ namespace Ater.Web.Abstraction.EntityFramework;
 /// </summary>
 /// <typeparam name="TContext"></typeparam>
 /// <typeparam name="TEntity"></typeparam>
-public class CommandSet<TContent, TEntity>(TContent commandDbContext) : ICommandStore<TEntity>, ICommandStoreExt<TEntity>
-    where TContent : DbContext
+public class CommandSet<TContext, TEntity>(TContext commandDbContext)
+    where TContext : DbContext
     where TEntity : class, IEntityBase
 {
-    private readonly TContent _commandDbContext = commandDbContext;
+    private readonly TContext _commandDbContext = commandDbContext;
     /// <summary>
     /// 当前实体DbSet
     /// </summary>

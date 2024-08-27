@@ -14,7 +14,7 @@ public class SystemMenuManager(
     /// </summary>
     /// <param name="dto"></param>
     /// <returns></returns>
-    public async Task<SystemMenu> CreateNewEntityAsync(SystemMenuAddDto dto)
+    public async Task<Guid?> AddAsync(SystemMenuAddDto dto)
     {
         SystemMenu entity = dto.MapTo<SystemMenuAddDto, SystemMenu>();
         if (dto.ParentId != null)
@@ -22,7 +22,7 @@ public class SystemMenuManager(
             entity.ParentId = dto.ParentId.Value;
         }
 
-        return await Task.FromResult(entity);
+        return await base.AddAsync(entity) ? entity.Id : null;
     }
 
     /// <summary>
@@ -33,7 +33,7 @@ public class SystemMenuManager(
     public async Task<bool> SyncSystemMenusAsync(List<SystemMenuSyncDto> menus)
     {
         // 查询当前菜单内容
-        List<SystemMenu> currentMenus = await Command.ListAsync();
+        List<SystemMenu> currentMenus = await Command.ToListAsync();
         List<SystemMenu> flatMenus = FlatTree(menus);
 
         var accessCodes = flatMenus.Select(m => m.AccessCode).ToList();
@@ -67,10 +67,10 @@ public class SystemMenuManager(
                         menu.Parent = parent;
                     }
                 }
-                await Command.CreateAsync(menu);
+                await Command.AddAsync(menu);
             }
         }
-        return await Command.SaveChangesAsync() > 0;
+        return await SaveChangesAsync() > 0;
     }
 
     /// <summary>
@@ -116,9 +116,9 @@ public class SystemMenuManager(
         return res;
     }
 
-    public override async Task<SystemMenu> UpdateAsync(SystemMenu entity, SystemMenuUpdateDto dto)
+    public async Task<bool> UpdateAsync(SystemMenu entity, SystemMenuUpdateDto dto)
     {
-        return await base.UpdateAsync(entity, dto);
+        return await base.UpdateAsync(entity);
     }
 
     public new async Task<PageList<SystemMenu>> FilterAsync(SystemMenuFilterDto filter)
@@ -159,7 +159,7 @@ public class SystemMenuManager(
     /// <returns></returns>
     public async Task<SystemMenu?> GetOwnedAsync(Guid id)
     {
-        IQueryable<SystemMenu> query = Command.Db.Where(q => q.Id == id);
+        IQueryable<SystemMenu> query = Command.Where(q => q.Id == id);
         // 获取用户所属的对象
         // query = query.Where(q => q.User.Id == _userContext.UserId);
         return await query.FirstOrDefaultAsync();

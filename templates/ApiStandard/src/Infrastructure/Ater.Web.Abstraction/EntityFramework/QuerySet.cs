@@ -10,9 +10,8 @@ namespace Ater.Web.Abstraction.EntityFramework;
 /// 只读仓储基类
 /// </summary>
 /// <typeparam name="TEntity"></typeparam>
-public class QuerySet<TContent, TEntity> :
-    IQueryStore<TEntity>, IQueryStoreExt<TEntity>
-    where TContent : DbContext
+public class QuerySet<TContext, TEntity>
+    where TContext : DbContext
     where TEntity : class, IEntityBase
 {
     public DbSet<TEntity> Db { get; }
@@ -24,7 +23,7 @@ public class QuerySet<TContent, TEntity> :
     /// </summary>
     public bool EnableGlobalQuery { get; set; } = true;
 
-    public QuerySet(TContent queryDbContext)
+    public QuerySet(TContext queryDbContext)
     {
         Db = queryDbContext.Set<TEntity>();
         Queryable = EnableGlobalQuery

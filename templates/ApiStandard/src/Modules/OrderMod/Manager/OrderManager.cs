@@ -1,5 +1,4 @@
 using Application;
-using Entity.OrderMod;
 using OrderMod.Models.OrderDtos;
 
 namespace OrderMod.Manager;
@@ -19,7 +18,7 @@ public class OrderManager(
     /// 创建待添加实体
     /// </summary>
     /// <returns></returns>
-    public async Task<Order?> CreateNewEntityAsync(OrderAddDto dto)
+    public async Task<Guid?> AddAsync(OrderAddDto dto)
     {
         Product? product = await _productManager.GetCurrentAsync(dto.ProductId);
         return product != null
@@ -36,12 +35,12 @@ public class OrderManager(
             : default;
     }
 
-    public override async Task<Order> UpdateAsync(Order entity, OrderUpdateDto dto)
+    public async Task<bool> UpdateAsync(Order entity, OrderUpdateDto dto)
     {
-        return await base.UpdateAsync(entity, dto);
+        return await base.UpdateAsync(entity);
     }
 
-    public override async Task<PageList<OrderItemDto>> FilterAsync(OrderFilterDto filter)
+    public override async Task<PageList<OrderItemDto>> ToPageAsync(OrderFilterDto filter)
     {
         Queryable = Queryable
             .WhereNotNull(filter.OrderNumber, q => q.OrderNumber == filter.OrderNumber)
@@ -49,7 +48,7 @@ public class OrderManager(
             .WhereNotNull(filter.UserId, q => q.User.Id == filter.UserId)
             .WhereNotNull(filter.Status, q => q.Status == filter.Status);
 
-        return await Query.FilterAsync<OrderItemDto>(Queryable, filter.PageIndex, filter.PageSize, filter.OrderBy);
+        return await base.ToPageAsync(filter);
     }
 
     /*/// <summary>
@@ -67,7 +66,7 @@ public class OrderManager(
     /// <returns></returns>
     public async Task<Order?> GetOwnedAsync(Guid id)
     {
-        IQueryable<Order> query = Command.Db.Where(q => q.Id == id);
+        IQueryable<Order> query = Command.Where(q => q.Id == id);
         // 获取用户所属的对象
         // query = query.Where(q => q.User.Id == _userContext.UserId);
         return await query.FirstOrDefaultAsync();

@@ -1,4 +1,3 @@
-using Entity.FileManagerMod;
 using FileManagerMod.Models.FileDataDtos;
 
 using Microsoft.AspNetCore.Http;
@@ -31,7 +30,7 @@ public class FileDataManager(
                 var fileBytes = ms.ToArray();
 
                 var md5 = HashCrypto.Md5FileHash(file.OpenReadStream());
-                var exist = Query.Db.Any(q => q.Md5 == md5);
+                var exist = Query.Any(q => q.Md5 == md5);
                 if (exist)
                 {
                     continue;
@@ -73,7 +72,7 @@ public class FileDataManager(
         await stream.CopyToAsync(ms);
         var fileBytes = ms.ToArray();
 
-        FileData? file = await Query.Db.Where(q => q.Md5 == md5).FirstOrDefaultAsync();
+        FileData? file = await Query.Where(q => q.Md5 == md5).FirstOrDefaultAsync();
         if (file != null)
         {
             return file;
@@ -95,8 +94,8 @@ public class FileDataManager(
             Path = folder
         };
         fileData.Folder = folderData;
-        Command.Db.Add(fileData);
-        await Command.SaveChangesAsync();
+        Command.Add(fileData);
+        await SaveChangesAsync();
         return fileData;
     }
 
@@ -108,7 +107,7 @@ public class FileDataManager(
     /// <returns></returns>
     public async Task<FileData?> GetByMd5Async(string path, string md5)
     {
-        FileData? fileContent = await Query.Db.Where(q => q.Md5 == md5)
+        FileData? fileContent = await Query.Where(q => q.Md5 == md5)
             .Where(q => q.Folder!.Name == path)
             .SingleOrDefaultAsync();
         return fileContent;
@@ -116,16 +115,16 @@ public class FileDataManager(
 
     public async Task<int> AddFilesAsync(List<FileData> files)
     {
-        await Command.Db.AddRangeAsync(files);
-        return await Command.SaveChangesAsync();
+        await Command.AddRangeAsync(files);
+        return await SaveChangesAsync();
     }
 
-    public override async Task<FileData> UpdateAsync(FileData entity, FileDataUpdateDto dto)
+    public async Task<bool> UpdateAsync(FileData entity, FileDataUpdateDto dto)
     {
-        return await base.UpdateAsync(entity, dto);
+        return await base.UpdateAsync(entity);
     }
 
-    public override async Task<PageList<FileDataItemDto>> FilterAsync(FileDataFilterDto filter)
+    public override async Task<PageList<FileDataItemDto>> ToPageAsync(FileDataFilterDto filter)
     {
         Queryable = Queryable
             .WhereNotNull(filter.Md5, q => q.Md5 == filter.Md5)
@@ -155,7 +154,7 @@ public class FileDataManager(
             Queryable = Queryable.Where(q => extensions.Contains(q.Extension));
         }
 
-        return await Query.FilterAsync<FileDataItemDto>(Queryable, filter.PageIndex, filter.PageSize, filter.OrderBy);
+        return await base.ToPageAsync(filter);
     }
 
     /// <summary>
@@ -165,7 +164,7 @@ public class FileDataManager(
     /// <returns></returns>
     public async Task<FileData?> GetOwnedAsync(Guid id)
     {
-        IQueryable<FileData> query = Command.Db.Where(q => q.Id == id);
+        IQueryable<FileData> query = Command.Where(q => q.Id == id);
         // 获取用户所属的对象
         // query = query.Where(q => q.User.Id == _userContext.UserId);
         return await query.FirstOrDefaultAsync();

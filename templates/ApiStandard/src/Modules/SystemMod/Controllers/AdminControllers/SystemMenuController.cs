@@ -61,7 +61,7 @@ public class SystemMenuController(
     /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<ActionResult<SystemMenu>> AddAsync(SystemMenuAddDto dto)
+    public async Task<ActionResult<Guid?>> AddAsync(SystemMenuAddDto dto)
     {
         if (dto.ParentId != null)
         {
@@ -70,8 +70,8 @@ public class SystemMenuController(
                 return NotFound(ErrorMsg.NotFoundResource);
             }
         }
-        SystemMenu entity = await _manager.CreateNewEntityAsync(dto);
-        return await _manager.AddAsync(entity);
+        var id = await _manager.AddAsync(dto);
+        return id == null ? Problem(Constant.AddFailed) : id;
     }
 
     /// <summary>
@@ -81,7 +81,7 @@ public class SystemMenuController(
     /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPatch("{id}")]
-    public async Task<ActionResult<SystemMenu?>> UpdateAsync([FromRoute] Guid id, SystemMenuUpdateDto dto)
+    public async Task<ActionResult<bool?>> UpdateAsync([FromRoute] Guid id, SystemMenuUpdateDto dto)
     {
         SystemMenu? current = await _manager.GetCurrentAsync(id);
         if (current == null)
@@ -98,14 +98,15 @@ public class SystemMenuController(
     /// <returns></returns>
     // [ApiExplorerSettings(IgnoreApi = true)]
     [HttpDelete("{id}")]
-    public async Task<ActionResult<SystemMenu?>> DeleteAsync([FromRoute] Guid id)
+    public async Task<ActionResult<bool?>> DeleteAsync([FromRoute] Guid id)
     {
         // 注意删除权限
-        SystemMenu? entity = await _manager.GetCurrentAsync(id);
+        SystemMenu? entity = await _manager.GetOwnedAsync(id);
         if (entity == null)
         {
             return NotFound();
         };
-        return await _manager.DeleteAsync(entity);
+        return entity == null ? NotFound() : await _manager.DeleteAsync([id], false);
+
     }
 }

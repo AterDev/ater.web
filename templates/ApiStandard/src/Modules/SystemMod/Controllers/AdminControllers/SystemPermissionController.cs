@@ -1,4 +1,3 @@
-using Entity.SystemMod;
 using SystemMod.Models.SystemPermissionDtos;
 namespace SystemMod.Controllers.AdminControllers;
 
@@ -23,7 +22,7 @@ public class SystemPermissionController(
     [HttpPost("filter")]
     public async Task<ActionResult<PageList<SystemPermissionItemDto>>> FilterAsync(SystemPermissionFilterDto filter)
     {
-        return await _manager.FilterAsync(filter);
+        return await _manager.ToPageAsync(filter);
     }
 
     /// <summary>
@@ -32,14 +31,14 @@ public class SystemPermissionController(
     /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<ActionResult<SystemPermission>> AddAsync(SystemPermissionAddDto dto)
+    public async Task<ActionResult<Guid?>> AddAsync(SystemPermissionAddDto dto)
     {
         if (!await _systemPermissionGroupManager.ExistAsync(dto.SystemPermissionGroupId))
         {
             return NotFound("不存在的权限组");
         }
-        SystemPermission entity = await _manager.CreateNewEntityAsync(dto);
-        return await _manager.AddAsync(entity);
+        var id = await _manager.AddAsync(dto);
+        return id == null ? Problem(Constant.AddFailed) : id;
     }
 
     /// <summary>
@@ -49,7 +48,7 @@ public class SystemPermissionController(
     /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPatch("{id}")]
-    public async Task<ActionResult<SystemPermission?>> UpdateAsync([FromRoute] Guid id, SystemPermissionUpdateDto dto)
+    public async Task<ActionResult<bool?>> UpdateAsync([FromRoute] Guid id, SystemPermissionUpdateDto dto)
     {
         SystemPermission? current = await _manager.GetCurrentAsync(id);
         if (current == null)
@@ -86,15 +85,11 @@ public class SystemPermissionController(
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
-    public async Task<ActionResult<SystemPermission?>> DeleteAsync([FromRoute] Guid id)
+    public async Task<ActionResult<bool?>> DeleteAsync([FromRoute] Guid id)
     {
         // 注意删除权限
         SystemPermission? entity = await _manager.GetCurrentAsync(id);
-        if (entity == null)
-        {
-            return NotFound();
-        };
-        // return Forbid();
-        return await _manager.DeleteAsync(entity);
+        return entity == null ? NotFound() : await _manager.DeleteAsync([id], false);
+
     }
 }

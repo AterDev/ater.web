@@ -26,7 +26,7 @@ public class FileDataController(
     [HttpPost("filter")]
     public async Task<ActionResult<PageList<FileDataItemDto>>> FilterAsync(FileDataFilterDto filter)
     {
-        return await _manager.FilterAsync(filter);
+        return await _manager.ToPageAsync(filter);
     }
 
     /// <summary>
@@ -91,6 +91,6 @@ public class FileDataController(
         {
             return NotFound();
         };
-        return await _manager.DeleteAsync(entity, false);
+        return entity == null ? NotFound() : await _manager.DeleteAsync([id], false);
     }
 }

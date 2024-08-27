@@ -1,8 +1,6 @@
-using Ater.Web.Extension;
-
 using System.Security.Claims;
 using System.Text.RegularExpressions;
-
+using Ater.Web.Extension;
 using SystemMod.Models;
 using SystemMod.Models.SystemUserDtos;
 
@@ -176,7 +174,7 @@ public class SystemUserManager(
         user.PasswordSalt = HashCrypto.BuildSalt();
         user.PasswordHash = HashCrypto.GeneratePwd(newPassword, user.PasswordSalt);
         Command.Update(user);
-        return await Command.SaveChangesAsync() > 0;
+        return await SaveChangesAsync() > 0;
     }
 
     /// <summary>
@@ -184,7 +182,7 @@ public class SystemUserManager(
     /// </summary>
     /// <param name="dto"></param>
     /// <returns></returns>
-    public Task<SystemUser> CreateNewEntityAsync(SystemUserAddDto dto)
+    public async Task<Guid?> AddAsync(SystemUserAddDto dto)
     {
         SystemUser entity = dto.MapTo<SystemUserAddDto, SystemUser>();
         // 密码处理
@@ -197,11 +195,18 @@ public class SystemUserManager(
                 .ToList();
             entity.SystemRoles = roles;
         }
-        return Task.FromResult(entity);
+        return await base.AddAsync(entity) ? entity.Id : null;
     }
 
-    public override async Task<SystemUser> UpdateAsync(SystemUser entity, SystemUserUpdateDto dto)
+    /// <summary>
+    /// 更新实体
+    /// </summary>
+    /// <param name="entity"></param>
+    /// <param name="dto"></param>
+    /// <returns></returns>
+    public async Task<bool> UpdateAsync(SystemUser entity, SystemUserUpdateDto dto)
     {
+        entity.Merge(dto);
         if (dto.Password != null)
         {
             entity.PasswordSalt = HashCrypto.BuildSalt();
@@ -214,10 +219,10 @@ public class SystemUserManager(
                 .ToList();
             entity.SystemRoles = roles;
         }
-        return await base.UpdateAsync(entity, dto);
+        return await base.UpdateAsync(entity);
     }
 
-    public override async Task<PageList<SystemUserItemDto>> FilterAsync(SystemUserFilterDto filter)
+    public override async Task<PageList<SystemUserItemDto>> ToPageAsync(SystemUserFilterDto filter)
     {
         Queryable = Queryable
             .WhereNotNull(filter.UserName, q => q.UserName == filter.UserName)
@@ -246,8 +251,7 @@ public class SystemUserManager(
         {
             Queryable = Queryable.Where(q => q.SystemRoles.Any(r => r.Id == filter.RoleId));
         }
-
-        return await Query.FilterAsync<SystemUserItemDto>(Queryable, filter.PageIndex, filter.PageSize, filter.OrderBy);
+        return await base.ToPageAsync(filter);
     }
 
     /// <summary>
@@ -257,7 +261,7 @@ public class SystemUserManager(
     /// <returns></returns>
     public async Task<bool> IsExistAsync(string email)
     {
-        return await Query.Db.AnyAsync(q => q.Email == email);
+        return await Query.AnyAsync(q => q.Email == email);
     }
 
     /// <summary>
@@ -267,7 +271,7 @@ public class SystemUserManager(
     /// <returns></returns>
     public async Task<SystemUser?> GetOwnedAsync(Guid id)
     {
-        IQueryable<SystemUser> query = Command.Db.Where(q => q.Id == id);
+        IQueryable<SystemUser> query = Command.Where(q => q.Id == id);
         // 获取用户所属的对象
         query = query.Where(q => q.Id == _userContext.UserId);
         return await query.FirstOrDefaultAsync();
@@ -305,7 +309,7 @@ public class SystemUserManager(
 
     public override async Task<SystemUser?> FindAsync(Guid id)
     {
-        return await Query.Db.Where(q => q.Id == id)
+        return await Query.Where(q => q.Id == id)
             .Include(q => q.SystemRoles)
             .FirstOrDefaultAsync();
     }
@@ -313,7 +317,7 @@ public class SystemUserManager(
 
     public async Task<SystemUser?> FindByUserNameAsync(string userName)
     {
-        return await Command.Db.Where(u => u.UserName.Equals(userName))
+        return await Command.Where(u => u.UserName.Equals(userName))
             .Include(u => u.SystemRoles)
             .SingleOrDefaultAsync();
     }

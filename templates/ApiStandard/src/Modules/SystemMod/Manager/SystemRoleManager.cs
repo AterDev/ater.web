@@ -1,4 +1,3 @@
-using Entity.SystemMod;
 using SystemMod.Models.SystemRoleDtos;
 
 namespace SystemMod.Manager;
@@ -13,24 +12,23 @@ public class SystemRoleManager(
     /// </summary>
     /// <param name="dto"></param>
     /// <returns></returns>
-    public Task<SystemRole> CreateNewEntityAsync(SystemRoleAddDto dto)
+    public async Task<Guid?> AddAsync(SystemRoleAddDto dto)
     {
         SystemRole entity = dto.MapTo<SystemRoleAddDto, SystemRole>();
-        // other required props
-        return Task.FromResult(entity);
+        return await base.AddAsync(entity) ? entity.Id : null;
     }
 
-    public override async Task<SystemRole> UpdateAsync(SystemRole entity, SystemRoleUpdateDto dto)
+    public async Task<bool> UpdateAsync(SystemRole entity, SystemRoleUpdateDto dto)
     {
-        return await base.UpdateAsync(entity, dto);
+        return await base.UpdateAsync(entity);
     }
 
-    public override async Task<PageList<SystemRoleItemDto>> FilterAsync(SystemRoleFilterDto filter)
+    public override async Task<PageList<SystemRoleItemDto>> ToPageAsync(SystemRoleFilterDto filter)
     {
         Queryable = Queryable
             .WhereNotNull(filter.Name, q => q.Name == filter.Name)
             .WhereNotNull(filter.NameValue, q => q.NameValue == filter.NameValue);
-        return await Query.FilterAsync<SystemRoleItemDto>(Queryable, filter.PageIndex, filter.PageSize, filter.OrderBy);
+        return await base.ToPageAsync(filter);
     }
 
     /// <summary>
@@ -64,7 +62,7 @@ public class SystemRoleManager(
                 .Where(m => dto.PermissionGroupIds.Contains(m.Id))
                 .ToListAsync();
             current.PermissionGroups = groups;
-            await Command.SaveChangesAsync();
+            await SaveChangesAsync();
             return current;
         }
         catch (Exception e)
@@ -94,7 +92,7 @@ public class SystemRoleManager(
     /// <returns></returns>
     public async Task<SystemRole?> GetOwnedAsync(Guid id)
     {
-        IQueryable<SystemRole> query = Command.Db.Where(q => q.Id == id);
+        IQueryable<SystemRole> query = Command.Where(q => q.Id == id);
         // 获取用户所属的对象
         // query = query.Where(q => q.User.Id == _userContext.UserId);
         return await query.FirstOrDefaultAsync();
@@ -122,7 +120,7 @@ public class SystemRoleManager(
                 .Where(m => dto.MenuIds.Contains(m.Id))
                 .ToListAsync();
             current.Menus = menus;
-            await Command.SaveChangesAsync();
+            await SaveChangesAsync();
             return current;
         }
         catch (Exception e)

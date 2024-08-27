@@ -22,7 +22,7 @@ public class OrderController(
     public async Task<ActionResult<PageList<OrderItemDto>>> FilterAsync(OrderFilterDto filter)
     {
         filter.UserId = _user.UserId;
-        return await _manager.FilterAsync(filter);
+        return await _manager.ToPageAsync(filter);
     }
 
     /// <summary>

@@ -21,7 +21,7 @@ public class UserController(
     [HttpPost("filter")]
     public async Task<ActionResult<PageList<UserItemDto>>> FilterAsync(UserFilterDto filter)
     {
-        return await _manager.FilterAsync(filter);
+        return await _manager.ToPageAsync(filter);
     }
 
     /// <summary>
@@ -30,15 +30,15 @@ public class UserController(
     /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<ActionResult<User>> AddAsync(UserAddDto dto)
+    public async Task<ActionResult<Guid?>> AddAsync(UserAddDto dto)
     {
         // 判断重复用户名
         if (await _manager.ExistAsync(q => q.UserName.Equals(dto.UserName)))
         {
             return Conflict(ErrorMsg.ExistUser);
         }
-        User entity = await _manager.CreateNewEntityAsync(dto);
-        return await _manager.AddAsync(entity);
+        var id = await _manager.AddAsync(dto);
+        return id == null ? Problem(Constant.AddFailed) : id;
     }
 
     /// <summary>
@@ -48,7 +48,7 @@ public class UserController(
     /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPatch("{id}")]
-    public async Task<ActionResult<User?>> UpdateAsync([FromRoute] Guid id, UserUpdateDto dto)
+    public async Task<ActionResult<bool?>> UpdateAsync([FromRoute] Guid id, UserUpdateDto dto)
     {
         User? current = await _manager.GetCurrentAsync(id);
         if (current == null)
@@ -76,14 +76,12 @@ public class UserController(
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
-    public async Task<ActionResult<User?>> DeleteAsync([FromRoute] Guid id)
+    public async Task<ActionResult<bool?>> DeleteAsync([FromRoute] Guid id)
     {
         // 注意删除权限
-        User? entity = await _manager.GetCurrentAsync(id);
-        if (entity == null)
-        {
-            return NotFound(ErrorMsg.NotFoundUser);
-        };
-        return await _manager.DeleteAsync(entity);
+        var res = await _manager.GetCurrentAsync(id);
+        return res == null ? NotFound(ErrorMsg.NotFoundResource)
+            : await _manager.DeleteAsync([id], true);
+
     }
 }

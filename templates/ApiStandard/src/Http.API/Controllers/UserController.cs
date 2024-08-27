@@ -221,7 +221,7 @@ public class UserController(
     /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPut]
-    public async Task<ActionResult<User?>> UpdateAsync(UserUpdateDto dto)
+    public async Task<ActionResult<bool?>> UpdateAsync(UserUpdateDto dto)
     {
         User? current = await _manager.GetCurrentAsync(_user.UserId);
         if (current == null)
@@ -236,9 +236,10 @@ public class UserController(
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    public async Task<ActionResult<User?>> GetDetailAsync()
+    public async Task<ActionResult<bool?>> GetDetailAsync()
     {
         User? res = await _manager.FindAsync(_user.UserId);
-        return (res == null) ? NotFound(ErrorMsg.NotFoundResource) : res;
+        return (res == null) ? NotFound(ErrorMsg.NotFoundResource)
+            : await _manager.DeleteAsync([_user.UserId], true);
     }
 }
