@@ -10,7 +10,7 @@ public class SystemConfigManager(
     DataAccessContext<SystemConfig> dataContext,
     ILogger<SystemConfigManager> logger,
     IConfiguration configuration,
-    CacheService cache) : ManagerBase<SystemConfig, SystemConfigUpdateDto, SystemConfigFilterDto, SystemConfigItemDto>(dataContext, logger)
+    CacheService cache) : ManagerBase<SystemConfig>(dataContext, logger)
 {
     private readonly IConfiguration _configuration = configuration;
     private readonly CacheService _cache = cache;
@@ -37,13 +37,13 @@ public class SystemConfigManager(
         return await base.UpdateAsync(entity);
     }
 
-    public override async Task<PageList<SystemConfigItemDto>> ToPageAsync(SystemConfigFilterDto filter)
+    public async Task<PageList<SystemConfigItemDto>> ToPageAsync(SystemConfigFilterDto filter)
     {
         Queryable = Queryable
             .WhereNotNull(filter.Key, q => q.Key.Contains(filter.Key!, StringComparison.CurrentCultureIgnoreCase))
             .WhereNotNull(filter.GroupName, q => q.GroupName == filter.GroupName);
 
-        return await base.ToPageAsync(filter);
+        return await base.ToPageAsync<SystemConfigFilterDto, SystemConfigItemDto>(filter);
     }
 
     /// <summary>

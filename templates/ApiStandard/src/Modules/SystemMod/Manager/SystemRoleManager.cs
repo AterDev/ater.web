@@ -4,7 +4,7 @@ namespace SystemMod.Manager;
 
 public class SystemRoleManager(
     DataAccessContext<SystemRole> dataContext,
-    ILogger<SystemRoleManager> logger) : ManagerBase<SystemRole, SystemRoleUpdateDto, SystemRoleFilterDto, SystemRoleItemDto>(dataContext, logger)
+    ILogger<SystemRoleManager> logger) : ManagerBase<SystemRole>(dataContext, logger)
 {
 
     /// <summary>
@@ -23,12 +23,12 @@ public class SystemRoleManager(
         return await base.UpdateAsync(entity);
     }
 
-    public override async Task<PageList<SystemRoleItemDto>> ToPageAsync(SystemRoleFilterDto filter)
+    public async Task<PageList<SystemRoleItemDto>> ToPageAsync(SystemRoleFilterDto filter)
     {
         Queryable = Queryable
             .WhereNotNull(filter.Name, q => q.Name == filter.Name)
             .WhereNotNull(filter.NameValue, q => q.NameValue == filter.NameValue);
-        return await base.ToPageAsync(filter);
+        return await base.ToPageAsync<SystemRoleFilterDto, SystemRoleItemDto>(filter);
     }
 
     /// <summary>

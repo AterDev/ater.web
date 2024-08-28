@@ -7,7 +7,7 @@ namespace SystemMod.Manager;
 public class SystemPermissionManager(
     DataAccessContext<SystemPermission> dataContext,
     ILogger<SystemPermissionManager> logger
-        ) : ManagerBase<SystemPermission, SystemPermissionUpdateDto, SystemPermissionFilterDto, SystemPermissionItemDto>(dataContext, logger)
+        ) : ManagerBase<SystemPermission>(dataContext, logger)
 {
 
     /// <summary>
@@ -34,14 +34,14 @@ public class SystemPermissionManager(
         return await base.UpdateAsync(entity);
     }
 
-    public override async Task<PageList<SystemPermissionItemDto>> ToPageAsync(SystemPermissionFilterDto filter)
+    public async Task<PageList<SystemPermissionItemDto>> ToPageAsync(SystemPermissionFilterDto filter)
     {
         Queryable = Queryable
             .WhereNotNull(filter.Name, q => q.Name == filter.Name)
             .WhereNotNull(filter.PermissionType, q => q.PermissionType == filter.PermissionType)
             .WhereNotNull(filter.GroupId, q => q.Group.Id == filter.GroupId);
 
-        return await base.ToPageAsync(filter);
+        return await base.ToPageAsync<SystemPermissionFilterDto, SystemPermissionItemDto>(filter);
     }
 
     /// <summary>

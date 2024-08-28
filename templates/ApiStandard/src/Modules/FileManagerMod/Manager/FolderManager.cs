@@ -7,7 +7,7 @@ namespace FileManagerMod.Manager;
 public class FolderManager(
     DataAccessContext<Folder> dataContext,
     ILogger<FolderManager> logger
-        ) : ManagerBase<Folder, FolderUpdateDto, FolderFilterDto, FolderItemDto>(dataContext, logger)
+        ) : ManagerBase<Folder>(dataContext, logger)
 {
 
     /// <summary>
@@ -36,13 +36,13 @@ public class FolderManager(
         return await base.UpdateAsync(entity);
     }
 
-    public override async Task<PageList<FolderItemDto>> ToPageAsync(FolderFilterDto filter)
+    public async Task<PageList<FolderItemDto>> ToPageAsync(FolderFilterDto filter)
     {
         Queryable = Queryable
             .WhereNotNull(filter.Name, q => q.Name == filter.Name)
             .WhereNotNull(filter.ParentId, q => q.ParentId == filter.ParentId);
 
-        return await base.ToPageAsync(filter);
+        return await base.ToPageAsync<FolderFilterDto, FolderItemDto>(filter);
     }
 
     /// <summary>

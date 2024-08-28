@@ -9,7 +9,7 @@ public class OrderManager(
     DataAccessContext<Order> dataContext,
     ILogger<OrderManager> logger,
     IUserContext userContext,
-    ProductManager productManager) : ManagerBase<Order, OrderUpdateDto, OrderFilterDto, OrderItemDto>(dataContext, logger)
+    ProductManager productManager) : ManagerBase<Order>(dataContext, logger)
 {
     private readonly ProductManager _productManager = productManager;
     private readonly IUserContext _userContext = userContext;
@@ -21,18 +21,8 @@ public class OrderManager(
     public async Task<Guid?> AddAsync(OrderAddDto dto)
     {
         Product? product = await _productManager.GetCurrentAsync(dto.ProductId);
-        return product != null
-            ? new Order
-            {
-                Product = product,
-                UserId = _userContext.UserId,
-                ProductName = product.Name,
-                DiscountCode = dto.DiscountCode,
-                OriginPrice = product.OriginPrice,
-                TotalPrice = product.Price,
-                Status = OrderStatus.UnPaid
-            }
-            : default;
+        // TODO: create order
+        return null;
     }
 
     public async Task<bool> UpdateAsync(Order entity, OrderUpdateDto dto)
@@ -40,7 +30,7 @@ public class OrderManager(
         return await base.UpdateAsync(entity);
     }
 
-    public override async Task<PageList<OrderItemDto>> ToPageAsync(OrderFilterDto filter)
+    public async Task<PageList<OrderItemDto>> ToPageAsync(OrderFilterDto filter)
     {
         Queryable = Queryable
             .WhereNotNull(filter.OrderNumber, q => q.OrderNumber == filter.OrderNumber)
@@ -48,7 +38,7 @@ public class OrderManager(
             .WhereNotNull(filter.UserId, q => q.User.Id == filter.UserId)
             .WhereNotNull(filter.Status, q => q.Status == filter.Status);
 
-        return await base.ToPageAsync(filter);
+        return await base.ToPageAsync<OrderFilterDto, OrderItemDto>(filter);
     }
 
     /*/// <summary>

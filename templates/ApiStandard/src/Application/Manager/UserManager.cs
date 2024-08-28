@@ -7,7 +7,7 @@ namespace Application.Manager;
 public class UserManager(
     DataAccessContext<User> dataContext,
     ILogger<UserManager> logger,
-    IUserContext userContext) : ManagerBase<User, UserUpdateDto, UserFilterDto, UserItemDto>(dataContext, logger)
+    IUserContext userContext) : ManagerBase<User>(dataContext, logger)
 {
     private readonly IUserContext _userContext = userContext;
 
@@ -76,7 +76,7 @@ public class UserManager(
         return await base.UpdateAsync(entity);
     }
 
-    public override async Task<PageList<UserItemDto>> ToPageAsync(UserFilterDto filter)
+    public async Task<PageList<UserItemDto>> ToPageAsync(UserFilterDto filter)
     {
         Queryable = Queryable
             .WhereNotNull(filter.UserName, q => q.UserName == filter.UserName)
@@ -86,7 +86,7 @@ public class UserManager(
             .WhereNotNull(filter.EmailConfirmed, q => q.EmailConfirmed == filter.EmailConfirmed)
             .WhereNotNull(filter.PhoneNumberConfirmed, q => q.PhoneNumberConfirmed == filter.PhoneNumberConfirmed);
 
-        return await base.ToPageAsync(filter);
+        return await base.ToPageAsync<UserFilterDto, UserItemDto>(filter);
     }
 
     /// <summary>

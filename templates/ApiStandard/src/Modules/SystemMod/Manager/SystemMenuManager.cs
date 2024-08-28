@@ -6,7 +6,7 @@ namespace SystemMod.Manager;
 /// </summary>
 public class SystemMenuManager(
     DataAccessContext<SystemMenu> dataContext,
-    ILogger<SystemMenuManager> logger) : ManagerBase<SystemMenu, SystemMenuUpdateDto, SystemMenuFilterDto, SystemMenuItemDto>(dataContext, logger)
+    ILogger<SystemMenuManager> logger) : ManagerBase<SystemMenu>(dataContext, logger)
 {
 
     /// <summary>
@@ -121,7 +121,7 @@ public class SystemMenuManager(
         return await base.UpdateAsync(entity);
     }
 
-    public new async Task<PageList<SystemMenu>> FilterAsync(SystemMenuFilterDto filter)
+    public async Task<PageList<SystemMenu>> FilterAsync(SystemMenuFilterDto filter)
     {
         List<SystemMenu>? menus;
         if (filter.RoleId != null)

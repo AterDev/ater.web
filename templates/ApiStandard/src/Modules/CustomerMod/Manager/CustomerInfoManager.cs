@@ -8,7 +8,7 @@ public class CustomerInfoManager(
     DataAccessContext<CustomerInfo> dataContext,
     ILogger<CustomerInfoManager> logger,
     CommandDbContext command,
-    IUserContext userContext) : ManagerBase<CustomerInfo, CustomerInfoUpdateDto, CustomerInfoFilterDto, CustomerInfoItemDto>(dataContext, logger)
+    IUserContext userContext) : ManagerBase<CustomerInfo>(dataContext, logger)
 {
     private readonly CommandDbContext _command = command;
     private readonly IUserContext _userContext = userContext;
@@ -50,7 +50,7 @@ public class CustomerInfoManager(
         return await base.UpdateAsync(entity);
     }
 
-    public override async Task<PageList<CustomerInfoItemDto>> ToPageAsync(CustomerInfoFilterDto filter)
+    public async Task<PageList<CustomerInfoItemDto>> ToPageAsync(CustomerInfoFilterDto filter)
     {
         Queryable = Queryable
             .WhereNotNull(filter.SearchKey, q => q.Name == filter.SearchKey || q.Numbering == filter.SearchKey)
@@ -59,7 +59,7 @@ public class CustomerInfoManager(
             .WhereNotNull(filter.FollowUpStatus, q => q.FollowUpStatus == filter.FollowUpStatus)
             .WhereNotNull(filter.GenderType, q => q.GenderType == filter.GenderType);
 
-        return await base.ToPageAsync(filter);
+        return await base.ToPageAsync<CustomerInfoFilterDto, CustomerInfoItemDto>(filter);
     }
 
 

@@ -10,12 +10,8 @@ namespace Application.Implement;
 /// Manager base class
 /// </summary>
 /// <typeparam name="TEntity">实体类型</typeparam>
-/// <typeparam name="TUpdate">更新DTO</typeparam>
-/// <typeparam name="TFilter">筛选DTO</typeparam>
-/// <typeparam name="TItem">列表元素DTO</typeparam>
-public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem> : ManagerBase<TEntity>
+public partial class ManagerBase<TEntity> : ManagerBase
     where TEntity : class, IEntityBase
-    where TFilter : FilterBase
 {
     #region Properties and Fields
     protected IUserContext? UserContext { get; private set; }
@@ -49,8 +45,27 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem> : ManagerBase
     public TEntity? CurrentEntity { get; set; }
     #endregion
 
-    public ManagerBase(DataAccessContext<TEntity> dataAccessContext, ILogger logger) : base(dataAccessContext, logger)
+    protected CommandDbContext CommandContext { get; init; }
+    protected QueryDbContext QueryContext { get; init; }
+    protected DatabaseFacade Database { get; init; }
+    /// <summary>
+    /// 实体的只读仓储实现
+    /// </summary>
+    protected DbSet<TEntity> Query { get; init; }
+    /// <summary>
+    /// 实体的可写仓储实现
+    /// </summary>
+    protected DbSet<TEntity> Command { get; init; }
+    protected IQueryable<TEntity> Queryable { get; set; }
+
+    public ManagerBase(DataAccessContext<TEntity> dataAccessContext, ILogger logger) : base(logger)
     {
+        CommandContext = dataAccessContext.CommandContext;
+        QueryContext = dataAccessContext.QueryContext;
+        Database = CommandContext.Database;
+        Query = QueryContext.Set<TEntity>();
+        Command = CommandContext.Set<TEntity>();
+        Queryable = Query.AsNoTracking().AsQueryable();
         if (!EnableGlobalQuery)
         {
             Queryable = Queryable.IgnoreQueryFilters();
@@ -149,7 +164,7 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem> : ManagerBase
     /// </summary>
     /// <param name="filter"></param>
     /// <returns></returns>
-    public virtual async Task<PageList<TItem>> ToPageAsync(TFilter filter)
+    public virtual async Task<PageList<TItem>> ToPageAsync<TFilter, TItem>(TFilter filter) where TFilter : FilterBase where TItem : class
     {
         Queryable = filter.OrderBy != null
             ? Queryable.OrderBy(filter.OrderBy)
@@ -372,36 +387,6 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem> : ManagerBase
         Queryable = EnableGlobalQuery
             ? Query.AsQueryable()
             : Queryable.IgnoreQueryFilters().AsQueryable();
-    }
-}
-
-/// <summary>
-/// Manager base with entity
-/// </summary>
-/// <typeparam name="TEntity">实体类型</typeparam>
-public class ManagerBase<TEntity> : ManagerBase where TEntity : class, IEntityBase
-{
-    protected CommandDbContext CommandContext { get; init; }
-    protected QueryDbContext QueryContext { get; init; }
-    protected DatabaseFacade Database { get; init; }
-    /// <summary>
-    /// 实体的只读仓储实现
-    /// </summary>
-    protected DbSet<TEntity> Query { get; init; }
-    /// <summary>
-    /// 实体的可写仓储实现
-    /// </summary>
-    protected DbSet<TEntity> Command { get; init; }
-    protected IQueryable<TEntity> Queryable { get; set; }
-
-    public ManagerBase(DataAccessContext<TEntity> dataAccessContext, ILogger logger) : base(logger)
-    {
-        CommandContext = dataAccessContext.CommandContext;
-        QueryContext = dataAccessContext.QueryContext;
-        Database = CommandContext.Database;
-        Query = QueryContext.Set<TEntity>();
-        Command = CommandContext.Set<TEntity>();
-        Queryable = Query.AsNoTracking().AsQueryable();
     }
 }
 

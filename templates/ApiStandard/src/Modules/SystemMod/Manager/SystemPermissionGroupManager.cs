@@ -5,7 +5,7 @@ namespace SystemMod.Manager;
 public class SystemPermissionGroupManager(
     DataAccessContext<SystemPermissionGroup> dataContext,
     ILogger<SystemPermissionGroupManager> logger
-        ) : ManagerBase<SystemPermissionGroup, SystemPermissionGroupUpdateDto, SystemPermissionGroupFilterDto, SystemPermissionGroupItemDto>(dataContext, logger)
+        ) : ManagerBase<SystemPermissionGroup>(dataContext, logger)
 {
 
     /// <summary>
@@ -24,10 +24,10 @@ public class SystemPermissionGroupManager(
         return await base.UpdateAsync(entity);
     }
 
-    public override async Task<PageList<SystemPermissionGroupItemDto>> ToPageAsync(SystemPermissionGroupFilterDto filter)
+    public async Task<PageList<SystemPermissionGroupItemDto>> ToPageAsync(SystemPermissionGroupFilterDto filter)
     {
         Queryable = Queryable.WhereNotNull(filter.Name, q => q.Name.Contains(filter.Name!));
-        return await base.ToPageAsync(filter);
+        return await base.ToPageAsync<SystemPermissionGroupFilterDto, SystemPermissionGroupItemDto>(filter);
     }
 
     public override async Task<SystemPermissionGroup?> FindAsync(Guid id)

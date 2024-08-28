@@ -8,7 +8,7 @@ namespace FileManagerMod.Manager;
 /// </summary>
 public class FileDataManager(
     DataAccessContext<FileData> dataContext,
-    ILogger<FileDataManager> logger) : ManagerBase<FileData, FileDataUpdateDto, FileDataFilterDto, FileDataItemDto>(dataContext, logger)
+    ILogger<FileDataManager> logger) : ManagerBase<FileData>(dataContext, logger)
 {
 
     /// <summary>
@@ -124,7 +124,7 @@ public class FileDataManager(
         return await base.UpdateAsync(entity);
     }
 
-    public override async Task<PageList<FileDataItemDto>> ToPageAsync(FileDataFilterDto filter)
+    public async Task<PageList<FileDataItemDto>> ToPageAsync(FileDataFilterDto filter)
     {
         Queryable = Queryable
             .WhereNotNull(filter.Md5, q => q.Md5 == filter.Md5)
@@ -154,7 +154,7 @@ public class FileDataManager(
             Queryable = Queryable.Where(q => extensions.Contains(q.Extension));
         }
 
-        return await base.ToPageAsync(filter);
+        return await base.ToPageAsync<FileDataFilterDto, FileDataItemDto>(filter);
     }
 
     /// <summary>

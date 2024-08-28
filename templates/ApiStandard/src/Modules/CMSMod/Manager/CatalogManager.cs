@@ -8,7 +8,7 @@ namespace CMSMod.Manager;
 /// <summary>
 /// 目录管理
 /// </summary>
-public class CatalogManager(DataAccessContext<Catalog> dataContext, IUserContext userContext, ILogger<BlogManager> logger) : ManagerBase<Catalog, CatalogUpdateDto, CatalogFilterDto, CatalogItemDto>(dataContext, logger)
+public class CatalogManager(DataAccessContext<Catalog> dataContext, IUserContext userContext, ILogger<BlogManager> logger) : ManagerBase<Catalog>(dataContext, logger)
 {
     private readonly IUserContext _userContext = userContext;
 
@@ -43,11 +43,11 @@ public class CatalogManager(DataAccessContext<Catalog> dataContext, IUserContext
         return await base.UpdateAsync(entity);
     }
 
-    public override async Task<PageList<CatalogItemDto>> ToPageAsync(CatalogFilterDto filter)
+    public async Task<PageList<CatalogItemDto>> ToPageAsync(CatalogFilterDto filter)
     {
         // TODO:根据实际业务构建筛选条件
         // if ... Queryable = ...
-        return await base.ToPageAsync(filter);
+        return await base.ToPageAsync<CatalogFilterDto, CatalogItemDto>(filter);
     }
 
     /// <summary>

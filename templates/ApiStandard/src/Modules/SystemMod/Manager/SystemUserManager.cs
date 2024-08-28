@@ -12,7 +12,7 @@ public class SystemUserManager(
     IConfiguration configuration,
     CacheService cache,
     SystemConfigManager systemConfig,
-    ILogger<SystemUserManager> logger) : ManagerBase<SystemUser, SystemUserUpdateDto, SystemUserFilterDto, SystemUserItemDto>(dataContext, logger)
+    ILogger<SystemUserManager> logger) : ManagerBase<SystemUser>(dataContext, logger)
 {
     private readonly IUserContext _userContext = userContext;
     private readonly SystemConfigManager _systemConfig = systemConfig;
@@ -222,7 +222,7 @@ public class SystemUserManager(
         return await base.UpdateAsync(entity);
     }
 
-    public override async Task<PageList<SystemUserItemDto>> ToPageAsync(SystemUserFilterDto filter)
+    public async Task<PageList<SystemUserItemDto>> ToPageAsync(SystemUserFilterDto filter)
     {
         Queryable = Queryable
             .WhereNotNull(filter.UserName, q => q.UserName == filter.UserName)
@@ -251,7 +251,7 @@ public class SystemUserManager(
         {
             Queryable = Queryable.Where(q => q.SystemRoles.Any(r => r.Id == filter.RoleId));
         }
-        return await base.ToPageAsync(filter);
+        return await base.ToPageAsync<SystemUserFilterDto, SystemUserItemDto>(filter);
     }
 
     /// <summary>

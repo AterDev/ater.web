@@ -7,7 +7,7 @@ namespace SystemMod.Manager;
 public class SystemLogsManager(
     DataAccessContext<SystemLogs> dataContext,
     ILogger<SystemLogsManager> logger,
-    IUserContext userContext) : ManagerBase<SystemLogs, SystemLogsUpdateDto, SystemLogsFilterDto, SystemLogsItemDto>(dataContext, logger)
+    IUserContext userContext) : ManagerBase<SystemLogs>(dataContext, logger)
 {
     private readonly IUserContext _userContext = userContext;
 
@@ -28,7 +28,7 @@ public class SystemLogsManager(
         return await base.UpdateAsync(entity);
     }
 
-    public override async Task<PageList<SystemLogsItemDto>> ToPageAsync(SystemLogsFilterDto filter)
+    public async Task<PageList<SystemLogsItemDto>> ToPageAsync(SystemLogsFilterDto filter)
     {
         Queryable = Queryable
             .WhereNotNull(filter.ActionUserName, q => q.ActionUserName == filter.ActionUserName)
@@ -41,7 +41,7 @@ public class SystemLogsManager(
             var endDate = filter.EndDate.Value.AddDays(1);
             Queryable = Queryable.Between(q => q.CreatedTime, filter.StartDate.Value, endDate);
         }
-        return await base.ToPageAsync(filter);
+        return await base.ToPageAsync<SystemLogsFilterDto, SystemLogsItemDto>(filter);
     }
 
     /// <summary>

@@ -10,7 +10,7 @@ namespace CMSMod.Manager;
 public class BlogManager(
     DataAccessContext<Blog> dataContext,
     ILogger<BlogManager> logger,
-    IUserContext userContext) : ManagerBase<Blog, BlogUpdateDto, BlogFilterDto, BlogItemDto>(dataContext, logger)
+    IUserContext userContext) : ManagerBase<Blog>(dataContext, logger)
 {
     private readonly IUserContext _userContext = userContext;
 
@@ -33,7 +33,7 @@ public class BlogManager(
         return await base.UpdateAsync(entity);
     }
 
-    public override async Task<PageList<BlogItemDto>> ToPageAsync(BlogFilterDto filter)
+    public async Task<PageList<BlogItemDto>> ToPageAsync(BlogFilterDto filter)
     {
         Queryable = Queryable
             .WhereNotNull(filter.Title, q => q.Title == filter.Title)
@@ -44,7 +44,7 @@ public class BlogManager(
             .WhereNotNull(filter.IsOriginal, q => q.IsOriginal == filter.IsOriginal)
             .WhereNotNull(filter.UserId, q => q.User.Id == filter.UserId)
             .WhereNotNull(filter.CatalogId, q => q.Catalog.Id == filter.CatalogId);
-        return await base.ToPageAsync(filter);
+        return await base.ToPageAsync<BlogFilterDto, BlogItemDto>(filter);
     }
 
     /// <summary>

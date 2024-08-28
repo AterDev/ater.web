@@ -9,7 +9,7 @@ public class ProductManager(
     DataAccessContext<Product> dataContext,
     ILogger<ProductManager> logger,
     IUserContext userContext
-        ) : ManagerBase<Product, ProductUpdateDto, ProductFilterDto, ProductItemDto>(dataContext, logger)
+        ) : ManagerBase<Product>(dataContext, logger)
 {
     private readonly IUserContext _userContext = userContext;
 
@@ -29,7 +29,7 @@ public class ProductManager(
         return await base.UpdateAsync(entity);
     }
 
-    public override async Task<PageList<ProductItemDto>> ToPageAsync(ProductFilterDto filter)
+    public async Task<PageList<ProductItemDto>> ToPageAsync(ProductFilterDto filter)
     {
         Queryable = Queryable
             .WhereNotNull(filter.ProductType, q => q.ProductType == filter.ProductType)
@@ -40,7 +40,7 @@ public class ProductManager(
             ["Sort"] = true
         };
 
-        return await base.ToPageAsync(filter);
+        return await base.ToPageAsync<ProductFilterDto, ProductItemDto>(filter);
     }
 
     /// <summary>
