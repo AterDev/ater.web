@@ -14,8 +14,6 @@ public partial class ManagerBase<TEntity> : ManagerBase
     where TEntity : class, IEntityBase
 {
     #region Properties and Fields
-    protected IUserContext? UserContext { get; private set; }
-
     /// <summary>
     /// 自动日志类型
     /// </summary>
@@ -346,21 +344,23 @@ public partial class ManagerBase<TEntity> : ManagerBase
     /// <returns></returns>
     private async Task SaveToLogAsync(UserActionType actionType)
     {
-        if (UserContext == null)
+        var userContext = WebAppContext.GetScopeService<IUserContext>();
+
+        if (userContext == null)
         {
             _logger.LogWarning("UserContext is null, can't save log");
             return;
         }
 
-        var route = UserContext.GetHttpContext()?.Request.Path.Value;
+        var route = userContext.GetHttpContext()?.Request.Path.Value;
         var description = string.Empty;
         var targetName = typeof(TEntity).GetType().Name;
 
-        if (UserContext.IsAdmin)
+        if (userContext.IsAdmin)
         {
             // 管理员日志
             // 使用SystemMod时生效
-            var log = SystemLogs.NewLog(UserContext.Username ?? "", UserContext.UserId, targetName, actionType, route, description);
+            var log = SystemLogs.NewLog(userContext.Username ?? "", userContext.UserId, targetName, actionType, route, description);
             var taskQueue = WebAppContext.GetScopeService<IEntityTaskQueue<SystemLogs>>();
             if (taskQueue != null)
             {
@@ -370,7 +370,7 @@ public partial class ManagerBase<TEntity> : ManagerBase
         else
         {
             // 用户日志
-            var log = UserLogs.NewLog(UserContext.Username ?? "", UserContext.UserId, targetName, actionType, route, description);
+            var log = UserLogs.NewLog(userContext.Username ?? "", userContext.UserId, targetName, actionType, route, description);
             var taskQueue = WebAppContext.GetScopeService<IEntityTaskQueue<UserLogs>>();
             if (taskQueue != null)
             {

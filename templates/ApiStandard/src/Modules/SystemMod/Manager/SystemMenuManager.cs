@@ -8,7 +8,6 @@ public class SystemMenuManager(
     DataAccessContext<SystemMenu> dataContext,
     ILogger<SystemMenuManager> logger) : ManagerBase<SystemMenu>(dataContext, logger)
 {
-
     /// <summary>
     /// 创建待添加实体
     /// </summary>
