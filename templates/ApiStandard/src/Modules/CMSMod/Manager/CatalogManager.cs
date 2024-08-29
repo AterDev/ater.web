@@ -40,6 +40,7 @@ public class CatalogManager(DataAccessContext<Catalog> dataContext, IUserContext
 
     public async Task<bool> UpdateAsync(Catalog entity, CatalogUpdateDto dto)
     {
+        entity.Merge(dto);
         return await base.UpdateAsync(entity);
     }
 

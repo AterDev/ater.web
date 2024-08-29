@@ -230,9 +230,9 @@ public partial class ManagerBase<TEntity> : ManagerBase
     /// 更新关联数据
     /// </summary>
     /// <typeparam name="TProperty"></typeparam>
-    /// <param name="entity"></param>
-    /// <param name="propertyExpression"></param>
-    /// <param name="data"></param>
+    /// <param name="entity">当前实体</param>
+    /// <param name="propertyExpression">导航属性</param>
+    /// <param name="data">新数据</param>
     public void UpdateRelation<TProperty>(TEntity entity, Expression<Func<TEntity, IEnumerable<TProperty>>> propertyExpression, List<TProperty> data) where TProperty : class
     {
         var currentValue = CommandContext.Entry(entity).Collection(propertyExpression).CurrentValue;

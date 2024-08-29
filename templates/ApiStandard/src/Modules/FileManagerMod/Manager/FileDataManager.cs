@@ -121,6 +121,7 @@ public class FileDataManager(
 
     public async Task<bool> UpdateAsync(FileData entity, FileDataUpdateDto dto)
     {
+        entity.Merge(dto);
         return await base.UpdateAsync(entity);
     }
 

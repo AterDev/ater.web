@@ -20,6 +20,7 @@ public class SystemRoleManager(
 
     public async Task<bool> UpdateAsync(SystemRole entity, SystemRoleUpdateDto dto)
     {
+        entity.Merge(dto);
         return await base.UpdateAsync(entity);
     }
 

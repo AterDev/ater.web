@@ -117,6 +117,7 @@ public class SystemMenuManager(
 
     public async Task<bool> UpdateAsync(SystemMenu entity, SystemMenuUpdateDto dto)
     {
+        entity.Merge(dto);
         return await base.UpdateAsync(entity);
     }
 

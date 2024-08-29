@@ -21,6 +21,7 @@ public class SystemPermissionGroupManager(
 
     public async Task<bool> UpdateAsync(SystemPermissionGroup entity, SystemPermissionGroupUpdateDto dto)
     {
+        entity.Merge(dto);
         return await base.UpdateAsync(entity);
     }
 

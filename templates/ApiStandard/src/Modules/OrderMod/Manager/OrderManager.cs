@@ -27,6 +27,7 @@ public class OrderManager(
 
     public async Task<bool> UpdateAsync(Order entity, OrderUpdateDto dto)
     {
+        entity.Merge(dto);
         return await base.UpdateAsync(entity);
     }
 

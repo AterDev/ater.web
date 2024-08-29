@@ -26,6 +26,7 @@ public class ProductManager(
 
     public async Task<bool> UpdateAsync(Product entity, ProductUpdateDto dto)
     {
+        entity.Merge(dto);
         return await base.UpdateAsync(entity);
     }
 

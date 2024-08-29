@@ -25,6 +25,7 @@ public class SystemLogsManager(
 
     public async Task<bool> UpdateAsync(SystemLogs entity, SystemLogsUpdateDto dto)
     {
+        entity.Merge(dto);
         return await base.UpdateAsync(entity);
     }
 

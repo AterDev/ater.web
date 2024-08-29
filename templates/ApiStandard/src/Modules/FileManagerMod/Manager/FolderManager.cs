@@ -33,6 +33,7 @@ public class FolderManager(
 
     public async Task<bool> UpdateAsync(Folder entity, FolderUpdateDto dto)
     {
+        entity.Merge(dto);
         return await base.UpdateAsync(entity);
     }
 

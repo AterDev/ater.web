@@ -30,6 +30,7 @@ public class BlogManager(
 
     public async Task<bool> UpdateAsync(Blog entity, BlogUpdateDto dto)
     {
+        entity.Merge(dto);
         return await base.UpdateAsync(entity);
     }
 

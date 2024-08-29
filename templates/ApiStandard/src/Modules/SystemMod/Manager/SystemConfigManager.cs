@@ -29,6 +29,7 @@ public class SystemConfigManager(
 
     public async Task<bool> UpdateAsync(SystemConfig entity, SystemConfigUpdateDto dto)
     {
+        entity.Merge(dto);
         if (entity.IsSystem)
         {
             dto.Key = null;

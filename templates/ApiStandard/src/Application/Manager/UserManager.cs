@@ -68,6 +68,7 @@ public class UserManager(
 
     public async Task<bool> UpdateAsync(User entity, UserUpdateDto dto)
     {
+        entity.Merge(dto);
         if (dto.Password != null && _userContext != null && _userContext.IsAdmin)
         {
             entity.PasswordSalt = HashCrypto.BuildSalt();

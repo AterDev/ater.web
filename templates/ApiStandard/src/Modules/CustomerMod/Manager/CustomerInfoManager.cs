@@ -35,18 +35,7 @@ public class CustomerInfoManager(
 
     public async Task<bool> UpdateAsync(CustomerInfo entity, CustomerInfoUpdateDto dto)
     {
-        /*
-        if (dto.CustomerTagIds != null && dto.CustomerTagIds.Count > 0)
-        {
-            var tags = await CommandContext.Tags()
-                .Where(t => dto.CustomerTagIds.Contains(t.Id))
-                .ToListAsync();
-            if (tags != null)
-            {
-                entity.Tags = tags;
-            }
-        }
-        */
+        entity.Merge(dto);
         return await base.UpdateAsync(entity);
     }
 
@@ -61,7 +50,6 @@ public class CustomerInfoManager(
 
         return await base.ToPageAsync<CustomerInfoFilterDto, CustomerInfoItemDto>(filter);
     }
-
 
     /// <summary>
     /// 获取详情
