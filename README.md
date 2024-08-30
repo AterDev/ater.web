@@ -3,9 +3,8 @@
 本仓库包含了Ater.Web 相关内容的源代码。主要包括：
 
 - templates:dotnet 模板内容
+- 基础包:templates\ApiStandard\src\Infrastructure
 - analyzer:分析器项目
-- IdentityServer:统一认证授权项目
-
 
 The web framework with best practices base on ASP.NET Core.
 
