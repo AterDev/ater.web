@@ -87,14 +87,33 @@ public class HashCrypto
     /// <returns></returns>
     public static string Md5Hash(string str)
     {
-        var data = MD5.HashData(Encoding.UTF8.GetBytes(str));
-        StringBuilder sBuilder = new();
-        for (var i = 0; i < data.Length; i++)
-        {
-            _ = sBuilder.Append(data[i].ToString("x2"));
-        }
-        return sBuilder.ToString();
+        return HashString(str);
     }
+
+    /// <summary>
+    /// 字符串hash值
+    /// </summary>
+    /// <param name="str"></param>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    public static string HashString(string str, HashType type = HashType.MD5)
+    {
+        var bytes = HashData(str, type);
+        return BitConverter.ToString(bytes).Replace("-", "").ToLower();
+    }
+
+    private static byte[] HashData(string str, HashType type = HashType.MD5)
+    {
+        var bytes = Encoding.UTF8.GetBytes(str);
+        return type switch
+        {
+            HashType.MD5 => MD5.HashData(bytes),
+            HashType.SHA256 => SHA256.HashData(bytes),
+            HashType.SHA512 => SHA512.HashData(bytes),
+            _ => throw new NotSupportedException()
+        };
+    }
+
     /// <summary>
     /// 某文件的md5值
     /// </summary>
@@ -249,3 +268,14 @@ public class HashCrypto
         return null;
     }
 }
+
+/// <summary>
+/// hash type
+/// </summary>
+public enum HashType
+{
+    MD5,
+    SHA256,
+    SHA512,
+}
+
