@@ -69,7 +69,7 @@ public class CatalogManager(DataAccessContext<Catalog> dataContext, IUserContext
     /// <returns></returns>
     public async Task<List<Catalog>> GetLeafCatalogsAsync()
     {
-        List<Guid?> parentIds = await Query.Db
+        List<Guid?> parentIds = await Query
             .Select(s => s.ParentId)
             .ToListAsync();
 

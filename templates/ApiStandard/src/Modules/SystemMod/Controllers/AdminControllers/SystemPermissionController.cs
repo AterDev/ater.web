@@ -39,7 +39,7 @@ public class SystemPermissionController(
             return NotFound("不存在的权限组");
         }
         var id = await _manager.AddAsync(dto);
-        return id == null ? Problem(Constant.AddFailed) : id;
+        return id == null ? Problem(ErrorMsg.AddFailed) : id;
     }
 
     /// <summary>

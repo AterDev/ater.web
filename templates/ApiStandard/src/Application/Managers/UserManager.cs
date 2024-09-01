@@ -91,14 +91,39 @@ public class UserManager(
     }
 
     /// <summary>
-    /// 当前用户所拥有的对象
+    /// 唯一性判断
+    /// </summary>
+    /// <param name="unique">唯一标识</param>
+    /// <param name="id">排除当前</param>
+    /// <returns></returns>
+    public async Task<bool> IsUniqueAsync(string unique, Guid? id = null)
+    {
+        // TODO:自定义唯一性验证参数和逻辑
+        return await Command.Where(q => q.UserName == unique)
+            .WhereNotNull(id, q => q.Id != id)
+            .AnyAsync();
+    }
+
+    /// <summary>
+    /// 获取实体详情
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    public async Task<UserDetailDto?> GetDetailAsync(Guid id)
+    {
+        return await FindAsync<UserDetailDto>(e => e.Id == id);
+    }
+
+    /// <summary>
+    /// 数据权限验证
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
     public async Task<User?> GetOwnedAsync(Guid id)
     {
-        IQueryable<User> query = Command.Where(q => q.Id == id);
-        // 获取用户所属的对象
+        var query = Command.Where(q => q.Id == id);
+        // TODO:自定义数据权限验证
+        // query = query.Where(q => q.User.Id == _userContext.UserId);
         return await query.FirstOrDefaultAsync();
     }
 }

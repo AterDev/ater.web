@@ -26,7 +26,6 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddCustomerModManagers(this IServiceCollection services)
     {
         services.AddScoped(typeof(CustomerInfoManager));
-        services.AddScoped(typeof(CustomerTagManager));
         return services;
     }
 }

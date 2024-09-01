@@ -31,7 +31,7 @@ public class SystemPermissionGroupController(
     public async Task<ActionResult<Guid?>> AddAsync(SystemPermissionGroupAddDto dto)
     {
         var id = await _manager.AddAsync(dto);
-        return id == null ? Problem(Constant.AddFailed) : id;
+        return id == null ? Problem(ErrorMsg.AddFailed) : id;
     }
 
     /// <summary>

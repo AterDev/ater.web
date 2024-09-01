@@ -1,7 +1,5 @@
 using Entity.SystemMod;
-
 using EntityFramework.DBProvider;
-
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Application.Implement;
@@ -200,7 +198,7 @@ public partial class ManagerBase<TEntity> : ManagerBase
 
         if (AutoLogType is LogActionType.Add or LogActionType.All or LogActionType.AddOrUpdate)
         {
-            await SaveToLogAsync(UserActionType.Add);
+            await SaveToLogAsync(UserActionType.Add, entity.GetType().Name);
         }
         return true;
     }
@@ -220,7 +218,7 @@ public partial class ManagerBase<TEntity> : ManagerBase
 
         if (AutoLogType is LogActionType.Update or LogActionType.All or LogActionType.AddOrUpdate)
         {
-            await SaveToLogAsync(UserActionType.Update);
+            await SaveToLogAsync(UserActionType.Update, entity.GetType().Name);
         }
         return true;
     }
@@ -303,7 +301,8 @@ public partial class ManagerBase<TEntity> : ManagerBase
 
         if (AutoLogType is LogActionType.Delete or LogActionType.All)
         {
-            await SaveToLogAsync(UserActionType.Delete);
+            var target = string.Join(",", ids);
+            await SaveToLogAsync(UserActionType.Delete, target);
         }
         return res > 0;
     }
@@ -341,8 +340,10 @@ public partial class ManagerBase<TEntity> : ManagerBase
     /// 日志记录
     /// </summary>
     /// <param name="actionType"></param>
+    /// <param name="targetName">对象名称</param>
+    /// <param name="description">描述</param>
     /// <returns></returns>
-    private async Task SaveToLogAsync(UserActionType actionType)
+    private async Task SaveToLogAsync(UserActionType actionType, string targetName, string? description = null)
     {
         var userContext = WebAppContext.GetScopeService<IUserContext>();
 
@@ -353,8 +354,6 @@ public partial class ManagerBase<TEntity> : ManagerBase
         }
 
         var route = userContext.GetHttpContext()?.Request.Path.Value;
-        var description = string.Empty;
-        var targetName = typeof(TEntity).GetType().Name;
 
         if (userContext.IsAdmin)
         {

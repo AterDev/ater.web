@@ -3,7 +3,7 @@ namespace Share.Models.UserDtos;
 /// 用户账户概要
 /// </summary>
 /// <inheritdoc cref="Entity.User"/>
-public class UserShortDto
+public class UserDetailDto
 {
     /// <summary>
     /// 用户名

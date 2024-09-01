@@ -11,7 +11,7 @@ global using Entity.FileManagerMod;
 
 global using EntityFramework;
 
-global using FileManagerMod.Manager;
+global using FileManagerMod.Managers;
 
 global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Mvc;

@@ -1,7 +1,5 @@
 using Application;
 
-using Entity.FileManagerMod;
-
 using FileManagerMod.Managers;
 using FileManagerMod.Models.FileDataDtos;
 
@@ -86,10 +84,10 @@ public class FileDataController(
     /// <returns></returns>
     // [ApiExplorerSettings(IgnoreApi = true)]
     [HttpDelete("{id}")]
-    public async Task<ActionResult<FileData?>> DeleteAsync([FromRoute] Guid id)
+    public async Task<ActionResult<bool>> DeleteAsync([FromRoute] Guid id)
     {
         // 注意删除权限
-        FileData? entity = await _manager.GetCurrentAsync(id);
+        var entity = await _manager.GetCurrentAsync(id);
         if (entity == null)
         {
             return NotFound();

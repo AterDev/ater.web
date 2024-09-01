@@ -35,12 +35,12 @@ public class UserController(
     public async Task<ActionResult<Guid?>> AddAsync(UserAddDto dto)
     {
         // 判断重复用户名
-        if (await _manager.ExistAsync(q => q.UserName.Equals(dto.UserName)))
+        if (await _manager.IsUniqueAsync(dto.UserName))
         {
             return Conflict(ErrorMsg.ExistUser);
         }
         var id = await _manager.AddAsync(dto);
-        return id == null ? Problem(Constant.AddFailed) : id;
+        return id == null ? Problem(ErrorMsg.AddFailed) : id;
     }
 
     /// <summary>
@@ -50,13 +50,11 @@ public class UserController(
     /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPatch("{id}")]
-    public async Task<ActionResult<bool?>> UpdateAsync([FromRoute] Guid id, UserUpdateDto dto)
+    public async Task<ActionResult<bool>> UpdateAsync([FromRoute] Guid id, UserUpdateDto dto)
     {
-        User? current = await _manager.GetCurrentAsync(id);
-        if (current == null)
-        {
-            return NotFound(ErrorMsg.NotFoundResource);
-        };
+        var current = await _manager.GetOwnedAsync(id);
+        if (current == null) { return NotFound(ErrorMsg.NotFoundResource); }
+
         return await _manager.UpdateAsync(current, dto);
     }
 
@@ -66,9 +64,9 @@ public class UserController(
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpGet("{id}")]
-    public async Task<ActionResult<User?>> GetDetailAsync([FromRoute] Guid id)
+    public async Task<ActionResult<UserDetailDto?>> GetDetailAsync([FromRoute] Guid id)
     {
-        User? res = await _manager.FindAsync(id);
+        var res = await _manager.GetDetailAsync(id);
         return (res == null) ? NotFound() : res;
     }
 
@@ -78,10 +76,11 @@ public class UserController(
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
+    [NonAction]
     public async Task<ActionResult<bool?>> DeleteAsync([FromRoute] Guid id)
     {
         // 注意删除权限
-        var res = await _manager.GetCurrentAsync(id);
+        var res = await _manager.GetOwnedAsync(id);
         return res == null ? NotFound(ErrorMsg.NotFoundResource)
             : await _manager.DeleteAsync([id], true);
 

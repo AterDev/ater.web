@@ -4,6 +4,7 @@
 /// </summary>
 public static class ErrorMsg
 {
+    public const string AddFailed = "添加失败";
     /// <summary>
     /// 未找到该用户
     /// </summary>
