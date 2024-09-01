@@ -1,4 +1,6 @@
 // 本文件由 ater.dry工具自动生成.
+using CustomerMod.Managers;
+
 namespace CustomerMod;
 /// <summary>
 /// 服务注入扩展

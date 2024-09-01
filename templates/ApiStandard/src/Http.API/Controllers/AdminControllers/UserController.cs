@@ -1,10 +1,12 @@
+using Application.Managers;
+
 using Share.Models.UserDtos;
 namespace Http.API.Controllers.AdminControllers;
 
 /// <summary>
 /// 用户账户
 /// </summary>
-/// <see cref="Application.Manager.UserManager"/>
+/// <see cref="Application.Managers.UserManager"/>
 [Authorize(AterConst.AdminUser)]
 public class UserController(
     IUserContext user,

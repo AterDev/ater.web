@@ -1,6 +1,6 @@
 using SystemMod.Models.SystemPermissionGroupDtos;
 
-namespace SystemMod.Manager;
+namespace SystemMod.Managers;
 
 public class SystemPermissionGroupManager(
     DataAccessContext<SystemPermissionGroup> dataContext,
@@ -16,19 +16,19 @@ public class SystemPermissionGroupManager(
     public async Task<Guid?> AddAsync(SystemPermissionGroupAddDto dto)
     {
         SystemPermissionGroup entity = dto.MapTo<SystemPermissionGroupAddDto, SystemPermissionGroup>();
-        return await base.AddAsync(entity) ? entity.Id : null;
+        return await AddAsync(entity) ? entity.Id : null;
     }
 
     public async Task<bool> UpdateAsync(SystemPermissionGroup entity, SystemPermissionGroupUpdateDto dto)
     {
         entity.Merge(dto);
-        return await base.UpdateAsync(entity);
+        return await UpdateAsync(entity);
     }
 
     public async Task<PageList<SystemPermissionGroupItemDto>> ToPageAsync(SystemPermissionGroupFilterDto filter)
     {
         Queryable = Queryable.WhereNotNull(filter.Name, q => q.Name.Contains(filter.Name!));
-        return await base.ToPageAsync<SystemPermissionGroupFilterDto, SystemPermissionGroupItemDto>(filter);
+        return await ToPageAsync<SystemPermissionGroupFilterDto, SystemPermissionGroupItemDto>(filter);
     }
 
     public override async Task<SystemPermissionGroup?> FindAsync(Guid id)

@@ -1,6 +1,6 @@
 using FileManagerMod.Models.FolderDtos;
 
-namespace FileManagerMod.Manager;
+namespace FileManagerMod.Managers;
 /// <summary>
 /// 文件夹
 /// </summary>
@@ -28,13 +28,13 @@ public class FolderManager(
         {
             entity.Path = entity.Name;
         }
-        return await base.AddAsync(entity) ? entity.Id : null;
+        return await AddAsync(entity) ? entity.Id : null;
     }
 
     public async Task<bool> UpdateAsync(Folder entity, FolderUpdateDto dto)
     {
         entity.Merge(dto);
-        return await base.UpdateAsync(entity);
+        return await UpdateAsync(entity);
     }
 
     public async Task<PageList<FolderItemDto>> ToPageAsync(FolderFilterDto filter)
@@ -43,7 +43,7 @@ public class FolderManager(
             .WhereNotNull(filter.Name, q => q.Name == filter.Name)
             .WhereNotNull(filter.ParentId, q => q.ParentId == filter.ParentId);
 
-        return await base.ToPageAsync<FolderFilterDto, FolderItemDto>(filter);
+        return await ToPageAsync<FolderFilterDto, FolderItemDto>(filter);
     }
 
     /// <summary>

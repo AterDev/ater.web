@@ -1,6 +1,6 @@
 using CustomerMod.Models.CustomerInfoDtos;
 
-namespace CustomerMod.Manager;
+namespace CustomerMod.Managers;
 /// <summary>
 /// 客户信息
 /// </summary>
@@ -30,13 +30,13 @@ public class CustomerInfoManager(
         entity.CreatedUserId = _userContext.UserId;
         entity.ManagerId = consult!.Id;
 
-        return await base.AddAsync(entity) ? entity.Id : null;
+        return await AddAsync(entity) ? entity.Id : null;
     }
 
     public async Task<bool> UpdateAsync(CustomerInfo entity, CustomerInfoUpdateDto dto)
     {
         entity.Merge(dto);
-        return await base.UpdateAsync(entity);
+        return await UpdateAsync(entity);
     }
 
     public async Task<PageList<CustomerInfoItemDto>> ToPageAsync(CustomerInfoFilterDto filter)
@@ -48,7 +48,7 @@ public class CustomerInfoManager(
             .WhereNotNull(filter.FollowUpStatus, q => q.FollowUpStatus == filter.FollowUpStatus)
             .WhereNotNull(filter.GenderType, q => q.GenderType == filter.GenderType);
 
-        return await base.ToPageAsync<CustomerInfoFilterDto, CustomerInfoItemDto>(filter);
+        return await ToPageAsync<CustomerInfoFilterDto, CustomerInfoItemDto>(filter);
     }
 
     /// <summary>

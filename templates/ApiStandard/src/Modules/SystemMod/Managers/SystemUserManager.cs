@@ -1,10 +1,12 @@
 using System.Security.Claims;
 using System.Text.RegularExpressions;
+
 using Ater.Web.Extension;
+
 using SystemMod.Models;
 using SystemMod.Models.SystemUserDtos;
 
-namespace SystemMod.Manager;
+namespace SystemMod.Managers;
 
 public class SystemUserManager(
     DataAccessContext<SystemUser> dataContext,
@@ -86,7 +88,7 @@ public class SystemUserManager(
                 return false;
             }
             var key = AterConst.VerifyCodeCachePrefix + user.Email;
-            string? code = _cache.GetValue<string>(key);
+            var code = _cache.GetValue<string>(key);
             if (code == null)
             {
                 ErrorStatus = 500003;
@@ -195,7 +197,7 @@ public class SystemUserManager(
                 .ToList();
             entity.SystemRoles = roles;
         }
-        return await base.AddAsync(entity) ? entity.Id : null;
+        return await AddAsync(entity) ? entity.Id : null;
     }
 
     /// <summary>
@@ -219,7 +221,7 @@ public class SystemUserManager(
                 .ToList();
             entity.SystemRoles = roles;
         }
-        return await base.UpdateAsync(entity);
+        return await UpdateAsync(entity);
     }
 
     public async Task<PageList<SystemUserItemDto>> ToPageAsync(SystemUserFilterDto filter)
@@ -251,7 +253,7 @@ public class SystemUserManager(
         {
             Queryable = Queryable.Where(q => q.SystemRoles.Any(r => r.Id == filter.RoleId));
         }
-        return await base.ToPageAsync<SystemUserFilterDto, SystemUserItemDto>(filter);
+        return await ToPageAsync<SystemUserFilterDto, SystemUserItemDto>(filter);
     }
 
     /// <summary>
@@ -278,6 +280,17 @@ public class SystemUserManager(
     }
 
     /// <summary>
+    /// 删除实体
+    /// </summary>
+    /// <param name="ids"></param>
+    /// <param name="softDelete"></param>
+    /// <returns></returns>
+    public new async Task<bool?> DeleteAsync(List<Guid> ids, bool softDelete = true)
+    {
+        return await base.DeleteAsync(ids, softDelete);
+    }
+
+    /// <summary>
     /// 验证密码复杂度
     /// </summary>
     /// <param name="password"></param>
@@ -286,7 +299,7 @@ public class SystemUserManager(
     {
         var loginPolicy = _systemConfig.GetLoginSecurityPolicy();
         // 密码复杂度校验
-        string pwdReg = loginPolicy.PasswordLevel switch
+        var pwdReg = loginPolicy.PasswordLevel switch
         {
             PasswordLevel.Simple => "",
             PasswordLevel.Normal => "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,60}$",

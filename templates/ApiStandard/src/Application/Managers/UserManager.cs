@@ -1,6 +1,6 @@
 using Share.Models.UserDtos;
 
-namespace Application.Manager;
+namespace Application.Managers;
 /// <summary>
 /// 用户账户
 /// </summary>
@@ -63,7 +63,7 @@ public class UserManager(
         {
             entity.Email = dto.Email;
         }
-        return await base.AddAsync(entity) ? entity.Id : null;
+        return await AddAsync(entity) ? entity.Id : null;
     }
 
     public async Task<bool> UpdateAsync(User entity, UserUpdateDto dto)
@@ -74,7 +74,7 @@ public class UserManager(
             entity.PasswordSalt = HashCrypto.BuildSalt();
             entity.PasswordHash = HashCrypto.GeneratePwd(dto.Password, entity.PasswordSalt);
         }
-        return await base.UpdateAsync(entity);
+        return await UpdateAsync(entity);
     }
 
     public async Task<PageList<UserItemDto>> ToPageAsync(UserFilterDto filter)
@@ -87,7 +87,7 @@ public class UserManager(
             .WhereNotNull(filter.EmailConfirmed, q => q.EmailConfirmed == filter.EmailConfirmed)
             .WhereNotNull(filter.PhoneNumberConfirmed, q => q.PhoneNumberConfirmed == filter.PhoneNumberConfirmed);
 
-        return await base.ToPageAsync<UserFilterDto, UserItemDto>(filter);
+        return await ToPageAsync<UserFilterDto, UserItemDto>(filter);
     }
 
     /// <summary>

@@ -1,5 +1,8 @@
 using Application;
+
 using Entity.FileManagerMod;
+
+using FileManagerMod.Managers;
 using FileManagerMod.Models.FileDataDtos;
 
 using Microsoft.AspNetCore.Http;
@@ -9,7 +12,7 @@ namespace FileManagerMod.Controllers.AdminControllers;
 /// <summary>
 /// 文件数据
 /// </summary>
-/// <see cref="FileManagerMod.Manager.FileDataManager"/>
+/// <see cref="Managers.FileDataManager"/>
 public class FileDataController(
     IUserContext user,
     ILogger<FileDataController> logger,

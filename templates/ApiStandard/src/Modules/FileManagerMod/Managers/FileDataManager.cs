@@ -2,7 +2,7 @@ using FileManagerMod.Models.FileDataDtos;
 
 using Microsoft.AspNetCore.Http;
 
-namespace FileManagerMod.Manager;
+namespace FileManagerMod.Managers;
 /// <summary>
 /// 文件数据
 /// </summary>
@@ -122,7 +122,7 @@ public class FileDataManager(
     public async Task<bool> UpdateAsync(FileData entity, FileDataUpdateDto dto)
     {
         entity.Merge(dto);
-        return await base.UpdateAsync(entity);
+        return await UpdateAsync(entity);
     }
 
     public async Task<PageList<FileDataItemDto>> ToPageAsync(FileDataFilterDto filter)
@@ -155,7 +155,7 @@ public class FileDataManager(
             Queryable = Queryable.Where(q => extensions.Contains(q.Extension));
         }
 
-        return await base.ToPageAsync<FileDataFilterDto, FileDataItemDto>(filter);
+        return await ToPageAsync<FileDataFilterDto, FileDataItemDto>(filter);
     }
 
     /// <summary>

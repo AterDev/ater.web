@@ -1,6 +1,6 @@
 using SystemMod.Models.SystemLogsDtos;
 
-namespace SystemMod.Manager;
+namespace SystemMod.Managers;
 /// <summary>
 /// 系统日志
 /// </summary>
@@ -20,13 +20,13 @@ public class SystemLogsManager(
     {
         SystemLogs entity = dto.MapTo<SystemLogsAddDto, SystemLogs>();
         entity.SystemUserId = _userContext.UserId;
-        return await base.AddAsync(entity) ? entity.Id : null;
+        return await AddAsync(entity) ? entity.Id : null;
     }
 
     public async Task<bool> UpdateAsync(SystemLogs entity, SystemLogsUpdateDto dto)
     {
         entity.Merge(dto);
-        return await base.UpdateAsync(entity);
+        return await UpdateAsync(entity);
     }
 
     public async Task<PageList<SystemLogsItemDto>> ToPageAsync(SystemLogsFilterDto filter)
@@ -42,7 +42,7 @@ public class SystemLogsManager(
             var endDate = filter.EndDate.Value.AddDays(1);
             Queryable = Queryable.Between(q => q.CreatedTime, filter.StartDate.Value, endDate);
         }
-        return await base.ToPageAsync<SystemLogsFilterDto, SystemLogsItemDto>(filter);
+        return await ToPageAsync<SystemLogsFilterDto, SystemLogsItemDto>(filter);
     }
 
     /// <summary>

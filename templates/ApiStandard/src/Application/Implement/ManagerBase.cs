@@ -101,7 +101,7 @@ public partial class ManagerBase<TEntity> : ManagerBase
     /// <typeparam name="TDto"></typeparam>
     /// <param name="whereExp"></param>
     /// <returns></returns>
-    public virtual async Task<TDto?> FindAsync<TDto>(Expression<Func<TEntity, bool>>? whereExp = null) where TDto : class
+    public async Task<TDto?> FindAsync<TDto>(Expression<Func<TEntity, bool>>? whereExp = null) where TDto : class
     {
         var model = await Query.AsNoTracking()
             .Where(whereExp ?? (e => true))
@@ -130,7 +130,7 @@ public partial class ManagerBase<TEntity> : ManagerBase
     /// </summary>
     /// <param name="whereExp"></param>
     /// <returns></returns>
-    public virtual async Task<bool> ExistAsync(Expression<Func<TEntity, bool>> whereExp)
+    public async Task<bool> ExistAsync(Expression<Func<TEntity, bool>> whereExp)
     {
         return await Query.AnyAsync(whereExp);
     }
@@ -141,7 +141,7 @@ public partial class ManagerBase<TEntity> : ManagerBase
     /// <typeparam name="TDto">返回类型</typeparam>
     /// <param name="whereExp"></param>
     /// <returns></returns>
-    public virtual async Task<List<TDto>> ToListAsync<TDto>(Expression<Func<TEntity, bool>>? whereExp = null) where TDto : class
+    public async Task<List<TDto>> ToListAsync<TDto>(Expression<Func<TEntity, bool>>? whereExp = null) where TDto : class
     {
         return await Query.AsNoTracking()
             .Where(whereExp ?? (e => true))
@@ -149,7 +149,7 @@ public partial class ManagerBase<TEntity> : ManagerBase
             .ToListAsync();
     }
 
-    public virtual async Task<List<TEntity>> ToListAsync(Expression<Func<TEntity, bool>>? whereExp = null)
+    public async Task<List<TEntity>> ToListAsync(Expression<Func<TEntity, bool>>? whereExp = null)
     {
 
         return await Query.AsNoTracking()
@@ -162,7 +162,7 @@ public partial class ManagerBase<TEntity> : ManagerBase
     /// </summary>
     /// <param name="filter"></param>
     /// <returns></returns>
-    public virtual async Task<PageList<TItem>> ToPageAsync<TFilter, TItem>(TFilter filter) where TFilter : FilterBase where TItem : class
+    public async Task<PageList<TItem>> ToPageAsync<TFilter, TItem>(TFilter filter) where TFilter : FilterBase where TItem : class
     {
         Queryable = filter.OrderBy != null
             ? Queryable.OrderBy(filter.OrderBy)
@@ -190,7 +190,7 @@ public partial class ManagerBase<TEntity> : ManagerBase
     /// </summary>
     /// <param name="entity"></param>
     /// <returns></returns>
-    public virtual async Task<bool> AddAsync(TEntity entity)
+    public async Task<bool> AddAsync(TEntity entity)
     {
         await Command.AddAsync(entity);
         if (AutoSave)
@@ -210,7 +210,7 @@ public partial class ManagerBase<TEntity> : ManagerBase
     /// </summary>
     /// <param name="entity">已跟踪的实体</param>
     /// <returns></returns>
-    public virtual async Task<bool> UpdateAsync(TEntity entity)
+    public async Task<bool> UpdateAsync(TEntity entity)
     {
         Command.Update(entity);
         if (AutoSave)
@@ -288,7 +288,7 @@ public partial class ManagerBase<TEntity> : ManagerBase
     /// <param name="ids">实体id</param>
     /// <param name="softDelete">是否软件删除</param>
     /// <returns></returns>
-    public virtual async Task<bool?> DeleteAsync(List<Guid> ids, bool softDelete = true)
+    public async Task<bool?> DeleteAsync(List<Guid> ids, bool softDelete = true)
     {
         var res = 0;
         if (softDelete)

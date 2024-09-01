@@ -1,11 +1,13 @@
 using Application;
+
+using FileManagerMod.Managers;
 using FileManagerMod.Models.FileDataDtos;
 namespace FileManagerMod.Controllers;
 
 /// <summary>
 /// 文件数据
 /// </summary>
-/// <see cref="FileManagerMod.Manager.FileDataManager"/>
+/// <see cref="Managers.FileDataManager"/>
 public class FileDataController(
     IUserContext user,
     ILogger<FileDataController> logger,

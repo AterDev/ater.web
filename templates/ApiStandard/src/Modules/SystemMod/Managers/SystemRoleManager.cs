@@ -1,6 +1,6 @@
 using SystemMod.Models.SystemRoleDtos;
 
-namespace SystemMod.Manager;
+namespace SystemMod.Managers;
 
 public class SystemRoleManager(
     DataAccessContext<SystemRole> dataContext,
@@ -14,14 +14,20 @@ public class SystemRoleManager(
     /// <returns></returns>
     public async Task<Guid?> AddAsync(SystemRoleAddDto dto)
     {
-        SystemRole entity = dto.MapTo<SystemRoleAddDto, SystemRole>();
-        return await base.AddAsync(entity) ? entity.Id : null;
+        var entity = dto.MapTo<SystemRoleAddDto, SystemRole>();
+        return await AddAsync(entity) ? entity.Id : null;
     }
 
+    /// <summary>
+    /// 更新实体
+    /// </summary>
+    /// <param name="entity"></param>
+    /// <param name="dto"></param>
+    /// <returns></returns>
     public async Task<bool> UpdateAsync(SystemRole entity, SystemRoleUpdateDto dto)
     {
         entity.Merge(dto);
-        return await base.UpdateAsync(entity);
+        return await UpdateAsync(entity);
     }
 
     public async Task<PageList<SystemRoleItemDto>> ToPageAsync(SystemRoleFilterDto filter)
@@ -29,7 +35,7 @@ public class SystemRoleManager(
         Queryable = Queryable
             .WhereNotNull(filter.Name, q => q.Name == filter.Name)
             .WhereNotNull(filter.NameValue, q => q.NameValue == filter.NameValue);
-        return await base.ToPageAsync<SystemRoleFilterDto, SystemRoleItemDto>(filter);
+        return await ToPageAsync<SystemRoleFilterDto, SystemRoleItemDto>(filter);
     }
 
     /// <summary>

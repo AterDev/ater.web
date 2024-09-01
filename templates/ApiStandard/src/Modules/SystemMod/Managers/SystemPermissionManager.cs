@@ -1,6 +1,6 @@
 using SystemMod.Models.SystemPermissionDtos;
 
-namespace SystemMod.Manager;
+namespace SystemMod.Managers;
 /// <summary>
 /// 权限
 /// </summary>
@@ -19,7 +19,7 @@ public class SystemPermissionManager(
     {
         SystemPermission entity = dto.MapTo<SystemPermissionAddDto, SystemPermission>();
         entity.GroupId = dto.SystemPermissionGroupId;
-        return await base.AddAsync(entity) ? entity.Id : null;
+        return await AddAsync(entity) ? entity.Id : null;
     }
 
     public override Task<SystemPermission?> GetCurrentAsync(Guid id)
@@ -32,7 +32,7 @@ public class SystemPermissionManager(
     public async Task<bool> UpdateAsync(SystemPermission entity, SystemPermissionUpdateDto dto)
     {
         entity.Merge(dto);
-        return await base.UpdateAsync(entity);
+        return await UpdateAsync(entity);
     }
 
     public async Task<PageList<SystemPermissionItemDto>> ToPageAsync(SystemPermissionFilterDto filter)
@@ -42,7 +42,7 @@ public class SystemPermissionManager(
             .WhereNotNull(filter.PermissionType, q => q.PermissionType == filter.PermissionType)
             .WhereNotNull(filter.GroupId, q => q.Group.Id == filter.GroupId);
 
-        return await base.ToPageAsync<SystemPermissionFilterDto, SystemPermissionItemDto>(filter);
+        return await ToPageAsync<SystemPermissionFilterDto, SystemPermissionItemDto>(filter);
     }
 
     /// <summary>

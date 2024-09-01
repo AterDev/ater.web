@@ -2,7 +2,7 @@ using System.Text.Json;
 
 using SystemMod.Models.SystemConfigDtos;
 
-namespace SystemMod.Manager;
+namespace SystemMod.Managers;
 /// <summary>
 /// 系统配置
 /// </summary>
@@ -24,7 +24,7 @@ public class SystemConfigManager(
     {
         SystemConfig entity = dto.MapTo<SystemConfigAddDto, SystemConfig>();
         // other required props
-        return await base.AddAsync(entity) ? entity.Id : null;
+        return await AddAsync(entity) ? entity.Id : null;
     }
 
     public async Task<bool> UpdateAsync(SystemConfig entity, SystemConfigUpdateDto dto)
@@ -35,7 +35,7 @@ public class SystemConfigManager(
             dto.Key = null;
             dto.GroupName = null;
         }
-        return await base.UpdateAsync(entity);
+        return await UpdateAsync(entity);
     }
 
     public async Task<PageList<SystemConfigItemDto>> ToPageAsync(SystemConfigFilterDto filter)
@@ -44,7 +44,7 @@ public class SystemConfigManager(
             .WhereNotNull(filter.Key, q => q.Key.Contains(filter.Key!, StringComparison.CurrentCultureIgnoreCase))
             .WhereNotNull(filter.GroupName, q => q.GroupName == filter.GroupName);
 
-        return await base.ToPageAsync<SystemConfigFilterDto, SystemConfigItemDto>(filter);
+        return await ToPageAsync<SystemConfigFilterDto, SystemConfigItemDto>(filter);
     }
 
     /// <summary>

@@ -1,6 +1,6 @@
 using SystemMod.Models.SystemMenuDtos;
 
-namespace SystemMod.Manager;
+namespace SystemMod.Managers;
 /// <summary>
 /// 系统菜单
 /// </summary>
@@ -21,7 +21,7 @@ public class SystemMenuManager(
             entity.ParentId = dto.ParentId.Value;
         }
 
-        return await base.AddAsync(entity) ? entity.Id : null;
+        return await AddAsync(entity) ? entity.Id : null;
     }
 
     /// <summary>
@@ -118,7 +118,7 @@ public class SystemMenuManager(
     public async Task<bool> UpdateAsync(SystemMenu entity, SystemMenuUpdateDto dto)
     {
         entity.Merge(dto);
-        return await base.UpdateAsync(entity);
+        return await UpdateAsync(entity);
     }
 
     public async Task<PageList<SystemMenu>> FilterAsync(SystemMenuFilterDto filter)

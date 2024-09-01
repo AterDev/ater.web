@@ -1,3 +1,5 @@
+using Application.Managers;
+
 using Share.Models.UserDtos;
 
 namespace Http.API.Controllers;
@@ -5,7 +7,7 @@ namespace Http.API.Controllers;
 /// <summary>
 /// 用户账户
 /// </summary>
-/// <see cref="Application.Manager.UserManager"/>
+/// <see cref="Application.Managers.UserManager"/>
 public class UserController(
     IUserContext user,
     ILogger<UserController> logger,

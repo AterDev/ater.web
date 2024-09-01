@@ -1,9 +1,10 @@
 using Application;
 
 using CMSMod.Models.BlogDtos;
+
 using EntityFramework;
 
-namespace CMSMod.Manager;
+namespace CMSMod.Managers;
 /// <summary>
 /// 博客
 /// </summary>
@@ -25,13 +26,13 @@ public class BlogManager(
         entity.UserId = _userContext.UserId;
         entity.CatalogId = dto.CatalogId;
         // other required props
-        return await base.AddAsync(entity) ? entity.Id : null;
+        return await AddAsync(entity) ? entity.Id : null;
     }
 
     public async Task<bool> UpdateAsync(Blog entity, BlogUpdateDto dto)
     {
         entity.Merge(dto);
-        return await base.UpdateAsync(entity);
+        return await UpdateAsync(entity);
     }
 
     public async Task<PageList<BlogItemDto>> ToPageAsync(BlogFilterDto filter)
@@ -45,7 +46,7 @@ public class BlogManager(
             .WhereNotNull(filter.IsOriginal, q => q.IsOriginal == filter.IsOriginal)
             .WhereNotNull(filter.UserId, q => q.User.Id == filter.UserId)
             .WhereNotNull(filter.CatalogId, q => q.Catalog.Id == filter.CatalogId);
-        return await base.ToPageAsync<BlogFilterDto, BlogItemDto>(filter);
+        return await ToPageAsync<BlogFilterDto, BlogItemDto>(filter);
     }
 
     /// <summary>

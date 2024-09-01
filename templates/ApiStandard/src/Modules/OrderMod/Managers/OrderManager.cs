@@ -1,7 +1,8 @@
 using Application;
+
 using OrderMod.Models.OrderDtos;
 
-namespace OrderMod.Manager;
+namespace OrderMod.Managers;
 /// <summary>
 /// 订单
 /// </summary>
@@ -28,7 +29,7 @@ public class OrderManager(
     public async Task<bool> UpdateAsync(Order entity, OrderUpdateDto dto)
     {
         entity.Merge(dto);
-        return await base.UpdateAsync(entity);
+        return await UpdateAsync(entity);
     }
 
     public async Task<PageList<OrderItemDto>> ToPageAsync(OrderFilterDto filter)
@@ -39,7 +40,7 @@ public class OrderManager(
             .WhereNotNull(filter.UserId, q => q.User.Id == filter.UserId)
             .WhereNotNull(filter.Status, q => q.Status == filter.Status);
 
-        return await base.ToPageAsync<OrderFilterDto, OrderItemDto>(filter);
+        return await ToPageAsync<OrderFilterDto, OrderItemDto>(filter);
     }
 
     /*/// <summary>

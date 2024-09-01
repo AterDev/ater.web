@@ -1,7 +1,8 @@
 using Application;
+
 using OrderMod.Models.ProductDtos;
 
-namespace OrderMod.Manager;
+namespace OrderMod.Managers;
 /// <summary>
 /// 产品
 /// </summary>
@@ -21,13 +22,13 @@ public class ProductManager(
     public async Task<Guid?> AddAsync(ProductAddDto dto)
     {
         Product entity = dto.MapTo<ProductAddDto, Product>();
-        return await base.AddAsync(entity) ? entity.Id : null;
+        return await AddAsync(entity) ? entity.Id : null;
     }
 
     public async Task<bool> UpdateAsync(Product entity, ProductUpdateDto dto)
     {
         entity.Merge(dto);
-        return await base.UpdateAsync(entity);
+        return await UpdateAsync(entity);
     }
 
     public async Task<PageList<ProductItemDto>> ToPageAsync(ProductFilterDto filter)
@@ -41,7 +42,7 @@ public class ProductManager(
             ["Sort"] = true
         };
 
-        return await base.ToPageAsync<ProductFilterDto, ProductItemDto>(filter);
+        return await ToPageAsync<ProductFilterDto, ProductItemDto>(filter);
     }
 
     /// <summary>

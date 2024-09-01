@@ -1,11 +1,13 @@
 using Application;
+
+using FileManagerMod.Managers;
 using FileManagerMod.Models.FolderDtos;
 namespace FileManagerMod.Controllers;
 
 /// <summary>
 /// 文件夹
 /// </summary>
-/// <see cref="FileManagerMod.Manager.FolderManager"/>
+/// <see cref="Managers.FolderManager"/>
 public class FolderController(
     IUserContext user,
     ILogger<FolderController> logger,

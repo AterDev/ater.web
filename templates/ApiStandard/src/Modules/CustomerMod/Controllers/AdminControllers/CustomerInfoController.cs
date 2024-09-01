@@ -1,10 +1,11 @@
+using CustomerMod.Managers;
 using CustomerMod.Models.CustomerInfoDtos;
 namespace CustomerMod.Controllers.AdminControllers;
 
 /// <summary>
 /// 客户信息
 /// </summary>
-/// <see cref="CustomerMod.Manager.CustomerInfoManager"/>
+/// <see cref="Managers.CustomerInfoManager"/>
 public class CustomerInfoController(
     IUserContext user,
     ILogger<CustomerInfoController> logger,

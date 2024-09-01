@@ -1,9 +1,10 @@
 using Application;
 
 using CMSMod.Models.CatalogDtos;
+
 using EntityFramework;
 
-namespace CMSMod.Manager;
+namespace CMSMod.Managers;
 
 /// <summary>
 /// 目录管理
@@ -35,20 +36,20 @@ public class CatalogManager(DataAccessContext<Catalog> dataContext, IUserContext
                 entity.Level = 0;
             }
         }
-        return await base.AddAsync(entity) ? entity.Id : null;
+        return await AddAsync(entity) ? entity.Id : null;
     }
 
     public async Task<bool> UpdateAsync(Catalog entity, CatalogUpdateDto dto)
     {
         entity.Merge(dto);
-        return await base.UpdateAsync(entity);
+        return await UpdateAsync(entity);
     }
 
     public async Task<PageList<CatalogItemDto>> ToPageAsync(CatalogFilterDto filter)
     {
         // TODO:根据实际业务构建筛选条件
         // if ... Queryable = ...
-        return await base.ToPageAsync<CatalogFilterDto, CatalogItemDto>(filter);
+        return await ToPageAsync<CatalogFilterDto, CatalogItemDto>(filter);
     }
 
     /// <summary>

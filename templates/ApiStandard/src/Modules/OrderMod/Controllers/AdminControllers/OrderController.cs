@@ -1,11 +1,13 @@
 using Application;
+
+using OrderMod.Managers;
 using OrderMod.Models.OrderDtos;
 namespace OrderMod.Controllers.AdminControllers;
 
 /// <summary>
 /// 订单
 /// </summary>
-/// <see cref="OrderMod.Manager.OrderManager"/>
+/// <see cref="Managers.OrderManager"/>
 public class OrderController(
     IUserContext user,
     ILogger<OrderController> logger,
