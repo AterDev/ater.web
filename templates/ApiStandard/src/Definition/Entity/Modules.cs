@@ -28,5 +28,4 @@ public class Modules
     /// 系统管理
     /// </summary>
     public const string System = "SystemMod";
-
 }

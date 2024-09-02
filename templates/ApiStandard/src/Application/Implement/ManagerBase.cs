@@ -149,7 +149,6 @@ public partial class ManagerBase<TEntity> : ManagerBase
 
     public async Task<List<TEntity>> ToListAsync(Expression<Func<TEntity, bool>>? whereExp = null)
     {
-
         return await Query.AsNoTracking()
             .Where(whereExp ?? (e => true))
             .ToListAsync();
