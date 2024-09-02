@@ -1,12 +1,15 @@
 using Application;
+
 using Entity.OrderMod;
+
+using OrderMod.Managers;
 using OrderMod.Models.ProductDtos;
 namespace OrderMod.Controllers;
 
 /// <summary>
 /// 产品
 /// </summary>
-/// <see cref="OrderMod.Manager.ProductManager"/>
+/// <see cref="Managers.ProductManager"/>
 public class ProductController(
     IUserContext user,
     ILogger<ProductController> logger,
@@ -21,7 +24,7 @@ public class ProductController(
     [HttpGet("list")]
     public async Task<ActionResult<List<ProductItemDto>>> FilterAsync()
     {
-        return await _manager.ListAsync<ProductItemDto>();
+        return await _manager.ToListAsync<ProductItemDto>();
     }
 
     /// <summary>

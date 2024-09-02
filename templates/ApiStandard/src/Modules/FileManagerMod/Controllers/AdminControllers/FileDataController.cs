@@ -1,5 +1,6 @@
 using Application;
-using Entity.FileManagerMod;
+
+using FileManagerMod.Managers;
 using FileManagerMod.Models.FileDataDtos;
 
 using Microsoft.AspNetCore.Http;
@@ -9,7 +10,7 @@ namespace FileManagerMod.Controllers.AdminControllers;
 /// <summary>
 /// 文件数据
 /// </summary>
-/// <see cref="FileManagerMod.Manager.FileDataManager"/>
+/// <see cref="Managers.FileDataManager"/>
 public class FileDataController(
     IUserContext user,
     ILogger<FileDataController> logger,
@@ -26,7 +27,7 @@ public class FileDataController(
     [HttpPost("filter")]
     public async Task<ActionResult<PageList<FileDataItemDto>>> FilterAsync(FileDataFilterDto filter)
     {
-        return await _manager.FilterAsync(filter);
+        return await _manager.ToPageAsync(filter);
     }
 
     /// <summary>
@@ -83,14 +84,14 @@ public class FileDataController(
     /// <returns></returns>
     // [ApiExplorerSettings(IgnoreApi = true)]
     [HttpDelete("{id}")]
-    public async Task<ActionResult<FileData?>> DeleteAsync([FromRoute] Guid id)
+    public async Task<ActionResult<bool>> DeleteAsync([FromRoute] Guid id)
     {
         // 注意删除权限
-        FileData? entity = await _manager.GetCurrentAsync(id);
+        var entity = await _manager.GetCurrentAsync(id);
         if (entity == null)
         {
             return NotFound();
         };
-        return await _manager.DeleteAsync(entity, false);
+        return entity == null ? NotFound() : await _manager.DeleteAsync([id], false);
     }
 }

@@ -1,4 +1,4 @@
-using Entity.SystemMod;
+using SystemMod.Managers;
 using SystemMod.Models.SystemPermissionGroupDtos;
 namespace SystemMod.Controllers.AdminControllers;
 
@@ -19,7 +19,7 @@ public class SystemPermissionGroupController(
     [HttpPost("filter")]
     public async Task<ActionResult<PageList<SystemPermissionGroupItemDto>>> FilterAsync(SystemPermissionGroupFilterDto filter)
     {
-        return await _manager.FilterAsync(filter);
+        return await _manager.ToPageAsync(filter);
     }
 
     /// <summary>
@@ -28,10 +28,10 @@ public class SystemPermissionGroupController(
     /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<ActionResult<SystemPermissionGroup>> AddAsync(SystemPermissionGroupAddDto dto)
+    public async Task<ActionResult<Guid?>> AddAsync(SystemPermissionGroupAddDto dto)
     {
-        SystemPermissionGroup entity = await _manager.CreateNewEntityAsync(dto);
-        return await _manager.AddAsync(entity);
+        var id = await _manager.AddAsync(dto);
+        return id == null ? Problem(ErrorMsg.AddFailed) : id;
     }
 
     /// <summary>
@@ -41,7 +41,7 @@ public class SystemPermissionGroupController(
     /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPatch("{id}")]
-    public async Task<ActionResult<SystemPermissionGroup?>> UpdateAsync([FromRoute] Guid id, SystemPermissionGroupUpdateDto dto)
+    public async Task<ActionResult<bool?>> UpdateAsync([FromRoute] Guid id, SystemPermissionGroupUpdateDto dto)
     {
         SystemPermissionGroup? current = await _manager.GetCurrentAsync(id);
         if (current == null)
@@ -69,15 +69,10 @@ public class SystemPermissionGroupController(
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
-    public async Task<ActionResult<SystemPermissionGroup?>> DeleteAsync([FromRoute] Guid id)
+    public async Task<ActionResult<bool?>> DeleteAsync([FromRoute] Guid id)
     {
         // 注意删除权限
         SystemPermissionGroup? entity = await _manager.GetCurrentAsync(id);
-        if (entity == null)
-        {
-            return NotFound();
-        };
-        // return Forbid();
-        return await _manager.DeleteAsync(entity);
+        return entity == null ? NotFound() : await _manager.DeleteAsync([id]);
     }
 }

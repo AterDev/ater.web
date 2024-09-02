@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.RateLimiting;
 
+using SystemMod.Managers;
 using SystemMod.Models;
 using SystemMod.Models.SystemUserDtos;
 
@@ -100,8 +101,6 @@ public class SystemUserController(
                 permissionGroups = await _roleManager.GetPermissionGroupsAsync([.. user.SystemRoles]);
             }
 
-            await _manager.SaveChangesAsync();
-
             // 缓存登录状态
             string client = Request.Headers[AterConst.ClientHeader].FirstOrDefault() ?? AterConst.Web;
             if (loginPolicy.SessionLevel == SessionLevel.OnlyOne)
@@ -154,7 +153,7 @@ public class SystemUserController(
     [Authorize(AterConst.SuperAdmin)]
     public async Task<ActionResult<PageList<SystemUserItemDto>>> FilterAsync(SystemUserFilterDto filter)
     {
-        return await _manager.FilterAsync(filter);
+        return await _manager.ToPageAsync(filter);
     }
 
     /// <summary>
@@ -164,10 +163,10 @@ public class SystemUserController(
     /// <returns></returns>
     [HttpPost]
     [Authorize(AterConst.SuperAdmin)]
-    public async Task<ActionResult<SystemUser>> AddAsync(SystemUserAddDto dto)
+    public async Task<ActionResult<Guid?>> AddAsync(SystemUserAddDto dto)
     {
-        SystemUser entity = await _manager.CreateNewEntityAsync(dto);
-        return await _manager.AddAsync(entity);
+        var id = await _manager.AddAsync(dto);
+        return id == null ? Problem(ErrorMsg.AddFailed) : id;
     }
 
     /// <summary>
@@ -178,7 +177,7 @@ public class SystemUserController(
     /// <returns></returns>
     [HttpPatch("{id}")]
     [Authorize(AterConst.SuperAdmin)]
-    public async Task<ActionResult<SystemUser?>> UpdateAsync([FromRoute] Guid id, SystemUserUpdateDto dto)
+    public async Task<ActionResult<bool?>> UpdateAsync([FromRoute] Guid id, SystemUserUpdateDto dto)
     {
         SystemUser? current = await _manager.GetCurrentAsync(id);
         return current == null ? NotFound(ErrorMsg.NotFoundResource) : await _manager.UpdateAsync(current, dto);
@@ -222,10 +221,10 @@ public class SystemUserController(
     /// <returns></returns>
     [HttpDelete("{id}")]
     [Authorize(AterConst.SuperAdmin)]
-    public async Task<ActionResult<SystemUser?>> DeleteAsync([FromRoute] Guid id)
+    public async Task<ActionResult<bool?>> DeleteAsync([FromRoute] Guid id)
     {
         // 注意删除权限
-        SystemUser? entity = await _manager.GetCurrentAsync(id);
-        return entity == null ? NotFound() : await _manager.DeleteAsync(entity, false);
+        SystemUser? entity = await _manager.GetOwnedAsync(id);
+        return entity == null ? NotFound() : await _manager.DeleteAsync([id], false);
     }
 }

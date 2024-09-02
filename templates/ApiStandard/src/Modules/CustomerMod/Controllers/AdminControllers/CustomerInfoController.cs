@@ -1,10 +1,11 @@
+using CustomerMod.Managers;
 using CustomerMod.Models.CustomerInfoDtos;
 namespace CustomerMod.Controllers.AdminControllers;
 
 /// <summary>
 /// 客户信息
 /// </summary>
-/// <see cref="CustomerMod.Manager.CustomerInfoManager"/>
+/// <see cref="Managers.CustomerInfoManager"/>
 public class CustomerInfoController(
     IUserContext user,
     ILogger<CustomerInfoController> logger,
@@ -20,7 +21,7 @@ public class CustomerInfoController(
     [HttpPost("filter")]
     public async Task<ActionResult<PageList<CustomerInfoItemDto>>> FilterAsync(CustomerInfoFilterDto filter)
     {
-        return await _manager.FilterAsync(filter);
+        return await _manager.ToPageAsync(filter);
     }
 
     /// <summary>
@@ -29,14 +30,14 @@ public class CustomerInfoController(
     /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<ActionResult<CustomerInfo>> AddAsync(CustomerInfoAddDto dto)
+    public async Task<ActionResult<Guid?>> AddAsync(CustomerInfoAddDto dto)
     {
         if (await _manager.IsConflictAsync(dto.Name, dto.ContactInfo))
         {
             return Conflict(ErrorMsg.ConflictResource);
         }
-        var entity = await _manager.CreateNewEntityAsync(dto);
-        return await _manager.AddAsync(entity);
+        var id = await _manager.AddAsync(dto);
+        return id == null ? Problem(ErrorMsg.AddFailed) : id;
     }
 
     /// <summary>
@@ -46,7 +47,7 @@ public class CustomerInfoController(
     /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPatch("{id}")]
-    public async Task<ActionResult<CustomerInfo?>> UpdateAsync([FromRoute] Guid id, CustomerInfoUpdateDto dto)
+    public async Task<ActionResult<bool?>> UpdateAsync([FromRoute] Guid id, CustomerInfoUpdateDto dto)
     {
         var current = await _manager.GetCurrentAsync(id);
         if (current == null) { return NotFound("不存在的资源"); };
@@ -72,12 +73,10 @@ public class CustomerInfoController(
     /// <returns></returns>
     // [ApiExplorerSettings(IgnoreApi = true)]
     [HttpDelete("{id}")]
-    public async Task<ActionResult<CustomerInfo?>> DeleteAsync([FromRoute] Guid id)
+    public async Task<ActionResult<bool?>> DeleteAsync([FromRoute] Guid id)
     {
         // 注意删除权限
         var entity = await _manager.GetCurrentAsync(id);
-        if (entity == null) { return NotFound(); };
-        // return Forbid();
-        return await _manager.DeleteAsync(entity);
+        return entity == null ? NotFound() : await _manager.DeleteAsync([id], false);
     }
 }

@@ -31,7 +31,10 @@ public class SystemPermission : EntityBase
     /// <summary>
     /// 权限组
     /// </summary>
-    public required SystemPermissionGroup Group { get; set; }
+    [ForeignKey(nameof(GroupId))]
+    public SystemPermissionGroup Group { get; set; } = null!;
+
+    public Guid GroupId { get; set; } = default!;
 
 }
 

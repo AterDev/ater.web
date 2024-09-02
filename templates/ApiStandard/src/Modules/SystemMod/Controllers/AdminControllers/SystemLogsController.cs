@@ -1,3 +1,4 @@
+using SystemMod.Managers;
 using SystemMod.Models.SystemLogsDtos;
 namespace SystemMod.Controllers.AdminControllers;
 
@@ -20,7 +21,7 @@ public class SystemLogsController(
     [HttpPost("filter")]
     public async Task<ActionResult<PageList<SystemLogsItemDto>>> FilterAsync(SystemLogsFilterDto filter)
     {
-        return await _manager.FilterAsync(filter);
+        return await _manager.ToPageAsync(filter);
     }
 
 }

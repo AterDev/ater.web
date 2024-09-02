@@ -1,9 +1,5 @@
-using Ater.Web.Abstraction.EntityFramework;
-
 using Entity.SystemMod;
-
 using EntityFramework.DBProvider;
-
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Application.Implement;
@@ -12,20 +8,19 @@ namespace Application.Implement;
 /// Manager base class
 /// </summary>
 /// <typeparam name="TEntity">实体类型</typeparam>
-/// <typeparam name="TUpdate">更新DTO</typeparam>
-/// <typeparam name="TFilter">筛选DTO</typeparam>
-/// <typeparam name="TItem">列表元素DTO</typeparam>
-public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem> : ManagerBase<TEntity>
+public partial class ManagerBase<TEntity> : ManagerBase
     where TEntity : class, IEntityBase
-    where TFilter : FilterBase
 {
     #region Properties and Fields
-    protected IUserContext? UserContext { get; private set; }
-
     /// <summary>
     /// 自动日志类型
     /// </summary>
     protected LogActionType AutoLogType { get; private set; } = LogActionType.None;
+
+    /// <summary>
+    /// 全局筛选
+    /// </summary>
+    public bool EnableGlobalQuery { get; set; } = true;
 
     /// <summary>
     /// 是否自动保存(调用SaveChanges)
@@ -46,14 +41,31 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem> : ManagerBase
     public TEntity? CurrentEntity { get; set; }
     #endregion
 
-    public ManagerBase(DataAccessContext<TEntity> dataAccessContext, ILogger logger) : base(dataAccessContext, logger)
+    protected CommandDbContext CommandContext { get; init; }
+    protected QueryDbContext QueryContext { get; init; }
+    protected DatabaseFacade Database { get; init; }
+    /// <summary>
+    /// 实体的只读仓储实现
+    /// </summary>
+    protected DbSet<TEntity> Query { get; init; }
+    /// <summary>
+    /// 实体的可写仓储实现
+    /// </summary>
+    protected DbSet<TEntity> Command { get; init; }
+    protected IQueryable<TEntity> Queryable { get; set; }
+
+    public ManagerBase(DataAccessContext<TEntity> dataAccessContext, ILogger logger) : base(logger)
     {
-        Query = dataAccessContext.QuerySet();
-        Command = dataAccessContext.CommandSet();
-        Queryable = Query.Queryable;
-        Database = Command.Database;
         CommandContext = dataAccessContext.CommandContext;
         QueryContext = dataAccessContext.QueryContext;
+        Database = CommandContext.Database;
+        Query = QueryContext.Set<TEntity>();
+        Command = CommandContext.Set<TEntity>();
+        Queryable = Query.AsNoTracking().AsQueryable();
+        if (!EnableGlobalQuery)
+        {
+            Queryable = Queryable.IgnoreQueryFilters();
+        }
     }
 
     /// <summary>
@@ -63,63 +75,42 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem> : ManagerBase
     /// <returns></returns>
     public virtual async Task<TEntity?> GetCurrentAsync(Guid id)
     {
-        return await Command.FindAsync(e => e.Id == id);
+        return await Command.FindAsync(id);
     }
-
-    public virtual async Task<TEntity> AddAsync(TEntity entity)
-    {
-        TEntity res = await Command.CreateAsync(entity);
-        await AutoSaveAsync();
-
-        if (AutoLogType is LogActionType.Add or LogActionType.All or LogActionType.AddOrUpdate)
-        {
-            await SaveToLogAsync(entity, UserActionType.Add);
-        }
-        return res;
-    }
-
 
     /// <summary>
-    /// 更新简单对象
-    /// 有关联对象需要手动处理
+    /// 获取实体
     /// </summary>
-    /// <param name="entity"></param>
-    /// <param name="dto"></param>
+    /// <param name="id"></param>
     /// <returns></returns>
-    public virtual async Task<TEntity> UpdateAsync(TEntity entity, TUpdate dto)
-    {
-        _ = entity.Merge(dto, true);
-        entity.UpdatedTime = DateTimeOffset.UtcNow;
-        TEntity res = Command.Update(entity);
-        await AutoSaveAsync();
-        if (AutoLogType is LogActionType.Update or LogActionType.All or LogActionType.AddOrUpdate)
-        {
-            await SaveToLogAsync(entity, UserActionType.Update);
-        }
-        return res;
-    }
-
-    public virtual async Task<TEntity?> DeleteAsync(TEntity entity, bool softDelete = true)
-    {
-        Command.EnableSoftDelete = softDelete;
-        TEntity? res = Command.Remove(entity);
-        await AutoSaveAsync();
-
-        if (AutoLogType is LogActionType.Delete or LogActionType.All)
-        {
-            await SaveToLogAsync(entity, UserActionType.Delete);
-        }
-        return res;
-    }
-
     public virtual async Task<TEntity?> FindAsync(Guid id)
     {
-        return await Query.FindAsync(q => q.Id == id);
+        var entity = await Query.FindAsync(id);
+        if (entity != null)
+        {
+            Command.Attach(entity);
+        }
+        return entity;
     }
 
-    public virtual async Task<TDto?> FindAsync<TDto>(Expression<Func<TEntity, bool>>? whereExp = null) where TDto : class
+    /// <summary>
+    /// 实体查询
+    /// </summary>
+    /// <typeparam name="TDto"></typeparam>
+    /// <param name="whereExp"></param>
+    /// <returns></returns>
+    public async Task<TDto?> FindAsync<TDto>(Expression<Func<TEntity, bool>>? whereExp = null) where TDto : class
     {
-        return await Query.FindAsync<TDto>(whereExp);
+        var model = await Query.AsNoTracking()
+            .Where(whereExp ?? (e => true))
+            .ProjectTo<TDto>()
+            .FirstOrDefaultAsync();
+
+        if (typeof(TDto) is TEntity && model != null)
+        {
+            Command.Attach((model as TEntity)!);
+        }
+        return model;
     }
 
     /// <summary>
@@ -129,7 +120,7 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem> : ManagerBase
     /// <returns></returns>
     public virtual async Task<bool> ExistAsync(Guid id)
     {
-        return await Query.Db.AnyAsync(q => q.Id == id);
+        return await Query.AnyAsync(q => q.Id == id);
     }
 
     /// <summary>
@@ -137,9 +128,9 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem> : ManagerBase
     /// </summary>
     /// <param name="whereExp"></param>
     /// <returns></returns>
-    public virtual async Task<bool> ExistAsync(Expression<Func<TEntity, bool>> whereExp)
+    public async Task<bool> ExistAsync(Expression<Func<TEntity, bool>> whereExp)
     {
-        return await Query.Db.AnyAsync(whereExp);
+        return await Query.AnyAsync(whereExp);
     }
 
     /// <summary>
@@ -148,13 +139,19 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem> : ManagerBase
     /// <typeparam name="TDto">返回类型</typeparam>
     /// <param name="whereExp"></param>
     /// <returns></returns>
-    public virtual async Task<List<TDto>> ListAsync<TDto>(Expression<Func<TEntity, bool>>? whereExp = null) where TDto : class
+    public async Task<List<TDto>> ToListAsync<TDto>(Expression<Func<TEntity, bool>>? whereExp = null) where TDto : class
     {
-        return await Query.ListAsync<TDto>(whereExp);
+        return await Query.AsNoTracking()
+            .Where(whereExp ?? (e => true))
+            .ProjectTo<TDto>()
+            .ToListAsync();
     }
-    public virtual async Task<List<TEntity>> ListAsync(Expression<Func<TEntity, bool>>? whereExp = null)
+
+    public async Task<List<TEntity>> ToListAsync(Expression<Func<TEntity, bool>>? whereExp = null)
     {
-        return await Query.ListAsync(whereExp);
+        return await Query.AsNoTracking()
+            .Where(whereExp ?? (e => true))
+            .ToListAsync();
     }
 
     /// <summary>
@@ -162,33 +159,67 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem> : ManagerBase
     /// </summary>
     /// <param name="filter"></param>
     /// <returns></returns>
-    public virtual async Task<PageList<TItem>> FilterAsync(TFilter filter)
+    public async Task<PageList<TItem>> ToPageAsync<TFilter, TItem>(TFilter filter) where TFilter : FilterBase where TItem : class
     {
-        return await Query.FilterAsync<TItem>(Queryable, filter.PageIndex, filter.PageSize, filter.OrderBy);
+        Queryable = filter.OrderBy != null
+            ? Queryable.OrderBy(filter.OrderBy)
+            : Queryable.OrderByDescending(t => t.CreatedTime);
+
+        var count = Queryable.Count();
+        List<TItem> data = await Queryable
+            .AsNoTracking()
+            .Skip((filter.PageIndex - 1) * filter.PageSize)
+            .Take(filter.PageSize)
+            .ProjectTo<TItem>()
+            .ToListAsync();
+
+        ResetQuery();
+        return new PageList<TItem>
+        {
+            Count = count,
+            Data = data,
+            PageIndex = filter.PageIndex
+        };
     }
 
     /// <summary>
-    /// 加载导航数据
+    /// 添加实体
     /// </summary>
-    /// <typeparam name="TProperty"></typeparam>
     /// <param name="entity"></param>
-    /// <param name="propertyExpression"></param>
     /// <returns></returns>
-    public async Task LoadAsync<TProperty>(TEntity entity, Expression<Func<TEntity, TProperty?>> propertyExpression) where TProperty : class
+    public async Task<bool> AddAsync(TEntity entity)
     {
-        await CommandContext.Entry(entity).Reference(propertyExpression).LoadAsync();
+        await Command.AddAsync(entity);
+        if (AutoSave)
+        {
+            return await SaveChangesAsync() > 0;
+        }
+
+        if (AutoLogType is LogActionType.Add or LogActionType.All or LogActionType.AddOrUpdate)
+        {
+            await SaveToLogAsync(UserActionType.Add, entity.GetType().Name);
+        }
+        return true;
     }
 
     /// <summary>
-    /// 加载关联数据
+    /// 更新实体
     /// </summary>
-    /// <typeparam name="TProperty"></typeparam>
-    /// <param name="entity"></param>
-    /// <param name="propertyExpression"></param>
+    /// <param name="entity">已跟踪的实体</param>
     /// <returns></returns>
-    public async Task LoadManyAsync<TProperty>(TEntity entity, Expression<Func<TEntity, IEnumerable<TProperty>>> propertyExpression) where TProperty : class
+    public async Task<bool> UpdateAsync(TEntity entity)
     {
-        await CommandContext.Entry(entity).Collection(propertyExpression).LoadAsync();
+        Command.Update(entity);
+        if (AutoSave)
+        {
+            return await SaveChangesAsync() > 0;
+        }
+
+        if (AutoLogType is LogActionType.Update or LogActionType.All or LogActionType.AddOrUpdate)
+        {
+            await SaveToLogAsync(UserActionType.Update, entity.GetType().Name);
+        }
+        return true;
     }
 
 
@@ -196,9 +227,9 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem> : ManagerBase
     /// 更新关联数据
     /// </summary>
     /// <typeparam name="TProperty"></typeparam>
-    /// <param name="entity"></param>
-    /// <param name="propertyExpression"></param>
-    /// <param name="data"></param>
+    /// <param name="entity">当前实体</param>
+    /// <param name="propertyExpression">导航属性</param>
+    /// <param name="data">新数据</param>
     public void UpdateRelation<TProperty>(TEntity entity, Expression<Func<TEntity, IEnumerable<TProperty>>> propertyExpression, List<TProperty> data) where TProperty : class
     {
         var currentValue = CommandContext.Entry(entity).Collection(propertyExpression).CurrentValue;
@@ -210,42 +241,124 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem> : ManagerBase
         CommandContext.AddRange(data);
     }
 
-    public async Task<int> SaveChangesAsync()
+    /// <summary>
+    /// 批量保存
+    /// </summary>
+    /// <param name="entityList"></param>
+    /// <returns></returns>
+    public async Task<bool> SaveAsync(List<TEntity> entityList)
     {
-        return await Command.SaveChangesAsync();
+        var Ids = await Command.Select(e => e.Id).ToListAsync();
+        // new entity by id
+        var newEntities = entityList.Where(d => !Ids.Contains(d.Id)).ToList();
+
+        var updateEntities = entityList.Where(d => Ids.Contains(d.Id)).ToList();
+        var removeEntities = Ids.Where(d => !entityList.Select(e => e.Id).Contains(d)).ToList();
+
+        if (newEntities.Any())
+        {
+            await Command.AddRangeAsync(newEntities);
+        }
+        if (updateEntities.Any())
+        {
+            Command.UpdateRange(updateEntities);
+        }
+        try
+        {
+            if (removeEntities.Any())
+            {
+                await Command.Where(d => removeEntities.Contains(d.Id)).ExecuteDeleteAsync();
+            }
+            _ = await SaveChangesAsync();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "AddOrUpdateAsync");
+            return false;
+        }
     }
 
-    private async Task AutoSaveAsync()
+    /// <summary>
+    /// 删除实体
+    /// </summary>
+    /// <param name="ids">实体id</param>
+    /// <param name="softDelete">是否软件删除</param>
+    /// <returns></returns>
+    public async Task<bool?> DeleteAsync(List<Guid> ids, bool softDelete = true)
     {
-        if (AutoSave)
+        var res = 0;
+        if (softDelete)
         {
-            _ = await SaveChangesAsync();
+            res = await Command.Where(d => ids.Contains(d.Id))
+                .ExecuteUpdateAsync(d => d.SetProperty(d => d.IsDeleted, true));
         }
+        else
+        {
+            res = await Command.Where(d => ids.Contains(d.Id)).ExecuteDeleteAsync();
+        }
+
+        if (AutoLogType is LogActionType.Delete or LogActionType.All)
+        {
+            var target = string.Join(",", ids);
+            await SaveToLogAsync(UserActionType.Delete, target);
+        }
+        return res > 0;
+    }
+
+    /// <summary>
+    /// 加载导航数据
+    /// </summary>
+    /// <typeparam name="TProperty"></typeparam>
+    /// <param name="entity"></param>
+    /// <param name="propertyExpression"></param>
+    /// <returns></returns>
+    protected async Task LoadAsync<TProperty>(TEntity entity, Expression<Func<TEntity, TProperty?>> propertyExpression) where TProperty : class
+    {
+        await CommandContext.Entry(entity).Reference(propertyExpression).LoadAsync();
+    }
+
+    /// <summary>
+    /// 加载关联数据
+    /// </summary>
+    /// <typeparam name="TProperty"></typeparam>
+    /// <param name="entity"></param>
+    /// <param name="propertyExpression"></param>
+    /// <returns></returns>
+    protected async Task LoadManyAsync<TProperty>(TEntity entity, Expression<Func<TEntity, IEnumerable<TProperty>>> propertyExpression) where TProperty : class
+    {
+        await CommandContext.Entry(entity).Collection(propertyExpression).LoadAsync();
+    }
+
+    protected async Task<int> SaveChangesAsync()
+    {
+        return await CommandContext.SaveChangesAsync();
     }
 
     /// <summary>
     /// 日志记录
     /// </summary>
-    /// <param name="entity"></param>
     /// <param name="actionType"></param>
+    /// <param name="targetName">对象名称</param>
+    /// <param name="description">描述</param>
     /// <returns></returns>
-    private async Task SaveToLogAsync(TEntity entity, UserActionType actionType)
+    private async Task SaveToLogAsync(UserActionType actionType, string targetName, string? description = null)
     {
-        if (UserContext == null)
+        var userContext = WebAppContext.GetScopeService<IUserContext>();
+
+        if (userContext == null)
         {
             _logger.LogWarning("UserContext is null, can't save log");
             return;
         }
 
-        var route = UserContext.GetHttpContext()?.Request.Path.Value;
-        var description = string.Empty;
-        var targetName = entity.GetType().Name;
+        var route = userContext.GetHttpContext()?.Request.Path.Value;
 
-        if (UserContext.IsAdmin)
+        if (userContext.IsAdmin)
         {
             // 管理员日志
             // 使用SystemMod时生效
-            var log = SystemLogs.NewLog(UserContext.Username ?? "", UserContext.UserId, targetName, actionType, route, description);
+            var log = SystemLogs.NewLog(userContext.Username ?? "", userContext.UserId, targetName, actionType, route, description);
             var taskQueue = WebAppContext.GetScopeService<IEntityTaskQueue<SystemLogs>>();
             if (taskQueue != null)
             {
@@ -255,7 +368,7 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem> : ManagerBase
         else
         {
             // 用户日志
-            var log = UserLogs.NewLog(UserContext.Username ?? "", UserContext.UserId, targetName, actionType, route, description);
+            var log = UserLogs.NewLog(userContext.Username ?? "", userContext.UserId, targetName, actionType, route, description);
             var taskQueue = WebAppContext.GetScopeService<IEntityTaskQueue<UserLogs>>();
             if (taskQueue != null)
             {
@@ -263,38 +376,23 @@ public partial class ManagerBase<TEntity, TUpdate, TFilter, TItem> : ManagerBase
             }
         }
     }
+
+    /// <summary>
+    /// reset queryable
+    /// </summary>
+    private void ResetQuery()
+    {
+        Queryable = EnableGlobalQuery
+            ? Query.AsQueryable()
+            : Queryable.IgnoreQueryFilters().AsQueryable();
+    }
 }
 
 /// <summary>
-/// Manager基类
+/// Manager base without entity
 /// </summary>
-/// <typeparam name="TEntity">实体类型</typeparam>
-public class ManagerBase<TEntity> where TEntity : class, IEntityBase
+/// <param name="logger"></param>
+public class ManagerBase(ILogger logger)
 {
-    protected readonly ILogger _logger;
-    /// <summary>
-    /// 实体的只读仓储实现
-    /// </summary>
-    protected QuerySet<QueryDbContext, TEntity> Query { get; init; }
-    /// <summary>
-    /// 实体的可写仓储实现
-    /// </summary>
-    protected CommandSet<CommandDbContext, TEntity> Command { get; init; }
-    protected IQueryable<TEntity> Queryable { get; set; }
-
-    protected CommandDbContext CommandContext { get; init; }
-
-    protected QueryDbContext QueryContext { get; init; }
-    protected DatabaseFacade Database { get; init; }
-
-    public ManagerBase(DataAccessContext<TEntity> dataAccessContext, ILogger logger)
-    {
-        Query = dataAccessContext.QuerySet();
-        Command = dataAccessContext.CommandSet();
-        Queryable = Query.Queryable;
-        Database = Command.Database;
-        _logger = logger;
-        CommandContext = dataAccessContext.CommandContext;
-        QueryContext = dataAccessContext.QueryContext;
-    }
+    protected readonly ILogger _logger = logger;
 }

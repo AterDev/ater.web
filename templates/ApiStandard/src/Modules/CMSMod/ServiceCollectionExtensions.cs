@@ -1,5 +1,5 @@
 // 本文件由 ater.dry工具自动生成.
-using CMSMod.Manager;
+using CMSMod.Managers;
 
 using Microsoft.Extensions.DependencyInjection;
 

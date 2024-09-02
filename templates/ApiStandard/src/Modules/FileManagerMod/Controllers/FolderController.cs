@@ -1,12 +1,13 @@
 using Application;
-using Entity.FileManagerMod;
+
+using FileManagerMod.Managers;
 using FileManagerMod.Models.FolderDtos;
 namespace FileManagerMod.Controllers;
 
 /// <summary>
 /// 文件夹
 /// </summary>
-/// <see cref="FileManagerMod.Manager.FolderManager"/>
+/// <see cref="Managers.FolderManager"/>
 public class FolderController(
     IUserContext user,
     ILogger<FolderController> logger,
@@ -22,7 +23,7 @@ public class FolderController(
     [HttpPost("filter")]
     public async Task<ActionResult<PageList<FolderItemDto>>> FilterAsync(FolderFilterDto filter)
     {
-        return await _manager.FilterAsync(filter);
+        return await _manager.ToPageAsync(filter);
     }
 
     /// <summary>
@@ -31,10 +32,10 @@ public class FolderController(
     /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<ActionResult<Folder>> AddAsync(FolderAddDto dto)
+    public async Task<ActionResult<Guid?>> AddAsync(FolderAddDto dto)
     {
-        Folder entity = await _manager.CreateNewEntityAsync(dto);
-        return await _manager.AddAsync(entity);
+        var id = await _manager.AddAsync(dto);
+        return id == null ? Problem(ErrorMsg.AddFailed) : id;
     }
 
     /// <summary>
@@ -44,7 +45,7 @@ public class FolderController(
     /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPatch("{id}")]
-    public async Task<ActionResult<Folder?>> UpdateAsync([FromRoute] Guid id, FolderUpdateDto dto)
+    public async Task<ActionResult<bool?>> UpdateAsync([FromRoute] Guid id, FolderUpdateDto dto)
     {
         Folder? current = await _manager.GetCurrentAsync(id);
         if (current == null)
@@ -73,15 +74,10 @@ public class FolderController(
     /// <returns></returns>
     // [ApiExplorerSettings(IgnoreApi = true)]
     [HttpDelete("{id}")]
-    public async Task<ActionResult<Folder?>> DeleteAsync([FromRoute] Guid id)
+    public async Task<ActionResult<bool?>> DeleteAsync([FromRoute] Guid id)
     {
         // 注意删除权限
         Folder? entity = await _manager.GetCurrentAsync(id);
-        if (entity == null)
-        {
-            return NotFound();
-        };
-        // return Forbid();
-        return await _manager.DeleteAsync(entity);
+        return entity == null ? NotFound() : await _manager.DeleteAsync([id], false);
     }
 }

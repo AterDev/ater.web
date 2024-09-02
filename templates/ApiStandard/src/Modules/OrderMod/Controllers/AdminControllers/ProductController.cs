@@ -1,12 +1,13 @@
 using Application;
-using Entity.OrderMod;
+
+using OrderMod.Managers;
 using OrderMod.Models.ProductDtos;
 namespace OrderMod.Controllers.AdminControllers;
 
 /// <summary>
 /// 产品
 /// </summary>
-/// <see cref="OrderMod.Manager.ProductManager"/>
+/// <see cref="Managers.ProductManager"/>
 public class ProductController(
     IUserContext user,
     ILogger<ProductController> logger,
@@ -22,7 +23,7 @@ public class ProductController(
     [HttpPost("filter")]
     public async Task<ActionResult<PageList<ProductItemDto>>> FilterAsync(ProductFilterDto filter)
     {
-        return await _manager.FilterAsync(filter);
+        return await _manager.ToPageAsync(filter);
     }
 
     /// <summary>
@@ -31,10 +32,10 @@ public class ProductController(
     /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<ActionResult<Product>> AddAsync(ProductAddDto dto)
+    public async Task<ActionResult<Guid?>> AddAsync(ProductAddDto dto)
     {
-        Product entity = await _manager.CreateNewEntityAsync(dto);
-        return await _manager.AddAsync(entity);
+        var id = await _manager.AddAsync(dto);
+        return id == null ? Problem(ErrorMsg.AddFailed) : id;
     }
 
     /// <summary>
@@ -44,7 +45,7 @@ public class ProductController(
     /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPatch("{id}")]
-    public async Task<ActionResult<Product?>> UpdateAsync([FromRoute] Guid id, ProductUpdateDto dto)
+    public async Task<ActionResult<bool?>> UpdateAsync([FromRoute] Guid id, ProductUpdateDto dto)
     {
         Product? current = await _manager.GetCurrentAsync(id);
         if (current == null)
@@ -71,17 +72,11 @@ public class ProductController(
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    // [ApiExplorerSettings(IgnoreApi = true)]
     [HttpDelete("{id}")]
-    public async Task<ActionResult<Product?>> DeleteAsync([FromRoute] Guid id)
+    public async Task<ActionResult<bool?>> DeleteAsync([FromRoute] Guid id)
     {
         // 注意删除权限
         Product? entity = await _manager.GetCurrentAsync(id);
-        if (entity == null)
-        {
-            return NotFound();
-        };
-        // return Forbid();
-        return await _manager.DeleteAsync(entity);
+        return entity == null ? NotFound() : await _manager.DeleteAsync([id], false);
     }
 }

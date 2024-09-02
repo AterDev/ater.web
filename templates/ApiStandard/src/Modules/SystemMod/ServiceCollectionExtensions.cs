@@ -1,6 +1,7 @@
 // 本文件由 ater.dry工具自动生成.
 using Ater.Web.Abstraction.Interface;
-using Entity.SystemMod;
+
+using SystemMod.Managers;
 using SystemMod.Worker;
 
 namespace SystemMod;

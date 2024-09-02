@@ -1,3 +1,4 @@
+using SystemMod.Managers;
 using SystemMod.Models.SystemRoleDtos;
 namespace SystemMod.Controllers.AdminControllers;
 
@@ -21,7 +22,7 @@ public class SystemRoleController(
     [HttpPost("filter")]
     public async Task<ActionResult<PageList<SystemRoleItemDto>>> FilterAsync(SystemRoleFilterDto filter)
     {
-        return await _manager.FilterAsync(filter);
+        return await _manager.ToPageAsync(filter);
     }
 
     /// <summary>
@@ -30,10 +31,10 @@ public class SystemRoleController(
     /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<ActionResult<SystemRole>> AddAsync(SystemRoleAddDto dto)
+    public async Task<ActionResult<Guid?>> AddAsync(SystemRoleAddDto dto)
     {
-        SystemRole entity = await _manager.CreateNewEntityAsync(dto);
-        return await _manager.AddAsync(entity);
+        var id = await _manager.AddAsync(dto);
+        return id == null ? Problem(ErrorMsg.AddFailed) : id;
     }
 
     /// <summary>
@@ -43,7 +44,7 @@ public class SystemRoleController(
     /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPatch("{id}")]
-    public async Task<ActionResult<SystemRole?>> UpdateAsync([FromRoute] Guid id, SystemRoleUpdateDto dto)
+    public async Task<ActionResult<bool?>> UpdateAsync([FromRoute] Guid id, SystemRoleUpdateDto dto)
     {
         SystemRole? current = await _manager.GetOwnedAsync(id);
         if (current == null)
@@ -107,7 +108,7 @@ public class SystemRoleController(
     /// <returns></returns>
     // [ApiExplorerSettings(IgnoreApi = true)]
     [HttpDelete("{id}")]
-    public async Task<ActionResult<SystemRole?>> DeleteAsync([FromRoute] Guid id)
+    public async Task<ActionResult<bool?>> DeleteAsync([FromRoute] Guid id)
     {
         // 注意删除权限
         SystemRole? entity = await _manager.GetOwnedAsync(id);
@@ -116,6 +117,6 @@ public class SystemRoleController(
             return NotFound();
         }
         // return Forbid();
-        return await _manager.DeleteAsync(entity, false);
+        return entity == null ? NotFound() : await _manager.DeleteAsync([id], false);
     }
 }

@@ -1,4 +1,4 @@
-using Entity.SystemMod;
+using SystemMod.Managers;
 using SystemMod.Models.SystemConfigDtos;
 namespace SystemMod.Controllers.AdminControllers;
 
@@ -21,7 +21,7 @@ public class SystemConfigController(
     [HttpPost("filter")]
     public async Task<ActionResult<PageList<SystemConfigItemDto>>> FilterAsync(SystemConfigFilterDto filter)
     {
-        return await _manager.FilterAsync(filter);
+        return await _manager.ToPageAsync(filter);
     }
 
     /// <summary>
@@ -39,10 +39,10 @@ public class SystemConfigController(
     /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<ActionResult<SystemConfig>> AddAsync(SystemConfigAddDto dto)
+    public async Task<ActionResult<Guid?>> AddAsync(SystemConfigAddDto dto)
     {
-        SystemConfig entity = await _manager.CreateNewEntityAsync(dto);
-        return await _manager.AddAsync(entity);
+        var id = await _manager.AddAsync(dto);
+        return id == null ? Problem(ErrorMsg.AddFailed) : id;
     }
 
     /// <summary>
@@ -52,7 +52,7 @@ public class SystemConfigController(
     /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPatch("{id}")]
-    public async Task<ActionResult<SystemConfig?>> UpdateAsync([FromRoute] Guid id, SystemConfigUpdateDto dto)
+    public async Task<ActionResult<bool?>> UpdateAsync([FromRoute] Guid id, SystemConfigUpdateDto dto)
     {
         SystemConfig? current = await _manager.GetCurrentAsync(id);
         if (current == null)
@@ -80,7 +80,7 @@ public class SystemConfigController(
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
-    public async Task<ActionResult<SystemConfig?>> DeleteAsync([FromRoute] Guid id)
+    public async Task<ActionResult<bool?>> DeleteAsync([FromRoute] Guid id)
     {
         // 注意删除权限
         SystemConfig? entity = await _manager.GetCurrentAsync(id);
@@ -90,6 +90,6 @@ public class SystemConfigController(
         };
         return entity.IsSystem
             ? Problem("系统配置，无法删除!")
-            : await _manager.DeleteAsync(entity);
+            : await _manager.DeleteAsync([id], false);
     }
 }

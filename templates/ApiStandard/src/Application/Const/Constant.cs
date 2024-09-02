@@ -5,4 +5,5 @@
 public static class Constant
 {
     // TODO: 定义应用常量
+
 }
