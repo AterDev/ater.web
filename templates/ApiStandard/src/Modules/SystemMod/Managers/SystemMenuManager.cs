@@ -128,6 +128,7 @@ public class SystemMenuManager(
         {
             menus = await Queryable.Where(q => q.Roles.Any(r => r.Id == filter.RoleId))
                 .ToListAsync();
+            menus.BuildTree();
         }
         else if (filter.ParentId != null)
         {
