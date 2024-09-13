@@ -1,4 +1,6 @@
-﻿namespace Entity.SystemMod;
+﻿using System.Text.Json.Serialization;
+
+namespace Entity.SystemMod;
 /// <summary>
 /// 系统日志
 /// </summary>
@@ -18,7 +20,11 @@ public class SystemLogs : EntityBase
     /// 操作对象名称
     /// </summary>
     [MaxLength(100)]
-    public required string TargetName { get; set; }
+    public string? TargetName { get; set; }
+
+    [NotMapped]
+    [JsonIgnore]
+    public object? Data { get; set; }
 
     /// <summary>
     /// 操作路由

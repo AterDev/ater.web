@@ -1,4 +1,6 @@
-﻿using Ater.Web.Abstraction.Interface;
+﻿using System.Reflection;
+using Ater.Web.Abstraction.Interface;
+using Ater.Web.Core.Attributes;
 using EntityFramework.DBProvider;
 using Microsoft.Extensions.Hosting;
 
@@ -26,6 +28,25 @@ public class SystemLogTaskHostedService(IServiceProvider serviceProvider, IEntit
         while (!stoppingToken.IsCancellationRequested)
         {
             var log = await _taskQueue.DequeueAsync(stoppingToken);
+            log.TargetName = log.Data?.GetType().Name;
+            var entity = log.Data;
+            if (entity != null)
+            {
+                var type = entity.GetType();
+                var attribute = type?.GetCustomAttribute<LogDescriptionAttribute>();
+                if (attribute != null)
+                {
+                    log.TargetName = attribute.Description;
+                    if (attribute.FieldName != null)
+                    {
+                        var fieldValue = type!.GetProperty(attribute.FieldName)?.GetValue(entity);
+                        if (fieldValue != null)
+                        {
+                            log.TargetName = fieldValue as string;
+                        }
+                    }
+                }
+            }
             try
             {
                 context.Add(log);

@@ -1,6 +1,6 @@
-﻿using Ater.Web.Abstraction.Interface;
+﻿using Entity.SystemMod;
 
-namespace SystemMod;
+namespace Application.Services;
 /// <summary>
 /// 业务日志服务
 /// </summary>
