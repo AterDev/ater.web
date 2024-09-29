@@ -16,15 +16,18 @@ namespace Ater.Web.Abstraction;
 [ApiExplorerSettings(GroupName = "admin")]
 public class RestControllerBase<TManager>(
     TManager manager,
-    IUserContextBase user,
     ILogger logger
         ) : RestControllerBase
      where TManager : class
 {
     protected readonly TManager _manager = manager;
     protected readonly ILogger _logger = logger;
-    protected readonly IUserContextBase _user = user;
+    protected readonly IUserContextBase? _user;
 
+    public RestControllerBase(TManager manager, IUserContextBase user, ILogger logger) : this(manager, logger)
+    {
+        _user = user;
+    }
 }
 
 /// <summary>
