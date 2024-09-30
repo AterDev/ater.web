@@ -14,20 +14,12 @@ namespace Ater.Web.Abstraction;
 [Route("api/admin/[controller]")]
 [Authorize(AterConst.AdminUser)]
 [ApiExplorerSettings(GroupName = "admin")]
-public class RestControllerBase<TManager>(
-    TManager manager,
-    ILogger logger
-        ) : RestControllerBase
-     where TManager : class
+public class RestControllerBase<TManager>(TManager manager, IUserContextBase user, ILogger logger) : RestControllerBase
+    where TManager : class
 {
     protected readonly TManager _manager = manager;
     protected readonly ILogger _logger = logger;
-    protected readonly IUserContextBase? _user;
-
-    public RestControllerBase(TManager manager, IUserContextBase user, ILogger logger) : this(manager, logger)
-    {
-        _user = user;
-    }
+    protected readonly IUserContextBase _user = user;
 }
 
 /// <summary>
