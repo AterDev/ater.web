@@ -19,7 +19,7 @@ public static class AppSetting
     public const string None = "None";
     public const string Redis = "Redis";
     public const string Memory = "Memory";
-    public const string Otlp = "otlp";
+    public const string OpenTelemetry = "OpenTelemetry";
 
     public const string CommandDB = "CommandDb";
     public const string QueryDB = "QueryDb";
@@ -42,7 +42,8 @@ public static partial class AppServiceCollectionExtensions
     {
         builder.AddDbContext();
         builder.AddCache();
-        var otlpEndpoint = builder.Configuration.GetSection("OpenTelemetry").GetValue<string>("Endpoint");
+        var otlpEndpoint = builder.Configuration.GetSection(AppSetting.OpenTelemetry)
+            .GetValue<string>("Endpoint");
         otlpEndpoint = otlpEndpoint.NotEmpty() ? otlpEndpoint : builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"] ?? "http://localhost:4317";
 
         builder.AddOpenTelemetry("MyProjectName", opt =>
@@ -134,7 +135,7 @@ public static partial class AppServiceCollectionExtensions
         var resource = ResourceBuilder.CreateDefault()
             .AddService(serviceName: serviceName, serviceInstanceId: $"{serviceName}_{Environment.MachineName}");
 
-        var section = builder.Configuration.GetSection("OpenTelemetry");
+        var section = builder.Configuration.GetSection(AppSetting.OpenTelemetry);
         bool exportConsole = false;
         if (section != null)
         {
