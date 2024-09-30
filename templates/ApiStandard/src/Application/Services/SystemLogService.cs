@@ -1,4 +1,6 @@
-﻿using Entity.SystemMod;
+﻿// 系统日志服务示例
+/*
+using Entity.SystemMod;
 
 namespace Application.Services;
 /// <summary>
@@ -46,3 +48,4 @@ public class SystemLogService
         await _taskQueue.AddItemAsync(log);
     }
 }
+*/

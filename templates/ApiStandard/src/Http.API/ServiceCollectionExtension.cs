@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using SystemMod;
 
 namespace Http.API;
 
@@ -32,7 +31,7 @@ public static class ServiceCollectionExtension
         builder.Services.AddSingleton<IEntityTaskQueue<UserLogs>, EntityTaskQueue<UserLogs>>();
 
         // 添加后台系统模块服务
-        builder.Services.AddSystemModServices();
+        //builder.Services.AddSystemModServices();
 
         // TODO:其他模块Manager
         builder.Services.AddSingleton(typeof(CacheService));

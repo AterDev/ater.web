@@ -33,7 +33,7 @@ public class InitDataTask
                 {
                     await InitUserAsync(context, configuration, logger);
                 }
-                await SystemMod.InitModule.InitializeAsync(provider);
+                //await SystemMod.InitModule.InitializeAsync(provider);
                 // [InitModule]
             }
         }
