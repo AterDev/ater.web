@@ -21,7 +21,6 @@
   - EntityFramework `Entity Framework` 定义项目，依赖`Entity`。
 - Application **`Manager`** 业务实现所在项目，包括各类服务。依赖 `Share`,`EntityFramework`。
 - Http.API **`WebAPI`** 接口项目，定义和实现控制器逻辑，对外开放和运行的主程序，依赖`Application`。
-  - ClienApp 集成的前端项目，使用`Angular`框架，可自行替换。
 - Microservice 拆分可单独部署的应用，如微服务项目，通常依赖`Application`项目，以复用相关逻辑代码。
 - Modules 模块目录。不同于拆分成单独的服务，模块的作用主要是实现关注点分离，它仍属于主服务的一部分。模块通常包括：
   - Models 接口所需要的DTO模型

@@ -15,7 +15,7 @@ public class EntityTaskQueue<TEntity> : IEntityTaskQueue<TEntity> where TEntity 
 {
     private readonly Channel<TEntity> _queue;
 
-    public EntityTaskQueue(int capacity = 1000)
+    public EntityTaskQueue(int capacity = 10000)
     {
         var options = new BoundedChannelOptions(capacity)
         {

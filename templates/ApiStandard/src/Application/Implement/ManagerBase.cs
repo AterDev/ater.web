@@ -1,6 +1,9 @@
 using Entity.SystemMod;
+using EntityFramework;
 using EntityFramework.DBProvider;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Implement;
 
@@ -8,7 +11,7 @@ namespace Application.Implement;
 /// Manager base class
 /// </summary>
 /// <typeparam name="TEntity">实体类型</typeparam>
-public partial class ManagerBase<TEntity> : ManagerBase
+public partial class ManagerBase<TEntity>
     where TEntity : class, IEntityBase
 {
     #region Properties and Fields
@@ -41,8 +44,6 @@ public partial class ManagerBase<TEntity> : ManagerBase
     public TEntity? CurrentEntity { get; set; }
     #endregion
 
-    protected CommandDbContext CommandContext { get; init; }
-    protected QueryDbContext QueryContext { get; init; }
     protected DatabaseFacade Database { get; init; }
     /// <summary>
     /// 实体的只读仓储实现
@@ -53,9 +54,13 @@ public partial class ManagerBase<TEntity> : ManagerBase
     /// </summary>
     protected DbSet<TEntity> Command { get; init; }
     protected IQueryable<TEntity> Queryable { get; set; }
+    protected readonly ILogger _logger;
+    protected CommandDbContext CommandContext { get; init; }
+    protected QueryDbContext QueryContext { get; init; }
 
-    public ManagerBase(DataAccessContext<TEntity> dataAccessContext, ILogger logger) : base(logger)
+    public ManagerBase(DataAccessContext<TEntity> dataAccessContext, ILogger logger)
     {
+        _logger = logger;
         CommandContext = dataAccessContext.CommandContext;
         QueryContext = dataAccessContext.QueryContext;
         Database = CommandContext.Database;
@@ -155,7 +160,7 @@ public partial class ManagerBase<TEntity> : ManagerBase
     }
 
     /// <summary>
-    /// 分页筛选，需要重写该方法
+    /// 分页筛选，需要重写该方法 
     /// </summary>
     /// <param name="filter"></param>
     /// <returns></returns>
@@ -222,7 +227,6 @@ public partial class ManagerBase<TEntity> : ManagerBase
         return true;
     }
 
-
     /// <summary>
     /// 更新关联数据
     /// </summary>
@@ -242,9 +246,9 @@ public partial class ManagerBase<TEntity> : ManagerBase
     }
 
     /// <summary>
-    /// 批量保存
+    /// 批量覆盖保存,id相同时更新，否则新增或删除
     /// </summary>
-    /// <param name="entityList"></param>
+    /// <param name="entityList">新的全量数据</param>
     /// <returns></returns>
     public async Task<bool> SaveAsync(List<TEntity> entityList)
     {
@@ -315,7 +319,17 @@ public partial class ManagerBase<TEntity> : ManagerBase
     /// <returns></returns>
     protected async Task LoadAsync<TProperty>(TEntity entity, Expression<Func<TEntity, TProperty?>> propertyExpression) where TProperty : class
     {
-        await CommandContext.Entry(entity).Reference(propertyExpression).LoadAsync();
+        var entry = CommandContext.Entry(entity);
+        if (entry.State != EntityState.Detached)
+        {
+            await CommandContext.Entry(entity).Reference(propertyExpression).LoadAsync();
+        }
+        else
+        {
+            await QueryContext.Entry(entity).Reference(propertyExpression)
+                .Query().AsNoTracking()
+                .LoadAsync();
+        }
     }
 
     /// <summary>
@@ -327,7 +341,17 @@ public partial class ManagerBase<TEntity> : ManagerBase
     /// <returns></returns>
     protected async Task LoadManyAsync<TProperty>(TEntity entity, Expression<Func<TEntity, IEnumerable<TProperty>>> propertyExpression) where TProperty : class
     {
-        await CommandContext.Entry(entity).Collection(propertyExpression).LoadAsync();
+        var entry = CommandContext.Entry(entity);
+        if (entry.State != EntityState.Detached)
+        {
+            await CommandContext.Entry(entity).Collection(propertyExpression).LoadAsync();
+        }
+        else
+        {
+            await QueryContext.Entry(entity).Collection(propertyExpression)
+                .Query().AsNoTracking()
+                .LoadAsync();
+        }
     }
 
     protected async Task<int> SaveChangesAsync()
@@ -351,30 +375,30 @@ public partial class ManagerBase<TEntity> : ManagerBase
             _logger.LogWarning("UserContext is null, can't save log");
             return;
         }
-
-        var route = userContext.GetHttpContext()?.Request.Path.Value;
-
-        if (userContext.IsAdmin)
-        {
-            // 管理员日志
-            // 使用SystemMod时生效
-            var log = SystemLogs.NewLog(userContext.Username ?? "", userContext.UserId, targetName, actionType, route, description);
-            var taskQueue = WebAppContext.GetScopeService<IEntityTaskQueue<SystemLogs>>();
-            if (taskQueue != null)
-            {
-                await taskQueue.AddItemAsync(log);
-            }
-        }
-        else
-        {
-            // 用户日志
-            var log = UserLogs.NewLog(userContext.Username ?? "", userContext.UserId, targetName, actionType, route, description);
-            var taskQueue = WebAppContext.GetScopeService<IEntityTaskQueue<UserLogs>>();
-            if (taskQueue != null)
-            {
-                await taskQueue.AddItemAsync(log);
-            }
-        }
+        // 日志入库代码示例：
+        await Task.CompletedTask; // 实现记录逻辑时 请删除此行
+        //var route = userContext.GetHttpContext()?.Request.Path.Value;
+        //if (userContext.IsAdmin)
+        //{
+        //    // 管理员日志
+        //    // 使用SystemMod时生效
+        //    var log = SystemLogs.NewLog(userContext.Username ?? "", userContext.UserId, targetName, actionType, route, description);
+        //    var taskQueue = WebAppContext.GetScopeService<IEntityTaskQueue<SystemLogs>>();
+        //    if (taskQueue != null)
+        //    {
+        //        await taskQueue.AddItemAsync(log);
+        //    }
+        //}
+        //else
+        //{
+        //    // 用户日志
+        //    var log = UserLogs.NewLog(userContext.Username ?? "", userContext.UserId, targetName, actionType, route, description);
+        //    var taskQueue = WebAppContext.GetScopeService<IEntityTaskQueue<UserLogs>>();
+        //    if (taskQueue != null)
+        //    {
+        //        await taskQueue.AddItemAsync(log);
+        //    }
+        //}
     }
 
     /// <summary>
@@ -392,7 +416,10 @@ public partial class ManagerBase<TEntity> : ManagerBase
 /// Manager base without entity
 /// </summary>
 /// <param name="logger"></param>
-public class ManagerBase(ILogger logger)
+/// <param name="dataAccessContext">数据访问上下文</param>
+public class ManagerBase(DataAccessContext dataAccessContext, ILogger logger)
 {
     protected readonly ILogger _logger = logger;
+    protected CommandDbContext CommandContext { get; init; } = dataAccessContext.CommandContext;
+    protected QueryDbContext QueryContext { get; init; } = dataAccessContext.QueryContext;
 }

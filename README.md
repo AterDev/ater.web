@@ -16,9 +16,8 @@ The web framework with best practices base on ASP.NET Core.
 
 |版本|.NET版本|支持
 |-|-|-|
-|6.x|.NET6|不再维护
-|7.x|.NET7|仅修复Bug
 |8.x|.NET8|当前版本
+|9.x|.NET9|预览
 
 ## 文档
 
@@ -39,7 +38,7 @@ The web framework with best practices base on ASP.NET Core.
 模板已经发布到[`nuget`](https://www.nuget.org/packages/ater.web.templates)上，请根据你的项目版本下载对应的模板。
 
 ```pwsh
-dotnet new --install ater.web.templates::8.0.0
+dotnet new --install ater.web.templates --preview
 ```
 
 ## 创建项目
@@ -63,17 +62,6 @@ dotnet new atapi -n <projectname>
 - 在`Http.API`项目`Program.cs`中，修改数据库上下文的注入。
 
 ## 数据迁移
-
-### 7.0之前
-
-项目`src\Database\EntityFramework.Migrator`目录下，执行脚本`MigrationContext.ps1`。
-
-```pwsh
-cd src\Database\EntityFramework.Migrator
-.\MigrationContext.ps1
-```
-
-### 7.0及之后
 
 移除了`EntityFramework.Migrator`，迁移代码将直接生成在`Http.API`项目中。
 

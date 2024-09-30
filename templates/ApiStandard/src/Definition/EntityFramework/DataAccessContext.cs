@@ -11,3 +11,14 @@ public class DataAccessContext<TEntity>(CommandDbContext commandDbContext, Query
     where TEntity : class, IEntityBase
 {
 }
+
+/// <summary>
+/// DataAccessContext without TEntity
+/// </summary>
+/// <param name="commandDbContext"></param>
+/// <param name="queryDbContext"></param>
+public class DataAccessContext(CommandDbContext commandDbContext, QueryDbContext queryDbContext)
+    : DataAccessContextBase<CommandDbContext, QueryDbContext>(commandDbContext, queryDbContext)
+
+{
+}
