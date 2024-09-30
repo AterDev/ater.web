@@ -7,22 +7,29 @@ namespace Application.Implement;
 
 public class UserContext : IUserContext
 {
+    /// <summary>
+    /// 鐢ㄦ埛id
+    /// </summary>
     public Guid UserId { get; init; }
+    /// <summary>
+    /// 缁勭粐id
+    /// </summary>
+    public Guid? GroupId { get; init; }
     public string? Username { get; init; }
     public string? Email { get; set; }
     /// <summary>
-    /// 是否为管理员
+    /// 鏄惁涓虹鐞嗗憳
     /// </summary>
     public bool IsAdmin { get; init; }
     public string? CurrentRole { get; set; }
     public List<string>? Roles { get; set; }
-    public Guid? GroupId { get; init; }
 
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly CommandDbContext _context;
     public UserContext(IHttpContextAccessor httpContextAccessor, CommandDbContext context)
     {
         _httpContextAccessor = httpContextAccessor;
+        _context = context;
         if (Guid.TryParse(FindClaim(ClaimTypes.NameIdentifier)?.Value, out Guid userId) && userId != Guid.Empty)
         {
             UserId = userId;
@@ -42,7 +49,6 @@ public class UserContext : IUserContext
         {
             IsAdmin = Roles.Any(r => r.Equals(AterConst.AdminUser) || r.Equals(AterConst.SuperAdmin));
         }
-        _context = context;
     }
 
     protected Claim? FindClaim(string claimType)
@@ -51,7 +57,7 @@ public class UserContext : IUserContext
     }
 
     /// <summary>
-    /// 判断当前角色
+    /// 鍒ゆ柇褰撳墠瑙掕壊
     /// </summary>
     /// <param name="roleName"></param>
     /// <returns></returns>
@@ -61,18 +67,18 @@ public class UserContext : IUserContext
     }
 
     /// <summary>
-    /// 是否存在
+    /// 鏄惁瀛樺湪
     /// </summary>
     /// <returns></returns>
-    public async Task<bool> ExistAsync()
+    public async Task<bool> ExistAsync<TUser>() where TUser : class, IEntityBase
     {
         return IsAdmin ?
-            await _context.SystemUsers.AnyAsync(u => u.Id == UserId) :
-            await _context.Users.AnyAsync(u => u.Id == UserId);
+            await _context.Set<TUser>().AnyAsync(u => u.Id == UserId) :
+            await _context.Set<TUser>().AnyAsync(u => u.Id == UserId);
     }
 
     /// <summary>
-    /// 获取ip地址
+    /// 鑾峰彇ip鍦板潃
     /// </summary>
     /// <returns></returns>
     public string? GetIpAddress()
@@ -84,12 +90,7 @@ public class UserContext : IUserContext
             : _httpContextAccessor.HttpContext!.Connection.RemoteIpAddress?.ToString();
     }
 
-    public async Task<User?> GetUserAsync()
-    {
-        return await _context.Users.FindAsync(UserId);
-    }
-
-    public async Task<TUser?> GetUserAsync<TUser>() where TUser : class
+    public async Task<TUser?> GetUserAsync<TUser>() where TUser : class, IEntityBase
     {
         return await _context.Set<TUser>().FindAsync(UserId);
     }
