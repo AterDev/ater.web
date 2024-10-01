@@ -9,7 +9,7 @@
       ]
     },
     "ater.dry": {
-      "version": "8.2.0",
+      "version": "9.0.0-preview1",
       "commands": [
         "dry"
       ]
