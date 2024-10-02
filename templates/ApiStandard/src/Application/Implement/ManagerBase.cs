@@ -1,8 +1,5 @@
-using EntityFramework;
 using EntityFramework.DBProvider;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Query;
-using Microsoft.Extensions.Logging;
 
 namespace Application.Implement;
 
@@ -159,7 +156,7 @@ public partial class ManagerBase<TEntity>
     }
 
     /// <summary>
-    /// 分页筛选，需要重写该方法 
+    /// 分页筛选
     /// </summary>
     /// <param name="filter"></param>
     /// <returns></returns>
@@ -196,12 +193,11 @@ public partial class ManagerBase<TEntity>
         await Command.AddAsync(entity);
         if (AutoSave)
         {
+            if (AutoLogType is LogActionType.Add or LogActionType.All or LogActionType.AddOrUpdate)
+            {
+                await SaveToLogAsync(UserActionType.Add, entity.GetType().Name);
+            }
             return await SaveChangesAsync() > 0;
-        }
-
-        if (AutoLogType is LogActionType.Add or LogActionType.All or LogActionType.AddOrUpdate)
-        {
-            await SaveToLogAsync(UserActionType.Add, entity.GetType().Name);
         }
         return true;
     }
@@ -216,12 +212,11 @@ public partial class ManagerBase<TEntity>
         Command.Update(entity);
         if (AutoSave)
         {
+            if (AutoLogType is LogActionType.Update or LogActionType.All or LogActionType.AddOrUpdate)
+            {
+                await SaveToLogAsync(UserActionType.Update, entity.GetType().Name);
+            }
             return await SaveChangesAsync() > 0;
-        }
-
-        if (AutoLogType is LogActionType.Update or LogActionType.All or LogActionType.AddOrUpdate)
-        {
-            await SaveToLogAsync(UserActionType.Update, entity.GetType().Name);
         }
         return true;
     }
@@ -290,17 +285,10 @@ public partial class ManagerBase<TEntity>
     /// <returns></returns>
     public async Task<bool?> DeleteAsync(List<Guid> ids, bool softDelete = true)
     {
-        var res = 0;
-        if (softDelete)
-        {
-            res = await Command.Where(d => ids.Contains(d.Id))
-                .ExecuteUpdateAsync(d => d.SetProperty(d => d.IsDeleted, true));
-        }
-        else
-        {
-            res = await Command.Where(d => ids.Contains(d.Id)).ExecuteDeleteAsync();
-        }
-
+        var res = softDelete
+            ? await Command.Where(d => ids.Contains(d.Id))
+                .ExecuteUpdateAsync(d => d.SetProperty(d => d.IsDeleted, true))
+            : await Command.Where(d => ids.Contains(d.Id)).ExecuteDeleteAsync();
         if (AutoLogType is LogActionType.Delete or LogActionType.All)
         {
             var target = string.Join(",", ids);

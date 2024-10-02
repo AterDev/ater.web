@@ -1,5 +1,3 @@
-using Application.Managers;
-
 using Share.Models.UserDtos;
 namespace Http.API.Controllers.AdminControllers;
 
@@ -53,9 +51,7 @@ public class UserController(
     public async Task<ActionResult<bool>> UpdateAsync([FromRoute] Guid id, UserUpdateDto dto)
     {
         var current = await _manager.GetOwnedAsync(id);
-        if (current == null) { return NotFound(ErrorMsg.NotFoundResource); }
-
-        return await _manager.UpdateAsync(current, dto);
+        return current == null ? NotFound(ErrorMsg.NotFoundResource) : await _manager.UpdateAsync(current, dto);
     }
 
     /// <summary>
@@ -77,7 +73,7 @@ public class UserController(
     /// <returns></returns>
     [HttpDelete("{id}")]
     [NonAction]
-    public async Task<ActionResult<bool?>> DeleteAsync([FromRoute] Guid id)
+    public async Task<ActionResult<bool>> DeleteAsync([FromRoute] Guid id)
     {
         // 注意删除权限
         var res = await _manager.GetOwnedAsync(id);
