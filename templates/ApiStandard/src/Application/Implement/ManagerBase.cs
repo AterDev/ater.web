@@ -80,6 +80,28 @@ public partial class ManagerBase<TEntity>
     }
 
     /// <summary>
+    /// Command Entity
+    /// </summary>
+    /// <typeparam name="TDto"></typeparam>
+    /// <param name="whereExp"></param>
+    /// <returns></returns>
+    public async Task<TDto?> GetCurrentAsync<TDto>(Expression<Func<TEntity, bool>>? whereExp = null) where TDto : class
+    {
+        if (typeof(TDto) == typeof(TEntity))
+        {
+            var model = await Command.Where(whereExp ?? (e => true))
+                .FirstOrDefaultAsync();
+            return model as TDto;
+        }
+        else
+        {
+            return await Command.Where(whereExp ?? (e => true))
+                .ProjectTo<TDto>()
+                .FirstOrDefaultAsync();
+        }
+    }
+
+    /// <summary>
     /// 获取实体
     /// </summary>
     /// <param name="id"></param>
