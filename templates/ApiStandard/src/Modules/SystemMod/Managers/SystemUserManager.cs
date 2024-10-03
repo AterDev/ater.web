@@ -137,7 +137,7 @@ public class SystemUserManager(
             List<string> roles = user.SystemRoles?.Select(r => r.NameValue)?.ToList()
                 ?? [AterConst.AdminUser];
             // 过期时间:秒
-            var expiredSeconds = jwtOption.ExpiredSeconds * 60 * 60;
+            var expiredSeconds = jwtOption.Expired * 60 * 60;
 
             JwtService jwt = new(jwtOption.Sign, jwtOption.ValidAudiences, jwtOption.ValidIssuer)
             {

@@ -1,8 +1,7 @@
 ﻿// 系统日志服务示例
-/*
-using Entity.SystemMod;
+using Ater.Web.Abstraction.Interface;
 
-namespace Application.Services;
+namespace SystemMod.Services;
 /// <summary>
 /// 业务日志服务
 /// </summary>
@@ -44,8 +43,7 @@ public class SystemLogService
         {
             return;
         }
-        var log = SystemLogs.NewLog(userName ?? "", userId.Value, targetName, actionType, route, description);
+        var log = SystemLogs.NewLog(userName ?? "", userId.Value, actionType, targetName, route, description);
         await _taskQueue.AddItemAsync(log);
     }
 }
-*/

@@ -195,7 +195,7 @@ public partial class ManagerBase<TEntity>
         {
             if (AutoLogType is LogActionType.Add or LogActionType.All or LogActionType.AddOrUpdate)
             {
-                await SaveToLogAsync(UserActionType.Add, entity.GetType().Name);
+                await SaveToLogAsync(UserActionType.Add, entity);
             }
             return await SaveChangesAsync() > 0;
         }
@@ -214,7 +214,7 @@ public partial class ManagerBase<TEntity>
         {
             if (AutoLogType is LogActionType.Update or LogActionType.All or LogActionType.AddOrUpdate)
             {
-                await SaveToLogAsync(UserActionType.Update, entity.GetType().Name);
+                await SaveToLogAsync(UserActionType.Update, entity);
             }
             return await SaveChangesAsync() > 0;
         }
@@ -292,7 +292,7 @@ public partial class ManagerBase<TEntity>
         if (AutoLogType is LogActionType.Delete or LogActionType.All)
         {
             var target = string.Join(",", ids);
-            await SaveToLogAsync(UserActionType.Delete, target);
+            await SaveToLogAsync(UserActionType.Delete, null, target);
         }
         return res > 0;
     }
@@ -304,7 +304,7 @@ public partial class ManagerBase<TEntity>
     /// <param name="entity"></param>
     /// <param name="propertyExpression"></param>
     /// <returns></returns>
-    protected async Task LoadAsync<TProperty>(TEntity entity, Expression<Func<TEntity, TProperty?>> propertyExpression) where TProperty : class
+    public async Task LoadAsync<TProperty>(TEntity entity, Expression<Func<TEntity, TProperty?>> propertyExpression) where TProperty : class
     {
         var entry = CommandContext.Entry(entity);
         if (entry.State != EntityState.Detached)
@@ -326,7 +326,7 @@ public partial class ManagerBase<TEntity>
     /// <param name="entity"></param>
     /// <param name="propertyExpression"></param>
     /// <returns></returns>
-    protected async Task LoadManyAsync<TProperty>(TEntity entity, Expression<Func<TEntity, IEnumerable<TProperty>>> propertyExpression) where TProperty : class
+    public async Task LoadManyAsync<TProperty>(TEntity entity, Expression<Func<TEntity, IEnumerable<TProperty>>> propertyExpression) where TProperty : class
     {
         var entry = CommandContext.Entry(entity);
         if (entry.State != EntityState.Detached)
@@ -349,11 +349,11 @@ public partial class ManagerBase<TEntity>
     /// <summary>
     /// 日志记录
     /// </summary>
+    /// <param name="entity"></param>
     /// <param name="actionType"></param>
-    /// <param name="targetName">对象名称</param>
-    /// <param name="description">描述</param>
+    /// <param name="description"></param>
     /// <returns></returns>
-    private async Task SaveToLogAsync(UserActionType actionType, string targetName, string? description = null)
+    protected async Task SaveToLogAsync(UserActionType actionType, object? entity, string? description = null)
     {
         var userContext = WebAppContext.GetScopeService<IUserContext>();
 
@@ -369,7 +369,7 @@ public partial class ManagerBase<TEntity>
         //{
         //    // 管理员日志
         //    // 使用SystemMod时生效
-        //    var log = SystemLogs.NewLog(userContext.Username ?? "", userContext.UserId, targetName, actionType, route, description);
+        //    var log = SystemLogs.NewLog(userContext.Username ?? "", userContext.UserId, actionType, entity, route, description);
         //    var taskQueue = WebAppContext.GetScopeService<IEntityTaskQueue<SystemLogs>>();
         //    if (taskQueue != null)
         //    {
@@ -379,7 +379,7 @@ public partial class ManagerBase<TEntity>
         //else
         //{
         //    // 用户日志
-        //    var log = UserLogs.NewLog(userContext.Username ?? "", userContext.UserId, targetName, actionType, route, description);
+        //    var log = UserLogs.NewLog(userContext.Username ?? "", userContext.UserId, actionType, entity, route, description);
         //    var taskQueue = WebAppContext.GetScopeService<IEntityTaskQueue<UserLogs>>();
         //    if (taskQueue != null)
         //    {
@@ -391,7 +391,7 @@ public partial class ManagerBase<TEntity>
     /// <summary>
     /// reset queryable
     /// </summary>
-    private void ResetQuery()
+    protected void ResetQuery()
     {
         Queryable = EnableGlobalQuery
             ? Query.AsQueryable()

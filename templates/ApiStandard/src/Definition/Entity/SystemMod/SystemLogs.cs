@@ -48,13 +48,13 @@ public class SystemLogs : EntityBase
 
     public Guid SystemUserId { get; set; } = default!;
 
-    public static SystemLogs NewLog(string userName, Guid userId, string targetName, UserActionType actionType, string? route = null, string? description = null)
+    public static SystemLogs NewLog(string userName, Guid userId, UserActionType actionType, object? entity, string? route = null, string? description = null)
     {
         return new SystemLogs
         {
             SystemUserId = userId,
             ActionUserName = userName,
-            TargetName = targetName,
+            Data = entity,
             Route = route ?? string.Empty,
             ActionType = actionType,
             Description = description,

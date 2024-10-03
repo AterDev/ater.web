@@ -6,7 +6,7 @@ public class JwtOption
     public required string Sign { get; set; }
 
     /// <summary>
-    /// 过期时间
+    /// 过期时间:小时
     /// </summary>
-    public int ExpiredSeconds { get; set; } = 24 * 60 * 60;
+    public int Expired { get; set; } = 24;
 }

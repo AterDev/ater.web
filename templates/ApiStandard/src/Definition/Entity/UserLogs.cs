@@ -1,4 +1,6 @@
-﻿namespace Entity;
+﻿using System.Text.Json.Serialization;
+
+namespace Entity;
 /// <summary>
 /// 用户日志
 /// </summary>
@@ -17,8 +19,11 @@ public class UserLogs : EntityBase
     /// 操作对象名称
     /// </summary>
     [MaxLength(100)]
-    public required string TargetName { get; set; }
+    public string? TargetName { get; set; }
 
+    [NotMapped]
+    [JsonIgnore]
+    public object? Data { get; set; }
     /// <summary>
     /// 操作路由
     /// </summary>
@@ -42,13 +47,13 @@ public class UserLogs : EntityBase
     public Guid UserId { get; set; } = default!;
 
 
-    public static UserLogs NewLog(string userName, Guid userId, string targetName, UserActionType actionType, string? route = null, string? description = null)
+    public static UserLogs NewLog(string userName, Guid userId, UserActionType actionType, object? entity, string? route = null, string? description = null)
     {
         return new UserLogs
         {
             UserId = userId,
             ActionUserName = userName,
-            TargetName = targetName,
+            Data = entity,
             Route = route ?? string.Empty,
             ActionType = actionType,
             Description = description,
