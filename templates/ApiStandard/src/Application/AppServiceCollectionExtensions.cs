@@ -1,5 +1,5 @@
 ﻿using EntityFramework.DBProvider;
-
+using Microsoft.Extensions.Caching.Hybrid;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using OpenTelemetry.Exporter;
@@ -99,6 +99,7 @@ public static partial class AppServiceCollectionExtensions
     /// <returns></returns>
     public static IHostApplicationBuilder AddCache(this IHostApplicationBuilder builder)
     {
+
         var cache = builder.Configuration.GetSection(AppSetting.Components).GetValue<string>(AppSetting.Cache);
         if (cache == AppSetting.Redis)
         {
@@ -108,11 +109,7 @@ public static partial class AppServiceCollectionExtensions
                 options.InstanceName = builder.Configuration.GetConnectionString(AppSetting.CacheInstanceName);
             });
         }
-        else
-        {
-            builder.Services.AddDistributedMemoryCache();
-        }
-        builder.Services.AddMemoryCache();
+
         return builder;
     }
 
