@@ -27,7 +27,7 @@ public static class ServiceCollectionExtension
         builder.Services.AddScoped<IUserContext, UserContext>();
         builder.Services.AddScoped<ITenantProvider, TenantProvider>();
 
-        builder.Services.AddManager();
+        builder.Services.AddManagers();
         builder.Services.AddSingleton<IEntityTaskQueue<UserLogs>, EntityTaskQueue<UserLogs>>();
 
         // 添加后台系统模块服务
