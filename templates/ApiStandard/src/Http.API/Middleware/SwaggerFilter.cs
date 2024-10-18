@@ -22,7 +22,7 @@ public class EnumSchemaFilter : ISchemaFilter
                 {
                     name.Add(new OpenApiString(f.Name));
                     CustomAttributeData? desAttr = f.CustomAttributes.Where(a => a.AttributeType.Name == "DescriptionAttribute").FirstOrDefault();
-                    desAttr ??= f.CustomAttributes.Where(a => a.AttributeType.Name == "DisplayNameAttribute").FirstOrDefault();
+                    desAttr ??= f.CustomAttributes.Where(a => a.AttributeType.Name == "DisplayAttribute").FirstOrDefault();
                     if (desAttr != null)
                     {
                         CustomAttributeTypedArgument des = desAttr.ConstructorArguments.FirstOrDefault();
