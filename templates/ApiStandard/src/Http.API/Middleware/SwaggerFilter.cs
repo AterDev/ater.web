@@ -20,22 +20,24 @@ public class EnumSchemaFilter : ISchemaFilter
             {
                 if (f.Name != "value__")
                 {
-                    name.Add(new OpenApiString(f.Name));
+                    var description = new OpenApiString(f.Name);
+                    name.Add(description);
                     CustomAttributeData? desAttr = f.CustomAttributes.Where(a => a.AttributeType.Name == "DescriptionAttribute").FirstOrDefault();
-                    desAttr ??= f.CustomAttributes.Where(a => a.AttributeType.Name == "DisplayAttribute").FirstOrDefault();
+                    desAttr ??= f.CustomAttributes.Where(a => a.AttributeType.Name == "DisplayNameAttribute").FirstOrDefault();
                     if (desAttr != null)
                     {
                         CustomAttributeTypedArgument des = desAttr.ConstructorArguments.FirstOrDefault();
                         if (des.Value != null)
                         {
-                            enumData.Add(new OpenApiObject()
-                            {
-                                ["name"] = new OpenApiString(f.Name),
-                                ["value"] = new OpenApiInteger((int)f.GetRawConstantValue()!),
-                                ["description"] = new OpenApiString(des.Value.ToString())
-                            });
+                            description = new OpenApiString(des.Value.ToString());
                         }
                     }
+                    enumData.Add(new OpenApiObject()
+                    {
+                        ["name"] = new OpenApiString(f.Name),
+                        ["value"] = new OpenApiInteger((int)f.GetRawConstantValue()!),
+                        ["description"] = description
+                    });
                 }
             }
             model.Extensions.Add("x-enumNames", name);
