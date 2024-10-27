@@ -300,23 +300,41 @@ public partial class ManagerBase<TEntity>
     }
 
     /// <summary>
-    /// 删除实体
+    /// 批量删除
     /// </summary>
     /// <param name="ids">实体id</param>
     /// <param name="softDelete">是否软件删除</param>
     /// <returns></returns>
-    public async Task<bool?> DeleteAsync(List<Guid> ids, bool softDelete = true)
+    public async Task<bool> DeleteAsync(List<Guid> ids, bool softDelete = true)
     {
         var res = softDelete
             ? await Command.Where(d => ids.Contains(d.Id))
                 .ExecuteUpdateAsync(d => d.SetProperty(d => d.IsDeleted, true))
             : await Command.Where(d => ids.Contains(d.Id)).ExecuteDeleteAsync();
+        return res > 0;
+    }
+
+    /// <summary>
+    /// 删除实体
+    /// </summary>
+    /// <param name="entity"></param>
+    /// <param name="softDelete"></param>
+    /// <returns></returns>
+    public async Task<bool> DeleteAsync(TEntity entity, bool softDelete = true)
+    {
+        if (softDelete)
+        {
+            entity.IsDeleted = true;
+        }
+        else
+        {
+            Command.Remove(entity);
+        }
         if (AutoLogType is LogActionType.Delete or LogActionType.All)
         {
-            var target = string.Join(",", ids);
-            await SaveToLogAsync(UserActionType.Delete, null, target);
+            await SaveToLogAsync(UserActionType.Delete, entity, entity.Id.ToString());
         }
-        return res > 0;
+        return await SaveChangesAsync() > 0;
     }
 
     /// <summary>
