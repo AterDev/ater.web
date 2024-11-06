@@ -20,7 +20,6 @@ public class Folder : EntityBase, ITreeNode<Folder>
     /// <summary>
     /// 路径
     /// </summary>
-    [Column(TypeName = "ltree")]
     [MaxLength(500)]
     public string? Path { get; set; }
 
