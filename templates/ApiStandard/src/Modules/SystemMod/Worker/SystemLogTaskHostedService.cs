@@ -28,15 +28,19 @@ public class SystemLogTaskHostedService(IServiceProvider serviceProvider, IEntit
         while (!stoppingToken.IsCancellationRequested)
         {
             var log = await _taskQueue.DequeueAsync(stoppingToken);
-            log.TargetName = log.Data?.GetType().Name;
             var entity = log.Data;
-            if (entity != null)
+            if (entity is string)
+            {
+                log.TargetName = entity as string;
+            }
+            else if (entity != null)
             {
                 var type = entity.GetType();
                 var attribute = type?.GetCustomAttribute<LogDescriptionAttribute>();
                 if (attribute != null)
                 {
                     log.TargetName = attribute.Description;
+                    log.Description ??= log.ActionType + attribute.Description;
                     if (attribute.FieldName != null)
                     {
                         var fieldValue = type!.GetProperty(attribute.FieldName)?.GetValue(entity);
